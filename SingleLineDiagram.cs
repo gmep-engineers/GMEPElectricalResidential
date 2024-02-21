@@ -16,6 +16,7 @@ namespace GMEPElectricalResidential
   {
     private List<DraggableObject> draggableObjects = new List<DraggableObject>();
     private DraggableObject currentDraggableObject;
+    private bool isDraggingForDeletion = false;
 
     public SINGLE_LINE_DIAGRAM()
     {
@@ -28,6 +29,10 @@ namespace GMEPElectricalResidential
       PANEL.MouseMove += new MouseEventHandler(PANEL_MouseMove);
       PANEL.MouseUp += new MouseEventHandler(PANEL_MouseUp);
       PANEL.Paint += new PaintEventHandler(PANEL_Paint);
+      TRASH.AllowDrop = true;
+      TRASH.DragEnter += new DragEventHandler(TRASH_DragEnter);
+      TRASH.DragDrop += new DragEventHandler(TRASH_DragDrop);
+      TRASH.DragLeave += TRASH_DragLeave;
     }
 
     private void UPWARDS_ARROW_MouseDown(object sender, MouseEventArgs e)
@@ -63,7 +68,7 @@ namespace GMEPElectricalResidential
         if (draggable.IsDragging)
         {
           // You can highlight the border if the item is being dragged
-          using (Pen borderPen = new Pen(Color.Red, 2)) // Red border, 2 pixels wide
+          using (Pen borderPen = new Pen(Color.Blue, 2)) // Red border, 2 pixels wide
           {
             e.Graphics.DrawRectangle(borderPen, draggable.Bounds);
           }
@@ -89,6 +94,8 @@ namespace GMEPElectricalResidential
           currentDraggableObject = draggable;
           currentDraggableObject.ClickOffset = new Point(clientPoint.X - draggable.Bounds.X, clientPoint.Y - draggable.Bounds.Y);
           currentDraggableObject.IsDragging = true;
+
+          PANEL.Invalidate();
           break;
         }
       }
@@ -138,14 +145,12 @@ namespace GMEPElectricalResidential
             {
               newY = obj.Bounds.Top - blockSize;
               newX = obj.Bounds.X; // Align lefts for perfect fit
-              snappedVertically = true;
               break; // Assuming one snap target is enough
             }
             else if (Math.Abs(newY - obj.Bounds.Bottom) < snapThreshold)
             {
               newY = obj.Bounds.Bottom;
               newX = obj.Bounds.X; // Align lefts for perfect fit
-              snappedVertically = true;
               break; // Assuming one snap target is enough
             }
           }
@@ -158,6 +163,17 @@ namespace GMEPElectricalResidential
         // Update the draggable object's position
         currentDraggableObject.Bounds = new Rectangle(newX, newY, blockSize, blockSize);
 
+        if (NearTrashCan(e.Location))
+        {
+          isDraggingForDeletion = true;
+          DoDragDrop(currentDraggableObject, DragDropEffects.Move);
+        }
+        else
+        {
+          isDraggingForDeletion = false;
+          PANEL.Invalidate(); // Repaint to update the position of the dragged image
+        }
+
         UpdateScrollBars();
         PANEL.Invalidate();
       }
@@ -167,27 +183,76 @@ namespace GMEPElectricalResidential
     {
       if (currentDraggableObject != null)
       {
-        currentDraggableObject.IsDragging = false;
-        currentDraggableObject = null;
+        if (!isDraggingForDeletion)
+        {
+          currentDraggableObject.IsDragging = false;
+          currentDraggableObject = null;
+          UpdateScrollBars();
+          PANEL.Invalidate(); // Repaint to finalize the position and remove the highlight
+        }
       }
-      UpdateScrollBars();
-      PANEL.Invalidate();
     }
 
     private void PANEL_DragDrop(object sender, DragEventArgs e)
     {
-      Point dropPoint = PANEL.PointToClient(new Point(e.X, e.Y));
-      Image droppedImage = (Image)e.Data.GetData(DataFormats.Bitmap);
-
-      DraggableObject draggable = new DraggableObject()
+      if (!e.Data.GetDataPresent(typeof(DraggableObject)) || sender == TRASH)
       {
-        Image = droppedImage,
-        Bounds = new Rectangle(dropPoint, droppedImage.Size)
-      };
+        Point dropPoint = PANEL.PointToClient(new Point(e.X, e.Y));
+        Image droppedImage = (Image)e.Data.GetData(DataFormats.Bitmap);
 
-      draggableObjects.Add(draggable);
-      UpdateScrollBars();
+        DraggableObject draggable = new DraggableObject()
+        {
+          Image = droppedImage,
+          Bounds = new Rectangle(dropPoint, droppedImage.Size)
+        };
+
+        draggableObjects.Add(draggable);
+        UpdateScrollBars();
+        PANEL.Invalidate();
+      }
+    }
+
+    private void TRASH_DragEnter(object sender, DragEventArgs e)
+    {
+      // Check if the data being dragged is a DraggableObject
+      if (e.Data.GetDataPresent(typeof(DraggableObject)) && isDraggingForDeletion)
+      {
+        e.Effect = DragDropEffects.Move; // Change the cursor to indicate moving
+      }
+    }
+
+    private void TRASH_DragLeave(object sender, EventArgs e)
+    {
+      isDraggingForDeletion = false;
       PANEL.Invalidate();
+    }
+
+    private void TRASH_DragDrop(object sender, DragEventArgs e)
+    {
+      // Check if the data being dropped is a DraggableObject
+      if (e.Data.GetDataPresent(typeof(DraggableObject)) && isDraggingForDeletion)
+      {
+        DraggableObject draggable = (DraggableObject)e.Data.GetData(typeof(DraggableObject));
+
+        // Remove the draggable object from the list
+        draggableObjects.Remove(draggable);
+
+        // Redraw the panel to reflect the changes
+        PANEL.Invalidate();
+      }
+    }
+
+    private bool NearTrashCan(Point mouseLocation)
+    {
+      var relativeX = mouseLocation.X + PANEL.Location.X;
+      var relativeY = mouseLocation.Y + PANEL.Location.Y;
+
+      var newLocation = new Point(relativeX, relativeY);
+
+      Console.WriteLine("Mouse Location: " + newLocation);
+      Console.WriteLine("Trash Can Contains Mouse: " + TRASH.Bounds.Contains(newLocation));
+
+      return TRASH.Bounds.Contains(newLocation);
     }
 
     private void UpdateScrollBars()

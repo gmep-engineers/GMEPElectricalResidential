@@ -79,9 +79,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="Images\Upwards Arrow.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"C:\Program Files\Autodesk\AutoCAD 2023\acad.exe" /product ACAD /language "en-US" "C:\Users\JacobH\OneDrive - GMEPE\Documents\Programming\Residential DWG\Residential Template - 24x36.dwg"</PostBuildEvent>
