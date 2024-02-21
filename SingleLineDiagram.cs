@@ -22,6 +22,14 @@ namespace GMEPElectricalResidential
     {
       InitializeComponent();
       UPWARDS_ARROW.MouseDown += new MouseEventHandler(UPWARDS_ARROW_MouseDown);
+      DOWNWARDS_ARROW.MouseDown += new MouseEventHandler(DOWNWARDS_ARROW_MouseDown);
+      METER_MAIN.MouseDown += new MouseEventHandler(METER_MAIN_MouseDown);
+      MAIN.MouseDown += new MouseEventHandler(MAIN_MouseDown);
+      METER_COMBO.MouseDown += new MouseEventHandler(METER_COMBO_MouseDown);
+      DISTRIBUTION.MouseDown += new MouseEventHandler(DISTRIBUTION_MouseDown);
+      MULTI_METER.MouseDown += new MouseEventHandler(MULTI_METER_MouseDown);
+      VERTICAL_WIRE.MouseDown += new MouseEventHandler(VERTICAL_WIRE_MouseDown);
+      HORIZONTAL_WIRE.MouseDown += new MouseEventHandler(HORIZONTAL_WIRE_MouseDown);
       PANEL.AllowDrop = true;
       PANEL.DragEnter += new DragEventHandler(PANEL_DragEnter);
       PANEL.DragDrop += new DragEventHandler(PANEL_DragDrop);
@@ -35,11 +43,75 @@ namespace GMEPElectricalResidential
       TRASH.DragLeave += TRASH_DragLeave;
     }
 
+    private void VERTICAL_WIRE_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Left)
+      {
+        VERTICAL_WIRE.DoDragDrop(VERTICAL_WIRE.Image, DragDropEffects.Copy);
+      }
+    }
+
+    private void HORIZONTAL_WIRE_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Left)
+      {
+        HORIZONTAL_WIRE.DoDragDrop(HORIZONTAL_WIRE.Image, DragDropEffects.Copy);
+      }
+    }
+
     private void UPWARDS_ARROW_MouseDown(object sender, MouseEventArgs e)
     {
       if (e.Button == MouseButtons.Left)
       {
         UPWARDS_ARROW.DoDragDrop(UPWARDS_ARROW.Image, DragDropEffects.Copy);
+      }
+    }
+
+    private void DOWNWARDS_ARROW_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Left)
+      {
+        DOWNWARDS_ARROW.DoDragDrop(DOWNWARDS_ARROW.Image, DragDropEffects.Copy);
+      }
+    }
+
+    private void METER_MAIN_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Left)
+      {
+        METER_MAIN.DoDragDrop(METER_MAIN.Image, DragDropEffects.Copy);
+      }
+    }
+
+    private void MAIN_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Left)
+      {
+        MAIN.DoDragDrop(MAIN.Image, DragDropEffects.Copy);
+      }
+    }
+
+    private void METER_COMBO_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Left)
+      {
+        METER_COMBO.DoDragDrop(METER_COMBO.Image, DragDropEffects.Copy);
+      }
+    }
+
+    private void DISTRIBUTION_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Left)
+      {
+        DISTRIBUTION.DoDragDrop(DISTRIBUTION.Image, DragDropEffects.Copy);
+      }
+    }
+
+    private void MULTI_METER_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Left)
+      {
+        MULTI_METER.DoDragDrop(MULTI_METER.Image, DragDropEffects.Copy);
       }
     }
 
