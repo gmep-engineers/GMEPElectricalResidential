@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GMEPUtilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,6 +27,7 @@ namespace GMEPElectricalResidential
       PANEL.MouseDown += new MouseEventHandler(PANEL_MouseDown);
       PANEL.MouseMove += new MouseEventHandler(PANEL_MouseMove);
       PANEL.MouseUp += new MouseEventHandler(PANEL_MouseUp);
+      PANEL.Paint += new PaintEventHandler(PANEL_Paint);
     }
 
     private void UPWARDS_ARROW_MouseDown(object sender, MouseEventArgs e)
@@ -48,25 +50,44 @@ namespace GMEPElectricalResidential
       }
     }
 
-    protected override void OnPaint(PaintEventArgs e)
+    private void PANEL_Paint(object sender, PaintEventArgs e)
     {
-      base.OnPaint(e);
+      var g = e.Graphics;
+      g.TranslateTransform(PANEL.AutoScrollPosition.X, PANEL.AutoScrollPosition.Y);
+
       foreach (var draggable in draggableObjects)
       {
         e.Graphics.DrawImage(draggable.Image, draggable.Bounds);
+
+        // Draw a border around the image
+        if (draggable.IsDragging)
+        {
+          // You can highlight the border if the item is being dragged
+          using (Pen borderPen = new Pen(Color.Red, 2)) // Red border, 2 pixels wide
+          {
+            e.Graphics.DrawRectangle(borderPen, draggable.Bounds);
+          }
+        }
+        else
+        {
+          // Regular border for not-dragging state
+          using (Pen borderPen = new Pen(Color.Black, 1)) // Black border, 1 pixel wide
+          {
+            e.Graphics.DrawRectangle(borderPen, draggable.Bounds);
+          }
+        }
       }
     }
 
     private void PANEL_MouseDown(object sender, MouseEventArgs e)
     {
-      // Check if the click is within the bounds of any draggable object
+      Point clientPoint = new Point(e.X - PANEL.AutoScrollPosition.X, e.Y - PANEL.AutoScrollPosition.Y);
       foreach (var draggable in draggableObjects)
       {
-        if (draggable.Bounds.Contains(e.Location))
+        if (draggable.Bounds.Contains(clientPoint))
         {
           currentDraggableObject = draggable;
-          // Calculate the click offset from the top-left corner of the image
-          currentDraggableObject.ClickOffset = new Point(e.X - draggable.Bounds.X, e.Y - draggable.Bounds.Y);
+          currentDraggableObject.ClickOffset = new Point(clientPoint.X - draggable.Bounds.X, clientPoint.Y - draggable.Bounds.Y);
           currentDraggableObject.IsDragging = true;
           break;
         }
@@ -77,9 +98,10 @@ namespace GMEPElectricalResidential
     {
       if (currentDraggableObject != null && currentDraggableObject.IsDragging)
       {
-        // Update the position of the image
-        currentDraggableObject.Bounds = new Rectangle(e.X - currentDraggableObject.ClickOffset.X, e.Y - currentDraggableObject.ClickOffset.Y, currentDraggableObject.Bounds.Width, currentDraggableObject.Bounds.Height);
-        PANEL.Invalidate(); // Invalidate the PANEL to trigger a repaint
+        Point clientPoint = new Point(e.X - PANEL.AutoScrollPosition.X, e.Y - PANEL.AutoScrollPosition.Y);
+        currentDraggableObject.Bounds = new Rectangle(clientPoint.X - currentDraggableObject.ClickOffset.X, clientPoint.Y - currentDraggableObject.ClickOffset.Y, currentDraggableObject.Bounds.Width, currentDraggableObject.Bounds.Height);
+        UpdateScrollBars();
+        PANEL.Invalidate();
       }
     }
 
@@ -90,6 +112,8 @@ namespace GMEPElectricalResidential
         currentDraggableObject.IsDragging = false;
         currentDraggableObject = null;
       }
+      UpdateScrollBars();
+      PANEL.Invalidate();
     }
 
     private void PANEL_DragDrop(object sender, DragEventArgs e)
@@ -97,18 +121,40 @@ namespace GMEPElectricalResidential
       Point dropPoint = PANEL.PointToClient(new Point(e.X, e.Y));
       Image droppedImage = (Image)e.Data.GetData(DataFormats.Bitmap);
 
-      // Create a new DraggableObject with the dropped image
       DraggableObject draggable = new DraggableObject()
       {
         Image = droppedImage,
         Bounds = new Rectangle(dropPoint, droppedImage.Size)
       };
 
-      // Add to the list of draggable objects
       draggableObjects.Add(draggable);
-
-      // Invalidate the PANEL to trigger a repaint
+      UpdateScrollBars();
       PANEL.Invalidate();
+    }
+
+    private void UpdateScrollBars()
+    {
+      int maxWidth = 0;
+      int maxHeight = 0;
+
+      foreach (var draggable in draggableObjects)
+      {
+        // Find the furthest edges of all draggable objects
+        int rightEdge = draggable.Bounds.Right;
+        int bottomEdge = draggable.Bounds.Bottom;
+
+        if (rightEdge > maxWidth)
+        {
+          maxWidth = rightEdge;
+        }
+        if (bottomEdge > maxHeight)
+        {
+          maxHeight = bottomEdge;
+        }
+      }
+
+      // Update the AutoScrollMinSize property
+      PANEL.AutoScrollMinSize = new Size(maxWidth, maxHeight);
     }
   }
 
@@ -118,5 +164,16 @@ namespace GMEPElectricalResidential
     public Rectangle Bounds { get; set; }
     public bool IsDragging { get; set; }
     public Point ClickOffset { get; set; }
+  }
+
+  public class DoubleBufferedPanel : Panel
+  {
+    public DoubleBufferedPanel()
+    {
+      this.DoubleBuffered = true;
+      this.SetStyle(ControlStyles.ResizeRedraw, true);
+      this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+      this.UpdateStyles();
+    }
   }
 }

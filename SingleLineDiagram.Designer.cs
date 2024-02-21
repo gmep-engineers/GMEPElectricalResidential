@@ -29,19 +29,10 @@
     private void InitializeComponent()
     {
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SINGLE_LINE_DIAGRAM));
-      this.PANEL = new System.Windows.Forms.Panel();
       this.UPWARDS_ARROW = new System.Windows.Forms.PictureBox();
+      this.PANEL = new GMEPElectricalResidential.DoubleBufferedPanel();
       ((System.ComponentModel.ISupportInitialize)(this.UPWARDS_ARROW)).BeginInit();
       this.SuspendLayout();
-      // 
-      // PANEL
-      // 
-      this.PANEL.AutoScroll = true;
-      this.PANEL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.PANEL.Location = new System.Drawing.Point(82, 12);
-      this.PANEL.Name = "PANEL";
-      this.PANEL.Size = new System.Drawing.Size(972, 452);
-      this.PANEL.TabIndex = 0;
       // 
       // UPWARDS_ARROW
       // 
@@ -53,13 +44,23 @@
       this.UPWARDS_ARROW.TabIndex = 5;
       this.UPWARDS_ARROW.TabStop = false;
       // 
+      // PANEL
+      // 
+      this.PANEL.AllowDrop = true;
+      this.PANEL.AutoScroll = true;
+      this.PANEL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.PANEL.Location = new System.Drawing.Point(82, 12);
+      this.PANEL.Name = "PANEL";
+      this.PANEL.Size = new System.Drawing.Size(972, 452);
+      this.PANEL.TabIndex = 6;
+      // 
       // SINGLE_LINE_DIAGRAM
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(1066, 476);
-      this.Controls.Add(this.UPWARDS_ARROW);
       this.Controls.Add(this.PANEL);
+      this.Controls.Add(this.UPWARDS_ARROW);
       this.Name = "SINGLE_LINE_DIAGRAM";
       this.Text = "Single Line Diagram";
       ((System.ComponentModel.ISupportInitialize)(this.UPWARDS_ARROW)).EndInit();
@@ -68,8 +69,7 @@
     }
 
     #endregion
-
-    private System.Windows.Forms.Panel PANEL;
     private System.Windows.Forms.PictureBox UPWARDS_ARROW;
+    private DoubleBufferedPanel PANEL;
   }
 }
