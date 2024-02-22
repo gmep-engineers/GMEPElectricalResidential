@@ -18,11 +18,13 @@ namespace GMEPElectricalResidential
     private DraggableObject currentDraggableObject;
     private bool isDraggingForDeletion = false;
     private int currentID;
+    private Point location;
 
     public SINGLE_LINE_DIAGRAM()
     {
       InitializeComponent();
       currentID = 0;
+      location = USERCONTROL_PLACEHOLDER.Location;
       UPWARDS_ARROW.MouseDown += new MouseEventHandler(UPWARDS_ARROW_MouseDown);
       DOWNWARDS_ARROW.MouseDown += new MouseEventHandler(DOWNWARDS_ARROW_MouseDown);
       METER_MAIN.MouseDown += new MouseEventHandler(METER_MAIN_MouseDown);
@@ -48,16 +50,20 @@ namespace GMEPElectricalResidential
     {
       if (currentDraggableObject != null)
       {
-        var name = currentDraggableObject.Name;
-        var location = USERCONTROL_PLACEHOLDER.Location;
         Controls.Remove(USERCONTROL_PLACEHOLDER);
+        RemoveAllControls();
 
-        if (name == "UPWARDS_ARROW")
-        {
-          Controls.Add(new PullSectionAboveForm(location));
-          BLOCK_INFORMATION.Text = "Pull Section Above Block";
-        }
+        Controls.Add(currentDraggableObject.Form as System.Windows.Forms.Control);
+        BLOCK_INFORMATION.Text = currentDraggableObject.Message;
       }
+    }
+
+    private void RemoveAllControls()
+    {
+      draggableObjects.ForEach(draggableObject =>
+      {
+        Controls.Remove(draggableObject.Form as System.Windows.Forms.Control);
+      });
     }
 
     private void DOWNWARDS_ARROW_MouseDown(object sender, MouseEventArgs e)
@@ -69,9 +75,28 @@ namespace GMEPElectricalResidential
           Image = DOWNWARDS_ARROW.Image,
           Bounds = new Rectangle(0, 0, 64, 64),
           ID = currentID,
-          Name = "DOWNWARDS_ARROW"
+          Name = "DOWNWARDS_ARROW",
+          Form = new PullSectionBelowForm(location),
+          Message = "Pull Section Below Block"
         };
         DOWNWARDS_ARROW.DoDragDrop(data, DragDropEffects.Copy);
+      }
+    }
+
+    private void UPWARDS_ARROW_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Left)
+      {
+        var data = new DraggableObject()
+        {
+          Image = UPWARDS_ARROW.Image,
+          Bounds = new Rectangle(0, 0, 64, 64),
+          ID = currentID,
+          Name = "UPWARDS_ARROW",
+          Form = new PullSectionAboveForm(location),
+          Message = "Pull Section Above Block"
+        };
+        UPWARDS_ARROW.DoDragDrop(data, DragDropEffects.Copy);
       }
     }
 
@@ -84,7 +109,9 @@ namespace GMEPElectricalResidential
           Image = METER_MAIN.Image,
           Bounds = new Rectangle(0, 0, 64, 64),
           ID = currentID,
-          Name = "METER_MAIN"
+          Name = "METER_MAIN",
+          Form = new MeterAndMainForm(location),
+          Message = "Meter Main Block"
         };
         METER_MAIN.DoDragDrop(data, DragDropEffects.Copy);
       }
@@ -147,21 +174,6 @@ namespace GMEPElectricalResidential
           Name = "MULTI_METER"
         };
         MULTI_METER.DoDragDrop(data, DragDropEffects.Copy);
-      }
-    }
-
-    private void UPWARDS_ARROW_MouseDown(object sender, MouseEventArgs e)
-    {
-      if (e.Button == MouseButtons.Left)
-      {
-        var data = new DraggableObject()
-        {
-          Image = UPWARDS_ARROW.Image,
-          Bounds = new Rectangle(0, 0, 64, 64),
-          ID = currentID,
-          Name = "UPWARDS_ARROW"
-        };
-        UPWARDS_ARROW.DoDragDrop(data, DragDropEffects.Copy);
       }
     }
 
@@ -356,6 +368,10 @@ namespace GMEPElectricalResidential
       {
         DraggableObject draggable = (DraggableObject)e.Data.GetData(typeof(DraggableObject));
 
+        RemoveAllControls();
+        Controls.Add(USERCONTROL_PLACEHOLDER);
+        BLOCK_INFORMATION.Text = "Double click a placed block to view its information";
+
         // Remove the draggable object from the list
         draggableObjects.Remove(draggable);
 
@@ -418,6 +434,8 @@ namespace GMEPElectricalResidential
     public Point ClickOffset { get; set; }
     public int ID { get; set; }
     public string Name { get; set; }
+    public object Form { get; set; }
+    public string Message { get; set; }
   }
 
   public class DoubleBufferedPanel : Panel

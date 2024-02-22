@@ -1,6 +1,6 @@
 ﻿namespace GMEPElectricalResidential
 {
-  partial class PullSectionAboveForm
+  partial class PullSectionBelowForm
   {
     /// <summary> 
     /// Required designer variable.
@@ -48,14 +48,14 @@
       this.label1.TabIndex = 1;
       this.label1.Text = "Amperage";
       // 
-      // PullSectionAboveForm
+      // PullSectionBelowForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.Controls.Add(this.label1);
       this.Controls.Add(this.AMPERAGE);
-      this.Name = "PullSectionAboveForm";
+      this.Name = "PullSectionBelowForm";
       this.Padding = new System.Windows.Forms.Padding(6);
       this.Size = new System.Drawing.Size(1040, 160);
       this.Tag = "UPWARDS_ARROW";

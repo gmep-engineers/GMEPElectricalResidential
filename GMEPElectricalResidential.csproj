@@ -68,6 +68,18 @@
       <DependentUpon>SingleLineDiagram.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\MeterAndMainForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\MeterAndMainForm.Designer.cs">
+      <DependentUpon>MeterAndMainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PullSectionBelowForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\PullSectionBelowForm.Designer.cs">
+      <DependentUpon>PullSectionBelowForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PullSectionAboveForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -79,6 +91,12 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\MeterAndMainForm.resx">
+      <DependentUpon>MeterAndMainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\PullSectionBelowForm.resx">
+      <DependentUpon>PullSectionBelowForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\PullSectionAboveForm.resx">
       <DependentUpon>PullSectionAboveForm.cs</DependentUpon>
