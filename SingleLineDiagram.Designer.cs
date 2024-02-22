@@ -40,6 +40,8 @@
       this.MULTI_METER = new System.Windows.Forms.PictureBox();
       this.HORIZONTAL_WIRE = new System.Windows.Forms.PictureBox();
       this.VERTICAL_WIRE = new System.Windows.Forms.PictureBox();
+      this.CONTINUE = new System.Windows.Forms.Button();
+      this.BACK = new System.Windows.Forms.Button();
       ((System.ComponentModel.ISupportInitialize)(this.UPWARDS_ARROW)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.TRASH)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.DOWNWARDS_ARROW)).BeginInit();
@@ -162,11 +164,31 @@
       this.VERTICAL_WIRE.TabIndex = 15;
       this.VERTICAL_WIRE.TabStop = false;
       // 
+      // CONTINUE
+      // 
+      this.CONTINUE.Location = new System.Drawing.Point(964, 471);
+      this.CONTINUE.Name = "CONTINUE";
+      this.CONTINUE.Size = new System.Drawing.Size(90, 24);
+      this.CONTINUE.TabIndex = 16;
+      this.CONTINUE.Text = "CONTINUE";
+      this.CONTINUE.UseVisualStyleBackColor = true;
+      // 
+      // BACK
+      // 
+      this.BACK.Location = new System.Drawing.Point(152, 470);
+      this.BACK.Name = "BACK";
+      this.BACK.Size = new System.Drawing.Size(66, 24);
+      this.BACK.TabIndex = 17;
+      this.BACK.Text = "BACK";
+      this.BACK.UseVisualStyleBackColor = true;
+      // 
       // SINGLE_LINE_DIAGRAM
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1066, 476);
+      this.ClientSize = new System.Drawing.Size(1066, 507);
+      this.Controls.Add(this.BACK);
+      this.Controls.Add(this.CONTINUE);
       this.Controls.Add(this.VERTICAL_WIRE);
       this.Controls.Add(this.HORIZONTAL_WIRE);
       this.Controls.Add(this.MULTI_METER);
@@ -206,5 +228,7 @@
     private System.Windows.Forms.PictureBox MULTI_METER;
     private System.Windows.Forms.PictureBox HORIZONTAL_WIRE;
     private System.Windows.Forms.PictureBox VERTICAL_WIRE;
+    private System.Windows.Forms.Button CONTINUE;
+    private System.Windows.Forms.Button BACK;
   }
 }
