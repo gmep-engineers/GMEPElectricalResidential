@@ -10,26 +10,27 @@ using System.Windows.Forms;
 
 namespace GMEPElectricalResidential
 {
-  public partial class PullSectionBelowForm : UserControl
+  public partial class MainForm : UserControl
   {
     private string amperageWaterMark = "Enter amperage...";
 
-    public PullSectionBelowForm(Point location)
+    public MainForm(Point location)
     {
       Location = location;
       InitializeComponent();
-      SetWatermarkText();
-      AMPERAGE.Enter += AMPERAGE_Enter;
-      AMPERAGE.Leave += AMPERAGE_Leave;
+      SetWaterMarkText();
+      CONFIGURATION.SelectedIndex = 0;
+      KAIC.SelectedIndex = 1;
+      AMPERAGE.Enter += new EventHandler(AMPERAGE_Enter);
+      AMPERAGE.Leave += new EventHandler(AMPERAGE_Leave);
     }
 
-    private void SetWatermarkText()
+    private void SetWaterMarkText()
     {
-      AMPERAGE.ForeColor = Color.Gray;
       AMPERAGE.Text = amperageWaterMark;
+      AMPERAGE.ForeColor = Color.Gray;
     }
 
-    // TextBox Enter event handler
     private void AMPERAGE_Enter(object sender, EventArgs e)
     {
       if (AMPERAGE.Text == amperageWaterMark)
@@ -39,13 +40,11 @@ namespace GMEPElectricalResidential
       }
     }
 
-    // TextBox Leave event handler
     private void AMPERAGE_Leave(object sender, EventArgs e)
     {
-      if (string.IsNullOrWhiteSpace(AMPERAGE.Text))
+      if (AMPERAGE.Text.Length == 0)
       {
-        AMPERAGE.Text = amperageWaterMark;
-        AMPERAGE.ForeColor = Color.Gray;
+        SetWaterMarkText();
       }
     }
   }

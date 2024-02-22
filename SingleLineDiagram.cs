@@ -126,7 +126,9 @@ namespace GMEPElectricalResidential
           Image = MAIN.Image,
           Bounds = new Rectangle(0, 0, 64, 64),
           ID = currentID,
-          Name = "MAIN"
+          Name = "MAIN",
+          Form = new MainForm(location),
+          Message = "Main Panel Block"
         };
         MAIN.DoDragDrop(data, DragDropEffects.Copy);
       }
@@ -141,7 +143,9 @@ namespace GMEPElectricalResidential
           Image = METER_COMBO.Image,
           Bounds = new Rectangle(0, 0, 64, 64),
           ID = currentID,
-          Name = "METER_COMBO"
+          Name = "METER_COMBO",
+          Form = new MeterComboForm(location),
+          Message = "Meter Combo Block"
         };
         METER_COMBO.DoDragDrop(data, DragDropEffects.Copy);
       }
