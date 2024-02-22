@@ -30,7 +30,6 @@
     {
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SINGLE_LINE_DIAGRAM));
       this.UPWARDS_ARROW = new System.Windows.Forms.PictureBox();
-      this.PANEL = new GMEPElectricalResidential.DoubleBufferedPanel();
       this.TRASH = new System.Windows.Forms.PictureBox();
       this.DOWNWARDS_ARROW = new System.Windows.Forms.PictureBox();
       this.MAIN = new System.Windows.Forms.PictureBox();
@@ -38,10 +37,9 @@
       this.METER_COMBO = new System.Windows.Forms.PictureBox();
       this.DISTRIBUTION = new System.Windows.Forms.PictureBox();
       this.MULTI_METER = new System.Windows.Forms.PictureBox();
-      this.HORIZONTAL_WIRE = new System.Windows.Forms.PictureBox();
-      this.VERTICAL_WIRE = new System.Windows.Forms.PictureBox();
-      this.CONTINUE = new System.Windows.Forms.Button();
-      this.BACK = new System.Windows.Forms.Button();
+      this.PANEL = new GMEPElectricalResidential.DoubleBufferedPanel();
+      this.USERCONTROL_PLACEHOLDER = new System.Windows.Forms.Panel();
+      this.BLOCK_INFORMATION = new System.Windows.Forms.Label();
       ((System.ComponentModel.ISupportInitialize)(this.UPWARDS_ARROW)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.TRASH)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.DOWNWARDS_ARROW)).BeginInit();
@@ -50,8 +48,6 @@
       ((System.ComponentModel.ISupportInitialize)(this.METER_COMBO)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.DISTRIBUTION)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.MULTI_METER)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.HORIZONTAL_WIRE)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.VERTICAL_WIRE)).BeginInit();
       this.SuspendLayout();
       // 
       // UPWARDS_ARROW
@@ -63,16 +59,6 @@
       this.UPWARDS_ARROW.Size = new System.Drawing.Size(64, 64);
       this.UPWARDS_ARROW.TabIndex = 5;
       this.UPWARDS_ARROW.TabStop = false;
-      // 
-      // PANEL
-      // 
-      this.PANEL.AllowDrop = true;
-      this.PANEL.AutoScroll = true;
-      this.PANEL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.PANEL.Location = new System.Drawing.Point(152, 12);
-      this.PANEL.Name = "PANEL";
-      this.PANEL.Size = new System.Drawing.Size(902, 452);
-      this.PANEL.TabIndex = 6;
       // 
       // TRASH
       // 
@@ -144,53 +130,40 @@
       this.MULTI_METER.TabIndex = 13;
       this.MULTI_METER.TabStop = false;
       // 
-      // HORIZONTAL_WIRE
+      // PANEL
       // 
-      this.HORIZONTAL_WIRE.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.HORIZONTAL_WIRE.Image = ((System.Drawing.Image)(resources.GetObject("HORIZONTAL_WIRE.Image")));
-      this.HORIZONTAL_WIRE.Location = new System.Drawing.Point(12, 222);
-      this.HORIZONTAL_WIRE.Name = "HORIZONTAL_WIRE";
-      this.HORIZONTAL_WIRE.Size = new System.Drawing.Size(64, 64);
-      this.HORIZONTAL_WIRE.TabIndex = 14;
-      this.HORIZONTAL_WIRE.TabStop = false;
+      this.PANEL.AllowDrop = true;
+      this.PANEL.AutoScroll = true;
+      this.PANEL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.PANEL.Location = new System.Drawing.Point(152, 12);
+      this.PANEL.Name = "PANEL";
+      this.PANEL.Size = new System.Drawing.Size(902, 452);
+      this.PANEL.TabIndex = 6;
       // 
-      // VERTICAL_WIRE
+      // USERCONTROL_PLACEHOLDER
       // 
-      this.VERTICAL_WIRE.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.VERTICAL_WIRE.Image = ((System.Drawing.Image)(resources.GetObject("VERTICAL_WIRE.Image")));
-      this.VERTICAL_WIRE.Location = new System.Drawing.Point(82, 292);
-      this.VERTICAL_WIRE.Name = "VERTICAL_WIRE";
-      this.VERTICAL_WIRE.Size = new System.Drawing.Size(64, 64);
-      this.VERTICAL_WIRE.TabIndex = 15;
-      this.VERTICAL_WIRE.TabStop = false;
+      this.USERCONTROL_PLACEHOLDER.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.USERCONTROL_PLACEHOLDER.Location = new System.Drawing.Point(12, 496);
+      this.USERCONTROL_PLACEHOLDER.Name = "USERCONTROL_PLACEHOLDER";
+      this.USERCONTROL_PLACEHOLDER.Size = new System.Drawing.Size(1042, 162);
+      this.USERCONTROL_PLACEHOLDER.TabIndex = 14;
       // 
-      // CONTINUE
+      // BLOCK_INFORMATION
       // 
-      this.CONTINUE.Location = new System.Drawing.Point(964, 471);
-      this.CONTINUE.Name = "CONTINUE";
-      this.CONTINUE.Size = new System.Drawing.Size(90, 24);
-      this.CONTINUE.TabIndex = 16;
-      this.CONTINUE.Text = "CONTINUE";
-      this.CONTINUE.UseVisualStyleBackColor = true;
-      // 
-      // BACK
-      // 
-      this.BACK.Location = new System.Drawing.Point(152, 470);
-      this.BACK.Name = "BACK";
-      this.BACK.Size = new System.Drawing.Size(66, 24);
-      this.BACK.TabIndex = 17;
-      this.BACK.Text = "BACK";
-      this.BACK.UseVisualStyleBackColor = true;
+      this.BLOCK_INFORMATION.AutoSize = true;
+      this.BLOCK_INFORMATION.Location = new System.Drawing.Point(469, 480);
+      this.BLOCK_INFORMATION.Name = "BLOCK_INFORMATION";
+      this.BLOCK_INFORMATION.Size = new System.Drawing.Size(89, 13);
+      this.BLOCK_INFORMATION.TabIndex = 15;
+      this.BLOCK_INFORMATION.Text = "Block Information";
       // 
       // SINGLE_LINE_DIAGRAM
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1066, 507);
-      this.Controls.Add(this.BACK);
-      this.Controls.Add(this.CONTINUE);
-      this.Controls.Add(this.VERTICAL_WIRE);
-      this.Controls.Add(this.HORIZONTAL_WIRE);
+      this.ClientSize = new System.Drawing.Size(1066, 673);
+      this.Controls.Add(this.BLOCK_INFORMATION);
+      this.Controls.Add(this.USERCONTROL_PLACEHOLDER);
       this.Controls.Add(this.MULTI_METER);
       this.Controls.Add(this.DISTRIBUTION);
       this.Controls.Add(this.METER_COMBO);
@@ -210,9 +183,8 @@
       ((System.ComponentModel.ISupportInitialize)(this.METER_COMBO)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.DISTRIBUTION)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.MULTI_METER)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.HORIZONTAL_WIRE)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.VERTICAL_WIRE)).EndInit();
       this.ResumeLayout(false);
+      this.PerformLayout();
 
     }
 
@@ -226,9 +198,7 @@
     private System.Windows.Forms.PictureBox METER_COMBO;
     private System.Windows.Forms.PictureBox DISTRIBUTION;
     private System.Windows.Forms.PictureBox MULTI_METER;
-    private System.Windows.Forms.PictureBox HORIZONTAL_WIRE;
-    private System.Windows.Forms.PictureBox VERTICAL_WIRE;
-    private System.Windows.Forms.Button CONTINUE;
-    private System.Windows.Forms.Button BACK;
+    private System.Windows.Forms.Panel USERCONTROL_PLACEHOLDER;
+    private System.Windows.Forms.Label BLOCK_INFORMATION;
   }
 }

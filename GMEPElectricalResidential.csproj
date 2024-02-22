@@ -68,11 +68,20 @@
       <DependentUpon>SingleLineDiagram.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\PullSectionAboveForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\PullSectionAboveForm.Designer.cs">
+      <DependentUpon>PullSectionAboveForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\PullSectionAboveForm.resx">
+      <DependentUpon>PullSectionAboveForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SingleLineDiagram.resx">
       <DependentUpon>SingleLineDiagram.cs</DependentUpon>

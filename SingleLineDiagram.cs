@@ -17,10 +17,12 @@ namespace GMEPElectricalResidential
     private List<DraggableObject> draggableObjects = new List<DraggableObject>();
     private DraggableObject currentDraggableObject;
     private bool isDraggingForDeletion = false;
+    private int currentID;
 
     public SINGLE_LINE_DIAGRAM()
     {
       InitializeComponent();
+      currentID = 0;
       UPWARDS_ARROW.MouseDown += new MouseEventHandler(UPWARDS_ARROW_MouseDown);
       DOWNWARDS_ARROW.MouseDown += new MouseEventHandler(DOWNWARDS_ARROW_MouseDown);
       METER_MAIN.MouseDown += new MouseEventHandler(METER_MAIN_MouseDown);
@@ -28,8 +30,6 @@ namespace GMEPElectricalResidential
       METER_COMBO.MouseDown += new MouseEventHandler(METER_COMBO_MouseDown);
       DISTRIBUTION.MouseDown += new MouseEventHandler(DISTRIBUTION_MouseDown);
       MULTI_METER.MouseDown += new MouseEventHandler(MULTI_METER_MouseDown);
-      VERTICAL_WIRE.MouseDown += new MouseEventHandler(VERTICAL_WIRE_MouseDown);
-      HORIZONTAL_WIRE.MouseDown += new MouseEventHandler(HORIZONTAL_WIRE_MouseDown);
       PANEL.AllowDrop = true;
       PANEL.DragEnter += new DragEventHandler(PANEL_DragEnter);
       PANEL.DragDrop += new DragEventHandler(PANEL_DragDrop);
@@ -37,33 +37,26 @@ namespace GMEPElectricalResidential
       PANEL.MouseMove += new MouseEventHandler(PANEL_MouseMove);
       PANEL.MouseUp += new MouseEventHandler(PANEL_MouseUp);
       PANEL.Paint += new PaintEventHandler(PANEL_Paint);
+      PANEL.DoubleClick += new EventHandler(PANEL_DoubleClick);
       TRASH.AllowDrop = true;
       TRASH.DragEnter += new DragEventHandler(TRASH_DragEnter);
       TRASH.DragDrop += new DragEventHandler(TRASH_DragDrop);
       TRASH.DragLeave += TRASH_DragLeave;
     }
 
-    private void VERTICAL_WIRE_MouseDown(object sender, MouseEventArgs e)
+    private void PANEL_DoubleClick(object sender, EventArgs e)
     {
-      if (e.Button == MouseButtons.Left)
+      if (currentDraggableObject != null)
       {
-        VERTICAL_WIRE.DoDragDrop(VERTICAL_WIRE.Image, DragDropEffects.Copy);
-      }
-    }
+        var name = currentDraggableObject.Name;
+        var location = USERCONTROL_PLACEHOLDER.Location;
+        Controls.Remove(USERCONTROL_PLACEHOLDER);
 
-    private void HORIZONTAL_WIRE_MouseDown(object sender, MouseEventArgs e)
-    {
-      if (e.Button == MouseButtons.Left)
-      {
-        HORIZONTAL_WIRE.DoDragDrop(HORIZONTAL_WIRE.Image, DragDropEffects.Copy);
-      }
-    }
-
-    private void UPWARDS_ARROW_MouseDown(object sender, MouseEventArgs e)
-    {
-      if (e.Button == MouseButtons.Left)
-      {
-        UPWARDS_ARROW.DoDragDrop(UPWARDS_ARROW.Image, DragDropEffects.Copy);
+        if (name == "UPWARDS_ARROW")
+        {
+          Controls.Add(new PullSectionAboveForm(location));
+          BLOCK_INFORMATION.Text = "Pull Section Above Block";
+        }
       }
     }
 
@@ -71,7 +64,14 @@ namespace GMEPElectricalResidential
     {
       if (e.Button == MouseButtons.Left)
       {
-        DOWNWARDS_ARROW.DoDragDrop(DOWNWARDS_ARROW.Image, DragDropEffects.Copy);
+        var data = new DraggableObject()
+        {
+          Image = DOWNWARDS_ARROW.Image,
+          Bounds = new Rectangle(0, 0, 64, 64),
+          ID = currentID,
+          Name = "DOWNWARDS_ARROW"
+        };
+        DOWNWARDS_ARROW.DoDragDrop(data, DragDropEffects.Copy);
       }
     }
 
@@ -79,7 +79,14 @@ namespace GMEPElectricalResidential
     {
       if (e.Button == MouseButtons.Left)
       {
-        METER_MAIN.DoDragDrop(METER_MAIN.Image, DragDropEffects.Copy);
+        var data = new DraggableObject()
+        {
+          Image = METER_MAIN.Image,
+          Bounds = new Rectangle(0, 0, 64, 64),
+          ID = currentID,
+          Name = "METER_MAIN"
+        };
+        METER_MAIN.DoDragDrop(data, DragDropEffects.Copy);
       }
     }
 
@@ -87,7 +94,14 @@ namespace GMEPElectricalResidential
     {
       if (e.Button == MouseButtons.Left)
       {
-        MAIN.DoDragDrop(MAIN.Image, DragDropEffects.Copy);
+        var data = new DraggableObject()
+        {
+          Image = MAIN.Image,
+          Bounds = new Rectangle(0, 0, 64, 64),
+          ID = currentID,
+          Name = "MAIN"
+        };
+        MAIN.DoDragDrop(data, DragDropEffects.Copy);
       }
     }
 
@@ -95,7 +109,14 @@ namespace GMEPElectricalResidential
     {
       if (e.Button == MouseButtons.Left)
       {
-        METER_COMBO.DoDragDrop(METER_COMBO.Image, DragDropEffects.Copy);
+        var data = new DraggableObject()
+        {
+          Image = METER_COMBO.Image,
+          Bounds = new Rectangle(0, 0, 64, 64),
+          ID = currentID,
+          Name = "METER_COMBO"
+        };
+        METER_COMBO.DoDragDrop(data, DragDropEffects.Copy);
       }
     }
 
@@ -103,7 +124,14 @@ namespace GMEPElectricalResidential
     {
       if (e.Button == MouseButtons.Left)
       {
-        DISTRIBUTION.DoDragDrop(DISTRIBUTION.Image, DragDropEffects.Copy);
+        var data = new DraggableObject()
+        {
+          Image = DISTRIBUTION.Image,
+          Bounds = new Rectangle(0, 0, 64, 64),
+          ID = currentID,
+          Name = "DISTRIBUTION"
+        };
+        DISTRIBUTION.DoDragDrop(data, DragDropEffects.Copy);
       }
     }
 
@@ -111,13 +139,35 @@ namespace GMEPElectricalResidential
     {
       if (e.Button == MouseButtons.Left)
       {
-        MULTI_METER.DoDragDrop(MULTI_METER.Image, DragDropEffects.Copy);
+        var data = new DraggableObject()
+        {
+          Image = MULTI_METER.Image,
+          Bounds = new Rectangle(0, 0, 64, 64),
+          ID = currentID,
+          Name = "MULTI_METER"
+        };
+        MULTI_METER.DoDragDrop(data, DragDropEffects.Copy);
+      }
+    }
+
+    private void UPWARDS_ARROW_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Left)
+      {
+        var data = new DraggableObject()
+        {
+          Image = UPWARDS_ARROW.Image,
+          Bounds = new Rectangle(0, 0, 64, 64),
+          ID = currentID,
+          Name = "UPWARDS_ARROW"
+        };
+        UPWARDS_ARROW.DoDragDrop(data, DragDropEffects.Copy);
       }
     }
 
     private void PANEL_DragEnter(object sender, DragEventArgs e)
     {
-      if (e.Data.GetDataPresent(DataFormats.Bitmap))
+      if (e.Data.GetDataPresent(typeof(DraggableObject)))
       {
         e.Effect = DragDropEffects.Copy;
       }
@@ -266,20 +316,21 @@ namespace GMEPElectricalResidential
 
     private void PANEL_DragDrop(object sender, DragEventArgs e)
     {
-      if (!e.Data.GetDataPresent(typeof(DraggableObject)) || sender == TRASH)
+      if (e.Data.GetDataPresent(typeof(DraggableObject)))
       {
         Point dropPoint = PANEL.PointToClient(new Point(e.X, e.Y));
-        Image droppedImage = (Image)e.Data.GetData(DataFormats.Bitmap);
 
-        DraggableObject draggable = new DraggableObject()
+        var draggableObject = e.Data.GetData(typeof(DraggableObject)) as DraggableObject;
+
+        if (draggableObject != null)
         {
-          Image = droppedImage,
-          Bounds = new Rectangle(dropPoint, droppedImage.Size)
-        };
-
-        draggableObjects.Add(draggable);
-        UpdateScrollBars();
-        PANEL.Invalidate();
+          Image droppedImage = draggableObject.Image;
+          draggableObject.Bounds = new Rectangle(dropPoint, droppedImage.Size);
+          currentID++;
+          draggableObjects.Add(draggableObject);
+          UpdateScrollBars();
+          PANEL.Invalidate();
+        }
       }
     }
 
@@ -350,6 +401,13 @@ namespace GMEPElectricalResidential
       // Update the AutoScrollMinSize property
       PANEL.AutoScrollMinSize = new Size(maxWidth, maxHeight);
     }
+
+    private void SaveEventData(object sender, EventArgs e)
+    {
+      HelperMethods.SaveDataToJsonFile(currentDraggableObject, "currentDraggableObject.json");
+      HelperMethods.SaveDataToJsonFile(sender, "sender.json");
+      HelperMethods.SaveDataToJsonFile(e, "e.json");
+    }
   }
 
   public class DraggableObject
@@ -358,6 +416,8 @@ namespace GMEPElectricalResidential
     public Rectangle Bounds { get; set; }
     public bool IsDragging { get; set; }
     public Point ClickOffset { get; set; }
+    public int ID { get; set; }
+    public string Name { get; set; }
   }
 
   public class DoubleBufferedPanel : Panel
