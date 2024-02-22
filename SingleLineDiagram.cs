@@ -188,42 +188,41 @@ namespace GMEPElectricalResidential
         const int blockSize = 64; // Size of the blocks
         bool snappedHorizontally = false;
 
-        foreach (var obj in draggableObjects.Where(o => o != currentDraggableObject))
+        // Find the closest draggable object
+        var closestObject = draggableObjects
+            .Where(o => o != currentDraggableObject)
+            .OrderBy(o => Math.Sqrt(Math.Pow(o.Bounds.X - currentDraggableObject.Bounds.X, 2) + Math.Pow(o.Bounds.Y - currentDraggableObject.Bounds.Y, 2)))
+            .FirstOrDefault();
+
+        if (closestObject != null)
         {
           // Horizontal Snapping (Left and Right edges)
-          if (Math.Abs(newX + blockSize - obj.Bounds.Left) < snapThreshold)
+          if (Math.Abs(newX + blockSize - closestObject.Bounds.Left) < snapThreshold)
           {
-            newX = obj.Bounds.Left - blockSize;
-            newY = obj.Bounds.Y; // Align tops for perfect fit
+            newX = closestObject.Bounds.Left - blockSize;
+            newY = closestObject.Bounds.Y; // Align tops for perfect fit
             snappedHorizontally = true;
-            break; // Assuming one snap target is enough
           }
-          else if (Math.Abs(newX - obj.Bounds.Right) < snapThreshold)
+          else if (Math.Abs(newX - closestObject.Bounds.Right) < snapThreshold)
           {
-            newX = obj.Bounds.Right;
-            newY = obj.Bounds.Y; // Align tops for perfect fit
+            newX = closestObject.Bounds.Right;
+            newY = closestObject.Bounds.Y; // Align tops for perfect fit
             snappedHorizontally = true;
-            break; // Assuming one snap target is enough
           }
-        }
 
-        // If not snapped horizontally, consider vertical snapping
-        if (!snappedHorizontally)
-        {
-          foreach (var obj in draggableObjects.Where(o => o != currentDraggableObject))
+          // If not snapped horizontally, consider vertical snapping
+          if (!snappedHorizontally)
           {
             // Vertical Snapping (Top and Bottom edges)
-            if (Math.Abs(newY + blockSize - obj.Bounds.Top) < snapThreshold)
+            if (Math.Abs(newY + blockSize - closestObject.Bounds.Top) < snapThreshold)
             {
-              newY = obj.Bounds.Top - blockSize;
-              newX = obj.Bounds.X; // Align lefts for perfect fit
-              break; // Assuming one snap target is enough
+              newY = closestObject.Bounds.Top - blockSize;
+              newX = closestObject.Bounds.X; // Align lefts for perfect fit
             }
-            else if (Math.Abs(newY - obj.Bounds.Bottom) < snapThreshold)
+            else if (Math.Abs(newY - closestObject.Bounds.Bottom) < snapThreshold)
             {
-              newY = obj.Bounds.Bottom;
-              newX = obj.Bounds.X; // Align lefts for perfect fit
-              break; // Assuming one snap target is enough
+              newY = closestObject.Bounds.Bottom;
+              newX = closestObject.Bounds.X; // Align lefts for perfect fit
             }
           }
         }
