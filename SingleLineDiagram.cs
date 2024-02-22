@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static GMEPElectricalResidential.SINGLE_LINE_DIAGRAM;
 
 namespace GMEPElectricalResidential
 {
@@ -160,7 +159,9 @@ namespace GMEPElectricalResidential
           Image = DISTRIBUTION.Image,
           Bounds = new Rectangle(0, 0, 64, 64),
           ID = currentID,
-          Name = "DISTRIBUTION"
+          Name = "DISTRIBUTION",
+          Form = new DistributionForm(location),
+          Message = "Distribution Block"
         };
         DISTRIBUTION.DoDragDrop(data, DragDropEffects.Copy);
       }

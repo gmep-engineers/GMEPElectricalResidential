@@ -135,20 +135,17 @@
       // USERCONTROL_PLACEHOLDER
       // 
       this.USERCONTROL_PLACEHOLDER.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.USERCONTROL_PLACEHOLDER.Location = new System.Drawing.Point(12, 496);
+      this.USERCONTROL_PLACEHOLDER.Location = new System.Drawing.Point(1060, 45);
       this.USERCONTROL_PLACEHOLDER.Name = "USERCONTROL_PLACEHOLDER";
-      this.USERCONTROL_PLACEHOLDER.Size = new System.Drawing.Size(1042, 162);
+      this.USERCONTROL_PLACEHOLDER.Size = new System.Drawing.Size(270, 419);
       this.USERCONTROL_PLACEHOLDER.TabIndex = 14;
       // 
       // BLOCK_INFORMATION
       // 
-      this.BLOCK_INFORMATION.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
       this.BLOCK_INFORMATION.BackColor = System.Drawing.Color.Transparent;
-      this.BLOCK_INFORMATION.Location = new System.Drawing.Point(12, 474);
+      this.BLOCK_INFORMATION.Location = new System.Drawing.Point(1060, 21);
       this.BLOCK_INFORMATION.Name = "BLOCK_INFORMATION";
-      this.BLOCK_INFORMATION.Size = new System.Drawing.Size(1042, 13);
+      this.BLOCK_INFORMATION.Size = new System.Drawing.Size(270, 13);
       this.BLOCK_INFORMATION.TabIndex = 15;
       this.BLOCK_INFORMATION.Text = "Double click a placed block to view its information";
       this.BLOCK_INFORMATION.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -171,16 +168,13 @@
       this.DRAG_AND_DROP.BackColor = System.Drawing.Color.Transparent;
       this.DRAG_AND_DROP.Location = new System.Drawing.Point(12, 12);
       this.DRAG_AND_DROP.Name = "DRAG_AND_DROP";
-      this.DRAG_AND_DROP.Size = new System.Drawing.Size(134, 30);
+      this.DRAG_AND_DROP.Size = new System.Drawing.Size(410, 0);
       this.DRAG_AND_DROP.TabIndex = 16;
       this.DRAG_AND_DROP.Text = "Drag and Drop";
       this.DRAG_AND_DROP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // PLACEMENT_AREA
       // 
-      this.PLACEMENT_AREA.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
       this.PLACEMENT_AREA.BackColor = System.Drawing.Color.Transparent;
       this.PLACEMENT_AREA.Location = new System.Drawing.Point(152, 12);
       this.PLACEMENT_AREA.Name = "PLACEMENT_AREA";
@@ -193,7 +187,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1066, 673);
+      this.ClientSize = new System.Drawing.Size(1342, 477);
       this.Controls.Add(this.PLACEMENT_AREA);
       this.Controls.Add(this.DRAG_AND_DROP);
       this.Controls.Add(this.BLOCK_INFORMATION);
