@@ -239,6 +239,7 @@
       this.DELETE_CHILD.TabIndex = 26;
       this.DELETE_CHILD.Text = "Delete Child";
       this.DELETE_CHILD.UseVisualStyleBackColor = false;
+      this.DELETE_CHILD.Click += new System.EventHandler(this.DELETE_CHILD_Click);
       // 
       // ADD_CHILD
       // 
