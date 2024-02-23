@@ -39,9 +39,9 @@
       this.MULTI_METER = new System.Windows.Forms.PictureBox();
       this.USERCONTROL_PLACEHOLDER = new System.Windows.Forms.Panel();
       this.BLOCK_INFORMATION = new System.Windows.Forms.Label();
-      this.PANEL = new GMEPElectricalResidential.DoubleBufferedPanel();
       this.DRAG_AND_DROP = new System.Windows.Forms.Label();
       this.PLACEMENT_AREA = new System.Windows.Forms.Label();
+      this.PANEL = new GMEPElectricalResidential.DoubleBufferedPanel();
       ((System.ComponentModel.ISupportInitialize)(this.UPWARDS_ARROW)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.TRASH)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.DOWNWARDS_ARROW)).BeginInit();
@@ -66,7 +66,7 @@
       // 
       this.TRASH.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.TRASH.Image = ((System.Drawing.Image)(resources.GetObject("TRASH.Image")));
-      this.TRASH.Location = new System.Drawing.Point(82, 400);
+      this.TRASH.Location = new System.Drawing.Point(82, 683);
       this.TRASH.Name = "TRASH";
       this.TRASH.Size = new System.Drawing.Size(64, 64);
       this.TRASH.TabIndex = 7;
@@ -137,7 +137,7 @@
       this.USERCONTROL_PLACEHOLDER.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.USERCONTROL_PLACEHOLDER.Location = new System.Drawing.Point(1060, 45);
       this.USERCONTROL_PLACEHOLDER.Name = "USERCONTROL_PLACEHOLDER";
-      this.USERCONTROL_PLACEHOLDER.Size = new System.Drawing.Size(270, 419);
+      this.USERCONTROL_PLACEHOLDER.Size = new System.Drawing.Size(270, 702);
       this.USERCONTROL_PLACEHOLDER.TabIndex = 14;
       // 
       // BLOCK_INFORMATION
@@ -150,25 +150,12 @@
       this.BLOCK_INFORMATION.Text = "Double click a placed block to view its information";
       this.BLOCK_INFORMATION.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
-      // PANEL
-      // 
-      this.PANEL.AllowDrop = true;
-      this.PANEL.AutoScroll = true;
-      this.PANEL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.PANEL.Location = new System.Drawing.Point(152, 45);
-      this.PANEL.Name = "PANEL";
-      this.PANEL.Size = new System.Drawing.Size(902, 419);
-      this.PANEL.TabIndex = 6;
-      // 
       // DRAG_AND_DROP
       // 
-      this.DRAG_AND_DROP.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
       this.DRAG_AND_DROP.BackColor = System.Drawing.Color.Transparent;
       this.DRAG_AND_DROP.Location = new System.Drawing.Point(12, 12);
       this.DRAG_AND_DROP.Name = "DRAG_AND_DROP";
-      this.DRAG_AND_DROP.Size = new System.Drawing.Size(410, 0);
+      this.DRAG_AND_DROP.Size = new System.Drawing.Size(134, 30);
       this.DRAG_AND_DROP.TabIndex = 16;
       this.DRAG_AND_DROP.Text = "Drag and Drop";
       this.DRAG_AND_DROP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -183,11 +170,21 @@
       this.PLACEMENT_AREA.Text = "Placement Area";
       this.PLACEMENT_AREA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
+      // PANEL
+      // 
+      this.PANEL.AllowDrop = true;
+      this.PANEL.AutoScroll = true;
+      this.PANEL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.PANEL.Location = new System.Drawing.Point(152, 45);
+      this.PANEL.Name = "PANEL";
+      this.PANEL.Size = new System.Drawing.Size(902, 702);
+      this.PANEL.TabIndex = 6;
+      // 
       // SINGLE_LINE_DIAGRAM
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1342, 477);
+      this.ClientSize = new System.Drawing.Size(1342, 759);
       this.Controls.Add(this.PLACEMENT_AREA);
       this.Controls.Add(this.DRAG_AND_DROP);
       this.Controls.Add(this.BLOCK_INFORMATION);

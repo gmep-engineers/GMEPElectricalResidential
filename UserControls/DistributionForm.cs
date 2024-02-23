@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,6 +27,7 @@ namespace GMEPElectricalResidential
       CONFIGURATION.SelectedIndex = 0;
       KAIC.SelectedIndex = 1;
       SIZE.SelectedIndex = 0;
+      PARENT.SelectedIndex = 0;
 
       DISTRIBUTION_NAME.Enter += PANEL_NAME_Enter;
       DISTRIBUTION_NAME.Leave += PANEL_NAME_Leave;
@@ -37,7 +39,7 @@ namespace GMEPElectricalResidential
 
       TabPage tab = new TabPage
       {
-        Text = "Item" + tabCount.ToString()
+        Text = "Child " + tabCount.ToString()
       };
 
       var tabUserControl = new ItemTab();
@@ -69,6 +71,10 @@ namespace GMEPElectricalResidential
       {
         SetWatermarkText();
       }
+    }
+
+    private void ADD_CHILD_Click(object sender, EventArgs e)
+    {
     }
   }
 }
