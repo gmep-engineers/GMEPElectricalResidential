@@ -141,7 +141,9 @@
       <DependentUpon>SingleLineDiagram.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="0_Notes.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"C:\Program Files\Autodesk\AutoCAD 2023\acad.exe" /product ACAD /language "en-US" "C:\Users\JacobH\OneDrive - GMEPE\Documents\Programming\Residential DWG\Residential Template - 24x36.dwg"</PostBuildEvent>

@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.EditorInput;
+using Autodesk.AutoCAD.Geometry;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Autodesk.AutoCAD.ApplicationServices.Core.Application;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace GMEPElectricalResidential
@@ -25,7 +30,7 @@ namespace GMEPElectricalResidential
       SetWatermarkText();
 
       CONFIGURATION.SelectedIndex = 0;
-      KAIC.SelectedIndex = 1;
+      KAIC.SelectedIndex = 0;
       SIZE.SelectedIndex = 0;
       PARENT.SelectedIndex = 0;
 
@@ -131,7 +136,7 @@ namespace GMEPElectricalResidential
 
       TabPage tab = new TabPage
       {
-        Text = "Child " + tabCount.ToString()
+        Text = "Breaker " + tabCount.ToString()
       };
 
       var tabUserControl = new ItemTab();
@@ -155,8 +160,83 @@ namespace GMEPElectricalResidential
     {
       for (int i = 0; i < TABS.TabPages.Count; i++)
       {
-        TABS.TabPages[i].Text = $"Child {i + 1}";
+        TABS.TabPages[i].Text = $"Breaker {i + 1}";
       }
     }
+
+    // HIDE COMPONENT
+    private void PARENT_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      if (PARENT.SelectedIndex == 0)
+      {
+        DISTANCE_FROM_PARENT.Enabled = false;
+        DISTANCE_FROM_PARENT_PANEL.BackColor = Color.FromKnownColor(KnownColor.Control);
+        DISTANCE_FROM_PARENT_LABEL.Text = "";
+      }
+      else
+      {
+        DISTANCE_FROM_PARENT.Enabled = true;
+        DISTANCE_FROM_PARENT_PANEL.BackColor = Color.FromKnownColor(KnownColor.Window);
+        DISTANCE_FROM_PARENT_LABEL.Text = "Distance from Parent (ft)";
+      }
+    }
+
+    // SET LOCATION
+    private void SET_DISTRIBUTION_LOCATION_Click(object sender, EventArgs e)
+    {
+      this.Parent.Hide();
+      using (DocumentLock docLock = DocumentManager.MdiActiveDocument.LockDocument())
+      {
+        SetCurrentSpaceToModelSpace();
+        Point3d location = PromptUserToClick();
+        this.Parent.Show();
+      }
+    }
+
+    public void SetCurrentSpaceToModelSpace()
+    {
+      LayoutManager acLayoutMgr = LayoutManager.Current;
+      acLayoutMgr.CurrentLayout = "Model";
+    }
+
+    public Point3d PromptUserToClick()
+    {
+      Document acDoc = DocumentManager.MdiActiveDocument;
+      Database acCurDb = acDoc.Database;
+
+      using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
+      {
+        PromptPointResult pPtRes;
+        PromptPointOptions pPtOpts = new PromptPointOptions("");
+
+        pPtOpts.Message = "\nClick where distribution panel is located.";
+        pPtRes = acDoc.Editor.GetPoint(pPtOpts);
+
+        if (pPtRes.Status == PromptStatus.OK)
+        {
+          return pPtRes.Value;
+        }
+      }
+
+      return new Point3d();
+    }
+  }
+
+  public class ElectricalDistribution
+  {
+    public string Name { get; set; }
+    public bool Status { get; set; }
+    public string Parent { get; set; }
+    public string Size { get; set; }
+    public string Configuration { get; set; }
+    public string KAIC { get; set; }
+    public Point3d Location { get; set; }
+    public string DistanceFromParent { get; set; }
+    public List<ElectricalPanel> Panels { get; set; }
+  }
+
+  public class ElectricalPanel
+  {
+    public Point3d Location { get; set; }
   }
 }

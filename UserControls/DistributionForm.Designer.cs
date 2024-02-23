@@ -41,16 +41,20 @@
       this.STATUS = new System.Windows.Forms.GroupBox();
       this.panel1 = new System.Windows.Forms.Panel();
       this.DISTRIBUTION_NAME = new System.Windows.Forms.TextBox();
-      this.button1 = new System.Windows.Forms.Button();
-      this.button2 = new System.Windows.Forms.Button();
-      this.DELETE_CHILD = new System.Windows.Forms.Button();
-      this.ADD_CHILD = new System.Windows.Forms.Button();
+      this.BREAKER_PANELS = new System.Windows.Forms.Button();
+      this.BREAKER_LOAD_CALCULATIONS = new System.Windows.Forms.Button();
+      this.DELETE_BREAKER = new System.Windows.Forms.Button();
+      this.ADD_BREAKER = new System.Windows.Forms.Button();
       this.PARENT = new System.Windows.Forms.ComboBox();
       this.label5 = new System.Windows.Forms.Label();
       this.SET_DISTRIBUTION_LOCATION = new System.Windows.Forms.Button();
-      this.EQUIPMENT = new System.Windows.Forms.Button();
+      this.BREAKER_EQUIPMENT = new System.Windows.Forms.Button();
+      this.DISTANCE_FROM_PARENT_LABEL = new System.Windows.Forms.Label();
+      this.DISTANCE_FROM_PARENT_PANEL = new System.Windows.Forms.Panel();
+      this.DISTANCE_FROM_PARENT = new System.Windows.Forms.TextBox();
       this.STATUS.SuspendLayout();
       this.panel1.SuspendLayout();
+      this.DISTANCE_FROM_PARENT_PANEL.SuspendLayout();
       this.SuspendLayout();
       // 
       // label1
@@ -66,7 +70,7 @@
       // label2
       // 
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(9, 124);
+      this.label2.Location = new System.Drawing.Point(9, 126);
       this.label2.Margin = new System.Windows.Forms.Padding(2);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(69, 13);
@@ -88,7 +92,7 @@
       this.CONFIGURATION.Margin = new System.Windows.Forms.Padding(2);
       this.CONFIGURATION.Name = "CONFIGURATION";
       this.CONFIGURATION.Size = new System.Drawing.Size(240, 21);
-      this.CONFIGURATION.TabIndex = 3;
+      this.CONFIGURATION.TabIndex = 4;
       // 
       // label3
       // 
@@ -114,7 +118,7 @@
       this.KAIC.Margin = new System.Windows.Forms.Padding(2);
       this.KAIC.Name = "KAIC";
       this.KAIC.Size = new System.Drawing.Size(240, 21);
-      this.KAIC.TabIndex = 7;
+      this.KAIC.TabIndex = 5;
       // 
       // label4
       // 
@@ -130,10 +134,11 @@
       // TABS
       // 
       this.TABS.Location = new System.Drawing.Point(6, 314);
+      this.TABS.Margin = new System.Windows.Forms.Padding(0);
       this.TABS.Name = "TABS";
       this.TABS.SelectedIndex = 0;
       this.TABS.Size = new System.Drawing.Size(240, 263);
-      this.TABS.TabIndex = 10;
+      this.TABS.TabIndex = 8;
       // 
       // SIZE
       // 
@@ -153,7 +158,7 @@
       this.SIZE.Margin = new System.Windows.Forms.Padding(2);
       this.SIZE.Name = "SIZE";
       this.SIZE.Size = new System.Drawing.Size(240, 21);
-      this.SIZE.TabIndex = 11;
+      this.SIZE.TabIndex = 3;
       // 
       // NEW
       // 
@@ -174,7 +179,7 @@
       this.EXISTING.Margin = new System.Windows.Forms.Padding(0);
       this.EXISTING.Name = "EXISTING";
       this.EXISTING.Size = new System.Drawing.Size(61, 17);
-      this.EXISTING.TabIndex = 0;
+      this.EXISTING.TabIndex = 2;
       this.EXISTING.TabStop = true;
       this.EXISTING.Text = "Existing";
       this.EXISTING.UseVisualStyleBackColor = true;
@@ -187,7 +192,7 @@
       this.STATUS.Name = "STATUS";
       this.STATUS.Padding = new System.Windows.Forms.Padding(0);
       this.STATUS.Size = new System.Drawing.Size(125, 42);
-      this.STATUS.TabIndex = 20;
+      this.STATUS.TabIndex = 1;
       this.STATUS.TabStop = false;
       this.STATUS.Text = "Status";
       // 
@@ -199,7 +204,7 @@
       this.panel1.Name = "panel1";
       this.panel1.Padding = new System.Windows.Forms.Padding(3);
       this.panel1.Size = new System.Drawing.Size(105, 21);
-      this.panel1.TabIndex = 21;
+      this.panel1.TabIndex = 0;
       // 
       // DISTRIBUTION_NAME
       // 
@@ -209,48 +214,48 @@
       this.DISTRIBUTION_NAME.Size = new System.Drawing.Size(93, 13);
       this.DISTRIBUTION_NAME.TabIndex = 0;
       // 
-      // button1
+      // BREAKER_PANELS
       // 
-      this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.button1.Location = new System.Drawing.Point(6, 612);
-      this.button1.Name = "button1";
-      this.button1.Size = new System.Drawing.Size(240, 23);
-      this.button1.TabIndex = 23;
-      this.button1.Text = "Children Panels";
-      this.button1.UseVisualStyleBackColor = true;
+      this.BREAKER_PANELS.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.BREAKER_PANELS.Location = new System.Drawing.Point(6, 612);
+      this.BREAKER_PANELS.Name = "BREAKER_PANELS";
+      this.BREAKER_PANELS.Size = new System.Drawing.Size(240, 23);
+      this.BREAKER_PANELS.TabIndex = 11;
+      this.BREAKER_PANELS.Text = "Breaker Panels";
+      this.BREAKER_PANELS.UseVisualStyleBackColor = true;
       // 
-      // button2
+      // BREAKER_LOAD_CALCULATIONS
       // 
-      this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.button2.Location = new System.Drawing.Point(6, 641);
-      this.button2.Name = "button2";
-      this.button2.Size = new System.Drawing.Size(240, 23);
-      this.button2.TabIndex = 24;
-      this.button2.Text = "Children Load Calculations";
-      this.button2.UseVisualStyleBackColor = true;
+      this.BREAKER_LOAD_CALCULATIONS.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.BREAKER_LOAD_CALCULATIONS.Location = new System.Drawing.Point(6, 641);
+      this.BREAKER_LOAD_CALCULATIONS.Name = "BREAKER_LOAD_CALCULATIONS";
+      this.BREAKER_LOAD_CALCULATIONS.Size = new System.Drawing.Size(240, 23);
+      this.BREAKER_LOAD_CALCULATIONS.TabIndex = 12;
+      this.BREAKER_LOAD_CALCULATIONS.Text = "Breaker Load Calculations";
+      this.BREAKER_LOAD_CALCULATIONS.UseVisualStyleBackColor = true;
       // 
-      // DELETE_CHILD
+      // DELETE_BREAKER
       // 
-      this.DELETE_CHILD.BackColor = System.Drawing.Color.IndianRed;
-      this.DELETE_CHILD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.DELETE_CHILD.Location = new System.Drawing.Point(129, 583);
-      this.DELETE_CHILD.Name = "DELETE_CHILD";
-      this.DELETE_CHILD.Size = new System.Drawing.Size(117, 23);
-      this.DELETE_CHILD.TabIndex = 26;
-      this.DELETE_CHILD.Text = "Delete Child";
-      this.DELETE_CHILD.UseVisualStyleBackColor = false;
-      this.DELETE_CHILD.Click += new System.EventHandler(this.DELETE_CHILD_Click);
+      this.DELETE_BREAKER.BackColor = System.Drawing.Color.IndianRed;
+      this.DELETE_BREAKER.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.DELETE_BREAKER.Location = new System.Drawing.Point(129, 583);
+      this.DELETE_BREAKER.Name = "DELETE_BREAKER";
+      this.DELETE_BREAKER.Size = new System.Drawing.Size(117, 23);
+      this.DELETE_BREAKER.TabIndex = 10;
+      this.DELETE_BREAKER.Text = "Delete Breaker";
+      this.DELETE_BREAKER.UseVisualStyleBackColor = false;
+      this.DELETE_BREAKER.Click += new System.EventHandler(this.DELETE_CHILD_Click);
       // 
-      // ADD_CHILD
+      // ADD_BREAKER
       // 
-      this.ADD_CHILD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.ADD_CHILD.Location = new System.Drawing.Point(6, 583);
-      this.ADD_CHILD.Name = "ADD_CHILD";
-      this.ADD_CHILD.Size = new System.Drawing.Size(113, 23);
-      this.ADD_CHILD.TabIndex = 25;
-      this.ADD_CHILD.Text = "Add Child";
-      this.ADD_CHILD.UseVisualStyleBackColor = true;
-      this.ADD_CHILD.Click += new System.EventHandler(this.ADD_CHILD_Click);
+      this.ADD_BREAKER.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.ADD_BREAKER.Location = new System.Drawing.Point(6, 583);
+      this.ADD_BREAKER.Name = "ADD_BREAKER";
+      this.ADD_BREAKER.Size = new System.Drawing.Size(113, 23);
+      this.ADD_BREAKER.TabIndex = 9;
+      this.ADD_BREAKER.Text = "Add Breaker";
+      this.ADD_BREAKER.UseVisualStyleBackColor = true;
+      this.ADD_BREAKER.Click += new System.EventHandler(this.ADD_CHILD_Click);
       // 
       // PARENT
       // 
@@ -263,12 +268,13 @@
       this.PARENT.Margin = new System.Windows.Forms.Padding(2);
       this.PARENT.Name = "PARENT";
       this.PARENT.Size = new System.Drawing.Size(240, 21);
-      this.PARENT.TabIndex = 28;
+      this.PARENT.TabIndex = 2;
+      this.PARENT.SelectedIndexChanged += new System.EventHandler(this.PARENT_SelectedIndexChanged);
       // 
       // label5
       // 
       this.label5.AutoSize = true;
-      this.label5.Location = new System.Drawing.Point(9, 44);
+      this.label5.Location = new System.Drawing.Point(9, 46);
       this.label5.Margin = new System.Windows.Forms.Padding(2);
       this.label5.Name = "label5";
       this.label5.Size = new System.Drawing.Size(38, 13);
@@ -278,22 +284,52 @@
       // SET_DISTRIBUTION_LOCATION
       // 
       this.SET_DISTRIBUTION_LOCATION.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.SET_DISTRIBUTION_LOCATION.Location = new System.Drawing.Point(6, 207);
+      this.SET_DISTRIBUTION_LOCATION.Location = new System.Drawing.Point(6, 243);
       this.SET_DISTRIBUTION_LOCATION.Name = "SET_DISTRIBUTION_LOCATION";
       this.SET_DISTRIBUTION_LOCATION.Size = new System.Drawing.Size(240, 23);
-      this.SET_DISTRIBUTION_LOCATION.TabIndex = 29;
+      this.SET_DISTRIBUTION_LOCATION.TabIndex = 7;
       this.SET_DISTRIBUTION_LOCATION.Text = "Set Distribution Location";
       this.SET_DISTRIBUTION_LOCATION.UseVisualStyleBackColor = true;
+      this.SET_DISTRIBUTION_LOCATION.Click += new System.EventHandler(this.SET_DISTRIBUTION_LOCATION_Click);
       // 
-      // EQUIPMENT
+      // BREAKER_EQUIPMENT
       // 
-      this.EQUIPMENT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.EQUIPMENT.Location = new System.Drawing.Point(6, 670);
-      this.EQUIPMENT.Name = "EQUIPMENT";
-      this.EQUIPMENT.Size = new System.Drawing.Size(240, 23);
-      this.EQUIPMENT.TabIndex = 30;
-      this.EQUIPMENT.Text = "Children Equipment";
-      this.EQUIPMENT.UseVisualStyleBackColor = true;
+      this.BREAKER_EQUIPMENT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.BREAKER_EQUIPMENT.Location = new System.Drawing.Point(6, 670);
+      this.BREAKER_EQUIPMENT.Name = "BREAKER_EQUIPMENT";
+      this.BREAKER_EQUIPMENT.Size = new System.Drawing.Size(240, 23);
+      this.BREAKER_EQUIPMENT.TabIndex = 13;
+      this.BREAKER_EQUIPMENT.Text = "Breaker Equipment";
+      this.BREAKER_EQUIPMENT.UseVisualStyleBackColor = true;
+      // 
+      // DISTANCE_FROM_PARENT_LABEL
+      // 
+      this.DISTANCE_FROM_PARENT_LABEL.AutoSize = true;
+      this.DISTANCE_FROM_PARENT_LABEL.Location = new System.Drawing.Point(8, 206);
+      this.DISTANCE_FROM_PARENT_LABEL.Margin = new System.Windows.Forms.Padding(2);
+      this.DISTANCE_FROM_PARENT_LABEL.Name = "DISTANCE_FROM_PARENT_LABEL";
+      this.DISTANCE_FROM_PARENT_LABEL.Size = new System.Drawing.Size(106, 13);
+      this.DISTANCE_FROM_PARENT_LABEL.TabIndex = 31;
+      this.DISTANCE_FROM_PARENT_LABEL.Text = "Distance from Parent";
+      // 
+      // DISTANCE_FROM_PARENT_PANEL
+      // 
+      this.DISTANCE_FROM_PARENT_PANEL.BackColor = System.Drawing.SystemColors.Control;
+      this.DISTANCE_FROM_PARENT_PANEL.Controls.Add(this.DISTANCE_FROM_PARENT);
+      this.DISTANCE_FROM_PARENT_PANEL.Location = new System.Drawing.Point(6, 220);
+      this.DISTANCE_FROM_PARENT_PANEL.Name = "DISTANCE_FROM_PARENT_PANEL";
+      this.DISTANCE_FROM_PARENT_PANEL.Padding = new System.Windows.Forms.Padding(3);
+      this.DISTANCE_FROM_PARENT_PANEL.Size = new System.Drawing.Size(240, 21);
+      this.DISTANCE_FROM_PARENT_PANEL.TabIndex = 6;
+      // 
+      // DISTANCE_FROM_PARENT
+      // 
+      this.DISTANCE_FROM_PARENT.BorderStyle = System.Windows.Forms.BorderStyle.None;
+      this.DISTANCE_FROM_PARENT.Enabled = false;
+      this.DISTANCE_FROM_PARENT.Location = new System.Drawing.Point(6, 4);
+      this.DISTANCE_FROM_PARENT.Name = "DISTANCE_FROM_PARENT";
+      this.DISTANCE_FROM_PARENT.Size = new System.Drawing.Size(228, 13);
+      this.DISTANCE_FROM_PARENT.TabIndex = 0;
       // 
       // DistributionForm
       // 
@@ -301,14 +337,16 @@
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Control;
       this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.Controls.Add(this.EQUIPMENT);
+      this.Controls.Add(this.DISTANCE_FROM_PARENT_PANEL);
+      this.Controls.Add(this.DISTANCE_FROM_PARENT_LABEL);
+      this.Controls.Add(this.BREAKER_EQUIPMENT);
       this.Controls.Add(this.SET_DISTRIBUTION_LOCATION);
       this.Controls.Add(this.PARENT);
       this.Controls.Add(this.label5);
-      this.Controls.Add(this.DELETE_CHILD);
-      this.Controls.Add(this.ADD_CHILD);
-      this.Controls.Add(this.button2);
-      this.Controls.Add(this.button1);
+      this.Controls.Add(this.DELETE_BREAKER);
+      this.Controls.Add(this.ADD_BREAKER);
+      this.Controls.Add(this.BREAKER_LOAD_CALCULATIONS);
+      this.Controls.Add(this.BREAKER_PANELS);
       this.Controls.Add(this.panel1);
       this.Controls.Add(this.STATUS);
       this.Controls.Add(this.SIZE);
@@ -327,6 +365,8 @@
       this.STATUS.PerformLayout();
       this.panel1.ResumeLayout(false);
       this.panel1.PerformLayout();
+      this.DISTANCE_FROM_PARENT_PANEL.ResumeLayout(false);
+      this.DISTANCE_FROM_PARENT_PANEL.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -346,13 +386,16 @@
     private System.Windows.Forms.GroupBox STATUS;
     private System.Windows.Forms.Panel panel1;
     private System.Windows.Forms.TextBox DISTRIBUTION_NAME;
-    private System.Windows.Forms.Button button1;
-    private System.Windows.Forms.Button button2;
-    private System.Windows.Forms.Button DELETE_CHILD;
-    private System.Windows.Forms.Button ADD_CHILD;
+    private System.Windows.Forms.Button BREAKER_PANELS;
+    private System.Windows.Forms.Button BREAKER_LOAD_CALCULATIONS;
+    private System.Windows.Forms.Button DELETE_BREAKER;
+    private System.Windows.Forms.Button ADD_BREAKER;
     private System.Windows.Forms.ComboBox PARENT;
     private System.Windows.Forms.Label label5;
     private System.Windows.Forms.Button SET_DISTRIBUTION_LOCATION;
-    private System.Windows.Forms.Button EQUIPMENT;
+    private System.Windows.Forms.Button BREAKER_EQUIPMENT;
+    private System.Windows.Forms.Label DISTANCE_FROM_PARENT_LABEL;
+    private System.Windows.Forms.Panel DISTANCE_FROM_PARENT_PANEL;
+    private System.Windows.Forms.TextBox DISTANCE_FROM_PARENT;
   }
 }

@@ -40,10 +40,15 @@
       this.label3 = new System.Windows.Forms.Label();
       this.panel1 = new System.Windows.Forms.Panel();
       this.NAME = new System.Windows.Forms.TextBox();
-      this.SET_CHILD_LOCATION = new System.Windows.Forms.Button();
+      this.SET_BREAKER_ITEM_LOCATION = new System.Windows.Forms.Button();
       this.SET_XFMR_LOCATION = new System.Windows.Forms.Button();
+      this.POLE_GROUP = new System.Windows.Forms.GroupBox();
+      this.POLE3 = new System.Windows.Forms.RadioButton();
+      this.POLE2 = new System.Windows.Forms.RadioButton();
+      this.POLE1 = new System.Windows.Forms.RadioButton();
       this.STATUS.SuspendLayout();
       this.panel1.SuspendLayout();
+      this.POLE_GROUP.SuspendLayout();
       this.SuspendLayout();
       // 
       // TYPE
@@ -59,8 +64,8 @@
             "Equipment"});
       this.TYPE.Location = new System.Drawing.Point(6, 25);
       this.TYPE.Name = "TYPE";
-      this.TYPE.Size = new System.Drawing.Size(213, 21);
-      this.TYPE.TabIndex = 13;
+      this.TYPE.Size = new System.Drawing.Size(220, 21);
+      this.TYPE.TabIndex = 0;
       this.TYPE.SelectedIndexChanged += new System.EventHandler(this.TYPE_SelectedIndexChanged);
       // 
       // label5
@@ -96,8 +101,8 @@
             "1000A"});
       this.BREAKER_SIZES.Location = new System.Drawing.Point(6, 65);
       this.BREAKER_SIZES.Name = "BREAKER_SIZES";
-      this.BREAKER_SIZES.Size = new System.Drawing.Size(213, 21);
-      this.BREAKER_SIZES.TabIndex = 15;
+      this.BREAKER_SIZES.Size = new System.Drawing.Size(220, 21);
+      this.BREAKER_SIZES.TabIndex = 1;
       // 
       // label1
       // 
@@ -147,11 +152,11 @@
       // 
       this.STATUS.Controls.Add(this.NEW);
       this.STATUS.Controls.Add(this.EXISTING);
-      this.STATUS.Location = new System.Drawing.Point(94, 131);
+      this.STATUS.Location = new System.Drawing.Point(101, 131);
       this.STATUS.Name = "STATUS";
       this.STATUS.Padding = new System.Windows.Forms.Padding(0);
       this.STATUS.Size = new System.Drawing.Size(125, 42);
-      this.STATUS.TabIndex = 19;
+      this.STATUS.TabIndex = 5;
       this.STATUS.TabStop = false;
       this.STATUS.Text = "Status";
       // 
@@ -176,7 +181,7 @@
       this.XFMR.Location = new System.Drawing.Point(6, 147);
       this.XFMR.Name = "XFMR";
       this.XFMR.Size = new System.Drawing.Size(82, 21);
-      this.XFMR.TabIndex = 21;
+      this.XFMR.TabIndex = 4;
       // 
       // label3
       // 
@@ -195,44 +200,90 @@
       this.panel1.Location = new System.Drawing.Point(6, 104);
       this.panel1.Name = "panel1";
       this.panel1.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
-      this.panel1.Size = new System.Drawing.Size(213, 21);
-      this.panel1.TabIndex = 23;
+      this.panel1.Size = new System.Drawing.Size(64, 21);
+      this.panel1.TabIndex = 2;
       // 
       // NAME
       // 
       this.NAME.BorderStyle = System.Windows.Forms.BorderStyle.None;
       this.NAME.Location = new System.Drawing.Point(6, 4);
       this.NAME.Name = "NAME";
-      this.NAME.Size = new System.Drawing.Size(201, 13);
+      this.NAME.Size = new System.Drawing.Size(52, 13);
       this.NAME.TabIndex = 0;
       // 
-      // SET_CHILD_LOCATION
+      // SET_BREAKER_ITEM_LOCATION
       // 
-      this.SET_CHILD_LOCATION.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.SET_CHILD_LOCATION.Location = new System.Drawing.Point(6, 179);
-      this.SET_CHILD_LOCATION.Name = "SET_CHILD_LOCATION";
-      this.SET_CHILD_LOCATION.Size = new System.Drawing.Size(213, 23);
-      this.SET_CHILD_LOCATION.TabIndex = 30;
-      this.SET_CHILD_LOCATION.Text = "Set Child Location";
-      this.SET_CHILD_LOCATION.UseVisualStyleBackColor = true;
+      this.SET_BREAKER_ITEM_LOCATION.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.SET_BREAKER_ITEM_LOCATION.Location = new System.Drawing.Point(6, 179);
+      this.SET_BREAKER_ITEM_LOCATION.Name = "SET_BREAKER_ITEM_LOCATION";
+      this.SET_BREAKER_ITEM_LOCATION.Size = new System.Drawing.Size(220, 23);
+      this.SET_BREAKER_ITEM_LOCATION.TabIndex = 6;
+      this.SET_BREAKER_ITEM_LOCATION.Text = "Set Breaker Item Location";
+      this.SET_BREAKER_ITEM_LOCATION.UseVisualStyleBackColor = true;
       // 
       // SET_XFMR_LOCATION
       // 
       this.SET_XFMR_LOCATION.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
       this.SET_XFMR_LOCATION.Location = new System.Drawing.Point(6, 208);
       this.SET_XFMR_LOCATION.Name = "SET_XFMR_LOCATION";
-      this.SET_XFMR_LOCATION.Size = new System.Drawing.Size(213, 23);
-      this.SET_XFMR_LOCATION.TabIndex = 31;
+      this.SET_XFMR_LOCATION.Size = new System.Drawing.Size(220, 23);
+      this.SET_XFMR_LOCATION.TabIndex = 7;
       this.SET_XFMR_LOCATION.Text = "Set XFMR Location";
       this.SET_XFMR_LOCATION.UseVisualStyleBackColor = true;
+      // 
+      // POLE_GROUP
+      // 
+      this.POLE_GROUP.Controls.Add(this.POLE3);
+      this.POLE_GROUP.Controls.Add(this.POLE2);
+      this.POLE_GROUP.Controls.Add(this.POLE1);
+      this.POLE_GROUP.Location = new System.Drawing.Point(83, 89);
+      this.POLE_GROUP.Name = "POLE_GROUP";
+      this.POLE_GROUP.Padding = new System.Windows.Forms.Padding(0);
+      this.POLE_GROUP.Size = new System.Drawing.Size(143, 42);
+      this.POLE_GROUP.TabIndex = 3;
+      this.POLE_GROUP.TabStop = false;
+      this.POLE_GROUP.Text = "Poles";
+      // 
+      // POLE3
+      // 
+      this.POLE3.AutoSize = true;
+      this.POLE3.Checked = true;
+      this.POLE3.Location = new System.Drawing.Point(99, 17);
+      this.POLE3.Name = "POLE3";
+      this.POLE3.Size = new System.Drawing.Size(38, 17);
+      this.POLE3.TabIndex = 3;
+      this.POLE3.TabStop = true;
+      this.POLE3.Text = "3P";
+      this.POLE3.UseVisualStyleBackColor = true;
+      // 
+      // POLE2
+      // 
+      this.POLE2.AutoSize = true;
+      this.POLE2.Location = new System.Drawing.Point(55, 17);
+      this.POLE2.Name = "POLE2";
+      this.POLE2.Size = new System.Drawing.Size(38, 17);
+      this.POLE2.TabIndex = 2;
+      this.POLE2.Text = "2P";
+      this.POLE2.UseVisualStyleBackColor = true;
+      // 
+      // POLE1
+      // 
+      this.POLE1.AutoSize = true;
+      this.POLE1.Location = new System.Drawing.Point(11, 17);
+      this.POLE1.Name = "POLE1";
+      this.POLE1.Size = new System.Drawing.Size(38, 17);
+      this.POLE1.TabIndex = 1;
+      this.POLE1.Text = "1P";
+      this.POLE1.UseVisualStyleBackColor = true;
       // 
       // ItemTab
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.BackColor = System.Drawing.SystemColors.Control;
+      this.BackColor = System.Drawing.Color.Snow;
+      this.Controls.Add(this.POLE_GROUP);
       this.Controls.Add(this.SET_XFMR_LOCATION);
-      this.Controls.Add(this.SET_CHILD_LOCATION);
+      this.Controls.Add(this.SET_BREAKER_ITEM_LOCATION);
       this.Controls.Add(this.panel1);
       this.Controls.Add(this.XFMR);
       this.Controls.Add(this.label3);
@@ -242,13 +293,16 @@
       this.Controls.Add(this.label1);
       this.Controls.Add(this.TYPE);
       this.Controls.Add(this.label5);
+      this.Margin = new System.Windows.Forms.Padding(0);
       this.Name = "ItemTab";
       this.Padding = new System.Windows.Forms.Padding(3);
-      this.Size = new System.Drawing.Size(225, 240);
+      this.Size = new System.Drawing.Size(232, 240);
       this.STATUS.ResumeLayout(false);
       this.STATUS.PerformLayout();
       this.panel1.ResumeLayout(false);
       this.panel1.PerformLayout();
+      this.POLE_GROUP.ResumeLayout(false);
+      this.POLE_GROUP.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -268,7 +322,11 @@
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Panel panel1;
     private System.Windows.Forms.TextBox NAME;
-    private System.Windows.Forms.Button SET_CHILD_LOCATION;
+    private System.Windows.Forms.Button SET_BREAKER_ITEM_LOCATION;
     private System.Windows.Forms.Button SET_XFMR_LOCATION;
+    private System.Windows.Forms.GroupBox POLE_GROUP;
+    private System.Windows.Forms.RadioButton POLE3;
+    private System.Windows.Forms.RadioButton POLE2;
+    private System.Windows.Forms.RadioButton POLE1;
   }
 }
