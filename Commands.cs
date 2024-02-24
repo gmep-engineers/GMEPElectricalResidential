@@ -13,5 +13,12 @@ namespace GMEPElectricalResidential
       SINGLE_LINE_DIAGRAM sld = new SINGLE_LINE_DIAGRAM();
       sld.Show();
     }
+
+    [CommandMethod("LoadCalculation")]
+    public void LoadCalculation()
+    {
+      LoadCalculations loadCalcs = new LoadCalculations();
+      loadCalcs.Show();
+    }
   }
 }

@@ -43,8 +43,12 @@
     <Reference Include="GMEPUtilities">
       <HintPath>..\GMEPUtilities\CreateFromJSON\bin\Release\GMEPUtilities.dll</HintPath>
     </Reference>
+    <Reference Include="MaterialSkin, Version=2.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MaterialSkin.2.2.3.1\lib\net48\MaterialSkin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -56,93 +60,105 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands.cs" />
+    <Compile Include="LoadCalculations\LoadCalculations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoadCalculations\LoadCalculations.Designer.cs">
+      <DependentUpon>LoadCalculations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SingleLineDiagram.cs">
+    <Compile Include="SingleLineDiagram\SingleLineDiagram.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SingleLineDiagram.Designer.cs">
+    <Compile Include="SingleLineDiagram\SingleLineDiagram.Designer.cs">
       <DependentUpon>SingleLineDiagram.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserControls\DistributionForm.cs">
+    <Compile Include="SingleLineDiagram\UserControls\DistributionForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\DistributionForm.Designer.cs">
+    <Compile Include="SingleLineDiagram\UserControls\DistributionForm.Designer.cs">
       <DependentUpon>DistributionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ItemTab.cs">
+    <Compile Include="SingleLineDiagram\UserControls\ItemTab.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ItemTab.Designer.cs">
+    <Compile Include="SingleLineDiagram\UserControls\ItemTab.Designer.cs">
       <DependentUpon>ItemTab.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\MeterComboForm.cs">
+    <Compile Include="SingleLineDiagram\UserControls\MeterComboForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\MeterComboForm.Designer.cs">
+    <Compile Include="SingleLineDiagram\UserControls\MeterComboForm.Designer.cs">
       <DependentUpon>MeterComboForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\MainForm.cs">
+    <Compile Include="SingleLineDiagram\UserControls\MainForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\MainForm.Designer.cs">
+    <Compile Include="SingleLineDiagram\UserControls\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\MeterAndMainForm.cs">
+    <Compile Include="SingleLineDiagram\UserControls\MeterAndMainForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\MeterAndMainForm.Designer.cs">
+    <Compile Include="SingleLineDiagram\UserControls\MeterAndMainForm.Designer.cs">
       <DependentUpon>MeterAndMainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PullSectionBelowForm.cs">
+    <Compile Include="SingleLineDiagram\UserControls\PullSectionBelowForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\PullSectionBelowForm.Designer.cs">
+    <Compile Include="SingleLineDiagram\UserControls\PullSectionBelowForm.Designer.cs">
       <DependentUpon>PullSectionBelowForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\PullSectionAboveForm.cs">
+    <Compile Include="SingleLineDiagram\UserControls\PullSectionAboveForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\PullSectionAboveForm.Designer.cs">
+    <Compile Include="SingleLineDiagram\UserControls\PullSectionAboveForm.Designer.cs">
       <DependentUpon>PullSectionAboveForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="LoadCalculations\LoadCalculations.resx">
+      <DependentUpon>LoadCalculations.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\DistributionForm.resx">
+    <EmbeddedResource Include="SingleLineDiagram\UserControls\DistributionForm.resx">
       <DependentUpon>DistributionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ItemTab.resx">
+    <EmbeddedResource Include="SingleLineDiagram\UserControls\ItemTab.resx">
       <DependentUpon>ItemTab.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\MeterComboForm.resx">
+    <EmbeddedResource Include="SingleLineDiagram\UserControls\MeterComboForm.resx">
       <DependentUpon>MeterComboForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\MainForm.resx">
+    <EmbeddedResource Include="SingleLineDiagram\UserControls\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\MeterAndMainForm.resx">
+    <EmbeddedResource Include="SingleLineDiagram\UserControls\MeterAndMainForm.resx">
       <DependentUpon>MeterAndMainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\PullSectionBelowForm.resx">
+    <EmbeddedResource Include="SingleLineDiagram\UserControls\PullSectionBelowForm.resx">
       <DependentUpon>PullSectionBelowForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\PullSectionAboveForm.resx">
+    <EmbeddedResource Include="SingleLineDiagram\UserControls\PullSectionAboveForm.resx">
       <DependentUpon>PullSectionAboveForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SingleLineDiagram.resx">
+    <EmbeddedResource Include="SingleLineDiagram\SingleLineDiagram.resx">
       <DependentUpon>SingleLineDiagram.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="0_Notes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

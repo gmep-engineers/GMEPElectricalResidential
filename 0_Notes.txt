@@ -73,3 +73,5 @@ Load Calculations are done
 - Per unit
 - Per building (or service)
 - Per meter section (or breaker off service)
+
+1. Create Load Calculation program to fill out the loads for each unit
