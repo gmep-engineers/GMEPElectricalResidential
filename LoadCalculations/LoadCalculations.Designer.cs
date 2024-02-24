@@ -229,7 +229,7 @@
       this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 12);
       this.groupBox1.Name = "groupBox1";
       this.groupBox1.Size = new System.Drawing.Size(166, 62);
-      this.groupBox1.TabIndex = 11;
+      this.groupBox1.TabIndex = 1;
       this.groupBox1.TabStop = false;
       // 
       // groupBox2
@@ -240,7 +240,7 @@
       this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 12);
       this.groupBox2.Name = "groupBox2";
       this.groupBox2.Size = new System.Drawing.Size(166, 62);
-      this.groupBox2.TabIndex = 13;
+      this.groupBox2.TabIndex = 2;
       this.groupBox2.TabStop = false;
       // 
       // materialRadioButton3
@@ -299,7 +299,7 @@
       this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 3, 3, 12);
       this.groupBox3.Name = "groupBox3";
       this.groupBox3.Size = new System.Drawing.Size(166, 62);
-      this.groupBox3.TabIndex = 15;
+      this.groupBox3.TabIndex = 3;
       this.groupBox3.TabStop = false;
       // 
       // materialRadioButton5
@@ -358,7 +358,7 @@
       this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 3, 3, 12);
       this.groupBox4.Name = "groupBox4";
       this.groupBox4.Size = new System.Drawing.Size(166, 62);
-      this.groupBox4.TabIndex = 17;
+      this.groupBox4.TabIndex = 4;
       this.groupBox4.TabStop = false;
       // 
       // materialRadioButton7
@@ -451,7 +451,7 @@
       this.SMALL_APPLIANCE_VA.Multiline = false;
       this.SMALL_APPLIANCE_VA.Name = "SMALL_APPLIANCE_VA";
       this.SMALL_APPLIANCE_VA.Size = new System.Drawing.Size(93, 50);
-      this.SMALL_APPLIANCE_VA.TabIndex = 19;
+      this.SMALL_APPLIANCE_VA.TabIndex = 5;
       this.SMALL_APPLIANCE_VA.Text = "3000";
       this.SMALL_APPLIANCE_VA.TrailingIcon = null;
       // 
@@ -684,7 +684,7 @@
       this.SMALL_APPLIANCE_MULTIPLIER.Name = "SMALL_APPLIANCE_MULTIPLIER";
       this.SMALL_APPLIANCE_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.SMALL_APPLIANCE_MULTIPLIER.StartIndex = 0;
-      this.SMALL_APPLIANCE_MULTIPLIER.TabIndex = 49;
+      this.SMALL_APPLIANCE_MULTIPLIER.TabIndex = 6;
       // 
       // LAUNDRY_MULTIPLIER
       // 
@@ -732,7 +732,7 @@
       this.LAUNDRY_MULTIPLIER.Name = "LAUNDRY_MULTIPLIER";
       this.LAUNDRY_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.LAUNDRY_MULTIPLIER.StartIndex = 0;
-      this.LAUNDRY_MULTIPLIER.TabIndex = 51;
+      this.LAUNDRY_MULTIPLIER.TabIndex = 8;
       // 
       // LAUNDRY_VA
       // 
@@ -748,7 +748,7 @@
       this.LAUNDRY_VA.Multiline = false;
       this.LAUNDRY_VA.Name = "LAUNDRY_VA";
       this.LAUNDRY_VA.Size = new System.Drawing.Size(93, 50);
-      this.LAUNDRY_VA.TabIndex = 50;
+      this.LAUNDRY_VA.TabIndex = 7;
       this.LAUNDRY_VA.Text = "1500";
       this.LAUNDRY_VA.TrailingIcon = null;
       // 
@@ -798,7 +798,7 @@
       this.BATHROOM_MULTIPLIER.Name = "BATHROOM_MULTIPLIER";
       this.BATHROOM_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.BATHROOM_MULTIPLIER.StartIndex = 0;
-      this.BATHROOM_MULTIPLIER.TabIndex = 53;
+      this.BATHROOM_MULTIPLIER.TabIndex = 10;
       // 
       // BATHROOM_VA
       // 
@@ -814,7 +814,7 @@
       this.BATHROOM_VA.Multiline = false;
       this.BATHROOM_VA.Name = "BATHROOM_VA";
       this.BATHROOM_VA.Size = new System.Drawing.Size(93, 50);
-      this.BATHROOM_VA.TabIndex = 52;
+      this.BATHROOM_VA.TabIndex = 9;
       this.BATHROOM_VA.Text = "0";
       this.BATHROOM_VA.TrailingIcon = null;
       // 
@@ -864,7 +864,7 @@
       this.DISHWASHER_MULTIPLIER.Name = "DISHWASHER_MULTIPLIER";
       this.DISHWASHER_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.DISHWASHER_MULTIPLIER.StartIndex = 0;
-      this.DISHWASHER_MULTIPLIER.TabIndex = 55;
+      this.DISHWASHER_MULTIPLIER.TabIndex = 12;
       // 
       // DISHWASHER_VA
       // 
@@ -880,7 +880,7 @@
       this.DISHWASHER_VA.Multiline = false;
       this.DISHWASHER_VA.Name = "DISHWASHER_VA";
       this.DISHWASHER_VA.Size = new System.Drawing.Size(93, 50);
-      this.DISHWASHER_VA.TabIndex = 54;
+      this.DISHWASHER_VA.TabIndex = 11;
       this.DISHWASHER_VA.Text = "1200";
       this.DISHWASHER_VA.TrailingIcon = null;
       // 
@@ -930,7 +930,7 @@
       this.MICROWAVE_MULTIPLIER.Name = "MICROWAVE_MULTIPLIER";
       this.MICROWAVE_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.MICROWAVE_MULTIPLIER.StartIndex = 0;
-      this.MICROWAVE_MULTIPLIER.TabIndex = 57;
+      this.MICROWAVE_MULTIPLIER.TabIndex = 14;
       // 
       // MICROWAVE_VA
       // 
@@ -946,7 +946,7 @@
       this.MICROWAVE_VA.Multiline = false;
       this.MICROWAVE_VA.Name = "MICROWAVE_VA";
       this.MICROWAVE_VA.Size = new System.Drawing.Size(93, 50);
-      this.MICROWAVE_VA.TabIndex = 56;
+      this.MICROWAVE_VA.TabIndex = 13;
       this.MICROWAVE_VA.Text = "1500";
       this.MICROWAVE_VA.TrailingIcon = null;
       // 
@@ -997,7 +997,7 @@
       this.GARBAGE_DISPOSAL_MULTIPLIER.Name = "GARBAGE_DISPOSAL_MULTIPLIER";
       this.GARBAGE_DISPOSAL_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.GARBAGE_DISPOSAL_MULTIPLIER.StartIndex = 0;
-      this.GARBAGE_DISPOSAL_MULTIPLIER.TabIndex = 59;
+      this.GARBAGE_DISPOSAL_MULTIPLIER.TabIndex = 16;
       // 
       // GARBAGE_DISPOSAL_VA
       // 
@@ -1013,7 +1013,7 @@
       this.GARBAGE_DISPOSAL_VA.Multiline = false;
       this.GARBAGE_DISPOSAL_VA.Name = "GARBAGE_DISPOSAL_VA";
       this.GARBAGE_DISPOSAL_VA.Size = new System.Drawing.Size(93, 50);
-      this.GARBAGE_DISPOSAL_VA.TabIndex = 58;
+      this.GARBAGE_DISPOSAL_VA.TabIndex = 15;
       this.GARBAGE_DISPOSAL_VA.Text = "1200";
       this.GARBAGE_DISPOSAL_VA.TrailingIcon = null;
       // 
@@ -1064,7 +1064,7 @@
       this.BATHROOM_FANS_MULTIPLIER.Name = "BATHROOM_FANS_MULTIPLIER";
       this.BATHROOM_FANS_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.BATHROOM_FANS_MULTIPLIER.StartIndex = 0;
-      this.BATHROOM_FANS_MULTIPLIER.TabIndex = 61;
+      this.BATHROOM_FANS_MULTIPLIER.TabIndex = 18;
       // 
       // BATHROOM_FANS_VA
       // 
@@ -1080,7 +1080,7 @@
       this.BATHROOM_FANS_VA.Multiline = false;
       this.BATHROOM_FANS_VA.Name = "BATHROOM_FANS_VA";
       this.BATHROOM_FANS_VA.Size = new System.Drawing.Size(93, 50);
-      this.BATHROOM_FANS_VA.TabIndex = 60;
+      this.BATHROOM_FANS_VA.TabIndex = 17;
       this.BATHROOM_FANS_VA.Text = "200";
       this.BATHROOM_FANS_VA.TrailingIcon = null;
       // 
@@ -1131,7 +1131,7 @@
       this.GARAGE_DOOR_OPENER_MULTIPLIER.Name = "GARAGE_DOOR_OPENER_MULTIPLIER";
       this.GARAGE_DOOR_OPENER_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.GARAGE_DOOR_OPENER_MULTIPLIER.StartIndex = 0;
-      this.GARAGE_DOOR_OPENER_MULTIPLIER.TabIndex = 63;
+      this.GARAGE_DOOR_OPENER_MULTIPLIER.TabIndex = 20;
       // 
       // GARAGE_DOOR_OPENER_VA
       // 
@@ -1147,7 +1147,7 @@
       this.GARAGE_DOOR_OPENER_VA.Multiline = false;
       this.GARAGE_DOOR_OPENER_VA.Name = "GARAGE_DOOR_OPENER_VA";
       this.GARAGE_DOOR_OPENER_VA.Size = new System.Drawing.Size(93, 50);
-      this.GARAGE_DOOR_OPENER_VA.TabIndex = 62;
+      this.GARAGE_DOOR_OPENER_VA.TabIndex = 19;
       this.GARAGE_DOOR_OPENER_VA.Text = "1200";
       this.GARAGE_DOOR_OPENER_VA.TrailingIcon = null;
       // 
@@ -1198,7 +1198,7 @@
       this.DRYER_MULTIPLIER.Name = "DRYER_MULTIPLIER";
       this.DRYER_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.DRYER_MULTIPLIER.StartIndex = 0;
-      this.DRYER_MULTIPLIER.TabIndex = 65;
+      this.DRYER_MULTIPLIER.TabIndex = 22;
       // 
       // DRYER_VA
       // 
@@ -1214,7 +1214,7 @@
       this.DRYER_VA.Multiline = false;
       this.DRYER_VA.Name = "DRYER_VA";
       this.DRYER_VA.Size = new System.Drawing.Size(93, 50);
-      this.DRYER_VA.TabIndex = 64;
+      this.DRYER_VA.TabIndex = 21;
       this.DRYER_VA.Text = "5000";
       this.DRYER_VA.TrailingIcon = null;
       // 
@@ -1265,7 +1265,7 @@
       this.RANGE_MULTIPLIER.Name = "RANGE_MULTIPLIER";
       this.RANGE_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.RANGE_MULTIPLIER.StartIndex = 0;
-      this.RANGE_MULTIPLIER.TabIndex = 67;
+      this.RANGE_MULTIPLIER.TabIndex = 24;
       // 
       // RANGE_VA
       // 
@@ -1281,7 +1281,7 @@
       this.RANGE_VA.Multiline = false;
       this.RANGE_VA.Name = "RANGE_VA";
       this.RANGE_VA.Size = new System.Drawing.Size(93, 50);
-      this.RANGE_VA.TabIndex = 66;
+      this.RANGE_VA.TabIndex = 23;
       this.RANGE_VA.Text = "8000";
       this.RANGE_VA.TrailingIcon = null;
       // 
@@ -1332,7 +1332,7 @@
       this.REFRIGERATOR_MULTIPLIER.Name = "REFRIGERATOR_MULTIPLIER";
       this.REFRIGERATOR_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.REFRIGERATOR_MULTIPLIER.StartIndex = 0;
-      this.REFRIGERATOR_MULTIPLIER.TabIndex = 69;
+      this.REFRIGERATOR_MULTIPLIER.TabIndex = 26;
       // 
       // REFRIGERATOR_VA
       // 
@@ -1348,7 +1348,7 @@
       this.REFRIGERATOR_VA.Multiline = false;
       this.REFRIGERATOR_VA.Name = "REFRIGERATOR_VA";
       this.REFRIGERATOR_VA.Size = new System.Drawing.Size(93, 50);
-      this.REFRIGERATOR_VA.TabIndex = 68;
+      this.REFRIGERATOR_VA.TabIndex = 25;
       this.REFRIGERATOR_VA.Text = "1000";
       this.REFRIGERATOR_VA.TrailingIcon = null;
       // 
@@ -1399,7 +1399,7 @@
       this.OVEN_MULTIPLIER.Name = "OVEN_MULTIPLIER";
       this.OVEN_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.OVEN_MULTIPLIER.StartIndex = 0;
-      this.OVEN_MULTIPLIER.TabIndex = 71;
+      this.OVEN_MULTIPLIER.TabIndex = 28;
       // 
       // OVEN_VA
       // 
@@ -1415,7 +1415,7 @@
       this.OVEN_VA.Multiline = false;
       this.OVEN_VA.Name = "OVEN_VA";
       this.OVEN_VA.Size = new System.Drawing.Size(93, 50);
-      this.OVEN_VA.TabIndex = 70;
+      this.OVEN_VA.TabIndex = 27;
       this.OVEN_VA.Text = "0";
       this.OVEN_VA.TrailingIcon = null;
       // 
@@ -1466,7 +1466,7 @@
       this.WATER_HEATER_MULTIPLIER.Name = "WATER_HEATER_MULTIPLIER";
       this.WATER_HEATER_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.WATER_HEATER_MULTIPLIER.StartIndex = 0;
-      this.WATER_HEATER_MULTIPLIER.TabIndex = 73;
+      this.WATER_HEATER_MULTIPLIER.TabIndex = 30;
       // 
       // WATER_HEATER_VA
       // 
@@ -1482,7 +1482,7 @@
       this.WATER_HEATER_VA.Multiline = false;
       this.WATER_HEATER_VA.Name = "WATER_HEATER_VA";
       this.WATER_HEATER_VA.Size = new System.Drawing.Size(93, 50);
-      this.WATER_HEATER_VA.TabIndex = 72;
+      this.WATER_HEATER_VA.TabIndex = 29;
       this.WATER_HEATER_VA.Text = "5000";
       this.WATER_HEATER_VA.TrailingIcon = null;
       // 
@@ -1532,7 +1532,7 @@
       this.CUSTOM_1_MULTIPLIER.Name = "CUSTOM_1_MULTIPLIER";
       this.CUSTOM_1_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.CUSTOM_1_MULTIPLIER.StartIndex = 0;
-      this.CUSTOM_1_MULTIPLIER.TabIndex = 75;
+      this.CUSTOM_1_MULTIPLIER.TabIndex = 33;
       // 
       // CUSTOM_1_VA
       // 
@@ -1548,7 +1548,7 @@
       this.CUSTOM_1_VA.Multiline = false;
       this.CUSTOM_1_VA.Name = "CUSTOM_1_VA";
       this.CUSTOM_1_VA.Size = new System.Drawing.Size(93, 50);
-      this.CUSTOM_1_VA.TabIndex = 74;
+      this.CUSTOM_1_VA.TabIndex = 32;
       this.CUSTOM_1_VA.Text = "";
       this.CUSTOM_1_VA.TrailingIcon = null;
       // 
@@ -1580,7 +1580,7 @@
       this.CUSTOM_1_NAME.Multiline = false;
       this.CUSTOM_1_NAME.Name = "CUSTOM_1_NAME";
       this.CUSTOM_1_NAME.Size = new System.Drawing.Size(261, 50);
-      this.CUSTOM_1_NAME.TabIndex = 77;
+      this.CUSTOM_1_NAME.TabIndex = 31;
       this.CUSTOM_1_NAME.Text = "";
       this.CUSTOM_1_NAME.TrailingIcon = null;
       // 
@@ -1598,7 +1598,7 @@
       this.CUSTOM_2_NAME.Multiline = false;
       this.CUSTOM_2_NAME.Name = "CUSTOM_2_NAME";
       this.CUSTOM_2_NAME.Size = new System.Drawing.Size(261, 50);
-      this.CUSTOM_2_NAME.TabIndex = 81;
+      this.CUSTOM_2_NAME.TabIndex = 34;
       this.CUSTOM_2_NAME.Text = "";
       this.CUSTOM_2_NAME.TrailingIcon = null;
       // 
@@ -1648,7 +1648,7 @@
       this.CUSTOM_2_MULTIPLIER.Name = "CUSTOM_2_MULTIPLIER";
       this.CUSTOM_2_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.CUSTOM_2_MULTIPLIER.StartIndex = 0;
-      this.CUSTOM_2_MULTIPLIER.TabIndex = 80;
+      this.CUSTOM_2_MULTIPLIER.TabIndex = 36;
       // 
       // CUSTOM_2_VA
       // 
@@ -1664,7 +1664,7 @@
       this.CUSTOM_2_VA.Multiline = false;
       this.CUSTOM_2_VA.Name = "CUSTOM_2_VA";
       this.CUSTOM_2_VA.Size = new System.Drawing.Size(93, 50);
-      this.CUSTOM_2_VA.TabIndex = 79;
+      this.CUSTOM_2_VA.TabIndex = 35;
       this.CUSTOM_2_VA.Text = "";
       this.CUSTOM_2_VA.TrailingIcon = null;
       // 
@@ -1696,7 +1696,7 @@
       this.CUSTOM_3_NAME.Multiline = false;
       this.CUSTOM_3_NAME.Name = "CUSTOM_3_NAME";
       this.CUSTOM_3_NAME.Size = new System.Drawing.Size(261, 50);
-      this.CUSTOM_3_NAME.TabIndex = 85;
+      this.CUSTOM_3_NAME.TabIndex = 37;
       this.CUSTOM_3_NAME.Text = "";
       this.CUSTOM_3_NAME.TrailingIcon = null;
       // 
@@ -1746,7 +1746,7 @@
       this.CUSTOM_3_MULTIPLIER.Name = "CUSTOM_3_MULTIPLIER";
       this.CUSTOM_3_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.CUSTOM_3_MULTIPLIER.StartIndex = 0;
-      this.CUSTOM_3_MULTIPLIER.TabIndex = 84;
+      this.CUSTOM_3_MULTIPLIER.TabIndex = 39;
       // 
       // CUSTOM_3_VA
       // 
@@ -1762,7 +1762,7 @@
       this.CUSTOM_3_VA.Multiline = false;
       this.CUSTOM_3_VA.Name = "CUSTOM_3_VA";
       this.CUSTOM_3_VA.Size = new System.Drawing.Size(93, 50);
-      this.CUSTOM_3_VA.TabIndex = 83;
+      this.CUSTOM_3_VA.TabIndex = 38;
       this.CUSTOM_3_VA.Text = "";
       this.CUSTOM_3_VA.TrailingIcon = null;
       // 
@@ -1794,7 +1794,7 @@
       this.CUSTOM_4_NAME.Multiline = false;
       this.CUSTOM_4_NAME.Name = "CUSTOM_4_NAME";
       this.CUSTOM_4_NAME.Size = new System.Drawing.Size(261, 50);
-      this.CUSTOM_4_NAME.TabIndex = 89;
+      this.CUSTOM_4_NAME.TabIndex = 40;
       this.CUSTOM_4_NAME.Text = "";
       this.CUSTOM_4_NAME.TrailingIcon = null;
       // 
@@ -1844,7 +1844,7 @@
       this.CUSTOM_4_MULTIPLIER.Name = "CUSTOM_4_MULTIPLIER";
       this.CUSTOM_4_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.CUSTOM_4_MULTIPLIER.StartIndex = 0;
-      this.CUSTOM_4_MULTIPLIER.TabIndex = 88;
+      this.CUSTOM_4_MULTIPLIER.TabIndex = 42;
       // 
       // CUSTOM_4_VA
       // 
@@ -1860,7 +1860,7 @@
       this.CUSTOM_4_VA.Multiline = false;
       this.CUSTOM_4_VA.Name = "CUSTOM_4_VA";
       this.CUSTOM_4_VA.Size = new System.Drawing.Size(93, 50);
-      this.CUSTOM_4_VA.TabIndex = 87;
+      this.CUSTOM_4_VA.TabIndex = 41;
       this.CUSTOM_4_VA.Text = "";
       this.CUSTOM_4_VA.TrailingIcon = null;
       // 
@@ -1920,7 +1920,7 @@
       this.OUTDOOR_CONDENSING_UNIT_VA.Multiline = false;
       this.OUTDOOR_CONDENSING_UNIT_VA.Name = "OUTDOOR_CONDENSING_UNIT_VA";
       this.OUTDOOR_CONDENSING_UNIT_VA.Size = new System.Drawing.Size(213, 50);
-      this.OUTDOOR_CONDENSING_UNIT_VA.TabIndex = 95;
+      this.OUTDOOR_CONDENSING_UNIT_VA.TabIndex = 43;
       this.OUTDOOR_CONDENSING_UNIT_VA.Text = "";
       this.OUTDOOR_CONDENSING_UNIT_VA.TrailingIcon = null;
       // 
@@ -1952,7 +1952,7 @@
       this.INDOOR_FAN_COIL_UNIT_VA.Multiline = false;
       this.INDOOR_FAN_COIL_UNIT_VA.Name = "INDOOR_FAN_COIL_UNIT_VA";
       this.INDOOR_FAN_COIL_UNIT_VA.Size = new System.Drawing.Size(213, 50);
-      this.INDOOR_FAN_COIL_UNIT_VA.TabIndex = 97;
+      this.INDOOR_FAN_COIL_UNIT_VA.TabIndex = 44;
       this.INDOOR_FAN_COIL_UNIT_VA.Text = "";
       this.INDOOR_FAN_COIL_UNIT_VA.TrailingIcon = null;
       // 
@@ -1995,7 +1995,7 @@
       this.materialComboBox1.Name = "materialComboBox1";
       this.materialComboBox1.Size = new System.Drawing.Size(241, 49);
       this.materialComboBox1.StartIndex = 0;
-      this.materialComboBox1.TabIndex = 101;
+      this.materialComboBox1.TabIndex = 45;
       // 
       // materialLabel29
       // 
@@ -2025,7 +2025,7 @@
       this.ADDITIONAL_CUSTOM_2_NAME.Multiline = false;
       this.ADDITIONAL_CUSTOM_2_NAME.Name = "ADDITIONAL_CUSTOM_2_NAME";
       this.ADDITIONAL_CUSTOM_2_NAME.Size = new System.Drawing.Size(261, 50);
-      this.ADDITIONAL_CUSTOM_2_NAME.TabIndex = 111;
+      this.ADDITIONAL_CUSTOM_2_NAME.TabIndex = 49;
       this.ADDITIONAL_CUSTOM_2_NAME.Text = "";
       this.ADDITIONAL_CUSTOM_2_NAME.TrailingIcon = null;
       // 
@@ -2075,7 +2075,7 @@
       this.ADDITIONAL_CUSTOM_2_MULTIPLIER.Name = "ADDITIONAL_CUSTOM_2_MULTIPLIER";
       this.ADDITIONAL_CUSTOM_2_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.ADDITIONAL_CUSTOM_2_MULTIPLIER.StartIndex = 0;
-      this.ADDITIONAL_CUSTOM_2_MULTIPLIER.TabIndex = 110;
+      this.ADDITIONAL_CUSTOM_2_MULTIPLIER.TabIndex = 51;
       // 
       // ADDITIONAL_CUSTOM_2_VA
       // 
@@ -2091,7 +2091,7 @@
       this.ADDITIONAL_CUSTOM_2_VA.Multiline = false;
       this.ADDITIONAL_CUSTOM_2_VA.Name = "ADDITIONAL_CUSTOM_2_VA";
       this.ADDITIONAL_CUSTOM_2_VA.Size = new System.Drawing.Size(93, 50);
-      this.ADDITIONAL_CUSTOM_2_VA.TabIndex = 109;
+      this.ADDITIONAL_CUSTOM_2_VA.TabIndex = 50;
       this.ADDITIONAL_CUSTOM_2_VA.Text = "";
       this.ADDITIONAL_CUSTOM_2_VA.TrailingIcon = null;
       // 
@@ -2123,7 +2123,7 @@
       this.ADDITIONAL_CUSTOM_1_NAME.Multiline = false;
       this.ADDITIONAL_CUSTOM_1_NAME.Name = "ADDITIONAL_CUSTOM_1_NAME";
       this.ADDITIONAL_CUSTOM_1_NAME.Size = new System.Drawing.Size(261, 50);
-      this.ADDITIONAL_CUSTOM_1_NAME.TabIndex = 107;
+      this.ADDITIONAL_CUSTOM_1_NAME.TabIndex = 46;
       this.ADDITIONAL_CUSTOM_1_NAME.Text = "";
       this.ADDITIONAL_CUSTOM_1_NAME.TrailingIcon = null;
       // 
@@ -2187,7 +2187,7 @@
       this.ADDITIONAL_CUSTOM_1_MULTIPLIER.Name = "ADDITIONAL_CUSTOM_1_MULTIPLIER";
       this.ADDITIONAL_CUSTOM_1_MULTIPLIER.Size = new System.Drawing.Size(67, 49);
       this.ADDITIONAL_CUSTOM_1_MULTIPLIER.StartIndex = 0;
-      this.ADDITIONAL_CUSTOM_1_MULTIPLIER.TabIndex = 105;
+      this.ADDITIONAL_CUSTOM_1_MULTIPLIER.TabIndex = 48;
       // 
       // ADDITIONAL_CUSTOM_1_VA
       // 
@@ -2203,7 +2203,7 @@
       this.ADDITIONAL_CUSTOM_1_VA.Multiline = false;
       this.ADDITIONAL_CUSTOM_1_VA.Name = "ADDITIONAL_CUSTOM_1_VA";
       this.ADDITIONAL_CUSTOM_1_VA.Size = new System.Drawing.Size(93, 50);
-      this.ADDITIONAL_CUSTOM_1_VA.TabIndex = 104;
+      this.ADDITIONAL_CUSTOM_1_VA.TabIndex = 47;
       this.ADDITIONAL_CUSTOM_1_VA.Text = "";
       this.ADDITIONAL_CUSTOM_1_VA.TrailingIcon = null;
       // 

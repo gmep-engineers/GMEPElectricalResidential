@@ -66,6 +66,12 @@
     <Compile Include="LoadCalculations\LoadCalculations.Designer.cs">
       <DependentUpon>LoadCalculations.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoadCalculations\UnitLoadCalculation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoadCalculations\UnitLoadCalculation.Designer.cs">
+      <DependentUpon>UnitLoadCalculation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
