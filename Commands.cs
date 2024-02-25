@@ -17,6 +17,8 @@ namespace GMEPElectricalResidential
     [CommandMethod("LoadCalculation")]
     public void LoadCalculation()
     {
+      LoadCalculationForm loadCalculation = new LoadCalculationForm();
+      loadCalculation.Show();
     }
   }
 }
