@@ -213,8 +213,8 @@
     }
 
     #endregion
-    private System.Windows.Forms.PictureBox UPWARDS_ARROW;
     private DoubleBufferedPanel PANEL;
+    private System.Windows.Forms.PictureBox UPWARDS_ARROW;
     private System.Windows.Forms.PictureBox TRASH;
     private System.Windows.Forms.PictureBox DOWNWARDS_ARROW;
     private System.Windows.Forms.PictureBox MAIN;

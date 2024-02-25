@@ -1,5 +1,4 @@
-﻿using GMEPUtilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -421,13 +420,6 @@ namespace GMEPElectricalResidential
 
       // Update the AutoScrollMinSize property
       PANEL.AutoScrollMinSize = new Size(maxWidth, maxHeight);
-    }
-
-    private void SaveEventData(object sender, EventArgs e)
-    {
-      HelperMethods.SaveDataToJsonFile(currentDraggableObject, "currentDraggableObject.json");
-      HelperMethods.SaveDataToJsonFile(sender, "sender.json");
-      HelperMethods.SaveDataToJsonFile(e, "e.json");
     }
   }
 
