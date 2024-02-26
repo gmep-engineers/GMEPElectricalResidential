@@ -78,3 +78,7 @@ Load Calculations are done
 - If the general lighting load is > 3000VA, then automatically apply the table 220.42.
 
 TODO
+3. Update "TOTAL_GENERAL_LOAD_CALCULATION" based on the values in the GENERAL_LOAD controls 
+4. Update "TOTAL_AC_LOAD_CALCULATION" based on the values in the AC_CALCULATION controls
+5. Update the "SUBTOTAL_GENERAL_LOAD_CALCULATION" from the "TOTAL_GENERAL_LOAD_CALCULATION"
+6. Update the "CALCULATED_LOAD_FOR_SERVICE" from the "SUBTOTAL_GENERAL_LOAD" and "AC_LOAD_CALCULATION"

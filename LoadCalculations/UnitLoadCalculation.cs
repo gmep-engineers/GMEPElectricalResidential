@@ -58,8 +58,7 @@ namespace GMEPElectricalResidential
 
     private void DetectIncorrectInputs()
     {
-      GENERAL_CUSTOM_VA.KeyPress += OnlyDigitInputs;
-      CUSTOM_VA.KeyPress += OnlyDigitInputs;
+      SubscribeVAsToOnlyDigits(this.Controls);
       SubscribeMultipliersToOnlyDigitInputs(this.Controls);
     }
 
@@ -70,6 +69,22 @@ namespace GMEPElectricalResidential
         if (control is ComboBox comboBox && comboBox.Name.EndsWith("MULTIPLIER"))
         {
           control.KeyPress += OnlyDigitInputs;
+        }
+      }
+    }
+
+    private void SubscribeVAsToOnlyDigits(Control.ControlCollection controls)
+    {
+      foreach (Control control in controls)
+      {
+        if (control is TextBox textBox && textBox.Name.EndsWith("VA"))
+        {
+          textBox.KeyPress += OnlyDigitInputs;
+        }
+
+        if (control.HasChildren)
+        {
+          SubscribeVAsToOnlyDigits(control.Controls);
         }
       }
     }
