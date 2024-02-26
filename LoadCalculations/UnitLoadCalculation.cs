@@ -123,6 +123,35 @@ namespace GMEPElectricalResidential
       VOLTAGE.SelectedIndex = 0;
     }
 
+    private bool isGreaterThanZero(string multiplier)
+    {
+      if (string.IsNullOrEmpty(multiplier))
+      {
+        return false;
+      }
+
+      if (decimal.TryParse(multiplier, out decimal result))
+      {
+        return result > 0;
+      }
+
+      return false;
+    }
+
+    private void WriteMessageToAutoCADConsole(object thing, string preMessage = "")
+    {
+      var settings = new JsonSerializerSettings
+      {
+        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+        PreserveReferencesHandling = PreserveReferencesHandling.Objects
+      };
+
+      var message = JsonConvert.SerializeObject(thing, Formatting.Indented, settings);
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      doc.Editor.WriteMessage(preMessage);
+      doc.Editor.WriteMessage(message);
+    }
+
     private void UNIT_NAME_TextChanged(object sender, EventArgs e)
     {
       var textBox = sender as TextBox;
@@ -208,20 +237,6 @@ namespace GMEPElectricalResidential
       }
     }
 
-    private void WriteMessageToAutoCADConsole(object thing, string preMessage = "")
-    {
-      var settings = new JsonSerializerSettings
-      {
-        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-        PreserveReferencesHandling = PreserveReferencesHandling.Objects
-      };
-
-      var message = JsonConvert.SerializeObject(thing, Formatting.Indented, settings);
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      doc.Editor.WriteMessage(preMessage);
-      doc.Editor.WriteMessage(message);
-    }
-
     private void AREA_TextChanged(object sender, EventArgs e)
     {
       var textBox = sender as TextBox;
@@ -231,30 +246,30 @@ namespace GMEPElectricalResidential
       }
     }
 
-    private void ADD_ENTRY_Click(object sender, EventArgs e)
+    private void AddEntry(TextBox nameTextBox, TextBox vaTextBox, ComboBox multiplierComboBox, ListBox listBox)
     {
-      string name = GENERAL_CUSTOM_NAME.Text;
-      string va = GENERAL_CUSTOM_VA.Text;
-      string multiplier = GENERAL_CUSTOM_MULTIPLIER.Text;
+      string name = nameTextBox.Text;
+      string va = vaTextBox.Text;
+      string multiplier = multiplierComboBox.Text;
 
       if (string.IsNullOrEmpty(name) || name == _NameWatermark)
       {
-        _toolTip.Show("You must enter a name.", sender as Control, 0, -20, 2000);
+        _toolTip.Show("You must enter a name.", nameTextBox, 0, -20, 2000);
         return;
       }
       else
       {
-        _toolTip.Hide(sender as Control);
+        _toolTip.Hide(nameTextBox);
       }
 
       if (string.IsNullOrEmpty(va) || va == _VAWatermark)
       {
-        _toolTip.Show("You must enter a VA.", sender as Control, 0, -20, 2000);
+        _toolTip.Show("You must enter a VA.", vaTextBox, 0, -20, 2000);
         return;
       }
       else
       {
-        _toolTip.Hide(sender as Control);
+        _toolTip.Hide(vaTextBox);
       }
 
       bool isMultiplierGreaterThanZero = isGreaterThanZero(multiplier);
@@ -262,12 +277,12 @@ namespace GMEPElectricalResidential
 
       if (string.IsNullOrEmpty(multiplier) || !isMultiplierGreaterThanZero)
       {
-        _toolTip.Show("You must enter a multiplier that is greater than 0.", sender as Control, 0, -20, 2000);
+        _toolTip.Show("You must enter a multiplier that is greater than 0.", multiplierComboBox, 0, -20, 2000);
         return;
       }
       else
       {
-        _toolTip.Hide(sender as Control);
+        _toolTip.Hide(multiplierComboBox);
       }
 
       TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -275,22 +290,21 @@ namespace GMEPElectricalResidential
 
       string newEntry = $"{name}, {va}, {multiplier}";
 
-      GENERAL_CUSTOM_LOAD_BOX.Items.Add(newEntry);
+      listBox.Items.Add(newEntry);
+
+      nameTextBox.Text = "";
+      vaTextBox.Text = "";
+      multiplierComboBox.Text = "1";
     }
 
-    private bool isGreaterThanZero(string multiplier)
+    private void ADD_ENTRY_Click(object sender, EventArgs e)
     {
-      if (string.IsNullOrEmpty(multiplier))
-      {
-        return false;
-      }
+      AddEntry(GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_VA, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_LOAD_BOX);
+    }
 
-      if (decimal.TryParse(multiplier, out decimal result))
-      {
-        return result > 0;
-      }
-
-      return false;
+    private void ADD_ENTRY_CUSTOM_Click(object sender, EventArgs e)
+    {
+      AddEntry(CUSTOM_NAME, CUSTOM_VA, CUSTOM_MULTIPLIER, CUSTOM_LOAD_BOX);
     }
   }
 }

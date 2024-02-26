@@ -127,8 +127,8 @@
       this.GENERAL_CUSTOM_LOAD_BOX = new System.Windows.Forms.ListBox();
       this.ADD_ENTRY = new System.Windows.Forms.Button();
       this.REMOVE_ENTRY = new System.Windows.Forms.Button();
-      this.button1 = new System.Windows.Forms.Button();
-      this.button2 = new System.Windows.Forms.Button();
+      this.REMOVE_ENTRY_CUSTOM = new System.Windows.Forms.Button();
+      this.ADD_ENTRY_CUSTOM = new System.Windows.Forms.Button();
       this.CUSTOM_LOAD_BOX = new System.Windows.Forms.ListBox();
       this.panel11 = new System.Windows.Forms.Panel();
       this.CUSTOM_VA = new System.Windows.Forms.TextBox();
@@ -1687,25 +1687,26 @@
       this.REMOVE_ENTRY.Text = "Remove";
       this.REMOVE_ENTRY.UseVisualStyleBackColor = true;
       // 
-      // button1
+      // REMOVE_ENTRY_CUSTOM
       // 
-      this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.button1.Location = new System.Drawing.Point(1062, 421);
-      this.button1.Name = "button1";
-      this.button1.Size = new System.Drawing.Size(88, 28);
-      this.button1.TabIndex = 105;
-      this.button1.Text = "Remove";
-      this.button1.UseVisualStyleBackColor = true;
+      this.REMOVE_ENTRY_CUSTOM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.REMOVE_ENTRY_CUSTOM.Location = new System.Drawing.Point(1062, 421);
+      this.REMOVE_ENTRY_CUSTOM.Name = "REMOVE_ENTRY_CUSTOM";
+      this.REMOVE_ENTRY_CUSTOM.Size = new System.Drawing.Size(88, 28);
+      this.REMOVE_ENTRY_CUSTOM.TabIndex = 105;
+      this.REMOVE_ENTRY_CUSTOM.Text = "Remove";
+      this.REMOVE_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
       // 
-      // button2
+      // ADD_ENTRY_CUSTOM
       // 
-      this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.button2.Location = new System.Drawing.Point(1002, 421);
-      this.button2.Name = "button2";
-      this.button2.Size = new System.Drawing.Size(54, 28);
-      this.button2.TabIndex = 104;
-      this.button2.Text = "Add";
-      this.button2.UseVisualStyleBackColor = true;
+      this.ADD_ENTRY_CUSTOM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.ADD_ENTRY_CUSTOM.Location = new System.Drawing.Point(1002, 421);
+      this.ADD_ENTRY_CUSTOM.Name = "ADD_ENTRY_CUSTOM";
+      this.ADD_ENTRY_CUSTOM.Size = new System.Drawing.Size(54, 28);
+      this.ADD_ENTRY_CUSTOM.TabIndex = 104;
+      this.ADD_ENTRY_CUSTOM.Text = "Add";
+      this.ADD_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
+      this.ADD_ENTRY_CUSTOM.Click += new System.EventHandler(this.ADD_ENTRY_CUSTOM_Click);
       // 
       // CUSTOM_LOAD_BOX
       // 
@@ -1919,8 +1920,8 @@
       this.Controls.Add(this.label27);
       this.Controls.Add(this.TOTAL_GENERAL_LOAD_CALCULATION);
       this.Controls.Add(this.label16);
-      this.Controls.Add(this.button1);
-      this.Controls.Add(this.button2);
+      this.Controls.Add(this.REMOVE_ENTRY_CUSTOM);
+      this.Controls.Add(this.ADD_ENTRY_CUSTOM);
       this.Controls.Add(this.CUSTOM_LOAD_BOX);
       this.Controls.Add(this.panel11);
       this.Controls.Add(this.panel12);
@@ -2159,8 +2160,8 @@
     private System.Windows.Forms.ListBox GENERAL_CUSTOM_LOAD_BOX;
     private System.Windows.Forms.Button ADD_ENTRY;
     private System.Windows.Forms.Button REMOVE_ENTRY;
-    private System.Windows.Forms.Button button1;
-    private System.Windows.Forms.Button button2;
+    private System.Windows.Forms.Button REMOVE_ENTRY_CUSTOM;
+    private System.Windows.Forms.Button ADD_ENTRY_CUSTOM;
     private System.Windows.Forms.ListBox CUSTOM_LOAD_BOX;
     private System.Windows.Forms.Panel panel11;
     private System.Windows.Forms.TextBox CUSTOM_VA;
