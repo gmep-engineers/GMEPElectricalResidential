@@ -78,4 +78,3 @@ Load Calculations are done
 - If the general lighting load is > 3000VA, then automatically apply the table 220.42.
 
 TODO
-4. Configure the remove button to find the selected entry in the list and delete it

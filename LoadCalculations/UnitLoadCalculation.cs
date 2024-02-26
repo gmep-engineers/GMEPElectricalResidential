@@ -24,6 +24,36 @@ namespace GMEPElectricalResidential
       SetDefaultValues();
       AddWaterMarks();
       DetectIncorrectInputs();
+      DetectEnterPresses();
+    }
+
+    private void DetectEnterPresses()
+    {
+      // Subscribe to KeyDown event for GENERAL_CUSTOM controls
+      GENERAL_CUSTOM_NAME.KeyDown += TextBox_KeyDown;
+      GENERAL_CUSTOM_VA.KeyDown += TextBox_KeyDown;
+      GENERAL_CUSTOM_MULTIPLIER.KeyDown += TextBox_KeyDown;
+
+      // Subscribe to KeyDown event for CUSTOM controls
+      CUSTOM_NAME.KeyDown += TextBox_KeyDown;
+      CUSTOM_VA.KeyDown += TextBox_KeyDown;
+      CUSTOM_MULTIPLIER.KeyDown += TextBox_KeyDown;
+    }
+
+    private void TextBox_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.KeyCode == Keys.Enter)
+      {
+        if (sender == GENERAL_CUSTOM_NAME || sender == GENERAL_CUSTOM_VA || sender == GENERAL_CUSTOM_MULTIPLIER)
+        {
+          AddEntry(GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_VA, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_LOAD_BOX);
+        }
+        else if (sender == CUSTOM_NAME || sender == CUSTOM_VA || sender == CUSTOM_MULTIPLIER)
+        {
+          AddEntry(CUSTOM_NAME, CUSTOM_VA, CUSTOM_MULTIPLIER, CUSTOM_LOAD_BOX);
+        }
+        e.SuppressKeyPress = true;
+      }
     }
 
     private void DetectIncorrectInputs()
@@ -295,6 +325,8 @@ namespace GMEPElectricalResidential
       nameTextBox.Text = "";
       vaTextBox.Text = "";
       multiplierComboBox.Text = "1";
+
+      nameTextBox.Focus();
     }
 
     private void ADD_ENTRY_Click(object sender, EventArgs e)
@@ -309,9 +341,16 @@ namespace GMEPElectricalResidential
 
     private void RemoveEntry(ListBox listBox)
     {
-      if (listBox.Items.Count > 0 && listBox.SelectedIndex != -1)
+      if (listBox.Items.Count > 0)
       {
-        listBox.Items.RemoveAt(listBox.SelectedIndex);
+        if (listBox.SelectedIndex != -1)
+        {
+          listBox.Items.RemoveAt(listBox.SelectedIndex);
+        }
+        else
+        {
+          listBox.Items.RemoveAt(listBox.Items.Count - 1);
+        }
       }
     }
 
