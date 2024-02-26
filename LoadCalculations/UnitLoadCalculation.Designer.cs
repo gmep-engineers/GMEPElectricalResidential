@@ -1675,6 +1675,7 @@
       this.ADD_ENTRY.TabIndex = 97;
       this.ADD_ENTRY.Text = "Add";
       this.ADD_ENTRY.UseVisualStyleBackColor = true;
+      this.ADD_ENTRY.Click += new System.EventHandler(this.ADD_ENTRY_Click);
       // 
       // REMOVE_ENTRY
       // 

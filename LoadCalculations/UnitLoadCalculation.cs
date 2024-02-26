@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -228,6 +229,68 @@ namespace GMEPElectricalResidential
       {
         GENERAL_LIGHTING_VA.Text = (floorArea * 3).ToString();
       }
+    }
+
+    private void ADD_ENTRY_Click(object sender, EventArgs e)
+    {
+      string name = GENERAL_CUSTOM_NAME.Text;
+      string va = GENERAL_CUSTOM_VA.Text;
+      string multiplier = GENERAL_CUSTOM_MULTIPLIER.Text;
+
+      if (string.IsNullOrEmpty(name) || name == _NameWatermark)
+      {
+        _toolTip.Show("You must enter a name.", sender as Control, 0, -20, 2000);
+        return;
+      }
+      else
+      {
+        _toolTip.Hide(sender as Control);
+      }
+
+      if (string.IsNullOrEmpty(va) || va == _VAWatermark)
+      {
+        _toolTip.Show("You must enter a VA.", sender as Control, 0, -20, 2000);
+        return;
+      }
+      else
+      {
+        _toolTip.Hide(sender as Control);
+      }
+
+      bool isMultiplierGreaterThanZero = isGreaterThanZero(multiplier);
+      WriteMessageToAutoCADConsole(isMultiplierGreaterThanZero);
+
+      if (string.IsNullOrEmpty(multiplier) || !isMultiplierGreaterThanZero)
+      {
+        _toolTip.Show("You must enter a multiplier that is greater than 0.", sender as Control, 0, -20, 2000);
+        return;
+      }
+      else
+      {
+        _toolTip.Hide(sender as Control);
+      }
+
+      TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+      name = textInfo.ToTitleCase(name.ToLower());
+
+      string newEntry = $"{name}, {va}, {multiplier}";
+
+      GENERAL_CUSTOM_LOAD_BOX.Items.Add(newEntry);
+    }
+
+    private bool isGreaterThanZero(string multiplier)
+    {
+      if (string.IsNullOrEmpty(multiplier))
+      {
+        return false;
+      }
+
+      if (decimal.TryParse(multiplier, out decimal result))
+      {
+        return result > 0;
+      }
+
+      return false;
     }
   }
 }
