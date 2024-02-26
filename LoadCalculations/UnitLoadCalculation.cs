@@ -15,12 +15,37 @@ namespace GMEPElectricalResidential
   {
     private string _NameWatermark = "Enter name...";
     private string _VAWatermark = "Enter VA...";
+    private ToolTip _toolTip = new ToolTip();
 
     public UnitLoadCalculation()
     {
       InitializeComponent();
       SetDefaultValues();
       AddWaterMarks();
+      DetectIncorrectInputs();
+    }
+
+    private void DetectIncorrectInputs()
+    {
+      GENERAL_CUSTOM_VA.KeyPress += GENERAL_CUSTOM_VA_KeyPress;
+      CUSTOM_VA.KeyPress += GENERAL_CUSTOM_VA_KeyPress;
+    }
+
+    private void GENERAL_CUSTOM_VA_KeyPress(object sender, KeyPressEventArgs e)
+    {
+      var textBox = sender as TextBox;
+      if (textBox != null)
+      {
+        if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+        {
+          e.Handled = true;
+          _toolTip.Show("You must enter a digit.", textBox, 0, -20, 2000);
+        }
+        else
+        {
+          _toolTip.Hide(textBox);
+        }
+      }
     }
 
     private void AddWaterMarks()
@@ -177,6 +202,10 @@ namespace GMEPElectricalResidential
       {
         GENERAL_LIGHTING_VA.Text = (floorArea * 3).ToString();
       }
+    }
+
+    private void GENERAL_CUSTOM_VA_TextChanged(object sender, EventArgs e)
+    {
     }
   }
 }
