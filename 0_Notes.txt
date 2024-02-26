@@ -78,6 +78,5 @@ Load Calculations are done
 - If the general lighting load is > 3000VA, then automatically apply the table 220.42.
 
 TODO
-2. Configure the input boxes to check that the input entered is correct before adding it to the list
 3. Configure the add button to take the values from the inputs and add an entry to the list, then remove the values that are in the inputs
 4. Configure the remove button to find the selected entry in the list and delete it

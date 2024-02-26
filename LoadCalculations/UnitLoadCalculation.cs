@@ -27,24 +27,44 @@ namespace GMEPElectricalResidential
 
     private void DetectIncorrectInputs()
     {
-      GENERAL_CUSTOM_VA.KeyPress += GENERAL_CUSTOM_VA_KeyPress;
-      CUSTOM_VA.KeyPress += GENERAL_CUSTOM_VA_KeyPress;
+      GENERAL_CUSTOM_VA.KeyPress += OnlyDigitInputs;
+      CUSTOM_VA.KeyPress += OnlyDigitInputs;
+      SubscribeMultipliersToOnlyDigitInputs(this.Controls);
     }
 
-    private void GENERAL_CUSTOM_VA_KeyPress(object sender, KeyPressEventArgs e)
+    private void SubscribeMultipliersToOnlyDigitInputs(Control.ControlCollection controls)
     {
-      var textBox = sender as TextBox;
-      if (textBox != null)
+      foreach (Control control in controls)
       {
-        if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+        if (control is ComboBox comboBox && comboBox.Name.EndsWith("MULTIPLIER"))
         {
-          e.Handled = true;
-          _toolTip.Show("You must enter a digit.", textBox, 0, -20, 2000);
+          control.KeyPress += OnlyDigitInputs;
         }
-        else
-        {
-          _toolTip.Hide(textBox);
-        }
+      }
+    }
+
+    private void OnlyDigitInputs(object sender, KeyPressEventArgs e)
+    {
+      if (sender is TextBox textBox)
+      {
+        HandleDigitInput(textBox, e);
+      }
+      else if (sender is ComboBox comboBox && comboBox.DropDownStyle == ComboBoxStyle.DropDown)
+      {
+        HandleDigitInput(comboBox, e);
+      }
+    }
+
+    private void HandleDigitInput(Control control, KeyPressEventArgs e)
+    {
+      if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+      {
+        e.Handled = true;
+        _toolTip.Show("You must enter a digit.", control, 0, -20, 2000);
+      }
+      else
+      {
+        _toolTip.Hide(control);
       }
     }
 
@@ -189,7 +209,13 @@ namespace GMEPElectricalResidential
 
     private void WriteMessageToAutoCADConsole(object thing, string preMessage = "")
     {
-      var message = JsonConvert.SerializeObject(thing, Formatting.Indented);
+      var settings = new JsonSerializerSettings
+      {
+        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+        PreserveReferencesHandling = PreserveReferencesHandling.Objects
+      };
+
+      var message = JsonConvert.SerializeObject(thing, Formatting.Indented, settings);
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
       doc.Editor.WriteMessage(preMessage);
       doc.Editor.WriteMessage(message);
@@ -202,10 +228,6 @@ namespace GMEPElectricalResidential
       {
         GENERAL_LIGHTING_VA.Text = (floorArea * 3).ToString();
       }
-    }
-
-    private void GENERAL_CUSTOM_VA_TextChanged(object sender, EventArgs e)
-    {
     }
   }
 }

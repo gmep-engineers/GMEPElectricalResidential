@@ -1475,7 +1475,6 @@
       this.GENERAL_CUSTOM_VA.Name = "GENERAL_CUSTOM_VA";
       this.GENERAL_CUSTOM_VA.Size = new System.Drawing.Size(104, 19);
       this.GENERAL_CUSTOM_VA.TabIndex = 2;
-      this.GENERAL_CUSTOM_VA.TextChanged += new System.EventHandler(this.GENERAL_CUSTOM_VA_TextChanged);
       // 
       // label25
       // 
