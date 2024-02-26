@@ -465,6 +465,7 @@
       this.AREA.Name = "AREA";
       this.AREA.Size = new System.Drawing.Size(86, 19);
       this.AREA.TabIndex = 0;
+      this.AREA.Text = "0";
       this.AREA.TextChanged += new System.EventHandler(this.AREA_TextChanged);
       // 
       // label5

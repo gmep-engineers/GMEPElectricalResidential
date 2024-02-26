@@ -379,4 +379,64 @@ namespace GMEPElectricalResidential
       RemoveEntry(CUSTOM_LOAD_BOX);
     }
   }
+
+  public class UnitInformation
+  {
+    public string Name { get; set; }
+    public string Voltage { get; set; }
+    public UnitDwellingArea DwellingArea { get; set; }
+    public UnitGeneralLoads GeneralLoads { get; set; }
+    public UnitCustomLoads CustomLoads { get; set; }
+    public UnitACLoads ACLoads { get; set; }
+    public UnitTotals Totals { get; set; }
+  }
+
+  public class UnitDwellingArea
+  {
+    public string FloorArea { get; set; }
+    public bool ElectricHeater { get; set; }
+    public bool ElectricDryer { get; set; }
+    public bool ElectricOven { get; set; }
+    public bool ElectricCooktop { get; set; }
+  }
+
+  public class UnitGeneralLoads
+  {
+    public string Lighting { get; set; }
+    public string SmallAppliance { get; set; }
+    public string Laundry { get; set; }
+    public string Bathroom { get; set; }
+    public string Dishwasher { get; set; }
+    public string MicrowaveOven { get; set; }
+    public string GarbageDisposal { get; set; }
+    public string BathroomFans { get; set; }
+    public string GarageDoorOpener { get; set; }
+    public string Dryer { get; set; }
+    public string Range { get; set; }
+    public string Refrigerator { get; set; }
+    public string Oven { get; set; }
+    public string WaterHeater { get; set; }
+    public string Cooktop { get; set; }
+
+    public List<string> Customs { get; set; }
+  }
+
+  public class UnitCustomLoads
+  {
+    public List<string> Customs { get; set; }
+  }
+
+  public class UnitACLoads
+  {
+    public string Condenser { get; set; }
+    public string FanCoil { get; set; }
+  }
+
+  public class UnitTotals
+  {
+    public string TotalGeneralLoad { get; set; }
+    public string TotalACLoad { get; set; }
+    public string SubtotalGeneralLoad { get; set; }
+    public string ServiceLoad { get; set; }
+  }
 }
