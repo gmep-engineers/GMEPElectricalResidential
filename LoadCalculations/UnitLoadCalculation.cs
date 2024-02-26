@@ -15,6 +15,17 @@ namespace GMEPElectricalResidential
     public UnitLoadCalculation()
     {
       InitializeComponent();
+      SetDefaultValues();
+    }
+
+    private void SetDefaultValues()
+    {
+      VOLTAGE.SelectedIndex = 0;
+      var parentTabControl = this.Parent as TabControl;
+      if (parentTabControl != null)
+      {
+        UNIT_NAME.Text = parentTabControl.TabCount.ToString();
+      }
     }
 
     private void UNIT_NAME_TextChanged(object sender, EventArgs e)

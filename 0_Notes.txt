@@ -85,8 +85,6 @@ Unit Load Calculations
 5. Show calculated load for service
 
 TODO
-2. Default a 208V voltage type (the first option in the combobox)
-3. Default the value in UNIT_NAME.Text to be equal to *number of tabs*
 4. If the GAS_HEATER radio button is checked, change the value of WATER_HEATER_VA to 180.
 5. If the ELECTRIC_HEATER radio button is checked, check if the WATER_HEATER_VA value is 180 and if so, change it to 5000.
 6. If the GAS_DRYER radio button is checked, change the value of DRYER_VA to 180.
