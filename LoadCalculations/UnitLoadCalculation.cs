@@ -16,7 +16,8 @@ namespace GMEPElectricalResidential
   {
     private string _NameWatermark = "Enter name...";
     private string _VAWatermark = "Enter VA...";
-    private ToolTip _toolTip = new ToolTip();
+    private ToolTip _toolTip;
+    private UnitInformation _unitInformation;
 
     public UnitLoadCalculation()
     {
@@ -25,6 +26,85 @@ namespace GMEPElectricalResidential
       AddWaterMarks();
       DetectIncorrectInputs();
       DetectEnterPresses();
+      SubscribeTextBoxesToTextChangedEvent(this.Controls);
+      SubscribeComboBoxesToTextChangedEvent(this.Controls);
+
+      _toolTip = new ToolTip();
+      _unitInformation = new UnitInformation();
+      _unitInformation.GeneralLoads = new UnitGeneralLoadContainer();
+      _unitInformation.Totals = new UnitTotals();
+    }
+
+    private void SubscribeComboBoxesToTextChangedEvent(Control.ControlCollection controls)
+    {
+      foreach (Control control in controls)
+      {
+        if (control is ComboBox comboBox)
+        {
+          comboBox.TextChanged += TextBox_TextChanged;
+        }
+
+        if (control.HasChildren)
+        {
+          SubscribeComboBoxesToTextChangedEvent(control.Controls);
+        }
+      }
+    }
+
+    private void SubscribeTextBoxesToTextChangedEvent(Control.ControlCollection controls)
+    {
+      foreach (Control control in controls)
+      {
+        if (control is TextBox textBox)
+        {
+          textBox.TextChanged += TextBox_TextChanged;
+        }
+
+        if (control.HasChildren)
+        {
+          SubscribeTextBoxesToTextChangedEvent(control.Controls);
+        }
+      }
+    }
+
+    private void TextBox_TextChanged(object sender, EventArgs e)
+    {
+      UpdateDataAndLoads();
+    }
+
+    private void UpdateDataAndLoads()
+    {
+      UpdateGeneralLoadData();
+      UpdateTotalGeneralLoadCalculation();
+    }
+
+    private void UpdateTotalGeneralLoadCalculation()
+    {
+      var generalLoads = _unitInformation.GeneralLoads;
+
+      int totalLoad = generalLoads.Lighting.GetLoad()
+                      + generalLoads.SmallAppliance.GetLoad()
+                      + generalLoads.Laundry.GetLoad()
+                      + generalLoads.Bathroom.GetLoad()
+                      + generalLoads.Dishwasher.GetLoad()
+                      + generalLoads.MicrowaveOven.GetLoad()
+                      + generalLoads.GarbageDisposal.GetLoad()
+                      + generalLoads.BathroomFans.GetLoad()
+                      + generalLoads.GarageDoorOpener.GetLoad()
+                      + generalLoads.Dryer.GetLoad()
+                      + generalLoads.Range.GetLoad()
+                      + generalLoads.Refrigerator.GetLoad()
+                      + generalLoads.Oven.GetLoad()
+                      + generalLoads.WaterHeater.GetLoad()
+                      + generalLoads.Cooktop.GetLoad();
+
+      foreach (var customLoad in generalLoads.Customs)
+      {
+        totalLoad += customLoad.GetLoad();
+      }
+
+      _unitInformation.Totals.TotalGeneralLoad = totalLoad.ToString();
+      TOTAL_GENERAL_LOAD_CALCULATION.Text = totalLoad.ToString();
     }
 
     private void DetectEnterPresses()
@@ -378,6 +458,40 @@ namespace GMEPElectricalResidential
     {
       RemoveEntry(CUSTOM_LOAD_BOX);
     }
+
+    private void UpdateGeneralLoadData()
+    {
+      UnitGeneralLoadContainer unitGeneralLoadContainer = new UnitGeneralLoadContainer();
+
+      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", GENERAL_LIGHTING_VA.Text, "1");
+      unitGeneralLoadContainer.SmallAppliance = new UnitLoad("Small Appliance", SMALL_APPLIANCE_VA.Text, SMALL_APPLIANCE_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Laundry = new UnitLoad("Laundry", LAUNDRY_VA.Text, LAUNDRY_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Bathroom = new UnitLoad("Bathroom", BATHROOM_VA.Text, BATHROOM_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Dishwasher = new UnitLoad("Dishwasher", DISHWASHER_VA.Text, DISHWASHER_MULTIPLIER.Text);
+      unitGeneralLoadContainer.MicrowaveOven = new UnitLoad("Microwave Oven", MICROWAVE_OVEN_VA.Text, MICROWAVE_OVEN_MULTIPLIER.Text);
+      unitGeneralLoadContainer.GarbageDisposal = new UnitLoad("Garbage Disposal", GARBAGE_DISPOSAL_VA.Text, GARBAGE_DISPOSAL_MULTIPLIER.Text);
+      unitGeneralLoadContainer.BathroomFans = new UnitLoad("Bathroom Fans", BATHROOM_FANS_VA.Text, BATHROOM_FANS_MULTIPLIER.Text);
+      unitGeneralLoadContainer.GarageDoorOpener = new UnitLoad("Garage Door Opener", GARAGE_DOOR_OPENER_VA.Text, GARAGE_DOOR_OPENER_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Dryer = new UnitLoad("Dryer", DRYER_VA.Text, DRYER_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Range = new UnitLoad("Range", RANGE_VA.Text, RANGE_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Refrigerator = new UnitLoad("Refrigerator", REFRIGERATOR_VA.Text, REFRIGERATOR_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Oven = new UnitLoad("Oven", OVEN_VA.Text, OVEN_MULTIPLIER.Text);
+      unitGeneralLoadContainer.WaterHeater = new UnitLoad("Water Heater", WATER_HEATER_VA.Text, WATER_HEATER_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Cooktop = new UnitLoad("Cooktop", COOKTOP_VA.Text, COOKTOP_MULTIPLIER.Text);
+
+      List<UnitLoad> customs = new List<UnitLoad>();
+
+      foreach (var item in GENERAL_CUSTOM_LOAD_BOX.Items)
+      {
+        var split = item.ToString().Trim().Split(',');
+        var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2]);
+        customs.Add(unitGeneralCustomLoad);
+      }
+
+      unitGeneralLoadContainer.Customs = customs;
+
+      _unitInformation.GeneralLoads = unitGeneralLoadContainer;
+    }
   }
 
   public class UnitInformation
@@ -385,8 +499,8 @@ namespace GMEPElectricalResidential
     public string Name { get; set; }
     public string Voltage { get; set; }
     public UnitDwellingArea DwellingArea { get; set; }
-    public UnitGeneralLoads GeneralLoads { get; set; }
-    public UnitCustomLoads CustomLoads { get; set; }
+    public UnitGeneralLoadContainer GeneralLoads { get; set; }
+    public UnitCustomLoadContainer CustomLoads { get; set; }
     public UnitACLoads ACLoads { get; set; }
     public UnitTotals Totals { get; set; }
   }
@@ -400,30 +514,57 @@ namespace GMEPElectricalResidential
     public bool ElectricCooktop { get; set; }
   }
 
-  public class UnitGeneralLoads
+  public class UnitGeneralLoadContainer
   {
-    public string Lighting { get; set; }
-    public string SmallAppliance { get; set; }
-    public string Laundry { get; set; }
-    public string Bathroom { get; set; }
-    public string Dishwasher { get; set; }
-    public string MicrowaveOven { get; set; }
-    public string GarbageDisposal { get; set; }
-    public string BathroomFans { get; set; }
-    public string GarageDoorOpener { get; set; }
-    public string Dryer { get; set; }
-    public string Range { get; set; }
-    public string Refrigerator { get; set; }
-    public string Oven { get; set; }
-    public string WaterHeater { get; set; }
-    public string Cooktop { get; set; }
-
-    public List<string> Customs { get; set; }
+    public UnitLoad Lighting { get; set; }
+    public UnitLoad SmallAppliance { get; set; }
+    public UnitLoad Laundry { get; set; }
+    public UnitLoad Bathroom { get; set; }
+    public UnitLoad Dishwasher { get; set; }
+    public UnitLoad MicrowaveOven { get; set; }
+    public UnitLoad GarbageDisposal { get; set; }
+    public UnitLoad BathroomFans { get; set; }
+    public UnitLoad GarageDoorOpener { get; set; }
+    public UnitLoad Dryer { get; set; }
+    public UnitLoad Range { get; set; }
+    public UnitLoad Refrigerator { get; set; }
+    public UnitLoad Oven { get; set; }
+    public UnitLoad WaterHeater { get; set; }
+    public UnitLoad Cooktop { get; set; }
+    public List<UnitLoad> Customs { get; set; }
   }
 
-  public class UnitCustomLoads
+  public class UnitLoad
   {
-    public List<string> Customs { get; set; }
+    public int VA { get; set; }
+    public int Multiplier { get; set; }
+    public string Name { get; set; }
+
+    public UnitLoad(string name, object va, object multiplier)
+    {
+      VA = va is int ? (int)va : int.TryParse(va.ToString(), out int vaResult) ? vaResult : 0;
+      Multiplier = multiplier is int ? (int)multiplier : int.TryParse(multiplier.ToString(), out int multiplierResult) ? multiplierResult : 0;
+    }
+
+    public int GetLoad()
+    {
+      return VA * Multiplier;
+    }
+  }
+
+  public class UnitCustomLoadContainer
+  {
+    public List<UnitLoad> Customs { get; set; }
+
+    public UnitCustomLoadContainer()
+    {
+      Customs = new List<UnitLoad>();
+    }
+
+    public void Add(UnitLoad load)
+    {
+      Customs.Add(load);
+    }
   }
 
   public class UnitACLoads
