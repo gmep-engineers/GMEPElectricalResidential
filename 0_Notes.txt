@@ -85,7 +85,6 @@ Unit Load Calculations
 5. Show calculated load for service
 
 TODO
-1. Update the tab name based on the unit name (when the UNIT_NAME textbox value changes, update the tab name to "Unit *value in textbox*")
 2. Default a 208V voltage type (the first option in the combobox)
 3. Default the value in UNIT_NAME.Text to be equal to *number of tabs*
 4. If the GAS_HEATER radio button is checked, change the value of WATER_HEATER_VA to 180.

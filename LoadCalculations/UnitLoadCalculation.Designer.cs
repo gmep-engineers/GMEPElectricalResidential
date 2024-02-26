@@ -229,6 +229,7 @@
       this.UNIT_NAME.Name = "UNIT_NAME";
       this.UNIT_NAME.Size = new System.Drawing.Size(137, 19);
       this.UNIT_NAME.TabIndex = 0;
+      this.UNIT_NAME.TextChanged += new System.EventHandler(this.UNIT_NAME_TextChanged);
       // 
       // label3
       // 

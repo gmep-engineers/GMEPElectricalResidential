@@ -16,5 +16,18 @@ namespace GMEPElectricalResidential
     {
       InitializeComponent();
     }
+
+    private void UNIT_NAME_TextChanged(object sender, EventArgs e)
+    {
+      var textBox = sender as TextBox;
+      if (textBox != null)
+      {
+        var parentTab = this.Parent as TabPage;
+        if (parentTab != null)
+        {
+          parentTab.Text = $"Unit {textBox.Text}";
+        }
+      }
+    }
   }
 }
