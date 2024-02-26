@@ -33,9 +33,30 @@ namespace GMEPElectricalResidential
       TAB_CONTROL.TabPages.Add(tabPage);
     }
 
+    public void RemoveCurrentTab()
+    {
+      // Check if there are any tabs to remove
+      if (TAB_CONTROL.TabCount > 0)
+      {
+        // Ask the user for confirmation
+        DialogResult result = MessageBox.Show("Are you sure you want to remove this tab?", "Confirmation", MessageBoxButtons.YesNo);
+
+        if (result == DialogResult.Yes)
+        {
+          // If the user clicked 'Yes', remove the current tab
+          TAB_CONTROL.TabPages.Remove(TAB_CONTROL.SelectedTab);
+        }
+      }
+    }
+
     private void CREATE_UNIT_BUTTON_Click(object sender, EventArgs e)
     {
       AddNewTab();
+    }
+
+    private void DELETE_UNIT_BUTTON_Click(object sender, EventArgs e)
+    {
+      RemoveCurrentTab();
     }
   }
 }

@@ -63,6 +63,7 @@
       this.DELETE_UNIT_BUTTON.TabIndex = 2;
       this.DELETE_UNIT_BUTTON.Text = "Delete Unit Type";
       this.DELETE_UNIT_BUTTON.UseVisualStyleBackColor = true;
+      this.DELETE_UNIT_BUTTON.Click += new System.EventHandler(this.DELETE_UNIT_BUTTON_Click);
       // 
       // LoadCalculationForm
       // 

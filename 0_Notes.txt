@@ -75,3 +75,28 @@ Load Calculations are done
 - Per meter section (or breaker off service)
 
 1. Create Load Calculation program to fill out the loads for each unit
+
+
+Unit Load Calculations
+1. Show general lighting (3VA * sqft)
+2. Show total general
+3. Show subtotal general
+4. Show total AC load
+5. Show calculated load for service
+
+TODO
+1. Update the tab name based on the unit name (when the UNIT_NAME textbox value changes, update the tab name to "Unit *value in textbox*")
+2. Default a 208V voltage type (the first option in the combobox)
+3. Default the value in UNIT_NAME.Text to be equal to *number of tabs*
+4. If the GAS_HEATER radio button is checked, change the value of WATER_HEATER_VA to 180.
+5. If the ELECTRIC_HEATER radio button is checked, check if the WATER_HEATER_VA value is 180 and if so, change it to 5000.
+6. If the GAS_DRYER radio button is checked, change the value of DRYER_VA to 180.
+7. If the ELECTRIC_DRYER radio button is checked, check if the value of the DRYER_VA is 180 and if so, change it to 5000.
+8. If the GAS_OVEN radio button is checked, change the value of OVEN_VA to 180.
+9. If the ELECTRIC_OVEN radio button is checked, check if the value of OVEN_VA is 180 and if so, change it to 8000.
+10. If the GAS_COOKTOP radio button is checked, change the value of COOKTOP_VA to 180.
+11. If the ELECTRIC_COOKTOP radio button is checked, check if the value of COOKTOP_VA is 180 and if so, change it to 8000.
+13. Add a total general load calculation label as a subtitle and a total general load calculation label as a value to update.
+14. Add a subtotal general load calculation label as a subtitle and subtotal general load calculation label as a value to update.
+15. Add a total AC load calculation label as a subtitle and a total AC load calculation label as a value to update.
+16. Add a calculated load for service label as a subtitle and a calculated load for service label as a value to update.
