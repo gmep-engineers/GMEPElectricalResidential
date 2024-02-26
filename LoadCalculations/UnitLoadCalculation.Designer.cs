@@ -1686,6 +1686,7 @@
       this.REMOVE_ENTRY.TabIndex = 98;
       this.REMOVE_ENTRY.Text = "Remove";
       this.REMOVE_ENTRY.UseVisualStyleBackColor = true;
+      this.REMOVE_ENTRY.Click += new System.EventHandler(this.REMOVE_ENTRY_Click);
       // 
       // REMOVE_ENTRY_CUSTOM
       // 
@@ -1696,6 +1697,7 @@
       this.REMOVE_ENTRY_CUSTOM.TabIndex = 105;
       this.REMOVE_ENTRY_CUSTOM.Text = "Remove";
       this.REMOVE_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
+      this.REMOVE_ENTRY_CUSTOM.Click += new System.EventHandler(this.REMOVE_ENTRY_CUSTOM_Click);
       // 
       // ADD_ENTRY_CUSTOM
       // 

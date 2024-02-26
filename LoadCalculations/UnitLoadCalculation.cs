@@ -306,5 +306,23 @@ namespace GMEPElectricalResidential
     {
       AddEntry(CUSTOM_NAME, CUSTOM_VA, CUSTOM_MULTIPLIER, CUSTOM_LOAD_BOX);
     }
+
+    private void RemoveEntry(ListBox listBox)
+    {
+      if (listBox.Items.Count > 0 && listBox.SelectedIndex != -1)
+      {
+        listBox.Items.RemoveAt(listBox.SelectedIndex);
+      }
+    }
+
+    private void REMOVE_ENTRY_Click(object sender, EventArgs e)
+    {
+      RemoveEntry(GENERAL_CUSTOM_LOAD_BOX);
+    }
+
+    private void REMOVE_ENTRY_CUSTOM_Click(object sender, EventArgs e)
+    {
+      RemoveEntry(CUSTOM_LOAD_BOX);
+    }
   }
 }
