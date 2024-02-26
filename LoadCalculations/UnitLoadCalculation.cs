@@ -35,6 +35,16 @@ namespace GMEPElectricalResidential
       _unitInformation.Totals = new UnitTotals();
     }
 
+    protected override void OnVisibleChanged(EventArgs e)
+    {
+      base.OnVisibleChanged(e);
+
+      if (this.Visible)
+      {
+        UpdateDataAndLoads();
+      }
+    }
+
     private void SubscribeComboBoxesToTextChangedEvent(Control.ControlCollection controls)
     {
       foreach (Control control in controls)
