@@ -131,10 +131,10 @@
       this.button2 = new System.Windows.Forms.Button();
       this.CUSTOM_LOAD_BOX = new System.Windows.Forms.ListBox();
       this.panel11 = new System.Windows.Forms.Panel();
-      this.CUSTOM_LOAD_VA = new System.Windows.Forms.TextBox();
+      this.CUSTOM_VA = new System.Windows.Forms.TextBox();
       this.panel12 = new System.Windows.Forms.Panel();
-      this.CUSTOM_LOAD_NAME = new System.Windows.Forms.TextBox();
-      this.CUSTOM_LOAD_MULTIPLIER = new System.Windows.Forms.ComboBox();
+      this.CUSTOM_NAME = new System.Windows.Forms.TextBox();
+      this.CUSTOM_MULTIPLIER = new System.Windows.Forms.ComboBox();
       this.label15 = new System.Windows.Forms.Label();
       this.label16 = new System.Windows.Forms.Label();
       this.TOTAL_GENERAL_LOAD_CALCULATION = new System.Windows.Forms.Label();
@@ -1720,7 +1720,7 @@
       // panel11
       // 
       this.panel11.BackColor = System.Drawing.SystemColors.Window;
-      this.panel11.Controls.Add(this.CUSTOM_LOAD_VA);
+      this.panel11.Controls.Add(this.CUSTOM_VA);
       this.panel11.Location = new System.Drawing.Point(819, 421);
       this.panel11.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel11.Name = "panel11";
@@ -1728,20 +1728,20 @@
       this.panel11.Size = new System.Drawing.Size(114, 28);
       this.panel11.TabIndex = 100;
       // 
-      // CUSTOM_LOAD_VA
+      // CUSTOM_VA
       // 
-      this.CUSTOM_LOAD_VA.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.CUSTOM_LOAD_VA.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.CUSTOM_LOAD_VA.Location = new System.Drawing.Point(5, 5);
-      this.CUSTOM_LOAD_VA.Margin = new System.Windows.Forms.Padding(0);
-      this.CUSTOM_LOAD_VA.Name = "CUSTOM_LOAD_VA";
-      this.CUSTOM_LOAD_VA.Size = new System.Drawing.Size(104, 19);
-      this.CUSTOM_LOAD_VA.TabIndex = 2;
+      this.CUSTOM_VA.BorderStyle = System.Windows.Forms.BorderStyle.None;
+      this.CUSTOM_VA.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.CUSTOM_VA.Location = new System.Drawing.Point(5, 5);
+      this.CUSTOM_VA.Margin = new System.Windows.Forms.Padding(0);
+      this.CUSTOM_VA.Name = "CUSTOM_VA";
+      this.CUSTOM_VA.Size = new System.Drawing.Size(104, 19);
+      this.CUSTOM_VA.TabIndex = 2;
       // 
       // panel12
       // 
       this.panel12.BackColor = System.Drawing.SystemColors.Window;
-      this.panel12.Controls.Add(this.CUSTOM_LOAD_NAME);
+      this.panel12.Controls.Add(this.CUSTOM_NAME);
       this.panel12.Location = new System.Drawing.Point(694, 421);
       this.panel12.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel12.Name = "panel12";
@@ -1749,22 +1749,22 @@
       this.panel12.Size = new System.Drawing.Size(120, 28);
       this.panel12.TabIndex = 99;
       // 
-      // CUSTOM_LOAD_NAME
+      // CUSTOM_NAME
       // 
-      this.CUSTOM_LOAD_NAME.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.CUSTOM_LOAD_NAME.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.CUSTOM_LOAD_NAME.Location = new System.Drawing.Point(5, 5);
-      this.CUSTOM_LOAD_NAME.Margin = new System.Windows.Forms.Padding(0);
-      this.CUSTOM_LOAD_NAME.Name = "CUSTOM_LOAD_NAME";
-      this.CUSTOM_LOAD_NAME.Size = new System.Drawing.Size(110, 19);
-      this.CUSTOM_LOAD_NAME.TabIndex = 2;
+      this.CUSTOM_NAME.BorderStyle = System.Windows.Forms.BorderStyle.None;
+      this.CUSTOM_NAME.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.CUSTOM_NAME.Location = new System.Drawing.Point(5, 5);
+      this.CUSTOM_NAME.Margin = new System.Windows.Forms.Padding(0);
+      this.CUSTOM_NAME.Name = "CUSTOM_NAME";
+      this.CUSTOM_NAME.Size = new System.Drawing.Size(110, 19);
+      this.CUSTOM_NAME.TabIndex = 2;
       // 
-      // CUSTOM_LOAD_MULTIPLIER
+      // CUSTOM_MULTIPLIER
       // 
-      this.CUSTOM_LOAD_MULTIPLIER.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.CUSTOM_LOAD_MULTIPLIER.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.CUSTOM_LOAD_MULTIPLIER.FormattingEnabled = true;
-      this.CUSTOM_LOAD_MULTIPLIER.Items.AddRange(new object[] {
+      this.CUSTOM_MULTIPLIER.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.CUSTOM_MULTIPLIER.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.CUSTOM_MULTIPLIER.FormattingEnabled = true;
+      this.CUSTOM_MULTIPLIER.Items.AddRange(new object[] {
             "1",
             "2",
             "3",
@@ -1790,12 +1790,12 @@
             "23",
             "24",
             "25"});
-      this.CUSTOM_LOAD_MULTIPLIER.Location = new System.Drawing.Point(936, 421);
-      this.CUSTOM_LOAD_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
-      this.CUSTOM_LOAD_MULTIPLIER.Name = "CUSTOM_LOAD_MULTIPLIER";
-      this.CUSTOM_LOAD_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
-      this.CUSTOM_LOAD_MULTIPLIER.TabIndex = 101;
-      this.CUSTOM_LOAD_MULTIPLIER.Text = "1";
+      this.CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(936, 421);
+      this.CUSTOM_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
+      this.CUSTOM_MULTIPLIER.Name = "CUSTOM_MULTIPLIER";
+      this.CUSTOM_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
+      this.CUSTOM_MULTIPLIER.TabIndex = 101;
+      this.CUSTOM_MULTIPLIER.Text = "1";
       // 
       // label15
       // 
@@ -1923,7 +1923,7 @@
       this.Controls.Add(this.CUSTOM_LOAD_BOX);
       this.Controls.Add(this.panel11);
       this.Controls.Add(this.panel12);
-      this.Controls.Add(this.CUSTOM_LOAD_MULTIPLIER);
+      this.Controls.Add(this.CUSTOM_MULTIPLIER);
       this.Controls.Add(this.label15);
       this.Controls.Add(this.REMOVE_ENTRY);
       this.Controls.Add(this.ADD_ENTRY);
@@ -2162,10 +2162,10 @@
     private System.Windows.Forms.Button button2;
     private System.Windows.Forms.ListBox CUSTOM_LOAD_BOX;
     private System.Windows.Forms.Panel panel11;
-    private System.Windows.Forms.TextBox CUSTOM_LOAD_VA;
+    private System.Windows.Forms.TextBox CUSTOM_VA;
     private System.Windows.Forms.Panel panel12;
-    private System.Windows.Forms.TextBox CUSTOM_LOAD_NAME;
-    private System.Windows.Forms.ComboBox CUSTOM_LOAD_MULTIPLIER;
+    private System.Windows.Forms.TextBox CUSTOM_NAME;
+    private System.Windows.Forms.ComboBox CUSTOM_MULTIPLIER;
     private System.Windows.Forms.Label label15;
     private System.Windows.Forms.Label label16;
     private System.Windows.Forms.Label TOTAL_GENERAL_LOAD_CALCULATION;

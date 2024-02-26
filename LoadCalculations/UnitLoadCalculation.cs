@@ -13,10 +13,63 @@ namespace GMEPElectricalResidential
 {
   public partial class UnitLoadCalculation : UserControl
   {
+    private string _NameWatermark = "Enter name...";
+    private string _VAWatermark = "Enter VA...";
+
     public UnitLoadCalculation()
     {
       InitializeComponent();
       SetDefaultValues();
+      AddWaterMarks();
+    }
+
+    private void AddWaterMarks()
+    {
+      GENERAL_CUSTOM_NAME.Text = _NameWatermark;
+      GENERAL_CUSTOM_NAME.ForeColor = Color.LightGray;
+      GENERAL_CUSTOM_NAME.Enter += RemoveWatermark;
+      GENERAL_CUSTOM_NAME.Leave += AddWatermark;
+
+      GENERAL_CUSTOM_VA.Text = _VAWatermark;
+      GENERAL_CUSTOM_VA.ForeColor = Color.LightGray;
+      GENERAL_CUSTOM_VA.Enter += RemoveWatermark;
+      GENERAL_CUSTOM_VA.Leave += AddWatermark;
+
+      CUSTOM_NAME.Text = _NameWatermark;
+      CUSTOM_NAME.ForeColor = Color.LightGray;
+      CUSTOM_NAME.Enter += RemoveWatermark;
+      CUSTOM_NAME.Leave += AddWatermark;
+
+      CUSTOM_VA.Text += _VAWatermark;
+      CUSTOM_VA.ForeColor = Color.LightGray;
+      CUSTOM_VA.Enter += RemoveWatermark;
+      CUSTOM_VA.Leave += AddWatermark;
+    }
+
+    private void RemoveWatermark(object sender, EventArgs e)
+    {
+      var textBox = sender as TextBox;
+      if (textBox != null)
+      {
+        if (textBox.Text == _NameWatermark || textBox.Text == _VAWatermark)
+        {
+          textBox.Text = "";
+          textBox.ForeColor = Color.Black;
+        }
+      }
+    }
+
+    private void AddWatermark(object sender, EventArgs e)
+    {
+      var textBox = sender as TextBox;
+      if (textBox != null)
+      {
+        if (string.IsNullOrEmpty(textBox.Text))
+        {
+          textBox.Text = textBox == GENERAL_CUSTOM_NAME ? _NameWatermark : _VAWatermark;
+          textBox.ForeColor = Color.LightGray;
+        }
+      }
     }
 
     private void SetDefaultValues()

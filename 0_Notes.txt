@@ -75,7 +75,10 @@ Load Calculations are done
 - Per meter section (or breaker off service)
 
 1. Create Load Calculation program to fill out the loads for each unit
+- If the general lighting load is > 3000VA, then automatically apply the table 220.42.
 
 TODO
-2. If the general lighting load is > 3000VA, then automatically apply the table 220.42.
-16. Add a calculated load for service label as a subtitle and a calculated load for service label as a value to update.
+1. Add watermarks to the custom entries for the Name and VA.
+2. Configure the input boxes to check that the input entered is correct before adding it to the list
+3. Configure the add button to take the values from the inputs and add an entry to the list, then remove the values that are in the inputs
+4. Configure the remove button to find the selected entry in the list and delete it
