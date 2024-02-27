@@ -83,11 +83,38 @@ namespace GMEPElectricalResidential
       UpdateDataAndLoads();
     }
 
+    private int GetLargestACLoad()
+    {
+      var numberOfUnits = _unitInformation.ACLoads.HeatingUnit.NumberOfUnits;
+      var heaterVA = _unitInformation.ACLoads.HeatingUnit.Heating;
+      var condenserVA = _unitInformation.ACLoads.Condenser;
+      var fanCoilVA = _unitInformation.ACLoads.FanCoil;
+
+      var totalACAndCooling = condenserVA + fanCoilVA;
+      var heatingAt65pc = Math.Ceiling(heaterVA * 0.65);
+      var heatingAt40pc = Math.Ceiling(heaterVA * 0.40);
+
+      if (numberOfUnits < 4)
+      {
+        return (totalACAndCooling > heatingAt65pc) ? totalACAndCooling : (int)heatingAt65pc;
+      }
+
+      return (totalACAndCooling > heatingAt40pc) ? totalACAndCooling : (int)heatingAt40pc;
+    }
+
     private void UpdateDataAndLoads()
     {
       UpdateGeneralLoadData();
       UpdateACLoadData();
       UpdateTotalGeneralLoadCalculation();
+      UpdateTotalACLoadCalculation();
+    }
+
+    private void UpdateTotalACLoadCalculation()
+    {
+      var largestACLoad = GetLargestACLoad();
+      TOTAL_AC_LOAD_CALCULATION.Text = largestACLoad.ToString();
+      _unitInformation.Totals.TotalACLoad = largestACLoad.ToString();
     }
 
     private void UpdateACLoadData()
@@ -190,12 +217,14 @@ namespace GMEPElectricalResidential
       if (totalLoad <= 10000)
       {
         SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = totalLoad.ToString();
+        _unitInformation.Totals.SubtotalGeneralLoad = totalLoad.ToString();
       }
       else
       {
         double subtotal = 10000 + 0.4 * (totalLoad - 10000);
         int roundedSubtotal = (int)Math.Ceiling(subtotal);
         SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = roundedSubtotal.ToString();
+        _unitInformation.Totals.SubtotalGeneralLoad = roundedSubtotal.ToString();
       }
     }
 
