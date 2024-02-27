@@ -197,7 +197,7 @@ namespace GMEPElectricalResidential
     {
       UnitGeneralLoadContainer unitGeneralLoadContainer = new UnitGeneralLoadContainer();
 
-      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", GENERAL_LIGHTING_VA.Text, "1");
+      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", GENERAL_LIGHTING_100PC.Text, "1");
       unitGeneralLoadContainer.SmallAppliance = new UnitLoad("Small Appliance", SMALL_APPLIANCE_VA.Text, SMALL_APPLIANCE_MULTIPLIER.Text);
       unitGeneralLoadContainer.Laundry = new UnitLoad("Laundry", LAUNDRY_VA.Text, LAUNDRY_MULTIPLIER.Text);
       unitGeneralLoadContainer.Bathroom = new UnitLoad("Bathroom", BATHROOM_VA.Text, BATHROOM_MULTIPLIER.Text);
@@ -542,7 +542,7 @@ namespace GMEPElectricalResidential
       var textBox = sender as TextBox;
       if (textBox != null && int.TryParse(textBox.Text, out int floorArea))
       {
-        GENERAL_LIGHTING_VA.Text = (floorArea * 3).ToString();
+        GENERAL_LIGHTING_100PC.Text = (floorArea * 3).ToString();
       }
     }
 
