@@ -34,6 +34,8 @@ namespace GMEPElectricalResidential
       _unitInformation.GeneralLoads = new UnitGeneralLoadContainer();
       _unitInformation.Totals = new UnitTotalContainer();
       _unitInformation.ACLoads = new UnitACLoadContainer();
+      _unitInformation.DwellingArea = new UnitDwellingArea();
+      _unitInformation.GeneralLoads.LightingCode = "220.42";
     }
 
     protected override void OnVisibleChanged(EventArgs e)
@@ -120,6 +122,7 @@ namespace GMEPElectricalResidential
     {
       UpdateGeneralData();
       UpdateDwellingData();
+
       UpdateGeneralLoadData();
       UpdateACLoadData();
       UpdateCustomLoadData();
@@ -131,6 +134,13 @@ namespace GMEPElectricalResidential
 
     private void UpdateDwellingData()
     {
+      var dwellingArea = new UnitDwellingArea();
+      dwellingArea.FloorArea = AREA.Text;
+      dwellingArea.ElectricHeater = ELECTRIC_HEATER.Checked;
+      dwellingArea.ElectricDryer = ELECTRIC_DRYER.Checked;
+      dwellingArea.ElectricCooktop = ELECTRIC_COOKTOP.Checked;
+      dwellingArea.ElectricOven = ELECTRIC_OVEN.Checked;
+      _unitInformation.DwellingArea = dwellingArea;
     }
 
     private void UpdateGeneralData()
@@ -161,7 +171,7 @@ namespace GMEPElectricalResidential
         customs.Add(unitGeneralCustomLoad);
       }
 
-      if (WATER_HEATER_CHECK.Checked)
+      if (!WATER_HEATER_CHECK.Checked)
       {
         var name = "Water Heater";
         var load = WATER_HEATER_VA.Text;
@@ -211,7 +221,7 @@ namespace GMEPElectricalResidential
     {
       UnitGeneralLoadContainer unitGeneralLoadContainer = new UnitGeneralLoadContainer();
 
-      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", GENERAL_LIGHTING_100PC.Text, "1");
+      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", GENERAL_LIGHTING_TOTAL.Text, "1");
       unitGeneralLoadContainer.SmallAppliance = new UnitLoad("Small Appliance", SMALL_APPLIANCE_VA.Text, SMALL_APPLIANCE_MULTIPLIER.Text);
       unitGeneralLoadContainer.Laundry = new UnitLoad("Laundry", LAUNDRY_VA.Text, LAUNDRY_MULTIPLIER.Text);
       unitGeneralLoadContainer.Bathroom = new UnitLoad("Bathroom", BATHROOM_VA.Text, BATHROOM_MULTIPLIER.Text);
@@ -556,7 +566,14 @@ namespace GMEPElectricalResidential
       var textBox = sender as TextBox;
       if (textBox != null && int.TryParse(textBox.Text, out int floorArea))
       {
-        GENERAL_LIGHTING_100PC.Text = (floorArea * 3).ToString();
+        int first3000 = Math.Min((floorArea * 3), 3000);
+        int over3000 = Math.Max(0, (floorArea * 3) - 3000);
+
+        GENERAL_LIGHTING_100PC.Text = (first3000).ToString();
+        GENERAL_LIGHTING_35PC.Text = (over3000 * 0.35).ToString();
+
+        int total = first3000 + (int)(over3000 * 0.35);
+        GENERAL_LIGHTING_TOTAL.Text = total.ToString();
       }
     }
 
@@ -696,6 +713,7 @@ namespace GMEPElectricalResidential
     public UnitLoad WaterHeater { get; set; }
     public UnitLoad Cooktop { get; set; }
     public List<UnitLoad> Customs { get; set; }
+    public string LightingCode { get; set; }
   }
 
   public class UnitLoad

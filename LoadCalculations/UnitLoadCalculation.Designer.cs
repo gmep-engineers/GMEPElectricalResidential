@@ -194,7 +194,7 @@
       this.ESTIMATE_FAN_COIL = new System.Windows.Forms.Button();
       this.TOTAL_CUSTOM_LOAD_CALCULATION = new System.Windows.Forms.Label();
       this.label76 = new System.Windows.Forms.Label();
-      this.GENERAL_LIGHTING_40PC = new System.Windows.Forms.Label();
+      this.GENERAL_LIGHTING_35PC = new System.Windows.Forms.Label();
       this.label77 = new System.Windows.Forms.Label();
       this.label78 = new System.Windows.Forms.Label();
       this.label79 = new System.Windows.Forms.Label();
@@ -2535,16 +2535,16 @@
       this.label76.TabIndex = 162;
       this.label76.Text = "Total Custom Load Calculation";
       // 
-      // GENERAL_LIGHTING_40PC
+      // GENERAL_LIGHTING_35PC
       // 
-      this.GENERAL_LIGHTING_40PC.AutoSize = true;
-      this.GENERAL_LIGHTING_40PC.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.GENERAL_LIGHTING_40PC.Location = new System.Drawing.Point(366, 99);
-      this.GENERAL_LIGHTING_40PC.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.GENERAL_LIGHTING_40PC.Name = "GENERAL_LIGHTING_40PC";
-      this.GENERAL_LIGHTING_40PC.Size = new System.Drawing.Size(20, 24);
-      this.GENERAL_LIGHTING_40PC.TabIndex = 164;
-      this.GENERAL_LIGHTING_40PC.Text = "0";
+      this.GENERAL_LIGHTING_35PC.AutoSize = true;
+      this.GENERAL_LIGHTING_35PC.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.GENERAL_LIGHTING_35PC.Location = new System.Drawing.Point(366, 99);
+      this.GENERAL_LIGHTING_35PC.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.GENERAL_LIGHTING_35PC.Name = "GENERAL_LIGHTING_35PC";
+      this.GENERAL_LIGHTING_35PC.Size = new System.Drawing.Size(20, 24);
+      this.GENERAL_LIGHTING_35PC.TabIndex = 164;
+      this.GENERAL_LIGHTING_35PC.Text = "0";
       // 
       // label77
       // 
@@ -2566,7 +2566,7 @@
       this.label78.Name = "label78";
       this.label78.Size = new System.Drawing.Size(112, 16);
       this.label78.TabIndex = 166;
-      this.label78.Text = "40% over 3000VA";
+      this.label78.Text = "35% over 3000VA";
       // 
       // label79
       // 
@@ -2647,7 +2647,7 @@
       this.Controls.Add(this.label79);
       this.Controls.Add(this.label78);
       this.Controls.Add(this.label77);
-      this.Controls.Add(this.GENERAL_LIGHTING_40PC);
+      this.Controls.Add(this.GENERAL_LIGHTING_35PC);
       this.Controls.Add(this.TOTAL_CUSTOM_LOAD_CALCULATION);
       this.Controls.Add(this.label76);
       this.Controls.Add(this.ESTIMATE_FAN_COIL);
@@ -3014,7 +3014,7 @@
     private System.Windows.Forms.Button ESTIMATE_FAN_COIL;
     private System.Windows.Forms.Label TOTAL_CUSTOM_LOAD_CALCULATION;
     private System.Windows.Forms.Label label76;
-    private System.Windows.Forms.Label GENERAL_LIGHTING_40PC;
+    private System.Windows.Forms.Label GENERAL_LIGHTING_35PC;
     private System.Windows.Forms.Label label77;
     private System.Windows.Forms.Label label78;
     private System.Windows.Forms.Label label79;
