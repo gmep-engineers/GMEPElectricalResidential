@@ -1869,7 +1869,7 @@
       this.label16.Location = new System.Drawing.Point(1233, 365);
       this.label16.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label16.Name = "label16";
-      this.label16.Size = new System.Drawing.Size(230, 21);
+      this.label16.Size = new System.Drawing.Size(245, 21);
       this.label16.TabIndex = 106;
       this.label16.Text = "Total General Load Calculation";
       // 

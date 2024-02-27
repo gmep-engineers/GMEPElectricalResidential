@@ -83,7 +83,7 @@ namespace GMEPElectricalResidential
       UpdateDataAndLoads();
     }
 
-    private int GetLargestACLoad()
+    private Tuple<int, string> GetLargestACInformation()
     {
       var numberOfUnits = _unitInformation.ACLoads.HeatingUnit.NumberOfUnits;
       var heaterVA = _unitInformation.ACLoads.HeatingUnit.Heating;
@@ -96,10 +96,24 @@ namespace GMEPElectricalResidential
 
       if (numberOfUnits < 4)
       {
-        return (totalACAndCooling > heatingAt65pc) ? totalACAndCooling : (int)heatingAt65pc;
+        if (totalACAndCooling > heatingAt65pc)
+        {
+          return Tuple.Create(totalACAndCooling, "220.82(C)(1)");
+        }
+        else
+        {
+          return Tuple.Create((int)heatingAt65pc, "220.82(C)(4)");
+        }
       }
 
-      return (totalACAndCooling > heatingAt40pc) ? totalACAndCooling : (int)heatingAt40pc;
+      if (totalACAndCooling > heatingAt40pc)
+      {
+        return Tuple.Create(totalACAndCooling, "220.82(C)(1)");
+      }
+      else
+      {
+        return Tuple.Create((int)heatingAt40pc, "220.82(C)(5)");
+      }
     }
 
     private void UpdateDataAndLoads()
@@ -147,9 +161,14 @@ namespace GMEPElectricalResidential
 
     private void UpdateTotalACLoadCalculation()
     {
-      var largestACLoad = GetLargestACLoad();
-      TOTAL_AC_LOAD_CALCULATION.Text = largestACLoad.ToString();
-      _unitInformation.Totals.TotalACLoad = largestACLoad.ToString();
+      var ACInformation = GetLargestACInformation();
+      var loadValue = ACInformation.Item1;
+      var loadCode = ACInformation.Item2;
+
+      TOTAL_AC_LOAD_CALCULATION.Text = loadValue.ToString();
+      _unitInformation.Totals.TotalACLoad = loadValue.ToString();
+
+      _unitInformation.ACLoads.ElectricalCode = loadCode;
     }
 
     private void UpdateACLoadData()
@@ -690,6 +709,7 @@ namespace GMEPElectricalResidential
     public int Condenser { get; set; }
     public int FanCoil { get; set; }
     public HeatingUnit HeatingUnit { get; set; }
+    public string ElectricalCode { get; set; }
   }
 
   public class UnitTotalContainer

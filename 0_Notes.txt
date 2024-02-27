@@ -78,5 +78,6 @@ Load Calculations are done
 - If the general lighting load is > 3000VA, then automatically apply the table 220.42.
 
 TODO
-4. Find out how the total AC LOAD is calculated and update the value accordingly
-6. Update the "CALCULATED_LOAD_FOR_SERVICE" from the "SUBTOTAL_GENERAL_LOAD" and "AC_LOAD_CALCULATION"
+1. Update the "CALCULATED_LOAD_FOR_SERVICE" from the "SUBTOTAL_GENERAL_LOAD" and "AC_LOAD_CALCULATION"
+2. Update the "General Lighting" section to calculate the VA based on the 3000VA @ 100% and anything over @ 40%.
+3. Add a row under Total Calculations for the Total Custom Load Calculation.
