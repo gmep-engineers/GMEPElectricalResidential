@@ -28,6 +28,7 @@ namespace GMEPElectricalResidential
       DetectEnterPresses();
       SubscribeTextBoxesToTextChangedEvent(this.Controls);
       SubscribeComboBoxesToTextChangedEvent(this.Controls);
+      SubscribeTextBoxesToTextEnterEvent(this.Controls);
 
       _toolTip = new ToolTip();
       _unitInformation = new UnitInformation();
@@ -38,6 +39,29 @@ namespace GMEPElectricalResidential
       _unitInformation.GeneralLoads.LightingCode = "220.42";
     }
 
+    private void SubscribeTextBoxesToTextEnterEvent(Control.ControlCollection controls)
+    {
+      foreach (Control control in controls)
+      {
+        if (control is TextBox)
+        {
+          ((TextBox)control).MouseUp += TextBox_MouseUp;
+        }
+        else
+        {
+          SubscribeTextBoxesToTextEnterEvent(control.Controls);
+        }
+      }
+    }
+
+    private void TextBox_MouseUp(object sender, MouseEventArgs e)
+    {
+      if (sender is TextBox textBox && !textBox.ReadOnly)
+      {
+        textBox.SelectAll();
+      }
+    }
+
     protected override void OnVisibleChanged(EventArgs e)
     {
       base.OnVisibleChanged(e);
@@ -45,6 +69,7 @@ namespace GMEPElectricalResidential
       if (this.Visible)
       {
         UpdateDataAndLoads();
+        UNIT_NAME.Select();
       }
     }
 

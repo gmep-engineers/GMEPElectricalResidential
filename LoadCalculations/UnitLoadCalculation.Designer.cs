@@ -602,7 +602,7 @@
       this.LAUNDRY_VA.Margin = new System.Windows.Forms.Padding(0);
       this.LAUNDRY_VA.Name = "LAUNDRY_VA";
       this.LAUNDRY_VA.Size = new System.Drawing.Size(71, 19);
-      this.LAUNDRY_VA.TabIndex = 2;
+      this.LAUNDRY_VA.TabIndex = 0;
       this.LAUNDRY_VA.Text = "1500";
       // 
       // LAUNDRY_MULTIPLIER
@@ -1088,8 +1088,8 @@
       this.panel13.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel13.Name = "panel13";
       this.panel13.Padding = new System.Windows.Forms.Padding(5);
-      this.panel13.Size = new System.Drawing.Size(96, 28);
-      this.panel13.TabIndex = 34;
+      this.panel13.Size = new System.Drawing.Size(111, 28);
+      this.panel13.TabIndex = 37;
       // 
       // GENERAL_CUSTOM_NAME
       // 
@@ -1098,7 +1098,7 @@
       this.GENERAL_CUSTOM_NAME.Location = new System.Drawing.Point(5, 5);
       this.GENERAL_CUSTOM_NAME.Margin = new System.Windows.Forms.Padding(0);
       this.GENERAL_CUSTOM_NAME.Name = "GENERAL_CUSTOM_NAME";
-      this.GENERAL_CUSTOM_NAME.Size = new System.Drawing.Size(86, 19);
+      this.GENERAL_CUSTOM_NAME.Size = new System.Drawing.Size(101, 19);
       this.GENERAL_CUSTOM_NAME.TabIndex = 2;
       // 
       // GENERAL_CUSTOM_MULTIPLIER
@@ -1132,11 +1132,11 @@
             "23",
             "24",
             "25"});
-      this.GENERAL_CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(923, 212);
+      this.GENERAL_CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(964, 212);
       this.GENERAL_CUSTOM_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.GENERAL_CUSTOM_MULTIPLIER.Name = "GENERAL_CUSTOM_MULTIPLIER";
       this.GENERAL_CUSTOM_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
-      this.GENERAL_CUSTOM_MULTIPLIER.TabIndex = 36;
+      this.GENERAL_CUSTOM_MULTIPLIER.TabIndex = 39;
       this.GENERAL_CUSTOM_MULTIPLIER.Text = "1";
       // 
       // label17
@@ -1159,7 +1159,7 @@
       this.panel14.Name = "panel14";
       this.panel14.Padding = new System.Windows.Forms.Padding(5);
       this.panel14.Size = new System.Drawing.Size(80, 28);
-      this.panel14.TabIndex = 32;
+      this.panel14.TabIndex = 34;
       // 
       // WATER_HEATER_VA
       // 
@@ -1169,7 +1169,7 @@
       this.WATER_HEATER_VA.Margin = new System.Windows.Forms.Padding(0);
       this.WATER_HEATER_VA.Name = "WATER_HEATER_VA";
       this.WATER_HEATER_VA.Size = new System.Drawing.Size(71, 19);
-      this.WATER_HEATER_VA.TabIndex = 2;
+      this.WATER_HEATER_VA.TabIndex = 0;
       this.WATER_HEATER_VA.Text = "5000";
       // 
       // WATER_HEATER_MULTIPLIER
@@ -1207,7 +1207,7 @@
       this.WATER_HEATER_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.WATER_HEATER_MULTIPLIER.Name = "WATER_HEATER_MULTIPLIER";
       this.WATER_HEATER_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
-      this.WATER_HEATER_MULTIPLIER.TabIndex = 33;
+      this.WATER_HEATER_MULTIPLIER.TabIndex = 35;
       this.WATER_HEATER_MULTIPLIER.Text = "1";
       // 
       // label18
@@ -1301,7 +1301,7 @@
       this.panel16.Name = "panel16";
       this.panel16.Padding = new System.Windows.Forms.Padding(5);
       this.panel16.Size = new System.Drawing.Size(80, 28);
-      this.panel16.TabIndex = 28;
+      this.panel16.TabIndex = 26;
       // 
       // REFRIGERATOR_VA
       // 
@@ -1311,7 +1311,7 @@
       this.REFRIGERATOR_VA.Margin = new System.Windows.Forms.Padding(0);
       this.REFRIGERATOR_VA.Name = "REFRIGERATOR_VA";
       this.REFRIGERATOR_VA.Size = new System.Drawing.Size(71, 19);
-      this.REFRIGERATOR_VA.TabIndex = 2;
+      this.REFRIGERATOR_VA.TabIndex = 0;
       this.REFRIGERATOR_VA.Text = "1000";
       // 
       // REFRIGERATOR_MULTIPLIER
@@ -1349,7 +1349,7 @@
       this.REFRIGERATOR_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.REFRIGERATOR_MULTIPLIER.Name = "REFRIGERATOR_MULTIPLIER";
       this.REFRIGERATOR_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
-      this.REFRIGERATOR_MULTIPLIER.TabIndex = 29;
+      this.REFRIGERATOR_MULTIPLIER.TabIndex = 27;
       this.REFRIGERATOR_MULTIPLIER.Text = "1";
       // 
       // label20
@@ -1372,7 +1372,7 @@
       this.panel17.Name = "panel17";
       this.panel17.Padding = new System.Windows.Forms.Padding(5);
       this.panel17.Size = new System.Drawing.Size(80, 28);
-      this.panel17.TabIndex = 26;
+      this.panel17.TabIndex = 28;
       // 
       // RANGE_VA
       // 
@@ -1420,7 +1420,7 @@
       this.RANGE_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.RANGE_MULTIPLIER.Name = "RANGE_MULTIPLIER";
       this.RANGE_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
-      this.RANGE_MULTIPLIER.TabIndex = 27;
+      this.RANGE_MULTIPLIER.TabIndex = 29;
       this.RANGE_MULTIPLIER.Text = "1";
       // 
       // label21
@@ -1520,12 +1520,12 @@
       // 
       this.panel19.BackColor = System.Drawing.SystemColors.Window;
       this.panel19.Controls.Add(this.GENERAL_CUSTOM_VA);
-      this.panel19.Location = new System.Drawing.Point(794, 211);
+      this.panel19.Location = new System.Drawing.Point(810, 211);
       this.panel19.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel19.Name = "panel19";
       this.panel19.Padding = new System.Windows.Forms.Padding(5);
-      this.panel19.Size = new System.Drawing.Size(73, 28);
-      this.panel19.TabIndex = 35;
+      this.panel19.Size = new System.Drawing.Size(108, 28);
+      this.panel19.TabIndex = 38;
       // 
       // GENERAL_CUSTOM_VA
       // 
@@ -1534,7 +1534,7 @@
       this.GENERAL_CUSTOM_VA.Location = new System.Drawing.Point(5, 5);
       this.GENERAL_CUSTOM_VA.Margin = new System.Windows.Forms.Padding(0);
       this.GENERAL_CUSTOM_VA.Name = "GENERAL_CUSTOM_VA";
-      this.GENERAL_CUSTOM_VA.Size = new System.Drawing.Size(63, 19);
+      this.GENERAL_CUSTOM_VA.Size = new System.Drawing.Size(98, 19);
       this.GENERAL_CUSTOM_VA.TabIndex = 2;
       // 
       // label25
@@ -1568,7 +1568,7 @@
       this.panel30.Name = "panel30";
       this.panel30.Padding = new System.Windows.Forms.Padding(5);
       this.panel30.Size = new System.Drawing.Size(108, 28);
-      this.panel30.TabIndex = 55;
+      this.panel30.TabIndex = 48;
       // 
       // OUTDOOR_CONDENSER_VA
       // 
@@ -1601,7 +1601,7 @@
       this.panel31.Name = "panel31";
       this.panel31.Padding = new System.Windows.Forms.Padding(5);
       this.panel31.Size = new System.Drawing.Size(108, 28);
-      this.panel31.TabIndex = 56;
+      this.panel31.TabIndex = 50;
       // 
       // INDOOR_FAN_COIL_VA
       // 
@@ -1634,7 +1634,7 @@
       this.panel32.Name = "panel32";
       this.panel32.Padding = new System.Windows.Forms.Padding(5);
       this.panel32.Size = new System.Drawing.Size(80, 28);
-      this.panel32.TabIndex = 91;
+      this.panel32.TabIndex = 32;
       // 
       // COOKTOP_VA
       // 
@@ -1682,7 +1682,7 @@
       this.COOKTOP_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.COOKTOP_MULTIPLIER.Name = "COOKTOP_MULTIPLIER";
       this.COOKTOP_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
-      this.COOKTOP_MULTIPLIER.TabIndex = 92;
+      this.COOKTOP_MULTIPLIER.TabIndex = 33;
       this.COOKTOP_MULTIPLIER.Text = "1";
       // 
       // label32
@@ -1716,7 +1716,7 @@
       this.GENERAL_CUSTOM_LOAD_BOX.Location = new System.Drawing.Point(693, 81);
       this.GENERAL_CUSTOM_LOAD_BOX.Name = "GENERAL_CUSTOM_LOAD_BOX";
       this.GENERAL_CUSTOM_LOAD_BOX.Size = new System.Drawing.Size(459, 102);
-      this.GENERAL_CUSTOM_LOAD_BOX.TabIndex = 96;
+      this.GENERAL_CUSTOM_LOAD_BOX.TabIndex = 36;
       // 
       // ADD_ENTRY
       // 
@@ -1724,7 +1724,7 @@
       this.ADD_ENTRY.Location = new System.Drawing.Point(693, 249);
       this.ADD_ENTRY.Name = "ADD_ENTRY";
       this.ADD_ENTRY.Size = new System.Drawing.Size(54, 28);
-      this.ADD_ENTRY.TabIndex = 97;
+      this.ADD_ENTRY.TabIndex = 40;
       this.ADD_ENTRY.Text = "Add";
       this.ADD_ENTRY.UseVisualStyleBackColor = true;
       this.ADD_ENTRY.Click += new System.EventHandler(this.ADD_ENTRY_Click);
@@ -1735,7 +1735,7 @@
       this.REMOVE_ENTRY.Location = new System.Drawing.Point(753, 249);
       this.REMOVE_ENTRY.Name = "REMOVE_ENTRY";
       this.REMOVE_ENTRY.Size = new System.Drawing.Size(88, 28);
-      this.REMOVE_ENTRY.TabIndex = 98;
+      this.REMOVE_ENTRY.TabIndex = 41;
       this.REMOVE_ENTRY.Text = "Remove";
       this.REMOVE_ENTRY.UseVisualStyleBackColor = true;
       this.REMOVE_ENTRY.Click += new System.EventHandler(this.REMOVE_ENTRY_Click);
@@ -1746,7 +1746,7 @@
       this.REMOVE_ENTRY_CUSTOM.Location = new System.Drawing.Point(752, 528);
       this.REMOVE_ENTRY_CUSTOM.Name = "REMOVE_ENTRY_CUSTOM";
       this.REMOVE_ENTRY_CUSTOM.Size = new System.Drawing.Size(88, 28);
-      this.REMOVE_ENTRY_CUSTOM.TabIndex = 105;
+      this.REMOVE_ENTRY_CUSTOM.TabIndex = 47;
       this.REMOVE_ENTRY_CUSTOM.Text = "Remove";
       this.REMOVE_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
       this.REMOVE_ENTRY_CUSTOM.Click += new System.EventHandler(this.REMOVE_ENTRY_CUSTOM_Click);
@@ -1757,7 +1757,7 @@
       this.ADD_ENTRY_CUSTOM.Location = new System.Drawing.Point(692, 528);
       this.ADD_ENTRY_CUSTOM.Name = "ADD_ENTRY_CUSTOM";
       this.ADD_ENTRY_CUSTOM.Size = new System.Drawing.Size(54, 28);
-      this.ADD_ENTRY_CUSTOM.TabIndex = 104;
+      this.ADD_ENTRY_CUSTOM.TabIndex = 46;
       this.ADD_ENTRY_CUSTOM.Text = "Add";
       this.ADD_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
       this.ADD_ENTRY_CUSTOM.Click += new System.EventHandler(this.ADD_ENTRY_CUSTOM_Click);
@@ -1771,18 +1771,18 @@
       this.CUSTOM_LOAD_BOX.Location = new System.Drawing.Point(693, 361);
       this.CUSTOM_LOAD_BOX.Name = "CUSTOM_LOAD_BOX";
       this.CUSTOM_LOAD_BOX.Size = new System.Drawing.Size(459, 102);
-      this.CUSTOM_LOAD_BOX.TabIndex = 103;
+      this.CUSTOM_LOAD_BOX.TabIndex = 42;
       // 
       // panel11
       // 
       this.panel11.BackColor = System.Drawing.SystemColors.Window;
       this.panel11.Controls.Add(this.CUSTOM_VA);
-      this.panel11.Location = new System.Drawing.Point(793, 490);
+      this.panel11.Location = new System.Drawing.Point(810, 490);
       this.panel11.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel11.Name = "panel11";
       this.panel11.Padding = new System.Windows.Forms.Padding(5);
-      this.panel11.Size = new System.Drawing.Size(73, 28);
-      this.panel11.TabIndex = 100;
+      this.panel11.Size = new System.Drawing.Size(108, 28);
+      this.panel11.TabIndex = 44;
       // 
       // CUSTOM_VA
       // 
@@ -1791,7 +1791,7 @@
       this.CUSTOM_VA.Location = new System.Drawing.Point(5, 5);
       this.CUSTOM_VA.Margin = new System.Windows.Forms.Padding(0);
       this.CUSTOM_VA.Name = "CUSTOM_VA";
-      this.CUSTOM_VA.Size = new System.Drawing.Size(63, 19);
+      this.CUSTOM_VA.Size = new System.Drawing.Size(98, 19);
       this.CUSTOM_VA.TabIndex = 2;
       // 
       // panel12
@@ -1802,8 +1802,8 @@
       this.panel12.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel12.Name = "panel12";
       this.panel12.Padding = new System.Windows.Forms.Padding(5);
-      this.panel12.Size = new System.Drawing.Size(96, 28);
-      this.panel12.TabIndex = 99;
+      this.panel12.Size = new System.Drawing.Size(111, 28);
+      this.panel12.TabIndex = 43;
       // 
       // CUSTOM_NAME
       // 
@@ -1812,7 +1812,7 @@
       this.CUSTOM_NAME.Location = new System.Drawing.Point(5, 5);
       this.CUSTOM_NAME.Margin = new System.Windows.Forms.Padding(0);
       this.CUSTOM_NAME.Name = "CUSTOM_NAME";
-      this.CUSTOM_NAME.Size = new System.Drawing.Size(85, 19);
+      this.CUSTOM_NAME.Size = new System.Drawing.Size(101, 19);
       this.CUSTOM_NAME.TabIndex = 2;
       // 
       // CUSTOM_MULTIPLIER
@@ -1846,11 +1846,11 @@
             "23",
             "24",
             "25"});
-      this.CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(922, 491);
+      this.CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(964, 491);
       this.CUSTOM_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.CUSTOM_MULTIPLIER.Name = "CUSTOM_MULTIPLIER";
       this.CUSTOM_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
-      this.CUSTOM_MULTIPLIER.TabIndex = 101;
+      this.CUSTOM_MULTIPLIER.TabIndex = 45;
       this.CUSTOM_MULTIPLIER.Text = "1";
       // 
       // label15
@@ -2283,7 +2283,7 @@
       // 
       this.label65.AutoSize = true;
       this.label65.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label65.Location = new System.Drawing.Point(867, 217);
+      this.label65.Location = new System.Drawing.Point(921, 217);
       this.label65.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label65.Name = "label65";
       this.label65.Size = new System.Drawing.Size(25, 16);
@@ -2294,7 +2294,7 @@
       // 
       this.label66.AutoSize = true;
       this.label66.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label66.Location = new System.Drawing.Point(909, 495);
+      this.label66.Location = new System.Drawing.Point(951, 495);
       this.label66.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label66.Name = "label66";
       this.label66.Size = new System.Drawing.Size(13, 16);
@@ -2305,7 +2305,7 @@
       // 
       this.label67.AutoSize = true;
       this.label67.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label67.Location = new System.Drawing.Point(866, 497);
+      this.label67.Location = new System.Drawing.Point(921, 497);
       this.label67.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label67.Name = "label67";
       this.label67.Size = new System.Drawing.Size(25, 16);
@@ -2390,7 +2390,7 @@
       this.panel20.Name = "panel20";
       this.panel20.Padding = new System.Windows.Forms.Padding(5);
       this.panel20.Size = new System.Drawing.Size(108, 28);
-      this.panel20.TabIndex = 154;
+      this.panel20.TabIndex = 52;
       // 
       // OUTDOOR_HEATER_UNIT
       // 
@@ -2449,14 +2449,14 @@
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Margin = new System.Windows.Forms.Padding(0);
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Name = "OUTDOOR_HEATER_UNIT_AMOUNT";
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Size = new System.Drawing.Size(56, 28);
-      this.OUTDOOR_HEATER_UNIT_AMOUNT.TabIndex = 157;
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.TabIndex = 53;
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Text = "1";
       // 
       // label64
       // 
       this.label64.AutoSize = true;
       this.label64.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label64.Location = new System.Drawing.Point(910, 215);
+      this.label64.Location = new System.Drawing.Point(951, 215);
       this.label64.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label64.Name = "label64";
       this.label64.Size = new System.Drawing.Size(13, 16);
@@ -2479,7 +2479,7 @@
       this.ESTIMATE_CONDENSER.Location = new System.Drawing.Point(1378, 76);
       this.ESTIMATE_CONDENSER.Name = "ESTIMATE_CONDENSER";
       this.ESTIMATE_CONDENSER.Size = new System.Drawing.Size(85, 28);
-      this.ESTIMATE_CONDENSER.TabIndex = 160;
+      this.ESTIMATE_CONDENSER.TabIndex = 49;
       this.ESTIMATE_CONDENSER.Text = "Estimate";
       this.ESTIMATE_CONDENSER.UseVisualStyleBackColor = true;
       this.ESTIMATE_CONDENSER.Click += new System.EventHandler(this.ESTIMATE_CONDENSER_Click);
@@ -2490,7 +2490,7 @@
       this.ESTIMATE_FAN_COIL.Location = new System.Drawing.Point(1378, 143);
       this.ESTIMATE_FAN_COIL.Name = "ESTIMATE_FAN_COIL";
       this.ESTIMATE_FAN_COIL.Size = new System.Drawing.Size(85, 28);
-      this.ESTIMATE_FAN_COIL.TabIndex = 161;
+      this.ESTIMATE_FAN_COIL.TabIndex = 51;
       this.ESTIMATE_FAN_COIL.Text = "Estimate";
       this.ESTIMATE_FAN_COIL.UseVisualStyleBackColor = true;
       this.ESTIMATE_FAN_COIL.Click += new System.EventHandler(this.ESTIMATE_FAN_COIL_Click);
@@ -2548,7 +2548,7 @@
       this.groupBox5.Location = new System.Drawing.Point(219, 75);
       this.groupBox5.Name = "groupBox5";
       this.groupBox5.Size = new System.Drawing.Size(328, 54);
-      this.groupBox5.TabIndex = 173;
+      this.groupBox5.TabIndex = 7;
       this.groupBox5.TabStop = false;
       this.groupBox5.Text = "Occupancy Type";
       // 
