@@ -106,8 +106,43 @@ namespace GMEPElectricalResidential
     {
       UpdateGeneralLoadData();
       UpdateACLoadData();
+      UpdateCustomLoadData();
       UpdateTotalGeneralLoadCalculation();
       UpdateTotalACLoadCalculation();
+      UpdateTotalCustomLoadCalculation();
+    }
+
+    private void UpdateTotalCustomLoadCalculation()
+    {
+      var totalLoad = 0;
+      foreach (var customLoad in _unitInformation.CustomLoads)
+      {
+        totalLoad += customLoad.GetLoad();
+      }
+      _unitInformation.Totals.CustomLoad = totalLoad.ToString();
+    }
+
+    private void UpdateCustomLoadData()
+    {
+      List<UnitLoad> customs = new List<UnitLoad>();
+
+      foreach (var item in CUSTOM_LOAD_BOX.Items)
+      {
+        var split = item.ToString().Trim().Split(',');
+        var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2]);
+        customs.Add(unitGeneralCustomLoad);
+      }
+
+      if (WATER_HEATER_CHECK.Checked)
+      {
+        var name = "Water Heater";
+        var load = WATER_HEATER_VA.Text;
+        var multiplier = WATER_HEATER_MULTIPLIER.Text;
+        var waterHeater = new UnitLoad(name, load, multiplier);
+        customs.Add(waterHeater);
+      }
+
+      _unitInformation.CustomLoads = customs;
     }
 
     private void UpdateTotalACLoadCalculation()
@@ -596,7 +631,7 @@ namespace GMEPElectricalResidential
     public string Voltage { get; set; }
     public UnitDwellingArea DwellingArea { get; set; }
     public UnitGeneralLoadContainer GeneralLoads { get; set; }
-    public UnitCustomLoadContainer CustomLoads { get; set; }
+    public List<UnitLoad> CustomLoads { get; set; }
     public UnitACLoadContainer ACLoads { get; set; }
     public UnitTotalContainer Totals { get; set; }
   }
@@ -650,21 +685,6 @@ namespace GMEPElectricalResidential
     }
   }
 
-  public class UnitCustomLoadContainer
-  {
-    public List<UnitLoad> Customs { get; set; }
-
-    public UnitCustomLoadContainer()
-    {
-      Customs = new List<UnitLoad>();
-    }
-
-    public void Add(UnitLoad load)
-    {
-      Customs.Add(load);
-    }
-  }
-
   public class UnitACLoadContainer
   {
     public int Condenser { get; set; }
@@ -677,6 +697,7 @@ namespace GMEPElectricalResidential
     public string TotalGeneralLoad { get; set; }
     public string TotalACLoad { get; set; }
     public string SubtotalGeneralLoad { get; set; }
+    public string CustomLoad { get; set; }
     public string ServiceLoad { get; set; }
   }
 
