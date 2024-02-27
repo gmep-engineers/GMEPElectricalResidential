@@ -195,10 +195,10 @@
       this.label79 = new System.Windows.Forms.Label();
       this.GENERAL_LIGHTING_TOTAL = new System.Windows.Forms.Label();
       this.groupBox5 = new System.Windows.Forms.GroupBox();
+      this.LIGHTING_OTHER = new System.Windows.Forms.RadioButton();
       this.LIGHTING_WAREHOUSE = new System.Windows.Forms.RadioButton();
       this.LIGHTING_HOTEL_MOTEL = new System.Windows.Forms.RadioButton();
       this.LIGHTING_DWELLING = new System.Windows.Forms.RadioButton();
-      this.LIGHTING_OTHER = new System.Windows.Forms.RadioButton();
       this.label63 = new System.Windows.Forms.Label();
       this.label74 = new System.Windows.Forms.Label();
       this.label77 = new System.Windows.Forms.Label();
@@ -2552,6 +2552,19 @@
       this.groupBox5.TabStop = false;
       this.groupBox5.Text = "Occupancy Type";
       // 
+      // LIGHTING_OTHER
+      // 
+      this.LIGHTING_OTHER.AutoSize = true;
+      this.LIGHTING_OTHER.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.LIGHTING_OTHER.Location = new System.Drawing.Point(271, 23);
+      this.LIGHTING_OTHER.Margin = new System.Windows.Forms.Padding(0);
+      this.LIGHTING_OTHER.Name = "LIGHTING_OTHER";
+      this.LIGHTING_OTHER.Size = new System.Drawing.Size(57, 20);
+      this.LIGHTING_OTHER.TabIndex = 11;
+      this.LIGHTING_OTHER.Text = "Other";
+      this.LIGHTING_OTHER.UseVisualStyleBackColor = true;
+      this.LIGHTING_OTHER.CheckedChanged += new System.EventHandler(this.LIGHTING_OTHER_CheckedChanged);
+      // 
       // LIGHTING_WAREHOUSE
       // 
       this.LIGHTING_WAREHOUSE.AutoSize = true;
@@ -2592,19 +2605,6 @@
       this.LIGHTING_DWELLING.Text = "Dwelling";
       this.LIGHTING_DWELLING.UseVisualStyleBackColor = true;
       this.LIGHTING_DWELLING.CheckedChanged += new System.EventHandler(this.LIGHTING_DWELLING_CheckedChanged);
-      // 
-      // LIGHTING_OTHER
-      // 
-      this.LIGHTING_OTHER.AutoSize = true;
-      this.LIGHTING_OTHER.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.LIGHTING_OTHER.Location = new System.Drawing.Point(271, 23);
-      this.LIGHTING_OTHER.Margin = new System.Windows.Forms.Padding(0);
-      this.LIGHTING_OTHER.Name = "LIGHTING_OTHER";
-      this.LIGHTING_OTHER.Size = new System.Drawing.Size(57, 20);
-      this.LIGHTING_OTHER.TabIndex = 11;
-      this.LIGHTING_OTHER.Text = "Other";
-      this.LIGHTING_OTHER.UseVisualStyleBackColor = true;
-      this.LIGHTING_OTHER.CheckedChanged += new System.EventHandler(this.LIGHTING_OTHER_CheckedChanged);
       // 
       // label63
       // 
@@ -2663,8 +2663,7 @@
       // 
       // UnitLoadCalculation
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
       this.Controls.Add(this.label80);
       this.Controls.Add(this.label78);
