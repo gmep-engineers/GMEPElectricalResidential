@@ -90,6 +90,11 @@ namespace GMEPElectricalResidential
 
     private void UpdateTotalGeneralLoadCalculation()
     {
+      if (_unitInformation == null || _unitInformation.GeneralLoads == null)
+      {
+        return;
+      }
+
       var generalLoads = _unitInformation.GeneralLoads;
 
       int totalLoad = generalLoads.Lighting.GetLoad()
@@ -105,8 +110,8 @@ namespace GMEPElectricalResidential
                       + generalLoads.Range.GetLoad()
                       + generalLoads.Refrigerator.GetLoad()
                       + generalLoads.Oven.GetLoad()
-                      + generalLoads.WaterHeater.GetLoad()
-                      + generalLoads.Cooktop.GetLoad();
+                      + generalLoads.Cooktop.GetLoad()
+                      + generalLoads.WaterHeater.GetLoad();
 
       foreach (var customLoad in generalLoads.Customs)
       {
@@ -115,6 +120,17 @@ namespace GMEPElectricalResidential
 
       _unitInformation.Totals.TotalGeneralLoad = totalLoad.ToString();
       TOTAL_GENERAL_LOAD_CALCULATION.Text = totalLoad.ToString();
+
+      if (totalLoad <= 10000)
+      {
+        SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = totalLoad.ToString();
+      }
+      else
+      {
+        double subtotal = 10000 + 0.4 * (totalLoad - 10000);
+        int roundedSubtotal = (int)Math.Ceiling(subtotal);
+        SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = roundedSubtotal.ToString();
+      }
     }
 
     private void DetectEnterPresses()
@@ -432,6 +448,8 @@ namespace GMEPElectricalResidential
       multiplierComboBox.Text = "1";
 
       nameTextBox.Focus();
+
+      UpdateDataAndLoads();
     }
 
     private void ADD_ENTRY_Click(object sender, EventArgs e)
@@ -457,6 +475,8 @@ namespace GMEPElectricalResidential
           listBox.Items.RemoveAt(listBox.Items.Count - 1);
         }
       }
+
+      UpdateDataAndLoads();
     }
 
     private void REMOVE_ENTRY_Click(object sender, EventArgs e)
@@ -486,8 +506,16 @@ namespace GMEPElectricalResidential
       unitGeneralLoadContainer.Range = new UnitLoad("Range", RANGE_VA.Text, RANGE_MULTIPLIER.Text);
       unitGeneralLoadContainer.Refrigerator = new UnitLoad("Refrigerator", REFRIGERATOR_VA.Text, REFRIGERATOR_MULTIPLIER.Text);
       unitGeneralLoadContainer.Oven = new UnitLoad("Oven", OVEN_VA.Text, OVEN_MULTIPLIER.Text);
-      unitGeneralLoadContainer.WaterHeater = new UnitLoad("Water Heater", WATER_HEATER_VA.Text, WATER_HEATER_MULTIPLIER.Text);
       unitGeneralLoadContainer.Cooktop = new UnitLoad("Cooktop", COOKTOP_VA.Text, COOKTOP_MULTIPLIER.Text);
+
+      if (WATER_HEATER_CHECK.Checked)
+      {
+        unitGeneralLoadContainer.WaterHeater = new UnitLoad("Water Heater", WATER_HEATER_VA.Text, WATER_HEATER_MULTIPLIER.Text);
+      }
+      else
+      {
+        unitGeneralLoadContainer.WaterHeater = new UnitLoad("Water Heater", "0", WATER_HEATER_MULTIPLIER.Text);
+      }
 
       List<UnitLoad> customs = new List<UnitLoad>();
 
@@ -501,6 +529,11 @@ namespace GMEPElectricalResidential
       unitGeneralLoadContainer.Customs = customs;
 
       _unitInformation.GeneralLoads = unitGeneralLoadContainer;
+    }
+
+    private void WATER_HEATER_CHECK_CheckedChanged(object sender, EventArgs e)
+    {
+      UpdateDataAndLoads();
     }
   }
 
@@ -554,11 +587,13 @@ namespace GMEPElectricalResidential
     {
       VA = va is int ? (int)va : int.TryParse(va.ToString(), out int vaResult) ? vaResult : 0;
       Multiplier = multiplier is int ? (int)multiplier : int.TryParse(multiplier.ToString(), out int multiplierResult) ? multiplierResult : 0;
+      Name = name;
     }
 
     public int GetLoad()
     {
-      return VA * Multiplier;
+      int load = VA * Multiplier;
+      return (load != 0) ? load : 0;
     }
   }
 
