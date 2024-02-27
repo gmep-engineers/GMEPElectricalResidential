@@ -32,7 +32,8 @@ namespace GMEPElectricalResidential
       _toolTip = new ToolTip();
       _unitInformation = new UnitInformation();
       _unitInformation.GeneralLoads = new UnitGeneralLoadContainer();
-      _unitInformation.Totals = new UnitTotals();
+      _unitInformation.Totals = new UnitTotalContainer();
+      _unitInformation.ACLoads = new UnitACLoadContainer();
     }
 
     protected override void OnVisibleChanged(EventArgs e)
@@ -85,7 +86,72 @@ namespace GMEPElectricalResidential
     private void UpdateDataAndLoads()
     {
       UpdateGeneralLoadData();
+      UpdateACLoadData();
       UpdateTotalGeneralLoadCalculation();
+    }
+
+    private void UpdateACLoadData()
+    {
+      UnitACLoadContainer unitACLoadContainer = new UnitACLoadContainer();
+
+      int.TryParse(OUTDOOR_CONDENSER_VA.Text, out int condenser);
+      int.TryParse(INDOOR_FAN_COIL_VA.Text, out int fanCoil);
+
+      HeatingUnit heatingUnit = new HeatingUnit();
+
+      int.TryParse(OUTDOOR_HEATER_UNIT.Text, out int heating);
+      int.TryParse(OUTDOOR_HEATER_UNIT_AMOUNT.Text, out int numberOfUnits);
+
+      heatingUnit.Heating = heating;
+      heatingUnit.NumberOfUnits = numberOfUnits;
+
+      unitACLoadContainer.Condenser = condenser;
+      unitACLoadContainer.FanCoil = fanCoil;
+      unitACLoadContainer.HeatingUnit = heatingUnit;
+
+      _unitInformation.ACLoads = unitACLoadContainer;
+    }
+
+    private void UpdateGeneralLoadData()
+    {
+      UnitGeneralLoadContainer unitGeneralLoadContainer = new UnitGeneralLoadContainer();
+
+      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", GENERAL_LIGHTING_VA.Text, "1");
+      unitGeneralLoadContainer.SmallAppliance = new UnitLoad("Small Appliance", SMALL_APPLIANCE_VA.Text, SMALL_APPLIANCE_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Laundry = new UnitLoad("Laundry", LAUNDRY_VA.Text, LAUNDRY_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Bathroom = new UnitLoad("Bathroom", BATHROOM_VA.Text, BATHROOM_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Dishwasher = new UnitLoad("Dishwasher", DISHWASHER_VA.Text, DISHWASHER_MULTIPLIER.Text);
+      unitGeneralLoadContainer.MicrowaveOven = new UnitLoad("Microwave Oven", MICROWAVE_OVEN_VA.Text, MICROWAVE_OVEN_MULTIPLIER.Text);
+      unitGeneralLoadContainer.GarbageDisposal = new UnitLoad("Garbage Disposal", GARBAGE_DISPOSAL_VA.Text, GARBAGE_DISPOSAL_MULTIPLIER.Text);
+      unitGeneralLoadContainer.BathroomFans = new UnitLoad("Bathroom Fans", BATHROOM_FANS_VA.Text, BATHROOM_FANS_MULTIPLIER.Text);
+      unitGeneralLoadContainer.GarageDoorOpener = new UnitLoad("Garage Door Opener", GARAGE_DOOR_OPENER_VA.Text, GARAGE_DOOR_OPENER_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Dryer = new UnitLoad("Dryer", DRYER_VA.Text, DRYER_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Range = new UnitLoad("Range", RANGE_VA.Text, RANGE_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Refrigerator = new UnitLoad("Refrigerator", REFRIGERATOR_VA.Text, REFRIGERATOR_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Oven = new UnitLoad("Oven", OVEN_VA.Text, OVEN_MULTIPLIER.Text);
+      unitGeneralLoadContainer.Cooktop = new UnitLoad("Cooktop", COOKTOP_VA.Text, COOKTOP_MULTIPLIER.Text);
+
+      if (WATER_HEATER_CHECK.Checked)
+      {
+        unitGeneralLoadContainer.WaterHeater = new UnitLoad("Water Heater", WATER_HEATER_VA.Text, WATER_HEATER_MULTIPLIER.Text);
+      }
+      else
+      {
+        unitGeneralLoadContainer.WaterHeater = new UnitLoad("Water Heater", "0", WATER_HEATER_MULTIPLIER.Text);
+      }
+
+      List<UnitLoad> customs = new List<UnitLoad>();
+
+      foreach (var item in GENERAL_CUSTOM_LOAD_BOX.Items)
+      {
+        var split = item.ToString().Trim().Split(',');
+        var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2]);
+        customs.Add(unitGeneralCustomLoad);
+      }
+
+      unitGeneralLoadContainer.Customs = customs;
+
+      _unitInformation.GeneralLoads = unitGeneralLoadContainer;
     }
 
     private void UpdateTotalGeneralLoadCalculation()
@@ -489,48 +555,6 @@ namespace GMEPElectricalResidential
       RemoveEntry(CUSTOM_LOAD_BOX);
     }
 
-    private void UpdateGeneralLoadData()
-    {
-      UnitGeneralLoadContainer unitGeneralLoadContainer = new UnitGeneralLoadContainer();
-
-      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", GENERAL_LIGHTING_VA.Text, "1");
-      unitGeneralLoadContainer.SmallAppliance = new UnitLoad("Small Appliance", SMALL_APPLIANCE_VA.Text, SMALL_APPLIANCE_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Laundry = new UnitLoad("Laundry", LAUNDRY_VA.Text, LAUNDRY_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Bathroom = new UnitLoad("Bathroom", BATHROOM_VA.Text, BATHROOM_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Dishwasher = new UnitLoad("Dishwasher", DISHWASHER_VA.Text, DISHWASHER_MULTIPLIER.Text);
-      unitGeneralLoadContainer.MicrowaveOven = new UnitLoad("Microwave Oven", MICROWAVE_OVEN_VA.Text, MICROWAVE_OVEN_MULTIPLIER.Text);
-      unitGeneralLoadContainer.GarbageDisposal = new UnitLoad("Garbage Disposal", GARBAGE_DISPOSAL_VA.Text, GARBAGE_DISPOSAL_MULTIPLIER.Text);
-      unitGeneralLoadContainer.BathroomFans = new UnitLoad("Bathroom Fans", BATHROOM_FANS_VA.Text, BATHROOM_FANS_MULTIPLIER.Text);
-      unitGeneralLoadContainer.GarageDoorOpener = new UnitLoad("Garage Door Opener", GARAGE_DOOR_OPENER_VA.Text, GARAGE_DOOR_OPENER_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Dryer = new UnitLoad("Dryer", DRYER_VA.Text, DRYER_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Range = new UnitLoad("Range", RANGE_VA.Text, RANGE_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Refrigerator = new UnitLoad("Refrigerator", REFRIGERATOR_VA.Text, REFRIGERATOR_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Oven = new UnitLoad("Oven", OVEN_VA.Text, OVEN_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Cooktop = new UnitLoad("Cooktop", COOKTOP_VA.Text, COOKTOP_MULTIPLIER.Text);
-
-      if (WATER_HEATER_CHECK.Checked)
-      {
-        unitGeneralLoadContainer.WaterHeater = new UnitLoad("Water Heater", WATER_HEATER_VA.Text, WATER_HEATER_MULTIPLIER.Text);
-      }
-      else
-      {
-        unitGeneralLoadContainer.WaterHeater = new UnitLoad("Water Heater", "0", WATER_HEATER_MULTIPLIER.Text);
-      }
-
-      List<UnitLoad> customs = new List<UnitLoad>();
-
-      foreach (var item in GENERAL_CUSTOM_LOAD_BOX.Items)
-      {
-        var split = item.ToString().Trim().Split(',');
-        var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2]);
-        customs.Add(unitGeneralCustomLoad);
-      }
-
-      unitGeneralLoadContainer.Customs = customs;
-
-      _unitInformation.GeneralLoads = unitGeneralLoadContainer;
-    }
-
     private void WATER_HEATER_CHECK_CheckedChanged(object sender, EventArgs e)
     {
       UpdateDataAndLoads();
@@ -544,8 +568,8 @@ namespace GMEPElectricalResidential
     public UnitDwellingArea DwellingArea { get; set; }
     public UnitGeneralLoadContainer GeneralLoads { get; set; }
     public UnitCustomLoadContainer CustomLoads { get; set; }
-    public UnitACLoads ACLoads { get; set; }
-    public UnitTotals Totals { get; set; }
+    public UnitACLoadContainer ACLoads { get; set; }
+    public UnitTotalContainer Totals { get; set; }
   }
 
   public class UnitDwellingArea
@@ -612,17 +636,24 @@ namespace GMEPElectricalResidential
     }
   }
 
-  public class UnitACLoads
+  public class UnitACLoadContainer
   {
-    public string Condenser { get; set; }
-    public string FanCoil { get; set; }
+    public int Condenser { get; set; }
+    public int FanCoil { get; set; }
+    public HeatingUnit HeatingUnit { get; set; }
   }
 
-  public class UnitTotals
+  public class UnitTotalContainer
   {
     public string TotalGeneralLoad { get; set; }
     public string TotalACLoad { get; set; }
     public string SubtotalGeneralLoad { get; set; }
     public string ServiceLoad { get; set; }
+  }
+
+  public class HeatingUnit
+  {
+    public int Heating { get; set; }
+    public int NumberOfUnits { get; set; }
   }
 }

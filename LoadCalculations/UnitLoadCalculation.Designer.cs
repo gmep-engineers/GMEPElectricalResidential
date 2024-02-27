@@ -190,6 +190,8 @@
       this.OUTDOOR_HEATER_UNIT_AMOUNT = new System.Windows.Forms.ComboBox();
       this.label64 = new System.Windows.Forms.Label();
       this.label75 = new System.Windows.Forms.Label();
+      this.ESTIMATE_CONDENSER = new System.Windows.Forms.Button();
+      this.ESTIMATE_FAN_COIL = new System.Windows.Forms.Button();
       this.panel1.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
@@ -2480,11 +2482,33 @@
       this.label75.TabIndex = 159;
       this.label75.Text = "Number of Separately Controlled Heater Units";
       // 
+      // ESTIMATE_CONDENSER
+      // 
+      this.ESTIMATE_CONDENSER.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.ESTIMATE_CONDENSER.Location = new System.Drawing.Point(1378, 76);
+      this.ESTIMATE_CONDENSER.Name = "ESTIMATE_CONDENSER";
+      this.ESTIMATE_CONDENSER.Size = new System.Drawing.Size(85, 28);
+      this.ESTIMATE_CONDENSER.TabIndex = 160;
+      this.ESTIMATE_CONDENSER.Text = "Estimate";
+      this.ESTIMATE_CONDENSER.UseVisualStyleBackColor = true;
+      // 
+      // ESTIMATE_FAN_COIL
+      // 
+      this.ESTIMATE_FAN_COIL.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.ESTIMATE_FAN_COIL.Location = new System.Drawing.Point(1378, 143);
+      this.ESTIMATE_FAN_COIL.Name = "ESTIMATE_FAN_COIL";
+      this.ESTIMATE_FAN_COIL.Size = new System.Drawing.Size(85, 28);
+      this.ESTIMATE_FAN_COIL.TabIndex = 161;
+      this.ESTIMATE_FAN_COIL.Text = "Estimate";
+      this.ESTIMATE_FAN_COIL.UseVisualStyleBackColor = true;
+      // 
       // UnitLoadCalculation
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+      this.Controls.Add(this.ESTIMATE_FAN_COIL);
+      this.Controls.Add(this.ESTIMATE_CONDENSER);
       this.Controls.Add(this.label75);
       this.Controls.Add(this.OUTDOOR_HEATER_UNIT_AMOUNT);
       this.Controls.Add(this.label72);
@@ -2843,5 +2867,7 @@
     private System.Windows.Forms.ComboBox OUTDOOR_HEATER_UNIT_AMOUNT;
     private System.Windows.Forms.Label label64;
     private System.Windows.Forms.Label label75;
+    private System.Windows.Forms.Button ESTIMATE_CONDENSER;
+    private System.Windows.Forms.Button ESTIMATE_FAN_COIL;
   }
 }
