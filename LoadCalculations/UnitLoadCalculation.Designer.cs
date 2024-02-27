@@ -199,6 +199,11 @@
       this.LIGHTING_HOTEL_MOTEL = new System.Windows.Forms.RadioButton();
       this.LIGHTING_DWELLING = new System.Windows.Forms.RadioButton();
       this.LIGHTING_OTHER = new System.Windows.Forms.RadioButton();
+      this.label63 = new System.Windows.Forms.Label();
+      this.label74 = new System.Windows.Forms.Label();
+      this.label77 = new System.Windows.Forms.Label();
+      this.label78 = new System.Windows.Forms.Label();
+      this.label80 = new System.Windows.Forms.Label();
       this.panel1.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
@@ -281,8 +286,7 @@
       this.VOLTAGE.FormattingEnabled = true;
       this.VOLTAGE.Items.AddRange(new object[] {
             "208V",
-            "240V",
-            "480V"});
+            "240V"});
       this.VOLTAGE.Location = new System.Drawing.Point(18, 143);
       this.VOLTAGE.Margin = new System.Windows.Forms.Padding(6, 0, 48, 24);
       this.VOLTAGE.Name = "VOLTAGE";
@@ -2600,11 +2604,71 @@
       this.LIGHTING_OTHER.UseVisualStyleBackColor = true;
       this.LIGHTING_OTHER.CheckedChanged += new System.EventHandler(this.LIGHTING_OTHER_CheckedChanged);
       // 
+      // label63
+      // 
+      this.label63.AutoSize = true;
+      this.label63.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label63.Location = new System.Drawing.Point(1376, 412);
+      this.label63.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label63.Name = "label63";
+      this.label63.Size = new System.Drawing.Size(25, 16);
+      this.label63.TabIndex = 174;
+      this.label63.Text = "VA";
+      // 
+      // label74
+      // 
+      this.label74.AutoSize = true;
+      this.label74.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label74.Location = new System.Drawing.Point(1375, 457);
+      this.label74.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label74.Name = "label74";
+      this.label74.Size = new System.Drawing.Size(25, 16);
+      this.label74.TabIndex = 175;
+      this.label74.Text = "VA";
+      // 
+      // label77
+      // 
+      this.label77.AutoSize = true;
+      this.label77.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label77.Location = new System.Drawing.Point(1375, 501);
+      this.label77.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label77.Name = "label77";
+      this.label77.Size = new System.Drawing.Size(25, 16);
+      this.label77.TabIndex = 176;
+      this.label77.Text = "VA";
+      // 
+      // label78
+      // 
+      this.label78.AutoSize = true;
+      this.label78.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label78.Location = new System.Drawing.Point(1375, 544);
+      this.label78.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label78.Name = "label78";
+      this.label78.Size = new System.Drawing.Size(25, 16);
+      this.label78.TabIndex = 177;
+      this.label78.Text = "VA";
+      // 
+      // label80
+      // 
+      this.label80.AutoSize = true;
+      this.label80.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label80.Location = new System.Drawing.Point(1375, 586);
+      this.label80.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label80.Name = "label80";
+      this.label80.Size = new System.Drawing.Size(16, 16);
+      this.label80.TabIndex = 178;
+      this.label80.Text = "A";
+      // 
       // UnitLoadCalculation
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+      this.Controls.Add(this.label80);
+      this.Controls.Add(this.label78);
+      this.Controls.Add(this.label77);
+      this.Controls.Add(this.label74);
+      this.Controls.Add(this.label63);
       this.Controls.Add(this.groupBox5);
       this.Controls.Add(this.GENERAL_LIGHTING_TOTAL);
       this.Controls.Add(this.label79);
@@ -2979,5 +3043,10 @@
     private System.Windows.Forms.RadioButton LIGHTING_DWELLING;
     private System.Windows.Forms.RadioButton LIGHTING_WAREHOUSE;
     private System.Windows.Forms.RadioButton LIGHTING_OTHER;
+    private System.Windows.Forms.Label label63;
+    private System.Windows.Forms.Label label74;
+    private System.Windows.Forms.Label label77;
+    private System.Windows.Forms.Label label78;
+    private System.Windows.Forms.Label label80;
   }
 }

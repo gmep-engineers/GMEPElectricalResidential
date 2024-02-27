@@ -130,6 +130,29 @@ namespace GMEPElectricalResidential
       UpdateTotalGeneralLoadCalculation();
       UpdateTotalACLoadCalculation();
       UpdateTotalCustomLoadCalculation();
+
+      UpdateServiceLoadDataAndCalculation();
+    }
+
+    private void UpdateServiceLoadDataAndCalculation()
+    {
+      if (int.TryParse(SUBTOTAL_GENERAL_LOAD_CALCULATION.Text, out int subtotalGeneralLoad) &&
+          int.TryParse(TOTAL_AC_LOAD_CALCULATION.Text, out int totalACLoad) &&
+          int.TryParse(TOTAL_CUSTOM_LOAD_CALCULATION.Text, out int totalCustomLoad))
+      {
+        string voltageText = VOLTAGE.Text;
+        if (voltageText.Length > 0 && voltageText[voltageText.Length - 1] == 'V')
+        {
+          voltageText = voltageText.Substring(0, voltageText.Length - 1);
+        }
+
+        if (int.TryParse(voltageText, out int voltage) && voltage != 0) // Avoid division by zero
+        {
+          var amperage = Math.Ceiling((double)(subtotalGeneralLoad + totalACLoad + totalCustomLoad) / voltage);
+          CALCULATED_LOAD_FOR_SERVICE.Text = amperage.ToString();
+          _unitInformation.Totals.ServiceLoad = amperage.ToString();
+        }
+      }
     }
 
     private void UpdateDwellingData()
