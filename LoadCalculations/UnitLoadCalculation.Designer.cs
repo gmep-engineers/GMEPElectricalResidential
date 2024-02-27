@@ -175,7 +175,6 @@
       this.label61 = new System.Windows.Forms.Label();
       this.label62 = new System.Windows.Forms.Label();
       this.label63 = new System.Windows.Forms.Label();
-      this.label64 = new System.Windows.Forms.Label();
       this.label65 = new System.Windows.Forms.Label();
       this.label66 = new System.Windows.Forms.Label();
       this.label67 = new System.Windows.Forms.Label();
@@ -184,6 +183,13 @@
       this.label70 = new System.Windows.Forms.Label();
       this.label71 = new System.Windows.Forms.Label();
       this.WATER_HEATER_CHECK = new System.Windows.Forms.CheckBox();
+      this.label72 = new System.Windows.Forms.Label();
+      this.panel20 = new System.Windows.Forms.Panel();
+      this.OUTDOOR_HEATER_UNIT = new System.Windows.Forms.TextBox();
+      this.label73 = new System.Windows.Forms.Label();
+      this.OUTDOOR_HEATER_UNIT_AMOUNT = new System.Windows.Forms.ComboBox();
+      this.label64 = new System.Windows.Forms.Label();
+      this.label75 = new System.Windows.Forms.Label();
       this.panel1.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
@@ -210,6 +216,7 @@
       this.panel32.SuspendLayout();
       this.panel11.SuspendLayout();
       this.panel12.SuspendLayout();
+      this.panel20.SuspendLayout();
       this.SuspendLayout();
       // 
       // label1
@@ -1558,6 +1565,7 @@
       this.OUTDOOR_CONDENSER_VA.Name = "OUTDOOR_CONDENSER_VA";
       this.OUTDOOR_CONDENSER_VA.Size = new System.Drawing.Size(98, 19);
       this.OUTDOOR_CONDENSER_VA.TabIndex = 2;
+      this.OUTDOOR_CONDENSER_VA.Text = "0";
       // 
       // label30
       // 
@@ -1590,6 +1598,7 @@
       this.INDOOR_FAN_COIL_VA.Name = "INDOOR_FAN_COIL_VA";
       this.INDOOR_FAN_COIL_VA.Size = new System.Drawing.Size(98, 19);
       this.INDOOR_FAN_COIL_VA.TabIndex = 2;
+      this.INDOOR_FAN_COIL_VA.Text = "0";
       // 
       // label31
       // 
@@ -1854,11 +1863,11 @@
       // 
       // label16
       // 
-      this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label16.Location = new System.Drawing.Point(1233, 246);
+      this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label16.Location = new System.Drawing.Point(1233, 365);
       this.label16.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label16.Name = "label16";
-      this.label16.Size = new System.Drawing.Size(220, 54);
+      this.label16.Size = new System.Drawing.Size(230, 21);
       this.label16.TabIndex = 106;
       this.label16.Text = "Total General Load Calculation";
       // 
@@ -1866,7 +1875,7 @@
       // 
       this.TOTAL_GENERAL_LOAD_CALCULATION.AutoSize = true;
       this.TOTAL_GENERAL_LOAD_CALCULATION.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.TOTAL_GENERAL_LOAD_CALCULATION.Location = new System.Drawing.Point(1233, 294);
+      this.TOTAL_GENERAL_LOAD_CALCULATION.Location = new System.Drawing.Point(1233, 386);
       this.TOTAL_GENERAL_LOAD_CALCULATION.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.TOTAL_GENERAL_LOAD_CALCULATION.Name = "TOTAL_GENERAL_LOAD_CALCULATION";
       this.TOTAL_GENERAL_LOAD_CALCULATION.Size = new System.Drawing.Size(19, 20);
@@ -1877,7 +1886,7 @@
       // 
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.AutoSize = true;
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Location = new System.Drawing.Point(1233, 449);
+      this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Location = new System.Drawing.Point(1233, 494);
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Name = "SUBTOTAL_GENERAL_LOAD_CALCULATION";
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Size = new System.Drawing.Size(19, 20);
@@ -1886,11 +1895,11 @@
       // 
       // label27
       // 
-      this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label27.Location = new System.Drawing.Point(1233, 401);
+      this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label27.Location = new System.Drawing.Point(1233, 453);
       this.label27.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label27.Name = "label27";
-      this.label27.Size = new System.Drawing.Size(220, 49);
+      this.label27.Size = new System.Drawing.Size(221, 45);
       this.label27.TabIndex = 108;
       this.label27.Text = "Subtotal General Load Calculation";
       // 
@@ -1898,7 +1907,7 @@
       // 
       this.TOTAL_AC_LOAD_CALCULATION.AutoSize = true;
       this.TOTAL_AC_LOAD_CALCULATION.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.TOTAL_AC_LOAD_CALCULATION.Location = new System.Drawing.Point(1233, 360);
+      this.TOTAL_AC_LOAD_CALCULATION.Location = new System.Drawing.Point(1233, 430);
       this.TOTAL_AC_LOAD_CALCULATION.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.TOTAL_AC_LOAD_CALCULATION.Name = "TOTAL_AC_LOAD_CALCULATION";
       this.TOTAL_AC_LOAD_CALCULATION.Size = new System.Drawing.Size(19, 20);
@@ -1908,11 +1917,11 @@
       // label26
       // 
       this.label26.AutoSize = true;
-      this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label26.Location = new System.Drawing.Point(1233, 336);
+      this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label26.Location = new System.Drawing.Point(1233, 409);
       this.label26.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label26.Name = "label26";
-      this.label26.Size = new System.Drawing.Size(226, 24);
+      this.label26.Size = new System.Drawing.Size(192, 20);
       this.label26.TabIndex = 110;
       this.label26.Text = "Total AC Load Calculation";
       // 
@@ -1920,7 +1929,7 @@
       // 
       this.CALCULATED_LOAD_FOR_SERVICE.AutoSize = true;
       this.CALCULATED_LOAD_FOR_SERVICE.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.CALCULATED_LOAD_FOR_SERVICE.Location = new System.Drawing.Point(1233, 536);
+      this.CALCULATED_LOAD_FOR_SERVICE.Location = new System.Drawing.Point(1233, 538);
       this.CALCULATED_LOAD_FOR_SERVICE.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.CALCULATED_LOAD_FOR_SERVICE.Name = "CALCULATED_LOAD_FOR_SERVICE";
       this.CALCULATED_LOAD_FOR_SERVICE.Size = new System.Drawing.Size(19, 20);
@@ -1929,11 +1938,11 @@
       // 
       // label28
       // 
-      this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label28.Location = new System.Drawing.Point(1233, 488);
+      this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label28.Location = new System.Drawing.Point(1233, 517);
       this.label28.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label28.Name = "label28";
-      this.label28.Size = new System.Drawing.Size(220, 49);
+      this.label28.Size = new System.Drawing.Size(220, 21);
       this.label28.TabIndex = 112;
       this.label28.Text = "Calculated Load For Service";
       // 
@@ -1941,7 +1950,7 @@
       // 
       this.label34.AutoSize = true;
       this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label34.Location = new System.Drawing.Point(1232, 209);
+      this.label34.Location = new System.Drawing.Point(1232, 328);
       this.label34.Margin = new System.Windows.Forms.Padding(0, 0, 0, 12);
       this.label34.Name = "label34";
       this.label34.Size = new System.Drawing.Size(202, 25);
@@ -2278,17 +2287,6 @@
       this.label63.TabIndex = 144;
       this.label63.Text = "VA";
       // 
-      // label64
-      // 
-      this.label64.AutoSize = true;
-      this.label64.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label64.Location = new System.Drawing.Point(910, 215);
-      this.label64.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label64.Name = "label64";
-      this.label64.Size = new System.Drawing.Size(13, 16);
-      this.label64.TabIndex = 146;
-      this.label64.Text = "x";
-      // 
       // label65
       // 
       this.label65.AutoSize = true;
@@ -2379,11 +2377,119 @@
       this.WATER_HEATER_CHECK.UseVisualStyleBackColor = true;
       this.WATER_HEATER_CHECK.CheckedChanged += new System.EventHandler(this.WATER_HEATER_CHECK_CheckedChanged);
       // 
+      // label72
+      // 
+      this.label72.AutoSize = true;
+      this.label72.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label72.Location = new System.Drawing.Point(1346, 216);
+      this.label72.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label72.Name = "label72";
+      this.label72.Size = new System.Drawing.Size(25, 16);
+      this.label72.TabIndex = 156;
+      this.label72.Text = "VA";
+      // 
+      // panel20
+      // 
+      this.panel20.BackColor = System.Drawing.SystemColors.Window;
+      this.panel20.Controls.Add(this.OUTDOOR_HEATER_UNIT);
+      this.panel20.Location = new System.Drawing.Point(1235, 209);
+      this.panel20.Margin = new System.Windows.Forms.Padding(48, 0, 3, 3);
+      this.panel20.Name = "panel20";
+      this.panel20.Padding = new System.Windows.Forms.Padding(5);
+      this.panel20.Size = new System.Drawing.Size(108, 28);
+      this.panel20.TabIndex = 154;
+      // 
+      // OUTDOOR_HEATER_UNIT
+      // 
+      this.OUTDOOR_HEATER_UNIT.BorderStyle = System.Windows.Forms.BorderStyle.None;
+      this.OUTDOOR_HEATER_UNIT.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.OUTDOOR_HEATER_UNIT.Location = new System.Drawing.Point(5, 5);
+      this.OUTDOOR_HEATER_UNIT.Margin = new System.Windows.Forms.Padding(0);
+      this.OUTDOOR_HEATER_UNIT.Name = "OUTDOOR_HEATER_UNIT";
+      this.OUTDOOR_HEATER_UNIT.Size = new System.Drawing.Size(98, 19);
+      this.OUTDOOR_HEATER_UNIT.TabIndex = 2;
+      this.OUTDOOR_HEATER_UNIT.Text = "0";
+      // 
+      // label73
+      // 
+      this.label73.AutoSize = true;
+      this.label73.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label73.Location = new System.Drawing.Point(1233, 182);
+      this.label73.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label73.Name = "label73";
+      this.label73.Size = new System.Drawing.Size(177, 24);
+      this.label73.TabIndex = 155;
+      this.label73.Text = "Outdoor Heater Unit";
+      // 
+      // OUTDOOR_HEATER_UNIT_AMOUNT
+      // 
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.FormattingEnabled = true;
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25"});
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.Location = new System.Drawing.Point(1235, 282);
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.Margin = new System.Windows.Forms.Padding(0);
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.Name = "OUTDOOR_HEATER_UNIT_AMOUNT";
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.Size = new System.Drawing.Size(56, 28);
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.TabIndex = 157;
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.Text = "1";
+      // 
+      // label64
+      // 
+      this.label64.AutoSize = true;
+      this.label64.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label64.Location = new System.Drawing.Point(910, 215);
+      this.label64.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label64.Name = "label64";
+      this.label64.Size = new System.Drawing.Size(13, 16);
+      this.label64.TabIndex = 146;
+      this.label64.Text = "x";
+      // 
+      // label75
+      // 
+      this.label75.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label75.Location = new System.Drawing.Point(1233, 240);
+      this.label75.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label75.Name = "label75";
+      this.label75.Size = new System.Drawing.Size(230, 43);
+      this.label75.TabIndex = 159;
+      this.label75.Text = "Number of Separately Controlled Heater Units";
+      // 
       // UnitLoadCalculation
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+      this.Controls.Add(this.label75);
+      this.Controls.Add(this.OUTDOOR_HEATER_UNIT_AMOUNT);
+      this.Controls.Add(this.label72);
+      this.Controls.Add(this.panel20);
+      this.Controls.Add(this.label73);
       this.Controls.Add(this.WATER_HEATER_CHECK);
       this.Controls.Add(this.label71);
       this.Controls.Add(this.label70);
@@ -2566,6 +2672,8 @@
       this.panel11.PerformLayout();
       this.panel12.ResumeLayout(false);
       this.panel12.PerformLayout();
+      this.panel20.ResumeLayout(false);
+      this.panel20.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -2720,7 +2828,6 @@
     private System.Windows.Forms.Label label61;
     private System.Windows.Forms.Label label62;
     private System.Windows.Forms.Label label63;
-    private System.Windows.Forms.Label label64;
     private System.Windows.Forms.Label label65;
     private System.Windows.Forms.Label label66;
     private System.Windows.Forms.Label label67;
@@ -2729,5 +2836,12 @@
     private System.Windows.Forms.Label label70;
     private System.Windows.Forms.Label label71;
     private System.Windows.Forms.CheckBox WATER_HEATER_CHECK;
+    private System.Windows.Forms.Label label72;
+    private System.Windows.Forms.Panel panel20;
+    private System.Windows.Forms.TextBox OUTDOOR_HEATER_UNIT;
+    private System.Windows.Forms.Label label73;
+    private System.Windows.Forms.ComboBox OUTDOOR_HEATER_UNIT_AMOUNT;
+    private System.Windows.Forms.Label label64;
+    private System.Windows.Forms.Label label75;
   }
 }

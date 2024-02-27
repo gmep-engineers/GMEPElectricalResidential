@@ -79,5 +79,4 @@ Load Calculations are done
 
 TODO
 4. Find out how the total AC LOAD is calculated and update the value accordingly
-5. Put 0 in the outdoor condenser and indoor fan coil textboxs by default
 6. Update the "CALCULATED_LOAD_FOR_SERVICE" from the "SUBTOTAL_GENERAL_LOAD" and "AC_LOAD_CALCULATION"
