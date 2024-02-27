@@ -2482,6 +2482,7 @@
       this.ESTIMATE_CONDENSER.TabIndex = 160;
       this.ESTIMATE_CONDENSER.Text = "Estimate";
       this.ESTIMATE_CONDENSER.UseVisualStyleBackColor = true;
+      this.ESTIMATE_CONDENSER.Click += new System.EventHandler(this.ESTIMATE_CONDENSER_Click);
       // 
       // ESTIMATE_FAN_COIL
       // 
@@ -2492,6 +2493,7 @@
       this.ESTIMATE_FAN_COIL.TabIndex = 161;
       this.ESTIMATE_FAN_COIL.Text = "Estimate";
       this.ESTIMATE_FAN_COIL.UseVisualStyleBackColor = true;
+      this.ESTIMATE_FAN_COIL.Click += new System.EventHandler(this.ESTIMATE_FAN_COIL_Click);
       // 
       // TOTAL_CUSTOM_LOAD_CALCULATION
       // 

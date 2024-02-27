@@ -782,6 +782,124 @@ namespace GMEPElectricalResidential
     {
       UpdateGeneralLighting();
     }
+
+    private void ESTIMATE_CONDENSER_Click(object sender, EventArgs e)
+    {
+      List<int> units;
+      if (int.TryParse(AREA.Text, out int area))
+      {
+        int kBTU = (int)Math.Ceiling((area / 500.0) * 12);
+
+        if (kBTU < 18)
+        {
+          kBTU = 18;
+        }
+        else if (kBTU % 6 != 0)
+        {
+          kBTU = ((int)(kBTU / 6) + 1) * 6;
+        }
+
+        units = BreakUpkBTU(kBTU);
+      }
+      else
+      {
+        units = new List<int> { 0 };
+      }
+
+      int condenserVA = GetCondenserVATotalFromUnits(units);
+
+      OUTDOOR_CONDENSER_VA.Text = condenserVA.ToString();
+    }
+
+    private int GetCondenserVATotalFromUnits(List<int> units)
+    {
+      Dictionary<int, int> map = new Dictionary<int, int>
+    {
+        { 18, 2714 },
+        { 24, 4048 },
+        { 30, 3864 },
+        { 36, 4945 },
+        { 42, 5405 },
+        { 48, 6026 },
+        { 60, 7866 }
+    };
+
+      return units.Sum(unit => map.ContainsKey(unit) ? map[unit] : 0);
+    }
+
+    private int GetFanCoilVATotalFromUnits(List<int> units)
+    {
+      Dictionary<int, int> map = new Dictionary<int, int>
+    {
+        { 18, 648 },
+        { 24, 848 },
+        { 30, 840 },
+        { 36, 816 },
+        { 42, 984 },
+        { 48, 1200 },
+        { 60, 1632 }
+    };
+
+      return units.Sum(unit => map.ContainsKey(unit) ? map[unit] : 0);
+    }
+
+    private List<int> BreakUpkBTU(int kBTU)
+    {
+      var units = new List<int> { 60, 48, 42, 36, 30, 24, 18 };
+      var bestCombination = new List<int>();
+
+      void FindCombination(int remainingBTU, List<int> currentCombination, int startIndex)
+      {
+        if (remainingBTU == 0)
+        {
+          if (!bestCombination.Any() || currentCombination.Count < bestCombination.Count)
+          {
+            bestCombination = new List<int>(currentCombination);
+          }
+          return;
+        }
+
+        for (int i = startIndex; i < units.Count; i++)
+        {
+          if (units[i] <= remainingBTU)
+          {
+            var nextCombination = new List<int>(currentCombination) { units[i] };
+            FindCombination(remainingBTU - units[i], nextCombination, i);
+          }
+        }
+      }
+
+      FindCombination(kBTU, new List<int>(), 0);
+      return bestCombination;
+    }
+
+    private void ESTIMATE_FAN_COIL_Click(object sender, EventArgs e)
+    {
+      List<int> units;
+      if (int.TryParse(AREA.Text, out int area))
+      {
+        int kBTU = (int)Math.Ceiling((area / 500.0) * 12);
+
+        if (kBTU < 18)
+        {
+          kBTU = 18;
+        }
+        else if (kBTU % 6 != 0)
+        {
+          kBTU = ((int)(kBTU / 6) + 1) * 6;
+        }
+
+        units = BreakUpkBTU(kBTU);
+      }
+      else
+      {
+        units = new List<int> { 0 };
+      }
+
+      int fanCoilVA = GetFanCoilVATotalFromUnits(units);
+
+      INDOOR_FAN_COIL_VA.Text = fanCoilVA.ToString();
+    }
   }
 
   public class UnitInformation
