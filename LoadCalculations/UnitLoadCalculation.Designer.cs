@@ -123,7 +123,6 @@
       this.COOKTOP_MULTIPLIER = new System.Windows.Forms.ComboBox();
       this.label32 = new System.Windows.Forms.Label();
       this.label33 = new System.Windows.Forms.Label();
-      this.GENERAL_LIGHTING_100PC = new System.Windows.Forms.Label();
       this.GENERAL_CUSTOM_LOAD_BOX = new System.Windows.Forms.ListBox();
       this.ADD_ENTRY = new System.Windows.Forms.Button();
       this.REMOVE_ENTRY = new System.Windows.Forms.Button();
@@ -174,7 +173,6 @@
       this.label60 = new System.Windows.Forms.Label();
       this.label61 = new System.Windows.Forms.Label();
       this.label62 = new System.Windows.Forms.Label();
-      this.label63 = new System.Windows.Forms.Label();
       this.label65 = new System.Windows.Forms.Label();
       this.label66 = new System.Windows.Forms.Label();
       this.label67 = new System.Windows.Forms.Label();
@@ -194,15 +192,13 @@
       this.ESTIMATE_FAN_COIL = new System.Windows.Forms.Button();
       this.TOTAL_CUSTOM_LOAD_CALCULATION = new System.Windows.Forms.Label();
       this.label76 = new System.Windows.Forms.Label();
-      this.GENERAL_LIGHTING_35PC = new System.Windows.Forms.Label();
-      this.label77 = new System.Windows.Forms.Label();
-      this.label78 = new System.Windows.Forms.Label();
       this.label79 = new System.Windows.Forms.Label();
-      this.label80 = new System.Windows.Forms.Label();
       this.GENERAL_LIGHTING_TOTAL = new System.Windows.Forms.Label();
-      this.label82 = new System.Windows.Forms.Label();
-      this.label83 = new System.Windows.Forms.Label();
-      this.label84 = new System.Windows.Forms.Label();
+      this.groupBox5 = new System.Windows.Forms.GroupBox();
+      this.LIGHTING_WAREHOUSE = new System.Windows.Forms.RadioButton();
+      this.LIGHTING_HOTEL_MOTEL = new System.Windows.Forms.RadioButton();
+      this.LIGHTING_DWELLING = new System.Windows.Forms.RadioButton();
+      this.LIGHTING_OTHER = new System.Windows.Forms.RadioButton();
       this.panel1.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
@@ -230,6 +226,7 @@
       this.panel11.SuspendLayout();
       this.panel12.SuspendLayout();
       this.panel20.SuspendLayout();
+      this.groupBox5.SuspendLayout();
       this.SuspendLayout();
       // 
       // label1
@@ -1699,23 +1696,12 @@
       // 
       this.label33.AutoSize = true;
       this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label33.Location = new System.Drawing.Point(217, 49);
+      this.label33.Location = new System.Drawing.Point(217, 45);
       this.label33.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label33.Name = "label33";
       this.label33.Size = new System.Drawing.Size(148, 24);
       this.label33.TabIndex = 94;
       this.label33.Text = "General Lighting";
-      // 
-      // GENERAL_LIGHTING_100PC
-      // 
-      this.GENERAL_LIGHTING_100PC.AutoSize = true;
-      this.GENERAL_LIGHTING_100PC.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.GENERAL_LIGHTING_100PC.Location = new System.Drawing.Point(220, 99);
-      this.GENERAL_LIGHTING_100PC.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.GENERAL_LIGHTING_100PC.Name = "GENERAL_LIGHTING_100PC";
-      this.GENERAL_LIGHTING_100PC.Size = new System.Drawing.Size(20, 24);
-      this.GENERAL_LIGHTING_100PC.TabIndex = 95;
-      this.GENERAL_LIGHTING_100PC.Text = "0";
       // 
       // GENERAL_CUSTOM_LOAD_BOX
       // 
@@ -2289,17 +2275,6 @@
       this.label62.TabIndex = 143;
       this.label62.Text = "SQFT";
       // 
-      // label63
-      // 
-      this.label63.AutoSize = true;
-      this.label63.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label63.Location = new System.Drawing.Point(299, 103);
-      this.label63.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label63.Name = "label63";
-      this.label63.Size = new System.Drawing.Size(25, 16);
-      this.label63.TabIndex = 144;
-      this.label63.Text = "VA";
-      // 
       // label65
       // 
       this.label65.AutoSize = true;
@@ -2535,119 +2510,104 @@
       this.label76.TabIndex = 162;
       this.label76.Text = "Total Custom Load Calculation";
       // 
-      // GENERAL_LIGHTING_35PC
-      // 
-      this.GENERAL_LIGHTING_35PC.AutoSize = true;
-      this.GENERAL_LIGHTING_35PC.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.GENERAL_LIGHTING_35PC.Location = new System.Drawing.Point(366, 99);
-      this.GENERAL_LIGHTING_35PC.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.GENERAL_LIGHTING_35PC.Name = "GENERAL_LIGHTING_35PC";
-      this.GENERAL_LIGHTING_35PC.Size = new System.Drawing.Size(20, 24);
-      this.GENERAL_LIGHTING_35PC.TabIndex = 164;
-      this.GENERAL_LIGHTING_35PC.Text = "0";
-      // 
-      // label77
-      // 
-      this.label77.AutoSize = true;
-      this.label77.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label77.Location = new System.Drawing.Point(453, 103);
-      this.label77.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label77.Name = "label77";
-      this.label77.Size = new System.Drawing.Size(25, 16);
-      this.label77.TabIndex = 165;
-      this.label77.Text = "VA";
-      // 
-      // label78
-      // 
-      this.label78.AutoSize = true;
-      this.label78.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label78.Location = new System.Drawing.Point(367, 80);
-      this.label78.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label78.Name = "label78";
-      this.label78.Size = new System.Drawing.Size(112, 16);
-      this.label78.TabIndex = 166;
-      this.label78.Text = "35% over 3000VA";
-      // 
       // label79
       // 
       this.label79.AutoSize = true;
       this.label79.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label79.Location = new System.Drawing.Point(511, 78);
+      this.label79.Location = new System.Drawing.Point(558, 75);
       this.label79.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label79.Name = "label79";
-      this.label79.Size = new System.Drawing.Size(38, 16);
+      this.label79.Size = new System.Drawing.Size(59, 16);
       this.label79.TabIndex = 167;
-      this.label79.Text = "Total";
-      // 
-      // label80
-      // 
-      this.label80.AutoSize = true;
-      this.label80.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label80.Location = new System.Drawing.Point(597, 103);
-      this.label80.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label80.Name = "label80";
-      this.label80.Size = new System.Drawing.Size(25, 16);
-      this.label80.TabIndex = 169;
-      this.label80.Text = "VA";
+      this.label79.Text = "Total VA";
       // 
       // GENERAL_LIGHTING_TOTAL
       // 
       this.GENERAL_LIGHTING_TOTAL.AutoSize = true;
       this.GENERAL_LIGHTING_TOTAL.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.GENERAL_LIGHTING_TOTAL.Location = new System.Drawing.Point(510, 99);
+      this.GENERAL_LIGHTING_TOTAL.Location = new System.Drawing.Point(557, 96);
       this.GENERAL_LIGHTING_TOTAL.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.GENERAL_LIGHTING_TOTAL.Name = "GENERAL_LIGHTING_TOTAL";
       this.GENERAL_LIGHTING_TOTAL.Size = new System.Drawing.Size(20, 24);
       this.GENERAL_LIGHTING_TOTAL.TabIndex = 168;
       this.GENERAL_LIGHTING_TOTAL.Text = "0";
       // 
-      // label82
+      // groupBox5
       // 
-      this.label82.AutoSize = true;
-      this.label82.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label82.Location = new System.Drawing.Point(341, 103);
-      this.label82.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label82.Name = "label82";
-      this.label82.Size = new System.Drawing.Size(14, 16);
-      this.label82.TabIndex = 170;
-      this.label82.Text = "+";
+      this.groupBox5.Controls.Add(this.LIGHTING_OTHER);
+      this.groupBox5.Controls.Add(this.LIGHTING_WAREHOUSE);
+      this.groupBox5.Controls.Add(this.LIGHTING_HOTEL_MOTEL);
+      this.groupBox5.Controls.Add(this.LIGHTING_DWELLING);
+      this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.groupBox5.Location = new System.Drawing.Point(219, 75);
+      this.groupBox5.Name = "groupBox5";
+      this.groupBox5.Size = new System.Drawing.Size(328, 54);
+      this.groupBox5.TabIndex = 173;
+      this.groupBox5.TabStop = false;
+      this.groupBox5.Text = "Occupancy Type";
       // 
-      // label83
+      // LIGHTING_WAREHOUSE
       // 
-      this.label83.AutoSize = true;
-      this.label83.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label83.Location = new System.Drawing.Point(487, 103);
-      this.label83.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label83.Name = "label83";
-      this.label83.Size = new System.Drawing.Size(14, 16);
-      this.label83.TabIndex = 171;
-      this.label83.Text = "=";
+      this.LIGHTING_WAREHOUSE.AutoSize = true;
+      this.LIGHTING_WAREHOUSE.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.LIGHTING_WAREHOUSE.Location = new System.Drawing.Point(176, 23);
+      this.LIGHTING_WAREHOUSE.Margin = new System.Windows.Forms.Padding(0);
+      this.LIGHTING_WAREHOUSE.Name = "LIGHTING_WAREHOUSE";
+      this.LIGHTING_WAREHOUSE.Size = new System.Drawing.Size(95, 20);
+      this.LIGHTING_WAREHOUSE.TabIndex = 10;
+      this.LIGHTING_WAREHOUSE.Text = "Warehouse";
+      this.LIGHTING_WAREHOUSE.UseVisualStyleBackColor = true;
+      this.LIGHTING_WAREHOUSE.CheckedChanged += new System.EventHandler(this.LIGHTING_WAREHOUSE_CheckedChanged);
       // 
-      // label84
+      // LIGHTING_HOTEL_MOTEL
       // 
-      this.label84.AutoSize = true;
-      this.label84.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label84.Location = new System.Drawing.Point(216, 80);
-      this.label84.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label84.Name = "label84";
-      this.label84.Size = new System.Drawing.Size(128, 16);
-      this.label84.TabIndex = 172;
-      this.label84.Text = "100% below 3000VA";
+      this.LIGHTING_HOTEL_MOTEL.AutoSize = true;
+      this.LIGHTING_HOTEL_MOTEL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.LIGHTING_HOTEL_MOTEL.Location = new System.Drawing.Point(82, 23);
+      this.LIGHTING_HOTEL_MOTEL.Margin = new System.Windows.Forms.Padding(0);
+      this.LIGHTING_HOTEL_MOTEL.Name = "LIGHTING_HOTEL_MOTEL";
+      this.LIGHTING_HOTEL_MOTEL.Size = new System.Drawing.Size(94, 20);
+      this.LIGHTING_HOTEL_MOTEL.TabIndex = 9;
+      this.LIGHTING_HOTEL_MOTEL.Text = "Hotel/Motel";
+      this.LIGHTING_HOTEL_MOTEL.UseVisualStyleBackColor = true;
+      this.LIGHTING_HOTEL_MOTEL.CheckedChanged += new System.EventHandler(this.LIGHTING_HOTEL_MOTEL_CheckedChanged);
+      // 
+      // LIGHTING_DWELLING
+      // 
+      this.LIGHTING_DWELLING.AutoSize = true;
+      this.LIGHTING_DWELLING.Checked = true;
+      this.LIGHTING_DWELLING.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.LIGHTING_DWELLING.Location = new System.Drawing.Point(6, 23);
+      this.LIGHTING_DWELLING.Margin = new System.Windows.Forms.Padding(0);
+      this.LIGHTING_DWELLING.Name = "LIGHTING_DWELLING";
+      this.LIGHTING_DWELLING.Size = new System.Drawing.Size(76, 20);
+      this.LIGHTING_DWELLING.TabIndex = 8;
+      this.LIGHTING_DWELLING.TabStop = true;
+      this.LIGHTING_DWELLING.Text = "Dwelling";
+      this.LIGHTING_DWELLING.UseVisualStyleBackColor = true;
+      this.LIGHTING_DWELLING.CheckedChanged += new System.EventHandler(this.LIGHTING_DWELLING_CheckedChanged);
+      // 
+      // LIGHTING_OTHER
+      // 
+      this.LIGHTING_OTHER.AutoSize = true;
+      this.LIGHTING_OTHER.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.LIGHTING_OTHER.Location = new System.Drawing.Point(271, 23);
+      this.LIGHTING_OTHER.Margin = new System.Windows.Forms.Padding(0);
+      this.LIGHTING_OTHER.Name = "LIGHTING_OTHER";
+      this.LIGHTING_OTHER.Size = new System.Drawing.Size(57, 20);
+      this.LIGHTING_OTHER.TabIndex = 11;
+      this.LIGHTING_OTHER.Text = "Other";
+      this.LIGHTING_OTHER.UseVisualStyleBackColor = true;
+      this.LIGHTING_OTHER.CheckedChanged += new System.EventHandler(this.LIGHTING_OTHER_CheckedChanged);
       // 
       // UnitLoadCalculation
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-      this.Controls.Add(this.label84);
-      this.Controls.Add(this.label83);
-      this.Controls.Add(this.label82);
-      this.Controls.Add(this.label80);
+      this.Controls.Add(this.groupBox5);
       this.Controls.Add(this.GENERAL_LIGHTING_TOTAL);
       this.Controls.Add(this.label79);
-      this.Controls.Add(this.label78);
-      this.Controls.Add(this.label77);
-      this.Controls.Add(this.GENERAL_LIGHTING_35PC);
       this.Controls.Add(this.TOTAL_CUSTOM_LOAD_CALCULATION);
       this.Controls.Add(this.label76);
       this.Controls.Add(this.ESTIMATE_FAN_COIL);
@@ -2666,7 +2626,6 @@
       this.Controls.Add(this.label67);
       this.Controls.Add(this.label64);
       this.Controls.Add(this.label65);
-      this.Controls.Add(this.label63);
       this.Controls.Add(this.label62);
       this.Controls.Add(this.label48);
       this.Controls.Add(this.label49);
@@ -2715,7 +2674,6 @@
       this.Controls.Add(this.REMOVE_ENTRY);
       this.Controls.Add(this.ADD_ENTRY);
       this.Controls.Add(this.GENERAL_CUSTOM_LOAD_BOX);
-      this.Controls.Add(this.GENERAL_LIGHTING_100PC);
       this.Controls.Add(this.label33);
       this.Controls.Add(this.panel32);
       this.Controls.Add(this.COOKTOP_MULTIPLIER);
@@ -2841,6 +2799,8 @@
       this.panel12.PerformLayout();
       this.panel20.ResumeLayout(false);
       this.panel20.PerformLayout();
+      this.groupBox5.ResumeLayout(false);
+      this.groupBox5.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -2943,7 +2903,6 @@
     private System.Windows.Forms.ComboBox COOKTOP_MULTIPLIER;
     private System.Windows.Forms.Label label32;
     private System.Windows.Forms.Label label33;
-    private System.Windows.Forms.Label GENERAL_LIGHTING_100PC;
     private System.Windows.Forms.ListBox GENERAL_CUSTOM_LOAD_BOX;
     private System.Windows.Forms.Button ADD_ENTRY;
     private System.Windows.Forms.Button REMOVE_ENTRY;
@@ -2994,7 +2953,6 @@
     private System.Windows.Forms.Label label60;
     private System.Windows.Forms.Label label61;
     private System.Windows.Forms.Label label62;
-    private System.Windows.Forms.Label label63;
     private System.Windows.Forms.Label label65;
     private System.Windows.Forms.Label label66;
     private System.Windows.Forms.Label label67;
@@ -3014,14 +2972,12 @@
     private System.Windows.Forms.Button ESTIMATE_FAN_COIL;
     private System.Windows.Forms.Label TOTAL_CUSTOM_LOAD_CALCULATION;
     private System.Windows.Forms.Label label76;
-    private System.Windows.Forms.Label GENERAL_LIGHTING_35PC;
-    private System.Windows.Forms.Label label77;
-    private System.Windows.Forms.Label label78;
     private System.Windows.Forms.Label label79;
-    private System.Windows.Forms.Label label80;
     private System.Windows.Forms.Label GENERAL_LIGHTING_TOTAL;
-    private System.Windows.Forms.Label label82;
-    private System.Windows.Forms.Label label83;
-    private System.Windows.Forms.Label label84;
+    private System.Windows.Forms.GroupBox groupBox5;
+    private System.Windows.Forms.RadioButton LIGHTING_HOTEL_MOTEL;
+    private System.Windows.Forms.RadioButton LIGHTING_DWELLING;
+    private System.Windows.Forms.RadioButton LIGHTING_WAREHOUSE;
+    private System.Windows.Forms.RadioButton LIGHTING_OTHER;
   }
 }

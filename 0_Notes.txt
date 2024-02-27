@@ -79,7 +79,5 @@ Load Calculations are done
 
 TODO
 1. Update the "CALCULATED_LOAD_FOR_SERVICE" from the "SUBTOTAL_GENERAL_LOAD" and "AC_LOAD_CALCULATION"
-2. Update the "General Lighting" section to calculate the VA based on the 3000VA @ 100% and anything over @ 40%.
-3. Add a row under Total Calculations for the Total Custom Load Calculation.
-4. When floor area is made empty, turn GENERAL_LIGHTING to 0
-5. TOTAL_CUSTOM_LOAD_CALCULATION should take the water heater load when the box is not checked
+2. When a textbox is clicked, highlight the content inside.
+3. Configure the estimate buttons based on the screenshot of the loads

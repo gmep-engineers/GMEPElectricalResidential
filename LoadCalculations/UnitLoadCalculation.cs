@@ -356,7 +356,7 @@ namespace GMEPElectricalResidential
     {
       foreach (Control control in controls)
       {
-        if (control is TextBox textBox && textBox.Name.EndsWith("VA"))
+        if (control is TextBox textBox && (textBox.Name.EndsWith("VA") || textBox.Name == "AREA"))
         {
           textBox.KeyPress += OnlyDigitInputs;
         }
@@ -563,18 +563,84 @@ namespace GMEPElectricalResidential
 
     private void AREA_TextChanged(object sender, EventArgs e)
     {
-      var textBox = sender as TextBox;
-      if (textBox != null && int.TryParse(textBox.Text, out int floorArea))
+      UpdateGeneralLighting();
+    }
+
+    private void UpdateGeneralLighting()
+    {
+      bool isLightingHotelMotel = LIGHTING_HOTEL_MOTEL.Checked;
+      bool isLightingWarehouse = LIGHTING_WAREHOUSE.Checked;
+      bool isOther = LIGHTING_OTHER.Checked;
+
+      var occType = "Dwelling";
+      if (isLightingHotelMotel)
       {
-        int first3000 = Math.Min((floorArea * 3), 3000);
-        int over3000 = Math.Max(0, (floorArea * 3) - 3000);
-
-        GENERAL_LIGHTING_100PC.Text = (first3000).ToString();
-        GENERAL_LIGHTING_35PC.Text = (over3000 * 0.35).ToString();
-
-        int total = first3000 + (int)(over3000 * 0.35);
-        GENERAL_LIGHTING_TOTAL.Text = total.ToString();
+        occType = "Hotel and Motel";
       }
+      else if (isLightingWarehouse)
+      {
+        occType = "Warehouse";
+      }
+      else if (isOther)
+      {
+        occType = "Other";
+      }
+
+      List<int> lightingLoads;
+      if (AREA != null && int.TryParse(AREA.Text, out int floorArea))
+      {
+        lightingLoads = CalculateLightingLoad(occType, floorArea * 3);
+      }
+      else
+      {
+        lightingLoads = CalculateLightingLoad(occType, 0);
+      }
+
+      var total = SumListInts(lightingLoads);
+      GENERAL_LIGHTING_TOTAL.Text = total.ToString();
+
+      UpdateDataAndLoads();
+    }
+
+    private int SumListInts(List<int> lightingLoads)
+    {
+      int total = 0;
+      foreach (int i in lightingLoads)
+      {
+        total += i;
+      }
+      return total;
+    }
+
+    public List<int> CalculateLightingLoad(string occupancyType, int lightingLoad)
+    {
+      List<int> calculatedLoads = new List<int>();
+
+      switch (occupancyType)
+      {
+        case "Dwelling":
+          calculatedLoads.Add((int)Math.Ceiling(Math.Min(lightingLoad, 3000) * 1.0));
+          calculatedLoads.Add((int)Math.Ceiling(Math.Min(Math.Max(lightingLoad - 3000, 0), 117000) * 0.35));
+          calculatedLoads.Add((int)Math.Ceiling(Math.Max(lightingLoad - 120000, 0) * 0.25));
+          break;
+
+        case "Hotel and Motel":
+          calculatedLoads.Add((int)Math.Ceiling(Math.Min(lightingLoad, 20000) * 0.60));
+          calculatedLoads.Add((int)Math.Ceiling(Math.Min(Math.Max(lightingLoad - 20000, 0), 80000) * 0.50));
+          calculatedLoads.Add((int)Math.Ceiling(Math.Max(lightingLoad - 100000, 0) * 0.35));
+          break;
+
+        case "Warehouse":
+          calculatedLoads.Add((int)Math.Ceiling(Math.Min(lightingLoad, 12500) * 1.0));
+          calculatedLoads.Add((int)Math.Ceiling(Math.Max(lightingLoad - 12500, 0) * 0.50));
+          break;
+
+        default:
+          calculatedLoads.Add(lightingLoad);
+          break;
+      }
+
+      return calculatedLoads;
     }
 
     private void AddEntry(TextBox nameTextBox, TextBox vaTextBox, ComboBox multiplierComboBox, ListBox listBox)
@@ -672,6 +738,26 @@ namespace GMEPElectricalResidential
     private void WATER_HEATER_CHECK_CheckedChanged(object sender, EventArgs e)
     {
       UpdateDataAndLoads();
+    }
+
+    private void LIGHTING_DWELLING_CheckedChanged(object sender, EventArgs e)
+    {
+      UpdateGeneralLighting();
+    }
+
+    private void LIGHTING_HOTEL_MOTEL_CheckedChanged(object sender, EventArgs e)
+    {
+      UpdateGeneralLighting();
+    }
+
+    private void LIGHTING_WAREHOUSE_CheckedChanged(object sender, EventArgs e)
+    {
+      UpdateGeneralLighting();
+    }
+
+    private void LIGHTING_OTHER_CheckedChanged(object sender, EventArgs e)
+    {
+      UpdateGeneralLighting();
     }
   }
 
