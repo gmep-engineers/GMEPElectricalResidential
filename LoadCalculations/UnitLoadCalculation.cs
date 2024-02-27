@@ -118,12 +118,25 @@ namespace GMEPElectricalResidential
 
     private void UpdateDataAndLoads()
     {
+      UpdateGeneralData();
+      UpdateDwellingData();
       UpdateGeneralLoadData();
       UpdateACLoadData();
       UpdateCustomLoadData();
+
       UpdateTotalGeneralLoadCalculation();
       UpdateTotalACLoadCalculation();
       UpdateTotalCustomLoadCalculation();
+    }
+
+    private void UpdateDwellingData()
+    {
+    }
+
+    private void UpdateGeneralData()
+    {
+      _unitInformation.Name = UNIT_NAME.Text;
+      _unitInformation.Voltage = VOLTAGE.Text;
     }
 
     private void UpdateTotalCustomLoadCalculation()
@@ -134,6 +147,7 @@ namespace GMEPElectricalResidential
         totalLoad += customLoad.GetLoad();
       }
       _unitInformation.Totals.CustomLoad = totalLoad.ToString();
+      TOTAL_CUSTOM_LOAD_CALCULATION.Text = totalLoad.ToString();
     }
 
     private void UpdateCustomLoadData()
