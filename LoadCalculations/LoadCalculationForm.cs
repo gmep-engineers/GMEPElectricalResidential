@@ -19,9 +19,44 @@ namespace GMEPElectricalResidential
     public LoadCalculationForm()
     {
       InitializeComponent();
-      AddNewTab();
+      bool createdTab = LoadSavedUnitLoadCalculations();
+      if (!createdTab)
+      {
+        AddNewTab();
+      }
 
       this.FormClosing += LoadCalculationForm_FormClosing;
+    }
+
+    private bool LoadSavedUnitLoadCalculations()
+    {
+      var createdTabFlag = false;
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
+      string baseSaveDirectory = Path.Combine(dwgDirectory, "Load Calculation Saves");
+
+      if (Directory.Exists(baseSaveDirectory))
+      {
+        var unitDirectories = Directory.GetDirectories(baseSaveDirectory);
+
+        foreach (var unitDirectory in unitDirectories)
+        {
+          var jsonFiles = Directory.GetFiles(unitDirectory, "*.json");
+
+          if (jsonFiles.Length > 0)
+          {
+            var latestJsonFile = jsonFiles.OrderByDescending(f => File.GetCreationTime(f)).First();
+            var json = File.ReadAllText(latestJsonFile);
+
+            var unitInformation = JsonConvert.DeserializeObject<UnitInformation>(json);
+
+            AddNewTab(unitInformation);
+
+            createdTabFlag = true;
+          }
+        }
+      }
+      return createdTabFlag;
     }
 
     private void LoadCalculationForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -40,9 +75,9 @@ namespace GMEPElectricalResidential
       return base.ProcessCmdKey(ref msg, keyData);
     }
 
-    public void AddNewTab()
+    public void AddNewTab(UnitInformation unitInformation = null)
     {
-      UnitLoadCalculation unitLoadCalculation = new UnitLoadCalculation(_tabID);
+      UnitLoadCalculation unitLoadCalculation = new UnitLoadCalculation(_tabID, unitInformation);
       TabPage tabPage = new TabPage("Unit");
       tabPage.Tag = _tabID;
       tabPage.Controls.Add(unitLoadCalculation);

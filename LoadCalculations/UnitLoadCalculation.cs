@@ -19,7 +19,7 @@ namespace GMEPElectricalResidential
     private ToolTip _toolTip;
     private UnitInformation _unitInformation;
 
-    public UnitLoadCalculation(int tabId)
+    public UnitLoadCalculation(int tabId, UnitInformation unitInformation = null)
     {
       InitializeComponent();
       SetDefaultValues();
@@ -31,13 +31,89 @@ namespace GMEPElectricalResidential
       SubscribeTextBoxesToTextEnterEvent(this.Controls);
 
       _toolTip = new ToolTip();
-      _unitInformation = new UnitInformation();
-      _unitInformation.GeneralLoads = new UnitGeneralLoadContainer();
-      _unitInformation.Totals = new UnitTotalContainer();
-      _unitInformation.ACLoads = new UnitACLoadContainer();
-      _unitInformation.DwellingArea = new UnitDwellingArea();
-      _unitInformation.GeneralLoads.LightingCode = "220.42";
-      _unitInformation.ID = tabId;
+
+      if (unitInformation != null)
+      {
+        _unitInformation = unitInformation;
+        PopulateUserControlWithUnitInformation(unitInformation);
+      }
+      else
+      {
+        _unitInformation = new UnitInformation();
+        _unitInformation.GeneralLoads = new UnitGeneralLoadContainer();
+        _unitInformation.Totals = new UnitTotalContainer();
+        _unitInformation.ACLoads = new UnitACLoadContainer();
+        _unitInformation.DwellingArea = new UnitDwellingArea();
+        _unitInformation.GeneralLoads.LightingCode = "220.42";
+        _unitInformation.ID = tabId;
+      }
+    }
+
+    private void PopulateUserControlWithUnitInformation(UnitInformation unitInformation)
+    {
+      // Set TextBox and ComboBox values with the saved data
+      UNIT_NAME.Text = unitInformation.Name;
+      VOLTAGE.Text = unitInformation.Voltage;
+
+      // Set Radio Buttons
+      ELECTRIC_HEATER.Checked = unitInformation.DwellingArea.ElectricHeater;
+      GAS_HEATER.Checked = !unitInformation.DwellingArea.ElectricHeater;
+      ELECTRIC_DRYER.Checked = unitInformation.DwellingArea.ElectricDryer;
+      GAS_DRYER.Checked = !unitInformation.DwellingArea.ElectricDryer;
+      ELECTRIC_OVEN.Checked = unitInformation.DwellingArea.ElectricOven;
+      GAS_OVEN.Checked = !unitInformation.DwellingArea.ElectricOven;
+      ELECTRIC_COOKTOP.Checked = unitInformation.DwellingArea.ElectricCooktop;
+      GAS_COOKTOP.Checked = !unitInformation.DwellingArea.ElectricCooktop;
+
+      // Set area
+      AREA.Text = unitInformation.DwellingArea.FloorArea.ToString();
+
+      // Set general loads
+      SMALL_APPLIANCE_VA.Text = unitInformation.GeneralLoads.SmallAppliance.VA.ToString();
+      SMALL_APPLIANCE_MULTIPLIER.Text = unitInformation.GeneralLoads.SmallAppliance.Multiplier.ToString();
+      LAUNDRY_VA.Text = unitInformation.GeneralLoads.Laundry.VA.ToString();
+      LAUNDRY_MULTIPLIER.Text = unitInformation.GeneralLoads.Laundry.Multiplier.ToString();
+      BATHROOM_VA.Text = unitInformation.GeneralLoads.Bathroom.VA.ToString();
+      BATHROOM_MULTIPLIER.Text = unitInformation.GeneralLoads.Bathroom.Multiplier.ToString();
+      DISHWASHER_VA.Text = unitInformation.GeneralLoads.Dishwasher.VA.ToString();
+      DISHWASHER_MULTIPLIER.Text = unitInformation.GeneralLoads.Dishwasher.Multiplier.ToString();
+      MICROWAVE_OVEN_VA.Text = unitInformation.GeneralLoads.MicrowaveOven.VA.ToString();
+      MICROWAVE_OVEN_MULTIPLIER.Text = unitInformation.GeneralLoads.MicrowaveOven.Multiplier.ToString();
+      GARBAGE_DISPOSAL_VA.Text = unitInformation.GeneralLoads.GarbageDisposal.VA.ToString();
+      GARBAGE_DISPOSAL_MULTIPLIER.Text = unitInformation.GeneralLoads.GarbageDisposal.Multiplier.ToString();
+      BATHROOM_FANS_VA.Text = unitInformation.GeneralLoads.BathroomFans.VA.ToString();
+      BATHROOM_FANS_MULTIPLIER.Text = unitInformation.GeneralLoads.BathroomFans.Multiplier.ToString();
+      GARAGE_DOOR_OPENER_VA.Text = unitInformation.GeneralLoads.GarageDoorOpener.VA.ToString();
+      GARAGE_DOOR_OPENER_MULTIPLIER.Text = unitInformation.GeneralLoads.GarageDoorOpener.Multiplier.ToString();
+      DRYER_VA.Text = unitInformation.GeneralLoads.Dryer.VA.ToString();
+      DRYER_MULTIPLIER.Text = unitInformation.GeneralLoads.Dryer.Multiplier.ToString();
+      RANGE_VA.Text = unitInformation.GeneralLoads.Range.VA.ToString();
+      RANGE_MULTIPLIER.Text = unitInformation.GeneralLoads.Range.Multiplier.ToString();
+      REFRIGERATOR_VA.Text = unitInformation.GeneralLoads.Refrigerator.VA.ToString();
+      REFRIGERATOR_MULTIPLIER.Text = unitInformation.GeneralLoads.Refrigerator.Multiplier.ToString();
+      OVEN_VA.Text = unitInformation.GeneralLoads.Oven.VA.ToString();
+      OVEN_MULTIPLIER.Text = unitInformation.GeneralLoads.Oven.Multiplier.ToString();
+      WATER_HEATER_VA.Text = unitInformation.GeneralLoads.WaterHeater.VA.ToString();
+      WATER_HEATER_MULTIPLIER.Text = unitInformation.GeneralLoads.WaterHeater.Multiplier.ToString();
+      COOKTOP_VA.Text = unitInformation.GeneralLoads.Cooktop.VA.ToString();
+      COOKTOP_MULTIPLIER.Text = unitInformation.GeneralLoads.Cooktop.Multiplier.ToString();
+
+      // TODO: Add to general load listbox
+      // TODO: Add to the custom load listbox
+      // TODO: Determine if the water heater is a custom load or a general load and modify the checkbox
+
+      // Set AC loads
+      OUTDOOR_CONDENSER_VA.Text = unitInformation.ACLoads.Condenser.ToString();
+      INDOOR_FAN_COIL_VA.Text = unitInformation.ACLoads.FanCoil.ToString();
+      OUTDOOR_HEATER_UNIT.Text = unitInformation.ACLoads.HeatingUnit.Heating.ToString();
+      OUTDOOR_HEATER_UNIT_AMOUNT.Text = unitInformation.ACLoads.HeatingUnit.NumberOfUnits.ToString();
+
+      // Set totals
+      TOTAL_GENERAL_LOAD_CALCULATION.Text = unitInformation.Totals.TotalGeneralLoad;
+      TOTAL_AC_LOAD_CALCULATION.Text = unitInformation.Totals.TotalACLoad;
+      SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = unitInformation.Totals.SubtotalGeneralLoad;
+      TOTAL_CUSTOM_LOAD_CALCULATION.Text = unitInformation.Totals.CustomLoad;
+      CALCULATED_LOAD_FOR_SERVICE.Text = unitInformation.Totals.ServiceLoad;
     }
 
     public UnitInformation RetrieveUnitInformation()

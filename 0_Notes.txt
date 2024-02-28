@@ -78,4 +78,5 @@ Load Calculations are done
 - If the general lighting load is > 3000VA, then automatically apply the table 220.42.
 
 TODO
-4. Add a load button to the unit load calculation form
+1. When the loadcalculationform is created, check for unitloadcalculation forms saved in the "Unit *unit name* - ID*unit ID*" directory within the "Load Calculation Saves" directory.
+2. Deserialize the data as a UnitInformation object from the most recently timestamp.json file within the "Unit *unit name* - ID*unit ID*" directory.
