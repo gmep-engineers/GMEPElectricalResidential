@@ -115,6 +115,8 @@ namespace GMEPElectricalResidential
       string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
       string baseSaveDirectory = Path.Combine(dwgDirectory, "Load Calculation Saves");
 
+      Directory.CreateDirectory(baseSaveDirectory);
+
       for (int i = 0; i < TAB_CONTROL.TabCount; i++)
       {
         var tabPage = TAB_CONTROL.TabPages[i];
