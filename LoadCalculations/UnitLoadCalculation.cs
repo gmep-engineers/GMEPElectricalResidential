@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using GMEPUtilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +19,8 @@ namespace GMEPElectricalResidential
     private string _VAWatermark = "Enter VA...";
     private ToolTip _toolTip;
     private UnitInformation _unitInformation;
+    private bool _isLoaded = false;
+    private bool _unitNullFlag = false;
 
     public UnitLoadCalculation(int tabId, UnitInformation unitInformation = null)
     {
@@ -35,10 +38,10 @@ namespace GMEPElectricalResidential
       if (unitInformation != null)
       {
         _unitInformation = unitInformation;
-        PopulateUserControlWithUnitInformation(unitInformation);
       }
       else
       {
+        _unitNullFlag = true;
         _unitInformation = new UnitInformation();
         _unitInformation.GeneralLoads = new UnitGeneralLoadContainer();
         _unitInformation.Totals = new UnitTotalContainer();
@@ -47,10 +50,23 @@ namespace GMEPElectricalResidential
         _unitInformation.GeneralLoads.LightingCode = "220.42";
         _unitInformation.ID = tabId;
       }
+
+      this.Load += new EventHandler(UnitLoadCalculation_Load);
+    }
+
+    private void UnitLoadCalculation_Load(object sender, EventArgs e)
+    {
+      if (!_unitNullFlag)
+      {
+        PopulateUserControlWithUnitInformation(_unitInformation);
+      }
+      _isLoaded = true;
     }
 
     private void PopulateUserControlWithUnitInformation(UnitInformation unitInformation)
     {
+      if (unitInformation == null) return;
+
       // Set TextBox and ComboBox values with the saved data
       UNIT_NAME.Text = unitInformation.Name;
       VOLTAGE.Text = unitInformation.Voltage;
@@ -98,9 +114,51 @@ namespace GMEPElectricalResidential
       COOKTOP_VA.Text = unitInformation.GeneralLoads.Cooktop.VA.ToString();
       COOKTOP_MULTIPLIER.Text = unitInformation.GeneralLoads.Cooktop.Multiplier.ToString();
 
-      // TODO: Add to general load listbox
-      // TODO: Add to the custom load listbox
-      // TODO: Determine if the water heater is a custom load or a general load and modify the checkbox
+      foreach (var load in unitInformation.GeneralLoads.Customs)
+      {
+        var entry = $"{load.Name}, {load.VA}, {load.Multiplier}";
+        GENERAL_CUSTOM_LOAD_BOX.Items.Add(entry);
+      }
+
+      foreach (var load in unitInformation.CustomLoads)
+      {
+        if (load.Name != "Water Heater")
+        {
+          var entry = $"{load.Name}, {load.VA}, {load.Multiplier}";
+          CUSTOM_LOAD_BOX.Items.Add(entry);
+        }
+      }
+
+      foreach (var load in unitInformation.CustomLoads)
+      {
+        if (load.Name == "Water Heater")
+        {
+          WATER_HEATER_CHECK.Checked = false;
+          WATER_HEATER_VA.Text = load.VA.ToString();
+          WATER_HEATER_MULTIPLIER.Text = load.Multiplier.ToString();
+          break;
+        }
+      }
+
+      if (unitInformation.GeneralLoads.LightingOccupancyType != null)
+      {
+        if (unitInformation.GeneralLoads.LightingOccupancyType == "Dwelling")
+        {
+          LIGHTING_DWELLING.Checked = true;
+        }
+        else if (unitInformation.GeneralLoads.LightingOccupancyType == "Hotel and Motel")
+        {
+          LIGHTING_HOTEL_MOTEL.Checked = true;
+        }
+        else if (unitInformation.GeneralLoads.LightingOccupancyType == "Warehouse")
+        {
+          LIGHTING_WAREHOUSE.Checked = true;
+        }
+        else if (unitInformation.GeneralLoads.LightingOccupancyType == "Other")
+        {
+          LIGHTING_OTHER.Checked = true;
+        }
+      }
 
       // Set AC loads
       OUTDOOR_CONDENSER_VA.Text = unitInformation.ACLoads.Condenser.ToString();
@@ -150,7 +208,6 @@ namespace GMEPElectricalResidential
 
       if (this.Visible)
       {
-        UpdateDataAndLoads();
         UNIT_NAME.Select();
       }
     }
@@ -189,7 +246,7 @@ namespace GMEPElectricalResidential
 
     private void TextBox_TextChanged(object sender, EventArgs e)
     {
-      UpdateDataAndLoads();
+      if (_isLoaded) UpdateDataAndLoads();
     }
 
     private Tuple<int, string> GetLargestACInformation()
@@ -387,6 +444,23 @@ namespace GMEPElectricalResidential
       unitGeneralLoadContainer.Customs = customs;
 
       _unitInformation.GeneralLoads = unitGeneralLoadContainer;
+
+      if (LIGHTING_DWELLING.Checked)
+      {
+        _unitInformation.GeneralLoads.LightingOccupancyType = "Dwelling";
+      }
+      else if (LIGHTING_HOTEL_MOTEL.Checked)
+      {
+        _unitInformation.GeneralLoads.LightingOccupancyType = "Hotel and Motel";
+      }
+      else if (LIGHTING_WAREHOUSE.Checked)
+      {
+        _unitInformation.GeneralLoads.LightingOccupancyType = "Warehouse";
+      }
+      else if (LIGHTING_OTHER.Checked)
+      {
+        _unitInformation.GeneralLoads.LightingOccupancyType = "Other";
+      }
     }
 
     private void UpdateTotalGeneralLoadCalculation()
@@ -715,7 +789,7 @@ namespace GMEPElectricalResidential
       var total = SumListInts(lightingLoads);
       GENERAL_LIGHTING_TOTAL.Text = total.ToString();
 
-      UpdateDataAndLoads();
+      if (_isLoaded) UpdateDataAndLoads();
     }
 
     private int SumListInts(List<int> lightingLoads)
@@ -810,7 +884,7 @@ namespace GMEPElectricalResidential
 
       nameTextBox.Focus();
 
-      UpdateDataAndLoads();
+      if (_isLoaded) UpdateDataAndLoads();
     }
 
     private void ADD_ENTRY_Click(object sender, EventArgs e)
@@ -837,7 +911,7 @@ namespace GMEPElectricalResidential
         }
       }
 
-      UpdateDataAndLoads();
+      if (_isLoaded) UpdateDataAndLoads();
     }
 
     private void REMOVE_ENTRY_Click(object sender, EventArgs e)
@@ -852,7 +926,7 @@ namespace GMEPElectricalResidential
 
     private void WATER_HEATER_CHECK_CheckedChanged(object sender, EventArgs e)
     {
-      UpdateDataAndLoads();
+      if (_isLoaded) UpdateDataAndLoads();
     }
 
     private void LIGHTING_DWELLING_CheckedChanged(object sender, EventArgs e)
@@ -992,6 +1066,20 @@ namespace GMEPElectricalResidential
 
       INDOOR_FAN_COIL_VA.Text = fanCoilVA.ToString();
     }
+
+    private void WriteMessageToAutoCADConsole(object thing, string preMessage = "")
+    {
+      var settings = new JsonSerializerSettings
+      {
+        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+        PreserveReferencesHandling = PreserveReferencesHandling.Objects
+      };
+
+      var message = JsonConvert.SerializeObject(thing, Formatting.Indented, settings);
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      doc.Editor.WriteMessage(preMessage);
+      doc.Editor.WriteMessage(message);
+    }
   }
 
   public class UnitInformation
@@ -1034,6 +1122,7 @@ namespace GMEPElectricalResidential
     public UnitLoad Cooktop { get; set; }
     public List<UnitLoad> Customs { get; set; }
     public string LightingCode { get; set; }
+    public string LightingOccupancyType { get; set; }
   }
 
   public class UnitLoad

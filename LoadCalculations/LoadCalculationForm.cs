@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using GMEPUtilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -77,8 +78,17 @@ namespace GMEPElectricalResidential
 
     public void AddNewTab(UnitInformation unitInformation = null)
     {
+      TabPage tabPage;
+      if (unitInformation != null)
+      {
+        tabPage = new TabPage("Unit " + unitInformation.Name);
+      }
+      else
+      {
+        tabPage = new TabPage("Unit");
+      }
+
       UnitLoadCalculation unitLoadCalculation = new UnitLoadCalculation(_tabID, unitInformation);
-      TabPage tabPage = new TabPage("Unit");
       tabPage.Tag = _tabID;
       tabPage.Controls.Add(unitLoadCalculation);
       TAB_CONTROL.TabPages.Add(tabPage);
@@ -141,20 +151,6 @@ namespace GMEPElectricalResidential
       }
     }
 
-    private void WriteMessageToAutoCADConsole(object thing, string preMessage = "")
-    {
-      var settings = new JsonSerializerSettings
-      {
-        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-        PreserveReferencesHandling = PreserveReferencesHandling.Objects
-      };
-
-      var message = JsonConvert.SerializeObject(thing, Formatting.Indented, settings);
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      doc.Editor.WriteMessage(preMessage);
-      doc.Editor.WriteMessage(message);
-    }
-
     private void CREATE_UNIT_BUTTON_Click(object sender, EventArgs e)
     {
       AddNewTab();
@@ -168,6 +164,20 @@ namespace GMEPElectricalResidential
     private void SAVE_BUTTON_Click(object sender, EventArgs e)
     {
       SaveLoadCalculationForm();
+    }
+
+    private void WriteMessageToAutoCADConsole(object thing, string preMessage = "")
+    {
+      var settings = new JsonSerializerSettings
+      {
+        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+        PreserveReferencesHandling = PreserveReferencesHandling.Objects
+      };
+
+      var message = JsonConvert.SerializeObject(thing, Formatting.Indented, settings);
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      doc.Editor.WriteMessage(preMessage);
+      doc.Editor.WriteMessage(message);
     }
   }
 }
