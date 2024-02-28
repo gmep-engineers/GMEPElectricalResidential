@@ -19,7 +19,7 @@ namespace GMEPElectricalResidential
     private ToolTip _toolTip;
     private UnitInformation _unitInformation;
 
-    public UnitLoadCalculation()
+    public UnitLoadCalculation(int tabId)
     {
       InitializeComponent();
       SetDefaultValues();
@@ -37,6 +37,12 @@ namespace GMEPElectricalResidential
       _unitInformation.ACLoads = new UnitACLoadContainer();
       _unitInformation.DwellingArea = new UnitDwellingArea();
       _unitInformation.GeneralLoads.LightingCode = "220.42";
+      _unitInformation.ID = tabId;
+    }
+
+    public UnitInformation RetrieveUnitInformation()
+    {
+      return _unitInformation;
     }
 
     private void SubscribeTextBoxesToTextEnterEvent(Control.ControlCollection controls)
@@ -510,20 +516,6 @@ namespace GMEPElectricalResidential
       return false;
     }
 
-    private void WriteMessageToAutoCADConsole(object thing, string preMessage = "")
-    {
-      var settings = new JsonSerializerSettings
-      {
-        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-        PreserveReferencesHandling = PreserveReferencesHandling.Objects
-      };
-
-      var message = JsonConvert.SerializeObject(thing, Formatting.Indented, settings);
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      doc.Editor.WriteMessage(preMessage);
-      doc.Editor.WriteMessage(message);
-    }
-
     private void UNIT_NAME_TextChanged(object sender, EventArgs e)
     {
       var textBox = sender as TextBox;
@@ -718,7 +710,6 @@ namespace GMEPElectricalResidential
       }
 
       bool isMultiplierGreaterThanZero = isGreaterThanZero(multiplier);
-      WriteMessageToAutoCADConsole(isMultiplierGreaterThanZero);
 
       if (string.IsNullOrEmpty(multiplier) || !isMultiplierGreaterThanZero)
       {
@@ -931,6 +922,7 @@ namespace GMEPElectricalResidential
   {
     public string Name { get; set; }
     public string Voltage { get; set; }
+    public int ID { get; set; }
     public UnitDwellingArea DwellingArea { get; set; }
     public UnitGeneralLoadContainer GeneralLoads { get; set; }
     public List<UnitLoad> CustomLoads { get; set; }

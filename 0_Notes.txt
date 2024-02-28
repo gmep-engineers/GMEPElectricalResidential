@@ -78,7 +78,4 @@ Load Calculations are done
 - If the general lighting load is > 3000VA, then automatically apply the table 220.42.
 
 TODO
-1. Add a save button to the load calculation form
-2. Allow user to press Ctrl + S to save at any time
-3. Save the load calculation form on close
 4. Add a load button to the unit load calculation form

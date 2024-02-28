@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,18 +14,41 @@ namespace GMEPElectricalResidential
 {
   public partial class LoadCalculationForm : Form
   {
+    private int _tabID = 0;
+
     public LoadCalculationForm()
     {
       InitializeComponent();
       AddNewTab();
+
+      this.FormClosing += LoadCalculationForm_FormClosing;
+    }
+
+    private void LoadCalculationForm_FormClosing(object sender, FormClosingEventArgs e)
+    {
+      SaveLoadCalculationForm();
+    }
+
+    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+    {
+      if (keyData == (Keys.Control | Keys.S))
+      {
+        SaveLoadCalculationForm();
+        return true;
+      }
+
+      return base.ProcessCmdKey(ref msg, keyData);
     }
 
     public void AddNewTab()
     {
-      UnitLoadCalculation unitLoadCalculation = new UnitLoadCalculation();
+      UnitLoadCalculation unitLoadCalculation = new UnitLoadCalculation(_tabID);
       TabPage tabPage = new TabPage("Unit");
+      tabPage.Tag = _tabID;
       tabPage.Controls.Add(unitLoadCalculation);
       TAB_CONTROL.TabPages.Add(tabPage);
+
+      _tabID++;
     }
 
     public void RemoveCurrentTab()
@@ -39,6 +64,62 @@ namespace GMEPElectricalResidential
       }
     }
 
+    private void SaveLoadCalculationForm()
+    {
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
+      string baseSaveDirectory = Path.Combine(dwgDirectory, "Load Calculation Saves");
+
+      for (int i = 0; i < TAB_CONTROL.TabCount; i++)
+      {
+        var tabPage = TAB_CONTROL.TabPages[i];
+        var unitLoadCalculation = tabPage.Controls.OfType<UnitLoadCalculation>().FirstOrDefault();
+
+        if (unitLoadCalculation != null)
+        {
+          var unitInformation = unitLoadCalculation.RetrieveUnitInformation();
+
+          string unitDirectory = $"Unit {tabPage.Text.Replace("Unit", "").Trim()} - ID{tabPage.Tag}";
+          string saveDirectory = Path.Combine(baseSaveDirectory, unitDirectory);
+
+          if (!Directory.Exists(saveDirectory))
+          {
+            var existingDirectory = Directory.GetDirectories(baseSaveDirectory)
+                .FirstOrDefault(dir => dir.Contains($"ID{tabPage.Tag}"));
+
+            if (existingDirectory != null)
+            {
+              Directory.Move(existingDirectory, saveDirectory);
+            }
+            else
+            {
+              Directory.CreateDirectory(saveDirectory);
+            }
+          }
+
+          string json = JsonConvert.SerializeObject(unitInformation, Formatting.Indented);
+
+          string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+          string savePath = Path.Combine(saveDirectory, $"{timestamp}.json");
+          File.WriteAllText(savePath, json);
+        }
+      }
+    }
+
+    private void WriteMessageToAutoCADConsole(object thing, string preMessage = "")
+    {
+      var settings = new JsonSerializerSettings
+      {
+        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+        PreserveReferencesHandling = PreserveReferencesHandling.Objects
+      };
+
+      var message = JsonConvert.SerializeObject(thing, Formatting.Indented, settings);
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      doc.Editor.WriteMessage(preMessage);
+      doc.Editor.WriteMessage(message);
+    }
+
     private void CREATE_UNIT_BUTTON_Click(object sender, EventArgs e)
     {
       AddNewTab();
@@ -47,6 +128,11 @@ namespace GMEPElectricalResidential
     private void DELETE_UNIT_BUTTON_Click(object sender, EventArgs e)
     {
       RemoveCurrentTab();
+    }
+
+    private void SAVE_BUTTON_Click(object sender, EventArgs e)
+    {
+      SaveLoadCalculationForm();
     }
   }
 }

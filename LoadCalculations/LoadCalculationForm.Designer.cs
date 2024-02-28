@@ -75,6 +75,7 @@
       this.SAVE_BUTTON.TabIndex = 3;
       this.SAVE_BUTTON.Text = "Save";
       this.SAVE_BUTTON.UseVisualStyleBackColor = true;
+      this.SAVE_BUTTON.Click += new System.EventHandler(this.SAVE_BUTTON_Click);
       // 
       // LoadCalculationForm
       // 
