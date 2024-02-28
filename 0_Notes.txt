@@ -78,3 +78,6 @@ Load Calculations are done
 - If the general lighting load is > 3000VA, then automatically apply the table 220.42.
 
 TODO
+1. Create a block
+2. Give the block an id
+3. 

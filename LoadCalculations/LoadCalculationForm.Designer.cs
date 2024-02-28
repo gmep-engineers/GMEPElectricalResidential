@@ -37,7 +37,7 @@
       // TAB_CONTROL
       // 
       this.TAB_CONTROL.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.TAB_CONTROL.Location = new System.Drawing.Point(12, 52);
+      this.TAB_CONTROL.Location = new System.Drawing.Point(101, 12);
       this.TAB_CONTROL.Name = "TAB_CONTROL";
       this.TAB_CONTROL.SelectedIndex = 0;
       this.TAB_CONTROL.Size = new System.Drawing.Size(1483, 652);
@@ -46,11 +46,11 @@
       // CREATE_UNIT_BUTTON
       // 
       this.CREATE_UNIT_BUTTON.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.CREATE_UNIT_BUTTON.Location = new System.Drawing.Point(1330, 710);
+      this.CREATE_UNIT_BUTTON.Location = new System.Drawing.Point(12, 52);
       this.CREATE_UNIT_BUTTON.Name = "CREATE_UNIT_BUTTON";
-      this.CREATE_UNIT_BUTTON.Size = new System.Drawing.Size(165, 34);
+      this.CREATE_UNIT_BUTTON.Size = new System.Drawing.Size(83, 34);
       this.CREATE_UNIT_BUTTON.TabIndex = 1;
-      this.CREATE_UNIT_BUTTON.Text = "Create Unit Type";
+      this.CREATE_UNIT_BUTTON.Text = "New";
       this.CREATE_UNIT_BUTTON.UseVisualStyleBackColor = true;
       this.CREATE_UNIT_BUTTON.Click += new System.EventHandler(this.CREATE_UNIT_BUTTON_Click);
       // 
@@ -58,31 +58,30 @@
       // 
       this.DELETE_UNIT_BUTTON.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.DELETE_UNIT_BUTTON.ForeColor = System.Drawing.Color.Red;
-      this.DELETE_UNIT_BUTTON.Location = new System.Drawing.Point(12, 710);
+      this.DELETE_UNIT_BUTTON.Location = new System.Drawing.Point(12, 630);
       this.DELETE_UNIT_BUTTON.Name = "DELETE_UNIT_BUTTON";
-      this.DELETE_UNIT_BUTTON.Size = new System.Drawing.Size(163, 33);
+      this.DELETE_UNIT_BUTTON.Size = new System.Drawing.Size(83, 33);
       this.DELETE_UNIT_BUTTON.TabIndex = 2;
-      this.DELETE_UNIT_BUTTON.Text = "Delete Unit Type";
+      this.DELETE_UNIT_BUTTON.Text = "Delete";
       this.DELETE_UNIT_BUTTON.UseVisualStyleBackColor = true;
       this.DELETE_UNIT_BUTTON.Click += new System.EventHandler(this.DELETE_UNIT_BUTTON_Click);
       // 
       // SAVE_BUTTON
       // 
       this.SAVE_BUTTON.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.SAVE_BUTTON.Location = new System.Drawing.Point(10, 12);
+      this.SAVE_BUTTON.Location = new System.Drawing.Point(12, 12);
       this.SAVE_BUTTON.Name = "SAVE_BUTTON";
-      this.SAVE_BUTTON.Size = new System.Drawing.Size(94, 34);
-      this.SAVE_BUTTON.TabIndex = 3;
+      this.SAVE_BUTTON.Size = new System.Drawing.Size(83, 34);
+      this.SAVE_BUTTON.TabIndex = 4;
       this.SAVE_BUTTON.Text = "Save";
       this.SAVE_BUTTON.UseVisualStyleBackColor = true;
-      this.SAVE_BUTTON.Click += new System.EventHandler(this.SAVE_BUTTON_Click);
       // 
       // LoadCalculationForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Control;
-      this.ClientSize = new System.Drawing.Size(1507, 758);
+      this.ClientSize = new System.Drawing.Size(1596, 675);
       this.Controls.Add(this.SAVE_BUTTON);
       this.Controls.Add(this.DELETE_UNIT_BUTTON);
       this.Controls.Add(this.CREATE_UNIT_BUTTON);

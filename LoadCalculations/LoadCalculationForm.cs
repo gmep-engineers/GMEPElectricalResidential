@@ -151,6 +151,21 @@ namespace GMEPElectricalResidential
       }
     }
 
+    public void RemoveUnitTypeData(int tabID)
+    {
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
+      string baseSaveDirectory = Path.Combine(dwgDirectory, "Load Calculation Saves");
+
+      var unitDirectory = Directory.GetDirectories(baseSaveDirectory)
+          .FirstOrDefault(dir => dir.Contains($"ID{tabID}"));
+
+      if (unitDirectory != null)
+      {
+        Directory.Delete(unitDirectory, true);
+      }
+    }
+
     private void CREATE_UNIT_BUTTON_Click(object sender, EventArgs e)
     {
       AddNewTab();
@@ -158,7 +173,17 @@ namespace GMEPElectricalResidential
 
     private void DELETE_UNIT_BUTTON_Click(object sender, EventArgs e)
     {
-      RemoveCurrentTab();
+      if (TAB_CONTROL.SelectedTab != null)
+      {
+        if (TAB_CONTROL.SelectedTab.Tag is int tabId ||
+            int.TryParse(TAB_CONTROL.SelectedTab.Tag.ToString(), out tabId))
+        {
+          WriteMessageToAutoCADConsole(tabId, "Tab ID: ");
+          RemoveUnitTypeData(tabId);
+        }
+
+        RemoveCurrentTab();
+      }
     }
 
     private void SAVE_BUTTON_Click(object sender, EventArgs e)
