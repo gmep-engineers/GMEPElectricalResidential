@@ -7,18 +7,31 @@ namespace GMEPElectricalResidential
 {
   public class Commands
   {
+    private static LoadCalculationForm _loadCalculationForm;
+    private static SINGLE_LINE_DIAGRAM _sld;
+
     [CommandMethod("SLD")]
     public void SLD()
     {
-      SINGLE_LINE_DIAGRAM sld = new SINGLE_LINE_DIAGRAM();
-      sld.Show();
+      if (_sld == null || _sld.IsDisposed)
+      {
+        _sld = new SINGLE_LINE_DIAGRAM();
+      }
+
+      _sld.Show();
+      _sld.BringToFront();
     }
 
     [CommandMethod("LoadCalculation")]
     public void LoadCalculation()
     {
-      LoadCalculationForm loadCalculation = new LoadCalculationForm();
-      loadCalculation.Show();
+      if (_loadCalculationForm == null || _loadCalculationForm.IsDisposed)
+      {
+        _loadCalculationForm = new LoadCalculationForm();
+      }
+
+      _loadCalculationForm.Show();
+      _loadCalculationForm.BringToFront();
     }
   }
 }
