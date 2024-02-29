@@ -284,6 +284,8 @@ namespace GMEPElectricalResidential
 
     private static ObjectData ShiftData(ObjectData bodyData, double shiftHeight)
     {
+      bodyData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(bodyData));
+
       foreach (var polyline in bodyData.Polylines)
       {
         for (int i = 0; i < polyline.Vectors.Count; i++)
