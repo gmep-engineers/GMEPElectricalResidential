@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Data;
 
 namespace GMEPElectricalResidential
@@ -180,18 +181,53 @@ namespace GMEPElectricalResidential
        *
        *
        */
+
       double HEADER_HEIGHT = 0.75;
 
       ObjectData headerData = GetCopyPasteData("UnitLoadCalculationHeader");
       ObjectData bodyData = GetCopyPasteData("UnitLoadCalculationBody");
 
       ObjectData dwellingBodyData = ShiftData(bodyData, -HEADER_HEIGHT);
+      dwellingBodyData = UpdateDwellingData(dwellingBodyData, unitInfo);
 
       string modifiedHeaderData = JsonConvert.SerializeObject(headerData);
       string modifiedDwellingBodyData = JsonConvert.SerializeObject(dwellingBodyData);
 
       CreateObjectFromData(modifiedHeaderData, point);
       CreateObjectFromData(modifiedDwellingBodyData, point);
+    }
+
+    private static ObjectData UpdateDwellingData(ObjectData dwellingBodyData, UnitInformation unitInfo)
+    {
+      var marginTopAndBot = 0.16;
+      var headers = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
+      if (headers != null)
+      {
+        headers.Contents = "";
+        string dwellingTitle = "Dwelling Information:".Underline().NewLine();
+        string dwellingSubtitles = "Floor Area:".NewLine() +
+                                   "Heater:".NewLine() +
+                                   "Dryer:".NewLine() +
+                                   "Oven:".NewLine() +
+                                   "Cooktop:";
+        string dwellingTitleAndSubtitles = dwellingTitle + dwellingSubtitles;
+        headers.Contents = dwellingTitleAndSubtitles.SetFont("Arial");
+      }
+
+      var values = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
+      if (values != null)
+      {
+        values.Contents = "";
+        string dwellingValues = "".NewLine() +
+                                $"{unitInfo.DwellingArea.FloorArea} ft\u00B2".NewLine() +
+                                $"{((unitInfo.DwellingArea.ElectricHeater) ? "Electric" : "Gas")}".NewLine() +
+                                $"{((unitInfo.DwellingArea.ElectricDryer) ? "Electric" : "Gas")}".NewLine() +
+                                $"{((unitInfo.DwellingArea.ElectricOven) ? "Electric" : "Gas")}".NewLine() +
+                                $"{((unitInfo.DwellingArea.ElectricCooktop) ? "Electric" : "Gas")}";
+        values.Contents = dwellingValues.SetFont("Arial");
+      }
+
+      return dwellingBodyData;
     }
 
     private static ObjectData ShiftData(ObjectData bodyData, double shiftHeight)
@@ -614,6 +650,31 @@ namespace GMEPElectricalResidential
     }
   }
 
+  public static class StringExtensions
+  {
+    public static string fontName = "Arial";
+
+    public static string Underline(this string text)
+    {
+      return "\\L" + text + "\\l";
+    }
+
+    public static string MakeBold(this string text)
+    {
+      return "{\\b1;" + text + "}";
+    }
+
+    public static string NewLine(this string text)
+    {
+      return text + "\\P";
+    }
+
+    public static string SetFont(this string text, string fontName)
+    {
+      return $"{{\\F{fontName};" + text + "}";
+    }
+  }
+
   internal class ObjectData
   {
     public List<PolylineData> Polylines { get; set; }
@@ -624,6 +685,8 @@ namespace GMEPElectricalResidential
     public List<MTextData> MTexts { get; set; }
     public List<TextData> Texts { get; set; }
     public List<SolidData> Solids { get; set; }
+
+    public double TotalHeight { get; set; }
 
     public ObjectData()
     {
