@@ -1,0 +1,64 @@
+{
+  "Polylines": [
+    {
+      "Vectors": [
+        {
+          "X": -7.0,
+          "Y": 0.0,
+          "Z": 0.0
+        },
+        {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0
+        },
+        {
+          "X": 0.0,
+          "Y": -0.75,
+          "Z": 0.0
+        },
+        {
+          "X": -7.0,
+          "Y": -0.75,
+          "Z": 0.0
+        }
+      ],
+      "LineType": "ByLayer",
+      "Closed": true,
+      "Layer": "E-TEXT"
+    }
+  ],
+  "Lines": [],
+  "Arcs": [],
+  "Circles": [],
+  "Ellipses": [],
+  "MTexts": [
+    {
+      "Style": "Standard",
+      "Justification": "MiddleCenter",
+      "Contents": "{\\Farial|c0;SERVICE LOAD CALCULATION}",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -3.5,
+        "Y": -0.37152114597544283,
+        "Z": 6.1232339957367663E-18
+      },
+      "LineSpaceDistance": 0.33333333333333331,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.2,
+      "Width": 6.4310568314888314,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    }
+  ],
+  "Texts": [],
+  "Solids": []
+}

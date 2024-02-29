@@ -1,0 +1,61 @@
+{
+  "Polylines": [],
+  "Lines": [],
+  "Arcs": [],
+  "Circles": [],
+  "Ellipses": [],
+  "MTexts": [
+    {
+      "Style": "Standard",
+      "Justification": "TopRight",
+      "Contents": "{\\Farial|c0;\\PSubtitle VA}",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -0.13877320921318059,
+        "Y": -0.15290150460731589,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "{\\Farial|c0;\\LTitle:\\l\\PSubtitle:}",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -6.7999732092131779,
+        "Y": -0.15293750679322038,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    }
+  ],
+  "Texts": [],
+  "Solids": []
+}

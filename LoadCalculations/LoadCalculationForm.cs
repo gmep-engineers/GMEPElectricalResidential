@@ -1,4 +1,6 @@
-﻿using Autodesk.AutoCAD.DatabaseServices;
+﻿using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
 using Newtonsoft.Json;
@@ -18,9 +20,11 @@ namespace GMEPElectricalResidential
   public partial class LoadCalculationForm : Form
   {
     private int _tabID = 0;
+    public Commands Commands { get; }
 
-    public LoadCalculationForm()
+    public LoadCalculationForm(Commands commands)
     {
+      Commands = commands;
       InitializeComponent();
       bool createdTab = LoadSavedUnitLoadCalculations();
       if (!createdTab)
@@ -111,13 +115,9 @@ namespace GMEPElectricalResidential
       }
     }
 
-    private void SaveLoadCalculationForm()
+    private List<UnitInformation> AllUnitInformation()
     {
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
-      string baseSaveDirectory = Path.Combine(dwgDirectory, "Load Calculation Saves");
-
-      Directory.CreateDirectory(baseSaveDirectory);
+      List<UnitInformation> allUnitInformation = new List<UnitInformation>();
 
       for (int i = 0; i < TAB_CONTROL.TabCount; i++)
       {
@@ -127,31 +127,50 @@ namespace GMEPElectricalResidential
         if (unitLoadCalculation != null)
         {
           var unitInformation = unitLoadCalculation.RetrieveUnitInformation();
-
-          string unitDirectory = $"Unit {tabPage.Text.Replace("Unit", "").Trim()} - ID{tabPage.Tag}";
-          string saveDirectory = Path.Combine(baseSaveDirectory, unitDirectory);
-
-          if (!Directory.Exists(saveDirectory))
-          {
-            var existingDirectory = Directory.GetDirectories(baseSaveDirectory)
-                .FirstOrDefault(dir => dir.Contains($"ID{tabPage.Tag}"));
-
-            if (existingDirectory != null)
-            {
-              Directory.Move(existingDirectory, saveDirectory);
-            }
-            else
-            {
-              Directory.CreateDirectory(saveDirectory);
-            }
-          }
-
-          string json = JsonConvert.SerializeObject(unitInformation, Formatting.Indented);
-
-          string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-          string savePath = Path.Combine(saveDirectory, $"{timestamp}.json");
-          File.WriteAllText(savePath, json);
+          allUnitInformation.Add(unitInformation);
         }
+      }
+
+      return allUnitInformation;
+    }
+
+    private void SaveLoadCalculationForm()
+    {
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
+      string baseSaveDirectory = Path.Combine(dwgDirectory, "Load Calculation Saves");
+
+      Directory.CreateDirectory(baseSaveDirectory);
+
+      List<UnitInformation> allUnitInformation = AllUnitInformation();
+
+      for (int i = 0; i < allUnitInformation.Count; i++)
+      {
+        var unitInformation = allUnitInformation[i];
+
+        string unitDirectory = $"Unit {unitInformation.Name} - ID{i}";
+        string saveDirectory = Path.Combine(baseSaveDirectory, unitDirectory);
+
+        if (!Directory.Exists(saveDirectory))
+        {
+          var existingDirectory = Directory.GetDirectories(baseSaveDirectory)
+              .FirstOrDefault(dir => dir.Contains($"ID{i}"));
+
+          if (existingDirectory != null)
+          {
+            Directory.Move(existingDirectory, saveDirectory);
+          }
+          else
+          {
+            Directory.CreateDirectory(saveDirectory);
+          }
+        }
+
+        string json = JsonConvert.SerializeObject(unitInformation, Formatting.Indented);
+
+        string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+        string savePath = Path.Combine(saveDirectory, $"{timestamp}.json");
+        File.WriteAllText(savePath, json);
       }
     }
 
@@ -207,6 +226,45 @@ namespace GMEPElectricalResidential
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
       doc.Editor.WriteMessage(preMessage);
       doc.Editor.WriteMessage(message);
+    }
+
+    private void CREATE_Click(object sender, EventArgs e)
+    {
+      var allUnitInfo = AllUnitInformation();
+
+      Close();
+
+      Autodesk.AutoCAD.ApplicationServices.Application.MainWindow.Focus();
+
+      using (DocumentLock docLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument())
+      {
+        Point3d point = UserClick();
+        foreach (var unitInfo in allUnitInfo)
+        {
+          Commands.CreateUnitLoadCalculationTable(unitInfo, point);
+        }
+      }
+    }
+
+    private Point3d UserClick()
+    {
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      var ed = doc.Editor;
+
+      PromptPointResult pPtRes;
+      PromptPointOptions pPtOpts = new PromptPointOptions("");
+
+      pPtOpts.Message = "\nClick a point to place the unit load calculation tables: ";
+      pPtRes = ed.GetPoint(pPtOpts);
+
+      if (pPtRes.Status == PromptStatus.OK)
+      {
+        return pPtRes.Value;
+      }
+      else
+      {
+        return new Point3d();
+      }
     }
   }
 }

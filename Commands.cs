@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Data;
 
 namespace GMEPElectricalResidential
 {
@@ -33,7 +34,7 @@ namespace GMEPElectricalResidential
     {
       if (_loadCalculationForm == null || _loadCalculationForm.IsDisposed)
       {
-        _loadCalculationForm = new LoadCalculationForm();
+        _loadCalculationForm = new LoadCalculationForm(this);
       }
 
       _loadCalculationForm.Show();
@@ -104,25 +105,12 @@ namespace GMEPElectricalResidential
       SaveDataToJsonFile(data, "data.json");
     }
 
-    [CommandMethod("CreateObjectFromData")]
-    public static void CreateObjectFromData()
+    public static void CreateObjectFromData(string jsonData, Point3d basePoint)
     {
-      string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-      string filePath = Path.Combine(desktopPath, "data.json");
-      string jsonData = File.ReadAllText(filePath);
-
       ObjectData objectData = JsonConvert.DeserializeObject<ObjectData>(jsonData);
 
       Document acDoc = Application.DocumentManager.MdiActiveDocument;
       Database acCurDb = acDoc.Database;
-      Editor ed = acDoc.Editor;
-
-      PromptPointOptions ppo = new PromptPointOptions("Select a point: ");
-      PromptPointResult ppr = ed.GetPoint(ppo);
-
-      if (ppr.Status != PromptStatus.OK) return;
-
-      Point3d basePoint = ppr.Value;
 
       using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
       {
@@ -181,6 +169,89 @@ namespace GMEPElectricalResidential
 
         acTrans.Commit();
       }
+    }
+
+    public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d point)
+    {
+      /* Create a new table
+       * 1. Retrieves the template json data and deserialized it to an ObjectData object
+       * 2. In the jsondata, access the "MTexts" property, sifts through the list of MText objects, checking the "Contents" property if the string contains "SERVICE LOAD CALCULATION" and adds a string to the end of it: $" - Unit {unitInformation.Name}"
+       * 3.
+       *
+       *
+       */
+      double HEADER_HEIGHT = 0.75;
+
+      ObjectData headerData = GetCopyPasteData("UnitLoadCalculationHeader");
+      ObjectData bodyData = GetCopyPasteData("UnitLoadCalculationBody");
+
+      ObjectData dwellingBodyData = ShiftData(bodyData, -HEADER_HEIGHT);
+
+      string modifiedHeaderData = JsonConvert.SerializeObject(headerData);
+      string modifiedDwellingBodyData = JsonConvert.SerializeObject(dwellingBodyData);
+
+      CreateObjectFromData(modifiedHeaderData, point);
+      CreateObjectFromData(modifiedDwellingBodyData, point);
+    }
+
+    private static ObjectData ShiftData(ObjectData bodyData, double shiftHeight)
+    {
+      foreach (var polyline in bodyData.Polylines)
+      {
+        for (int i = 0; i < polyline.Vectors.Count; i++)
+        {
+          polyline.Vectors[i].Y += shiftHeight;
+        }
+      }
+
+      foreach (var line in bodyData.Lines)
+      {
+        line.StartPoint.Y += shiftHeight;
+        line.EndPoint.Y += shiftHeight;
+      }
+
+      foreach (var arc in bodyData.Arcs)
+      {
+        arc.Center.Y += shiftHeight;
+      }
+
+      foreach (var circle in bodyData.Circles)
+      {
+        circle.Center.Y += shiftHeight;
+      }
+
+      foreach (var ellipse in bodyData.Ellipses)
+      {
+        ellipse.Center.Y += shiftHeight;
+      }
+
+      foreach (var mText in bodyData.MTexts)
+      {
+        mText.Location.Y += shiftHeight;
+      }
+
+      foreach (var text in bodyData.Texts)
+      {
+        text.Location.Y += shiftHeight;
+      }
+
+      foreach (var solid in bodyData.Solids)
+      {
+        for (int i = 0; i < solid.Vertices.Count; i++)
+        {
+          solid.Vertices[i].Y += shiftHeight;
+        }
+      }
+
+      return bodyData;
+    }
+
+    private static ObjectData GetCopyPasteData(string fileName)
+    {
+      string relativeFilePath = $"LoadCalculations\\CopyPaste\\{fileName}.json";
+      string jsonData = File.ReadAllText(relativeFilePath);
+      ObjectData objectData = JsonConvert.DeserializeObject<ObjectData>(jsonData);
+      return objectData;
     }
 
     private static Point3d CreateText(Point3d basePoint, Transaction acTrans, BlockTableRecord acBlkTblRec, TextData text)

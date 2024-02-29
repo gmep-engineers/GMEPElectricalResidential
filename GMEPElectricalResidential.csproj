@@ -173,6 +173,12 @@
     <Content Include="0_Notes.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="LoadCalculations\CopyPaste\UnitLoadCalculationHeader.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="LoadCalculations\CopyPaste\UnitLoadCalculationBody.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

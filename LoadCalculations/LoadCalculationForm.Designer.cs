@@ -32,6 +32,7 @@
       this.CREATE_UNIT_BUTTON = new System.Windows.Forms.Button();
       this.DELETE_UNIT_BUTTON = new System.Windows.Forms.Button();
       this.SAVE_BUTTON = new System.Windows.Forms.Button();
+      this.CREATE = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // TAB_CONTROL
@@ -76,12 +77,24 @@
       this.SAVE_BUTTON.Text = "Save";
       this.SAVE_BUTTON.UseVisualStyleBackColor = true;
       // 
+      // CREATE
+      // 
+      this.CREATE.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.CREATE.Location = new System.Drawing.Point(12, 92);
+      this.CREATE.Name = "CREATE";
+      this.CREATE.Size = new System.Drawing.Size(83, 34);
+      this.CREATE.TabIndex = 5;
+      this.CREATE.Text = "Create";
+      this.CREATE.UseVisualStyleBackColor = true;
+      this.CREATE.Click += new System.EventHandler(this.CREATE_Click);
+      // 
       // LoadCalculationForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Control;
       this.ClientSize = new System.Drawing.Size(1596, 675);
+      this.Controls.Add(this.CREATE);
       this.Controls.Add(this.SAVE_BUTTON);
       this.Controls.Add(this.DELETE_UNIT_BUTTON);
       this.Controls.Add(this.CREATE_UNIT_BUTTON);
@@ -98,5 +111,6 @@
     private System.Windows.Forms.Button CREATE_UNIT_BUTTON;
     private System.Windows.Forms.Button DELETE_UNIT_BUTTON;
     private System.Windows.Forms.Button SAVE_BUTTON;
+    private System.Windows.Forms.Button CREATE;
   }
 }
