@@ -183,12 +183,14 @@ namespace GMEPElectricalResidential
        */
 
       double HEADER_HEIGHT = 0.75;
+      int dwellingNumberOfLines = 6;
 
       ObjectData headerData = GetCopyPasteData("UnitLoadCalculationHeader");
       ObjectData bodyData = GetCopyPasteData("UnitLoadCalculationBody");
 
       ObjectData dwellingBodyData = ShiftData(bodyData, -HEADER_HEIGHT);
       dwellingBodyData = UpdateDwellingData(dwellingBodyData, unitInfo);
+      double dwellingSectionHeight = CreateUnitLoadCalculationRectangle(point, -HEADER_HEIGHT, dwellingNumberOfLines);
 
       string modifiedHeaderData = JsonConvert.SerializeObject(headerData);
       string modifiedDwellingBodyData = JsonConvert.SerializeObject(dwellingBodyData);
@@ -197,9 +199,65 @@ namespace GMEPElectricalResidential
       CreateObjectFromData(modifiedDwellingBodyData, point);
     }
 
+    private static double CreateUnitLoadCalculationRectangle(Point3d point, double shiftY, int numberOfRows)
+    {
+      double MARGIN_TOP_BOT = 0.16;
+      double ROW_HEIGHT = 0.234;
+      double WIDTH = 7.0;
+
+      Point3d topRight = new Point3d(point.X, point.Y + shiftY, point.Z);
+      Point3d topLeft = new Point3d(point.X - WIDTH, point.Y + shiftY, point.Z);
+
+      double height = MARGIN_TOP_BOT * 2 + (ROW_HEIGHT * numberOfRows);
+
+      Point3d bottomLeft = new Point3d(point.X - WIDTH, point.Y + shiftY - height, point.Z);
+      Point3d bottomRight = new Point3d(point.X, point.Y + shiftY - height, point.Z);
+
+      List<Point3d> points = new List<Point3d> { topRight, topLeft, bottomLeft, bottomRight };
+
+      CreateClosedPolylineGivenPoints(points);
+
+      return height;
+    }
+
+    private static void CreateClosedPolylineGivenPoints(List<Point3d> points)
+    {
+      Document acDoc = Application.DocumentManager.MdiActiveDocument;
+      Database acCurDb = acDoc.Database;
+
+      using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
+      {
+        BlockTable acBlkTbl;
+        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
+
+        BlockTableRecord acBlkTblRec;
+        if (acCurDb.TileMode)
+        {
+          acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+        }
+        else
+        {
+          acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.PaperSpace], OpenMode.ForWrite) as BlockTableRecord;
+        }
+
+        Polyline acPoly = new Polyline();
+        for (int i = 0; i < points.Count; i++)
+        {
+          acPoly.AddVertexAt(i, new Point2d(points[i].X, points[i].Y), 0, 0, 0);
+        }
+
+        acPoly.Closed = true;
+        acPoly.Layer = "E-TEXT";
+
+        acBlkTblRec.AppendEntity(acPoly);
+        acTrans.AddNewlyCreatedDBObject(acPoly, true);
+
+        acTrans.Commit();
+      }
+    }
+
     private static ObjectData UpdateDwellingData(ObjectData dwellingBodyData, UnitInformation unitInfo)
     {
-      var marginTopAndBot = 0.16;
       var headers = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
       if (headers != null)
       {
