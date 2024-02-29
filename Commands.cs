@@ -129,7 +129,15 @@ namespace GMEPElectricalResidential
         BlockTable acBlkTbl;
         acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
         BlockTableRecord acBlkTblRec;
-        acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.PaperSpace], OpenMode.ForWrite) as BlockTableRecord;
+
+        if (acCurDb.TileMode)
+        {
+          acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+        }
+        else
+        {
+          acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.PaperSpace], OpenMode.ForWrite) as BlockTableRecord;
+        }
 
         foreach (var polyline in objectData.Polylines)
         {
@@ -237,14 +245,16 @@ namespace GMEPElectricalResidential
     {
       MText mText = new MText();
       mText.Layer = mTextData.Layer;
-      SetMTextStyleByName(mText, mTextData.Style);
+      SetTextStyleByName(mText, mTextData.Style);
       mText.Attachment = (AttachmentPoint)Enum.Parse(typeof(AttachmentPoint), mTextData.Justification);
       mText.Contents = mTextData.Contents;
       mText.Location = new Point3d(basePoint.X + mTextData.Location.X, basePoint.Y + mTextData.Location.Y, basePoint.Z + mTextData.Location.Z);
-      mText.LineSpaceDistance = mTextData.LineSpaceDistance;
-      mText.Height = mTextData.Height;
+      //mText.LineSpacingStyle = mTextData.LineSpacingStyle;
+      //mText.LineSpacingFactor = mTextData.LineSpaceFactor;
+      mText.TextHeight = mTextData.TextHeight;
       mText.Width = mTextData.Width;
-      mText.Rotation = mTextData.Rotation;
+      //mText.Rotation = mTextData.Rotation;
+      //mText.Direction = mTextData.Direction;
 
       acBlkTblRec.AppendEntity(mText);
       acTrans.AddNewlyCreatedDBObject(mText, true);
@@ -436,9 +446,12 @@ namespace GMEPElectricalResidential
           Z = mText.Location.Z - origin.Z
         },
         LineSpaceDistance = mText.LineSpaceDistance,
-        Height = mText.ActualHeight,
-        Width = mText.ActualWidth,
+        LineSpaceFactor = mText.LineSpacingFactor,
+        LineSpacingStyle = mText.LineSpacingStyle,
+        TextHeight = mText.TextHeight,
+        Width = mText.Width,
         Rotation = mText.Rotation,
+        Direction = mText.Direction
       };
 
       data.MTexts.Add(mTextData);
@@ -549,6 +562,7 @@ namespace GMEPElectricalResidential
       Circles = new List<CircleData>();
       Ellipses = new List<EllipseData>();
       MTexts = new List<MTextData>();
+      Texts = new List<TextData>();
       Solids = new List<SolidData>();
     }
   }
@@ -622,9 +636,12 @@ namespace GMEPElectricalResidential
     public string Style { get; set; }
     public string Justification { get; set; }
     public string Contents { get; set; }
+    public Vector3d Direction { get; set; }
     public SimpleVector3d Location { get; set; }
     public double LineSpaceDistance { get; set; }
-    public double Height { get; set; }
+    public double LineSpaceFactor { get; set; }
+    public LineSpacingStyle LineSpacingStyle { get; set; }
+    public double TextHeight { get; set; }
     public double Width { get; set; }
     public double Rotation { get; set; }
   }
@@ -644,80 +661,5 @@ namespace GMEPElectricalResidential
     public double X { get; set; }
     public double Y { get; set; }
     public double Z { get; set; }
-  }
-
-  public class BaseDataConverter : JsonConverter
-  {
-    public override bool CanConvert(Type objectType)
-    {
-      return (objectType == typeof(BaseData));
-    }
-
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-    {
-      JObject jo = JObject.Load(reader);
-      switch (jo["Type"].Value<string>())
-      {
-        case "PolylineData":
-          return jo.ToObject<PolylineData>(serializer);
-
-        case "LineData":
-          return jo.ToObject<LineData>(serializer);
-
-        case "ArcData":
-          return jo.ToObject<ArcData>(serializer);
-
-        case "CircleData":
-          return jo.ToObject<CircleData>(serializer);
-
-        case "EllipseData":
-          return jo.ToObject<EllipseData>(serializer);
-
-        case "MTextData":
-          return jo.ToObject<MTextData>(serializer);
-
-        case "SolidData":
-          return jo.ToObject<SolidData>(serializer);
-
-        default:
-          throw new System.Exception("Type property not found!");
-      }
-    }
-
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-    {
-      if (value is PolylineData polylineData)
-      {
-        serializer.Serialize(writer, polylineData);
-      }
-      else if (value is LineData lineData)
-      {
-        serializer.Serialize(writer, lineData);
-      }
-      else if (value is ArcData arcData)
-      {
-        serializer.Serialize(writer, arcData);
-      }
-      else if (value is CircleData circleData)
-      {
-        serializer.Serialize(writer, circleData);
-      }
-      else if (value is EllipseData ellipseData)
-      {
-        serializer.Serialize(writer, ellipseData);
-      }
-      else if (value is MTextData mTextData)
-      {
-        serializer.Serialize(writer, mTextData);
-      }
-      else if (value is SolidData solidData)
-      {
-        serializer.Serialize(writer, solidData);
-      }
-      else
-      {
-        throw new System.Exception("Unknown type!");
-      }
-    }
   }
 }
