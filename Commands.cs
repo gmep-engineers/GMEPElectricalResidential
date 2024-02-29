@@ -174,14 +174,6 @@ namespace GMEPElectricalResidential
 
     public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d point)
     {
-      /* Create a new table
-       * 1. Retrieves the template json data and deserialized it to an ObjectData object
-       * 2. In the jsondata, access the "MTexts" property, sifts through the list of MText objects, checking the "Contents" property if the string contains "SERVICE LOAD CALCULATION" and adds a string to the end of it: $" - Unit {unitInformation.Name}"
-       * 3.
-       *
-       *
-       */
-
       double HEADER_HEIGHT = 0.75;
       int dwellingNumberOfLines = 6;
 
@@ -191,6 +183,8 @@ namespace GMEPElectricalResidential
       ObjectData dwellingBodyData = ShiftData(bodyData, -HEADER_HEIGHT);
       dwellingBodyData = UpdateDwellingData(dwellingBodyData, unitInfo);
       double dwellingSectionHeight = CreateUnitLoadCalculationRectangle(point, -HEADER_HEIGHT, dwellingNumberOfLines);
+
+      ObjectData generalBodyData = ShiftData(bodyData, -HEADER_HEIGHT - dwellingSectionHeight);
 
       string modifiedHeaderData = JsonConvert.SerializeObject(headerData);
       string modifiedDwellingBodyData = JsonConvert.SerializeObject(dwellingBodyData);
@@ -278,10 +272,10 @@ namespace GMEPElectricalResidential
         values.Contents = "";
         string dwellingValues = "".NewLine() +
                                 $"{unitInfo.DwellingArea.FloorArea} ft\u00B2".NewLine() +
-                                $"{((unitInfo.DwellingArea.ElectricHeater) ? "Electric" : "Gas")}".NewLine() +
-                                $"{((unitInfo.DwellingArea.ElectricDryer) ? "Electric" : "Gas")}".NewLine() +
-                                $"{((unitInfo.DwellingArea.ElectricOven) ? "Electric" : "Gas")}".NewLine() +
-                                $"{((unitInfo.DwellingArea.ElectricCooktop) ? "Electric" : "Gas")}";
+                                $"{unitInfo.DwellingArea.Heater}".NewLine() +
+                                $"{unitInfo.DwellingArea.Dryer}".NewLine() +
+                                $"{unitInfo.DwellingArea.Oven}".NewLine() +
+                                $"{unitInfo.DwellingArea.Cooktop}";
         values.Contents = dwellingValues.SetFont("Arial");
       }
 

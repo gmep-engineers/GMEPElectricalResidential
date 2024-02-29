@@ -36,15 +36,19 @@
       this.panel1 = new System.Windows.Forms.Panel();
       this.label4 = new System.Windows.Forms.Label();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.NA_HEATER = new System.Windows.Forms.RadioButton();
       this.GAS_HEATER = new System.Windows.Forms.RadioButton();
       this.ELECTRIC_HEATER = new System.Windows.Forms.RadioButton();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
+      this.NA_DRYER = new System.Windows.Forms.RadioButton();
       this.GAS_DRYER = new System.Windows.Forms.RadioButton();
       this.ELECTRIC_DRYER = new System.Windows.Forms.RadioButton();
       this.groupBox3 = new System.Windows.Forms.GroupBox();
+      this.NA_OVEN = new System.Windows.Forms.RadioButton();
       this.GAS_OVEN = new System.Windows.Forms.RadioButton();
       this.ELECTRIC_OVEN = new System.Windows.Forms.RadioButton();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.NA_COOKTOP = new System.Windows.Forms.RadioButton();
       this.GAS_COOKTOP = new System.Windows.Forms.RadioButton();
       this.ELECTRIC_COOKTOP = new System.Windows.Forms.RadioButton();
       this.panel2 = new System.Windows.Forms.Panel();
@@ -317,15 +321,28 @@
       // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.NA_HEATER);
       this.groupBox1.Controls.Add(this.GAS_HEATER);
       this.groupBox1.Controls.Add(this.ELECTRIC_HEATER);
       this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBox1.Location = new System.Drawing.Point(15, 302);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(153, 62);
+      this.groupBox1.Size = new System.Drawing.Size(206, 62);
       this.groupBox1.TabIndex = 3;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Heater";
+      // 
+      // NA_HEATER
+      // 
+      this.NA_HEATER.AutoSize = true;
+      this.NA_HEATER.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.NA_HEATER.Location = new System.Drawing.Point(156, 29);
+      this.NA_HEATER.Name = "NA_HEATER";
+      this.NA_HEATER.Size = new System.Drawing.Size(49, 24);
+      this.NA_HEATER.TabIndex = 10;
+      this.NA_HEATER.Text = "NA";
+      this.NA_HEATER.UseVisualStyleBackColor = true;
+      this.NA_HEATER.CheckedChanged += new System.EventHandler(this.NA_HEATER_CheckedChanged);
       // 
       // GAS_HEATER
       // 
@@ -355,15 +372,28 @@
       // 
       // groupBox2
       // 
+      this.groupBox2.Controls.Add(this.NA_DRYER);
       this.groupBox2.Controls.Add(this.GAS_DRYER);
       this.groupBox2.Controls.Add(this.ELECTRIC_DRYER);
       this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBox2.Location = new System.Drawing.Point(15, 370);
       this.groupBox2.Name = "groupBox2";
-      this.groupBox2.Size = new System.Drawing.Size(153, 62);
+      this.groupBox2.Size = new System.Drawing.Size(206, 62);
       this.groupBox2.TabIndex = 4;
       this.groupBox2.TabStop = false;
       this.groupBox2.Text = "Dryer";
+      // 
+      // NA_DRYER
+      // 
+      this.NA_DRYER.AutoSize = true;
+      this.NA_DRYER.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.NA_DRYER.Location = new System.Drawing.Point(156, 30);
+      this.NA_DRYER.Name = "NA_DRYER";
+      this.NA_DRYER.Size = new System.Drawing.Size(49, 24);
+      this.NA_DRYER.TabIndex = 11;
+      this.NA_DRYER.Text = "NA";
+      this.NA_DRYER.UseVisualStyleBackColor = true;
+      this.NA_DRYER.CheckedChanged += new System.EventHandler(this.NA_DRYER_CheckedChanged);
       // 
       // GAS_DRYER
       // 
@@ -393,15 +423,28 @@
       // 
       // groupBox3
       // 
+      this.groupBox3.Controls.Add(this.NA_OVEN);
       this.groupBox3.Controls.Add(this.GAS_OVEN);
       this.groupBox3.Controls.Add(this.ELECTRIC_OVEN);
       this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBox3.Location = new System.Drawing.Point(15, 438);
       this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(153, 62);
+      this.groupBox3.Size = new System.Drawing.Size(205, 62);
       this.groupBox3.TabIndex = 5;
       this.groupBox3.TabStop = false;
       this.groupBox3.Text = "Oven";
+      // 
+      // NA_OVEN
+      // 
+      this.NA_OVEN.AutoSize = true;
+      this.NA_OVEN.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.NA_OVEN.Location = new System.Drawing.Point(156, 29);
+      this.NA_OVEN.Name = "NA_OVEN";
+      this.NA_OVEN.Size = new System.Drawing.Size(49, 24);
+      this.NA_OVEN.TabIndex = 12;
+      this.NA_OVEN.Text = "NA";
+      this.NA_OVEN.UseVisualStyleBackColor = true;
+      this.NA_OVEN.CheckedChanged += new System.EventHandler(this.NA_OVEN_CheckedChanged);
       // 
       // GAS_OVEN
       // 
@@ -431,15 +474,28 @@
       // 
       // groupBox4
       // 
+      this.groupBox4.Controls.Add(this.NA_COOKTOP);
       this.groupBox4.Controls.Add(this.GAS_COOKTOP);
       this.groupBox4.Controls.Add(this.ELECTRIC_COOKTOP);
       this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBox4.Location = new System.Drawing.Point(15, 506);
       this.groupBox4.Name = "groupBox4";
-      this.groupBox4.Size = new System.Drawing.Size(153, 62);
+      this.groupBox4.Size = new System.Drawing.Size(205, 62);
       this.groupBox4.TabIndex = 6;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "Cooktop";
+      // 
+      // NA_COOKTOP
+      // 
+      this.NA_COOKTOP.AutoSize = true;
+      this.NA_COOKTOP.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.NA_COOKTOP.Location = new System.Drawing.Point(156, 29);
+      this.NA_COOKTOP.Name = "NA_COOKTOP";
+      this.NA_COOKTOP.Size = new System.Drawing.Size(49, 24);
+      this.NA_COOKTOP.TabIndex = 13;
+      this.NA_COOKTOP.Text = "NA";
+      this.NA_COOKTOP.UseVisualStyleBackColor = true;
+      this.NA_COOKTOP.CheckedChanged += new System.EventHandler(this.NA_COOKTOP_CheckedChanged);
       // 
       // GAS_COOKTOP
       // 
@@ -505,7 +561,7 @@
       // 
       this.panel3.BackColor = System.Drawing.SystemColors.Window;
       this.panel3.Controls.Add(this.SMALL_APPLIANCE_VA);
-      this.panel3.Location = new System.Drawing.Point(219, 159);
+      this.panel3.Location = new System.Drawing.Point(270, 157);
       this.panel3.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel3.Name = "panel3";
       this.panel3.Padding = new System.Windows.Forms.Padding(5);
@@ -554,7 +610,7 @@
             "23",
             "24",
             "25"});
-      this.SMALL_APPLIANCE_MULTIPLIER.Location = new System.Drawing.Point(355, 160);
+      this.SMALL_APPLIANCE_MULTIPLIER.Location = new System.Drawing.Point(406, 158);
       this.SMALL_APPLIANCE_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.SMALL_APPLIANCE_MULTIPLIER.Name = "SMALL_APPLIANCE_MULTIPLIER";
       this.SMALL_APPLIANCE_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -565,7 +621,7 @@
       // 
       this.label7.AutoSize = true;
       this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label7.Location = new System.Drawing.Point(217, 132);
+      this.label7.Location = new System.Drawing.Point(268, 130);
       this.label7.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label7.Name = "label7";
       this.label7.Size = new System.Drawing.Size(146, 24);
@@ -576,7 +632,7 @@
       // 
       this.label8.AutoSize = true;
       this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label8.Location = new System.Drawing.Point(216, 12);
+      this.label8.Location = new System.Drawing.Point(267, 10);
       this.label8.Margin = new System.Windows.Forms.Padding(0, 0, 0, 12);
       this.label8.Name = "label8";
       this.label8.Size = new System.Drawing.Size(443, 25);
@@ -587,7 +643,7 @@
       // 
       this.panel4.BackColor = System.Drawing.SystemColors.Window;
       this.panel4.Controls.Add(this.LAUNDRY_VA);
-      this.panel4.Location = new System.Drawing.Point(219, 226);
+      this.panel4.Location = new System.Drawing.Point(270, 224);
       this.panel4.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel4.Name = "panel4";
       this.panel4.Padding = new System.Windows.Forms.Padding(5);
@@ -636,7 +692,7 @@
             "23",
             "24",
             "25"});
-      this.LAUNDRY_MULTIPLIER.Location = new System.Drawing.Point(355, 227);
+      this.LAUNDRY_MULTIPLIER.Location = new System.Drawing.Point(406, 225);
       this.LAUNDRY_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.LAUNDRY_MULTIPLIER.Name = "LAUNDRY_MULTIPLIER";
       this.LAUNDRY_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -647,7 +703,7 @@
       // 
       this.label6.AutoSize = true;
       this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label6.Location = new System.Drawing.Point(217, 199);
+      this.label6.Location = new System.Drawing.Point(268, 197);
       this.label6.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label6.Name = "label6";
       this.label6.Size = new System.Drawing.Size(78, 24);
@@ -658,7 +714,7 @@
       // 
       this.panel5.BackColor = System.Drawing.SystemColors.Window;
       this.panel5.Controls.Add(this.BATHROOM_VA);
-      this.panel5.Location = new System.Drawing.Point(219, 293);
+      this.panel5.Location = new System.Drawing.Point(270, 291);
       this.panel5.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel5.Name = "panel5";
       this.panel5.Padding = new System.Windows.Forms.Padding(5);
@@ -707,7 +763,7 @@
             "23",
             "24",
             "25"});
-      this.BATHROOM_MULTIPLIER.Location = new System.Drawing.Point(355, 294);
+      this.BATHROOM_MULTIPLIER.Location = new System.Drawing.Point(406, 292);
       this.BATHROOM_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.BATHROOM_MULTIPLIER.Name = "BATHROOM_MULTIPLIER";
       this.BATHROOM_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -718,7 +774,7 @@
       // 
       this.label9.AutoSize = true;
       this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label9.Location = new System.Drawing.Point(217, 266);
+      this.label9.Location = new System.Drawing.Point(268, 264);
       this.label9.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label9.Name = "label9";
       this.label9.Size = new System.Drawing.Size(91, 24);
@@ -729,7 +785,7 @@
       // 
       this.panel6.BackColor = System.Drawing.SystemColors.Window;
       this.panel6.Controls.Add(this.DISHWASHER_VA);
-      this.panel6.Location = new System.Drawing.Point(219, 360);
+      this.panel6.Location = new System.Drawing.Point(270, 358);
       this.panel6.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel6.Name = "panel6";
       this.panel6.Padding = new System.Windows.Forms.Padding(5);
@@ -778,7 +834,7 @@
             "23",
             "24",
             "25"});
-      this.DISHWASHER_MULTIPLIER.Location = new System.Drawing.Point(355, 361);
+      this.DISHWASHER_MULTIPLIER.Location = new System.Drawing.Point(406, 359);
       this.DISHWASHER_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.DISHWASHER_MULTIPLIER.Name = "DISHWASHER_MULTIPLIER";
       this.DISHWASHER_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -789,7 +845,7 @@
       // 
       this.label10.AutoSize = true;
       this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label10.Location = new System.Drawing.Point(217, 333);
+      this.label10.Location = new System.Drawing.Point(268, 331);
       this.label10.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(108, 24);
@@ -800,7 +856,7 @@
       // 
       this.panel7.BackColor = System.Drawing.SystemColors.Window;
       this.panel7.Controls.Add(this.MICROWAVE_OVEN_VA);
-      this.panel7.Location = new System.Drawing.Point(219, 427);
+      this.panel7.Location = new System.Drawing.Point(270, 425);
       this.panel7.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel7.Name = "panel7";
       this.panel7.Padding = new System.Windows.Forms.Padding(5);
@@ -849,7 +905,7 @@
             "23",
             "24",
             "25"});
-      this.MICROWAVE_OVEN_MULTIPLIER.Location = new System.Drawing.Point(355, 428);
+      this.MICROWAVE_OVEN_MULTIPLIER.Location = new System.Drawing.Point(406, 426);
       this.MICROWAVE_OVEN_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.MICROWAVE_OVEN_MULTIPLIER.Name = "MICROWAVE_OVEN_MULTIPLIER";
       this.MICROWAVE_OVEN_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -860,7 +916,7 @@
       // 
       this.label11.AutoSize = true;
       this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label11.Location = new System.Drawing.Point(217, 400);
+      this.label11.Location = new System.Drawing.Point(268, 398);
       this.label11.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label11.Name = "label11";
       this.label11.Size = new System.Drawing.Size(152, 24);
@@ -871,7 +927,7 @@
       // 
       this.panel8.BackColor = System.Drawing.SystemColors.Window;
       this.panel8.Controls.Add(this.GARBAGE_DISPOSAL_VA);
-      this.panel8.Location = new System.Drawing.Point(219, 494);
+      this.panel8.Location = new System.Drawing.Point(270, 492);
       this.panel8.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel8.Name = "panel8";
       this.panel8.Padding = new System.Windows.Forms.Padding(5);
@@ -920,7 +976,7 @@
             "23",
             "24",
             "25"});
-      this.GARBAGE_DISPOSAL_MULTIPLIER.Location = new System.Drawing.Point(355, 495);
+      this.GARBAGE_DISPOSAL_MULTIPLIER.Location = new System.Drawing.Point(406, 493);
       this.GARBAGE_DISPOSAL_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.GARBAGE_DISPOSAL_MULTIPLIER.Name = "GARBAGE_DISPOSAL_MULTIPLIER";
       this.GARBAGE_DISPOSAL_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -931,7 +987,7 @@
       // 
       this.label12.AutoSize = true;
       this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label12.Location = new System.Drawing.Point(217, 467);
+      this.label12.Location = new System.Drawing.Point(268, 465);
       this.label12.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label12.Name = "label12";
       this.label12.Size = new System.Drawing.Size(159, 24);
@@ -942,7 +998,7 @@
       // 
       this.panel9.BackColor = System.Drawing.SystemColors.Window;
       this.panel9.Controls.Add(this.BATHROOM_FANS_VA);
-      this.panel9.Location = new System.Drawing.Point(219, 561);
+      this.panel9.Location = new System.Drawing.Point(270, 559);
       this.panel9.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel9.Name = "panel9";
       this.panel9.Padding = new System.Windows.Forms.Padding(5);
@@ -991,7 +1047,7 @@
             "23",
             "24",
             "25"});
-      this.BATHROOM_FANS_MULTIPLIER.Location = new System.Drawing.Point(355, 562);
+      this.BATHROOM_FANS_MULTIPLIER.Location = new System.Drawing.Point(406, 560);
       this.BATHROOM_FANS_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.BATHROOM_FANS_MULTIPLIER.Name = "BATHROOM_FANS_MULTIPLIER";
       this.BATHROOM_FANS_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -1002,7 +1058,7 @@
       // 
       this.label13.AutoSize = true;
       this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label13.Location = new System.Drawing.Point(217, 534);
+      this.label13.Location = new System.Drawing.Point(268, 532);
       this.label13.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label13.Name = "label13";
       this.label13.Size = new System.Drawing.Size(138, 24);
@@ -1013,7 +1069,7 @@
       // 
       this.panel10.BackColor = System.Drawing.SystemColors.Window;
       this.panel10.Controls.Add(this.GARAGE_DOOR_OPENER_VA);
-      this.panel10.Location = new System.Drawing.Point(431, 160);
+      this.panel10.Location = new System.Drawing.Point(482, 158);
       this.panel10.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel10.Name = "panel10";
       this.panel10.Padding = new System.Windows.Forms.Padding(5);
@@ -1062,7 +1118,7 @@
             "23",
             "24",
             "25"});
-      this.GARAGE_DOOR_OPENER_MULTIPLIER.Location = new System.Drawing.Point(567, 160);
+      this.GARAGE_DOOR_OPENER_MULTIPLIER.Location = new System.Drawing.Point(618, 158);
       this.GARAGE_DOOR_OPENER_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.GARAGE_DOOR_OPENER_MULTIPLIER.Name = "GARAGE_DOOR_OPENER_MULTIPLIER";
       this.GARAGE_DOOR_OPENER_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -1073,7 +1129,7 @@
       // 
       this.label14.AutoSize = true;
       this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label14.Location = new System.Drawing.Point(429, 133);
+      this.label14.Location = new System.Drawing.Point(480, 131);
       this.label14.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label14.Name = "label14";
       this.label14.Size = new System.Drawing.Size(188, 24);
@@ -1084,7 +1140,7 @@
       // 
       this.panel13.BackColor = System.Drawing.SystemColors.Window;
       this.panel13.Controls.Add(this.GENERAL_CUSTOM_NAME);
-      this.panel13.Location = new System.Drawing.Point(693, 211);
+      this.panel13.Location = new System.Drawing.Point(744, 209);
       this.panel13.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel13.Name = "panel13";
       this.panel13.Padding = new System.Windows.Forms.Padding(5);
@@ -1132,7 +1188,7 @@
             "23",
             "24",
             "25"});
-      this.GENERAL_CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(964, 212);
+      this.GENERAL_CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(1015, 210);
       this.GENERAL_CUSTOM_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.GENERAL_CUSTOM_MULTIPLIER.Name = "GENERAL_CUSTOM_MULTIPLIER";
       this.GENERAL_CUSTOM_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -1143,7 +1199,7 @@
       // 
       this.label17.AutoSize = true;
       this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label17.Location = new System.Drawing.Point(689, 51);
+      this.label17.Location = new System.Drawing.Point(740, 49);
       this.label17.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label17.Name = "label17";
       this.label17.Size = new System.Drawing.Size(122, 24);
@@ -1154,7 +1210,7 @@
       // 
       this.panel14.BackColor = System.Drawing.SystemColors.Window;
       this.panel14.Controls.Add(this.WATER_HEATER_VA);
-      this.panel14.Location = new System.Drawing.Point(429, 562);
+      this.panel14.Location = new System.Drawing.Point(480, 560);
       this.panel14.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel14.Name = "panel14";
       this.panel14.Padding = new System.Windows.Forms.Padding(5);
@@ -1203,7 +1259,7 @@
             "23",
             "24",
             "25"});
-      this.WATER_HEATER_MULTIPLIER.Location = new System.Drawing.Point(566, 562);
+      this.WATER_HEATER_MULTIPLIER.Location = new System.Drawing.Point(617, 560);
       this.WATER_HEATER_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.WATER_HEATER_MULTIPLIER.Name = "WATER_HEATER_MULTIPLIER";
       this.WATER_HEATER_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -1214,7 +1270,7 @@
       // 
       this.label18.AutoSize = true;
       this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label18.Location = new System.Drawing.Point(427, 535);
+      this.label18.Location = new System.Drawing.Point(478, 533);
       this.label18.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label18.Name = "label18";
       this.label18.Size = new System.Drawing.Size(120, 24);
@@ -1225,7 +1281,7 @@
       // 
       this.panel15.BackColor = System.Drawing.SystemColors.Window;
       this.panel15.Controls.Add(this.OVEN_VA);
-      this.panel15.Location = new System.Drawing.Point(429, 428);
+      this.panel15.Location = new System.Drawing.Point(480, 426);
       this.panel15.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel15.Name = "panel15";
       this.panel15.Padding = new System.Windows.Forms.Padding(5);
@@ -1274,7 +1330,7 @@
             "23",
             "24",
             "25"});
-      this.OVEN_MULTIPLIER.Location = new System.Drawing.Point(566, 428);
+      this.OVEN_MULTIPLIER.Location = new System.Drawing.Point(617, 426);
       this.OVEN_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.OVEN_MULTIPLIER.Name = "OVEN_MULTIPLIER";
       this.OVEN_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -1285,7 +1341,7 @@
       // 
       this.label19.AutoSize = true;
       this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label19.Location = new System.Drawing.Point(427, 401);
+      this.label19.Location = new System.Drawing.Point(478, 399);
       this.label19.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label19.Name = "label19";
       this.label19.Size = new System.Drawing.Size(56, 24);
@@ -1296,7 +1352,7 @@
       // 
       this.panel16.BackColor = System.Drawing.SystemColors.Window;
       this.panel16.Controls.Add(this.REFRIGERATOR_VA);
-      this.panel16.Location = new System.Drawing.Point(429, 295);
+      this.panel16.Location = new System.Drawing.Point(480, 293);
       this.panel16.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel16.Name = "panel16";
       this.panel16.Padding = new System.Windows.Forms.Padding(5);
@@ -1345,7 +1401,7 @@
             "23",
             "24",
             "25"});
-      this.REFRIGERATOR_MULTIPLIER.Location = new System.Drawing.Point(566, 295);
+      this.REFRIGERATOR_MULTIPLIER.Location = new System.Drawing.Point(617, 293);
       this.REFRIGERATOR_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.REFRIGERATOR_MULTIPLIER.Name = "REFRIGERATOR_MULTIPLIER";
       this.REFRIGERATOR_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -1356,7 +1412,7 @@
       // 
       this.label20.AutoSize = true;
       this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label20.Location = new System.Drawing.Point(427, 268);
+      this.label20.Location = new System.Drawing.Point(478, 266);
       this.label20.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label20.Name = "label20";
       this.label20.Size = new System.Drawing.Size(107, 24);
@@ -1367,7 +1423,7 @@
       // 
       this.panel17.BackColor = System.Drawing.SystemColors.Window;
       this.panel17.Controls.Add(this.RANGE_VA);
-      this.panel17.Location = new System.Drawing.Point(429, 361);
+      this.panel17.Location = new System.Drawing.Point(480, 359);
       this.panel17.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel17.Name = "panel17";
       this.panel17.Padding = new System.Windows.Forms.Padding(5);
@@ -1416,7 +1472,7 @@
             "23",
             "24",
             "25"});
-      this.RANGE_MULTIPLIER.Location = new System.Drawing.Point(566, 361);
+      this.RANGE_MULTIPLIER.Location = new System.Drawing.Point(617, 359);
       this.RANGE_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.RANGE_MULTIPLIER.Name = "RANGE_MULTIPLIER";
       this.RANGE_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -1427,7 +1483,7 @@
       // 
       this.label21.AutoSize = true;
       this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label21.Location = new System.Drawing.Point(427, 334);
+      this.label21.Location = new System.Drawing.Point(478, 332);
       this.label21.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label21.Name = "label21";
       this.label21.Size = new System.Drawing.Size(66, 24);
@@ -1438,7 +1494,7 @@
       // 
       this.panel18.BackColor = System.Drawing.SystemColors.Window;
       this.panel18.Controls.Add(this.DRYER_VA);
-      this.panel18.Location = new System.Drawing.Point(429, 227);
+      this.panel18.Location = new System.Drawing.Point(480, 225);
       this.panel18.Margin = new System.Windows.Forms.Padding(12, 0, 3, 12);
       this.panel18.Name = "panel18";
       this.panel18.Padding = new System.Windows.Forms.Padding(5);
@@ -1487,7 +1543,7 @@
             "23",
             "24",
             "25"});
-      this.DRYER_MULTIPLIER.Location = new System.Drawing.Point(566, 227);
+      this.DRYER_MULTIPLIER.Location = new System.Drawing.Point(617, 225);
       this.DRYER_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.DRYER_MULTIPLIER.Name = "DRYER_MULTIPLIER";
       this.DRYER_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -1498,7 +1554,7 @@
       // 
       this.label22.AutoSize = true;
       this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label22.Location = new System.Drawing.Point(427, 200);
+      this.label22.Location = new System.Drawing.Point(478, 198);
       this.label22.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label22.Name = "label22";
       this.label22.Size = new System.Drawing.Size(55, 24);
@@ -1509,7 +1565,7 @@
       // 
       this.label23.AutoSize = true;
       this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label23.Location = new System.Drawing.Point(688, 12);
+      this.label23.Location = new System.Drawing.Point(739, 10);
       this.label23.Margin = new System.Windows.Forms.Padding(0, 0, 0, 12);
       this.label23.Name = "label23";
       this.label23.Size = new System.Drawing.Size(517, 25);
@@ -1520,7 +1576,7 @@
       // 
       this.panel19.BackColor = System.Drawing.SystemColors.Window;
       this.panel19.Controls.Add(this.GENERAL_CUSTOM_VA);
-      this.panel19.Location = new System.Drawing.Point(810, 211);
+      this.panel19.Location = new System.Drawing.Point(861, 209);
       this.panel19.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel19.Name = "panel19";
       this.panel19.Padding = new System.Windows.Forms.Padding(5);
@@ -1541,7 +1597,7 @@
       // 
       this.label25.AutoSize = true;
       this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label25.Location = new System.Drawing.Point(687, 294);
+      this.label25.Location = new System.Drawing.Point(738, 292);
       this.label25.Margin = new System.Windows.Forms.Padding(0, 0, 0, 12);
       this.label25.Name = "label25";
       this.label25.Size = new System.Drawing.Size(513, 25);
@@ -1552,7 +1608,7 @@
       // 
       this.label29.AutoSize = true;
       this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label29.Location = new System.Drawing.Point(1232, 12);
+      this.label29.Location = new System.Drawing.Point(1283, 10);
       this.label29.Margin = new System.Windows.Forms.Padding(0, 0, 0, 12);
       this.label29.Name = "label29";
       this.label29.Size = new System.Drawing.Size(221, 25);
@@ -1563,7 +1619,7 @@
       // 
       this.panel30.BackColor = System.Drawing.SystemColors.Window;
       this.panel30.Controls.Add(this.OUTDOOR_CONDENSER_VA);
-      this.panel30.Location = new System.Drawing.Point(1235, 76);
+      this.panel30.Location = new System.Drawing.Point(1286, 74);
       this.panel30.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel30.Name = "panel30";
       this.panel30.Padding = new System.Windows.Forms.Padding(5);
@@ -1585,7 +1641,7 @@
       // 
       this.label30.AutoSize = true;
       this.label30.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label30.Location = new System.Drawing.Point(1233, 49);
+      this.label30.Location = new System.Drawing.Point(1284, 47);
       this.label30.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label30.Name = "label30";
       this.label30.Size = new System.Drawing.Size(224, 24);
@@ -1596,7 +1652,7 @@
       // 
       this.panel31.BackColor = System.Drawing.SystemColors.Window;
       this.panel31.Controls.Add(this.INDOOR_FAN_COIL_VA);
-      this.panel31.Location = new System.Drawing.Point(1235, 143);
+      this.panel31.Location = new System.Drawing.Point(1286, 141);
       this.panel31.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel31.Name = "panel31";
       this.panel31.Padding = new System.Windows.Forms.Padding(5);
@@ -1618,7 +1674,7 @@
       // 
       this.label31.AutoSize = true;
       this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label31.Location = new System.Drawing.Point(1233, 116);
+      this.label31.Location = new System.Drawing.Point(1284, 114);
       this.label31.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label31.Name = "label31";
       this.label31.Size = new System.Drawing.Size(176, 24);
@@ -1629,7 +1685,7 @@
       // 
       this.panel32.BackColor = System.Drawing.SystemColors.Window;
       this.panel32.Controls.Add(this.COOKTOP_VA);
-      this.panel32.Location = new System.Drawing.Point(429, 495);
+      this.panel32.Location = new System.Drawing.Point(480, 493);
       this.panel32.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel32.Name = "panel32";
       this.panel32.Padding = new System.Windows.Forms.Padding(5);
@@ -1678,7 +1734,7 @@
             "23",
             "24",
             "25"});
-      this.COOKTOP_MULTIPLIER.Location = new System.Drawing.Point(566, 495);
+      this.COOKTOP_MULTIPLIER.Location = new System.Drawing.Point(617, 493);
       this.COOKTOP_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.COOKTOP_MULTIPLIER.Name = "COOKTOP_MULTIPLIER";
       this.COOKTOP_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -1689,7 +1745,7 @@
       // 
       this.label32.AutoSize = true;
       this.label32.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label32.Location = new System.Drawing.Point(427, 468);
+      this.label32.Location = new System.Drawing.Point(478, 466);
       this.label32.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label32.Name = "label32";
       this.label32.Size = new System.Drawing.Size(80, 24);
@@ -1700,7 +1756,7 @@
       // 
       this.label33.AutoSize = true;
       this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label33.Location = new System.Drawing.Point(217, 45);
+      this.label33.Location = new System.Drawing.Point(268, 43);
       this.label33.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label33.Name = "label33";
       this.label33.Size = new System.Drawing.Size(148, 24);
@@ -1713,7 +1769,7 @@
       this.GENERAL_CUSTOM_LOAD_BOX.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.GENERAL_CUSTOM_LOAD_BOX.FormattingEnabled = true;
       this.GENERAL_CUSTOM_LOAD_BOX.ItemHeight = 20;
-      this.GENERAL_CUSTOM_LOAD_BOX.Location = new System.Drawing.Point(693, 81);
+      this.GENERAL_CUSTOM_LOAD_BOX.Location = new System.Drawing.Point(744, 79);
       this.GENERAL_CUSTOM_LOAD_BOX.Name = "GENERAL_CUSTOM_LOAD_BOX";
       this.GENERAL_CUSTOM_LOAD_BOX.Size = new System.Drawing.Size(459, 102);
       this.GENERAL_CUSTOM_LOAD_BOX.TabIndex = 36;
@@ -1721,7 +1777,7 @@
       // ADD_ENTRY
       // 
       this.ADD_ENTRY.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.ADD_ENTRY.Location = new System.Drawing.Point(693, 249);
+      this.ADD_ENTRY.Location = new System.Drawing.Point(744, 247);
       this.ADD_ENTRY.Name = "ADD_ENTRY";
       this.ADD_ENTRY.Size = new System.Drawing.Size(54, 28);
       this.ADD_ENTRY.TabIndex = 40;
@@ -1732,7 +1788,7 @@
       // REMOVE_ENTRY
       // 
       this.REMOVE_ENTRY.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.REMOVE_ENTRY.Location = new System.Drawing.Point(753, 249);
+      this.REMOVE_ENTRY.Location = new System.Drawing.Point(804, 247);
       this.REMOVE_ENTRY.Name = "REMOVE_ENTRY";
       this.REMOVE_ENTRY.Size = new System.Drawing.Size(88, 28);
       this.REMOVE_ENTRY.TabIndex = 41;
@@ -1743,7 +1799,7 @@
       // REMOVE_ENTRY_CUSTOM
       // 
       this.REMOVE_ENTRY_CUSTOM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.REMOVE_ENTRY_CUSTOM.Location = new System.Drawing.Point(752, 528);
+      this.REMOVE_ENTRY_CUSTOM.Location = new System.Drawing.Point(803, 526);
       this.REMOVE_ENTRY_CUSTOM.Name = "REMOVE_ENTRY_CUSTOM";
       this.REMOVE_ENTRY_CUSTOM.Size = new System.Drawing.Size(88, 28);
       this.REMOVE_ENTRY_CUSTOM.TabIndex = 47;
@@ -1754,7 +1810,7 @@
       // ADD_ENTRY_CUSTOM
       // 
       this.ADD_ENTRY_CUSTOM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.ADD_ENTRY_CUSTOM.Location = new System.Drawing.Point(692, 528);
+      this.ADD_ENTRY_CUSTOM.Location = new System.Drawing.Point(743, 526);
       this.ADD_ENTRY_CUSTOM.Name = "ADD_ENTRY_CUSTOM";
       this.ADD_ENTRY_CUSTOM.Size = new System.Drawing.Size(54, 28);
       this.ADD_ENTRY_CUSTOM.TabIndex = 46;
@@ -1768,7 +1824,7 @@
       this.CUSTOM_LOAD_BOX.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.CUSTOM_LOAD_BOX.FormattingEnabled = true;
       this.CUSTOM_LOAD_BOX.ItemHeight = 20;
-      this.CUSTOM_LOAD_BOX.Location = new System.Drawing.Point(693, 361);
+      this.CUSTOM_LOAD_BOX.Location = new System.Drawing.Point(744, 359);
       this.CUSTOM_LOAD_BOX.Name = "CUSTOM_LOAD_BOX";
       this.CUSTOM_LOAD_BOX.Size = new System.Drawing.Size(459, 102);
       this.CUSTOM_LOAD_BOX.TabIndex = 42;
@@ -1777,7 +1833,7 @@
       // 
       this.panel11.BackColor = System.Drawing.SystemColors.Window;
       this.panel11.Controls.Add(this.CUSTOM_VA);
-      this.panel11.Location = new System.Drawing.Point(810, 490);
+      this.panel11.Location = new System.Drawing.Point(861, 488);
       this.panel11.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel11.Name = "panel11";
       this.panel11.Padding = new System.Windows.Forms.Padding(5);
@@ -1798,7 +1854,7 @@
       // 
       this.panel12.BackColor = System.Drawing.SystemColors.Window;
       this.panel12.Controls.Add(this.CUSTOM_NAME);
-      this.panel12.Location = new System.Drawing.Point(693, 490);
+      this.panel12.Location = new System.Drawing.Point(744, 488);
       this.panel12.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel12.Name = "panel12";
       this.panel12.Padding = new System.Windows.Forms.Padding(5);
@@ -1846,7 +1902,7 @@
             "23",
             "24",
             "25"});
-      this.CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(964, 491);
+      this.CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(1015, 489);
       this.CUSTOM_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.CUSTOM_MULTIPLIER.Name = "CUSTOM_MULTIPLIER";
       this.CUSTOM_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -1857,7 +1913,7 @@
       // 
       this.label15.AutoSize = true;
       this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label15.Location = new System.Drawing.Point(689, 331);
+      this.label15.Location = new System.Drawing.Point(740, 329);
       this.label15.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label15.Name = "label15";
       this.label15.Size = new System.Drawing.Size(122, 24);
@@ -1867,7 +1923,7 @@
       // label16
       // 
       this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label16.Location = new System.Drawing.Point(1209, 388);
+      this.label16.Location = new System.Drawing.Point(1282, 391);
       this.label16.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label16.Name = "label16";
       this.label16.Size = new System.Drawing.Size(245, 21);
@@ -1878,7 +1934,7 @@
       // 
       this.TOTAL_GENERAL_LOAD_CALCULATION.AutoSize = true;
       this.TOTAL_GENERAL_LOAD_CALCULATION.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.TOTAL_GENERAL_LOAD_CALCULATION.Location = new System.Drawing.Point(1209, 409);
+      this.TOTAL_GENERAL_LOAD_CALCULATION.Location = new System.Drawing.Point(1282, 412);
       this.TOTAL_GENERAL_LOAD_CALCULATION.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.TOTAL_GENERAL_LOAD_CALCULATION.Name = "TOTAL_GENERAL_LOAD_CALCULATION";
       this.TOTAL_GENERAL_LOAD_CALCULATION.Size = new System.Drawing.Size(19, 20);
@@ -1889,7 +1945,7 @@
       // 
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.AutoSize = true;
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Location = new System.Drawing.Point(1209, 496);
+      this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Location = new System.Drawing.Point(1282, 499);
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Name = "SUBTOTAL_GENERAL_LOAD_CALCULATION";
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Size = new System.Drawing.Size(19, 20);
@@ -1899,7 +1955,7 @@
       // label27
       // 
       this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label27.Location = new System.Drawing.Point(1209, 476);
+      this.label27.Location = new System.Drawing.Point(1282, 479);
       this.label27.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label27.Name = "label27";
       this.label27.Size = new System.Drawing.Size(269, 22);
@@ -1910,7 +1966,7 @@
       // 
       this.TOTAL_AC_LOAD_CALCULATION.AutoSize = true;
       this.TOTAL_AC_LOAD_CALCULATION.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.TOTAL_AC_LOAD_CALCULATION.Location = new System.Drawing.Point(1209, 453);
+      this.TOTAL_AC_LOAD_CALCULATION.Location = new System.Drawing.Point(1282, 456);
       this.TOTAL_AC_LOAD_CALCULATION.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.TOTAL_AC_LOAD_CALCULATION.Name = "TOTAL_AC_LOAD_CALCULATION";
       this.TOTAL_AC_LOAD_CALCULATION.Size = new System.Drawing.Size(19, 20);
@@ -1921,7 +1977,7 @@
       // 
       this.label26.AutoSize = true;
       this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label26.Location = new System.Drawing.Point(1209, 432);
+      this.label26.Location = new System.Drawing.Point(1282, 435);
       this.label26.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label26.Name = "label26";
       this.label26.Size = new System.Drawing.Size(192, 20);
@@ -1932,7 +1988,7 @@
       // 
       this.CALCULATED_LOAD_FOR_SERVICE.AutoSize = true;
       this.CALCULATED_LOAD_FOR_SERVICE.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.CALCULATED_LOAD_FOR_SERVICE.Location = new System.Drawing.Point(1209, 583);
+      this.CALCULATED_LOAD_FOR_SERVICE.Location = new System.Drawing.Point(1282, 586);
       this.CALCULATED_LOAD_FOR_SERVICE.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.CALCULATED_LOAD_FOR_SERVICE.Name = "CALCULATED_LOAD_FOR_SERVICE";
       this.CALCULATED_LOAD_FOR_SERVICE.Size = new System.Drawing.Size(19, 20);
@@ -1942,7 +1998,7 @@
       // label28
       // 
       this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label28.Location = new System.Drawing.Point(1209, 562);
+      this.label28.Location = new System.Drawing.Point(1282, 565);
       this.label28.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label28.Name = "label28";
       this.label28.Size = new System.Drawing.Size(220, 21);
@@ -1953,7 +2009,7 @@
       // 
       this.label34.AutoSize = true;
       this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label34.Location = new System.Drawing.Point(1208, 351);
+      this.label34.Location = new System.Drawing.Point(1281, 354);
       this.label34.Margin = new System.Windows.Forms.Padding(0, 0, 0, 12);
       this.label34.Name = "label34";
       this.label34.Size = new System.Drawing.Size(202, 25);
@@ -1964,7 +2020,7 @@
       // 
       this.label24.AutoSize = true;
       this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label24.Location = new System.Drawing.Point(299, 166);
+      this.label24.Location = new System.Drawing.Point(350, 164);
       this.label24.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label24.Name = "label24";
       this.label24.Size = new System.Drawing.Size(25, 16);
@@ -1975,7 +2031,7 @@
       // 
       this.label35.AutoSize = true;
       this.label35.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label35.Location = new System.Drawing.Point(342, 164);
+      this.label35.Location = new System.Drawing.Point(393, 162);
       this.label35.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label35.Name = "label35";
       this.label35.Size = new System.Drawing.Size(13, 16);
@@ -1986,7 +2042,7 @@
       // 
       this.label36.AutoSize = true;
       this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label36.Location = new System.Drawing.Point(342, 231);
+      this.label36.Location = new System.Drawing.Point(393, 229);
       this.label36.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label36.Name = "label36";
       this.label36.Size = new System.Drawing.Size(13, 16);
@@ -1997,7 +2053,7 @@
       // 
       this.label37.AutoSize = true;
       this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label37.Location = new System.Drawing.Point(299, 233);
+      this.label37.Location = new System.Drawing.Point(350, 231);
       this.label37.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label37.Name = "label37";
       this.label37.Size = new System.Drawing.Size(25, 16);
@@ -2008,7 +2064,7 @@
       // 
       this.label38.AutoSize = true;
       this.label38.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label38.Location = new System.Drawing.Point(342, 298);
+      this.label38.Location = new System.Drawing.Point(393, 296);
       this.label38.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label38.Name = "label38";
       this.label38.Size = new System.Drawing.Size(13, 16);
@@ -2019,7 +2075,7 @@
       // 
       this.label39.AutoSize = true;
       this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label39.Location = new System.Drawing.Point(299, 300);
+      this.label39.Location = new System.Drawing.Point(350, 298);
       this.label39.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label39.Name = "label39";
       this.label39.Size = new System.Drawing.Size(25, 16);
@@ -2030,7 +2086,7 @@
       // 
       this.label40.AutoSize = true;
       this.label40.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label40.Location = new System.Drawing.Point(342, 365);
+      this.label40.Location = new System.Drawing.Point(393, 363);
       this.label40.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label40.Name = "label40";
       this.label40.Size = new System.Drawing.Size(13, 16);
@@ -2041,7 +2097,7 @@
       // 
       this.label41.AutoSize = true;
       this.label41.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label41.Location = new System.Drawing.Point(299, 367);
+      this.label41.Location = new System.Drawing.Point(350, 365);
       this.label41.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label41.Name = "label41";
       this.label41.Size = new System.Drawing.Size(25, 16);
@@ -2052,7 +2108,7 @@
       // 
       this.label42.AutoSize = true;
       this.label42.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label42.Location = new System.Drawing.Point(342, 432);
+      this.label42.Location = new System.Drawing.Point(393, 430);
       this.label42.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label42.Name = "label42";
       this.label42.Size = new System.Drawing.Size(13, 16);
@@ -2063,7 +2119,7 @@
       // 
       this.label43.AutoSize = true;
       this.label43.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label43.Location = new System.Drawing.Point(299, 434);
+      this.label43.Location = new System.Drawing.Point(350, 432);
       this.label43.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label43.Name = "label43";
       this.label43.Size = new System.Drawing.Size(25, 16);
@@ -2074,7 +2130,7 @@
       // 
       this.label44.AutoSize = true;
       this.label44.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label44.Location = new System.Drawing.Point(342, 499);
+      this.label44.Location = new System.Drawing.Point(393, 497);
       this.label44.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label44.Name = "label44";
       this.label44.Size = new System.Drawing.Size(13, 16);
@@ -2085,7 +2141,7 @@
       // 
       this.label45.AutoSize = true;
       this.label45.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label45.Location = new System.Drawing.Point(299, 501);
+      this.label45.Location = new System.Drawing.Point(350, 499);
       this.label45.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label45.Name = "label45";
       this.label45.Size = new System.Drawing.Size(25, 16);
@@ -2096,7 +2152,7 @@
       // 
       this.label46.AutoSize = true;
       this.label46.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label46.Location = new System.Drawing.Point(342, 566);
+      this.label46.Location = new System.Drawing.Point(393, 564);
       this.label46.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label46.Name = "label46";
       this.label46.Size = new System.Drawing.Size(13, 16);
@@ -2107,7 +2163,7 @@
       // 
       this.label47.AutoSize = true;
       this.label47.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label47.Location = new System.Drawing.Point(299, 568);
+      this.label47.Location = new System.Drawing.Point(350, 566);
       this.label47.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label47.Name = "label47";
       this.label47.Size = new System.Drawing.Size(25, 16);
@@ -2118,7 +2174,7 @@
       // 
       this.label48.AutoSize = true;
       this.label48.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label48.Location = new System.Drawing.Point(553, 499);
+      this.label48.Location = new System.Drawing.Point(604, 497);
       this.label48.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label48.Name = "label48";
       this.label48.Size = new System.Drawing.Size(13, 16);
@@ -2129,7 +2185,7 @@
       // 
       this.label49.AutoSize = true;
       this.label49.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label49.Location = new System.Drawing.Point(510, 501);
+      this.label49.Location = new System.Drawing.Point(561, 499);
       this.label49.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label49.Name = "label49";
       this.label49.Size = new System.Drawing.Size(25, 16);
@@ -2140,7 +2196,7 @@
       // 
       this.label50.AutoSize = true;
       this.label50.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label50.Location = new System.Drawing.Point(553, 566);
+      this.label50.Location = new System.Drawing.Point(604, 564);
       this.label50.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label50.Name = "label50";
       this.label50.Size = new System.Drawing.Size(13, 16);
@@ -2151,7 +2207,7 @@
       // 
       this.label51.AutoSize = true;
       this.label51.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label51.Location = new System.Drawing.Point(510, 568);
+      this.label51.Location = new System.Drawing.Point(561, 566);
       this.label51.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label51.Name = "label51";
       this.label51.Size = new System.Drawing.Size(25, 16);
@@ -2162,7 +2218,7 @@
       // 
       this.label52.AutoSize = true;
       this.label52.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label52.Location = new System.Drawing.Point(553, 432);
+      this.label52.Location = new System.Drawing.Point(604, 430);
       this.label52.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label52.Name = "label52";
       this.label52.Size = new System.Drawing.Size(13, 16);
@@ -2173,7 +2229,7 @@
       // 
       this.label53.AutoSize = true;
       this.label53.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label53.Location = new System.Drawing.Point(510, 434);
+      this.label53.Location = new System.Drawing.Point(561, 432);
       this.label53.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label53.Name = "label53";
       this.label53.Size = new System.Drawing.Size(25, 16);
@@ -2184,7 +2240,7 @@
       // 
       this.label54.AutoSize = true;
       this.label54.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label54.Location = new System.Drawing.Point(553, 299);
+      this.label54.Location = new System.Drawing.Point(604, 297);
       this.label54.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label54.Name = "label54";
       this.label54.Size = new System.Drawing.Size(13, 16);
@@ -2195,7 +2251,7 @@
       // 
       this.label55.AutoSize = true;
       this.label55.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label55.Location = new System.Drawing.Point(510, 301);
+      this.label55.Location = new System.Drawing.Point(561, 299);
       this.label55.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label55.Name = "label55";
       this.label55.Size = new System.Drawing.Size(25, 16);
@@ -2206,7 +2262,7 @@
       // 
       this.label56.AutoSize = true;
       this.label56.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label56.Location = new System.Drawing.Point(553, 365);
+      this.label56.Location = new System.Drawing.Point(604, 363);
       this.label56.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label56.Name = "label56";
       this.label56.Size = new System.Drawing.Size(13, 16);
@@ -2217,7 +2273,7 @@
       // 
       this.label57.AutoSize = true;
       this.label57.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label57.Location = new System.Drawing.Point(510, 367);
+      this.label57.Location = new System.Drawing.Point(561, 365);
       this.label57.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label57.Name = "label57";
       this.label57.Size = new System.Drawing.Size(25, 16);
@@ -2228,7 +2284,7 @@
       // 
       this.label58.AutoSize = true;
       this.label58.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label58.Location = new System.Drawing.Point(553, 231);
+      this.label58.Location = new System.Drawing.Point(604, 229);
       this.label58.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label58.Name = "label58";
       this.label58.Size = new System.Drawing.Size(13, 16);
@@ -2239,7 +2295,7 @@
       // 
       this.label59.AutoSize = true;
       this.label59.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label59.Location = new System.Drawing.Point(510, 233);
+      this.label59.Location = new System.Drawing.Point(561, 231);
       this.label59.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label59.Name = "label59";
       this.label59.Size = new System.Drawing.Size(25, 16);
@@ -2250,7 +2306,7 @@
       // 
       this.label60.AutoSize = true;
       this.label60.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label60.Location = new System.Drawing.Point(553, 164);
+      this.label60.Location = new System.Drawing.Point(604, 162);
       this.label60.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label60.Name = "label60";
       this.label60.Size = new System.Drawing.Size(13, 16);
@@ -2261,7 +2317,7 @@
       // 
       this.label61.AutoSize = true;
       this.label61.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label61.Location = new System.Drawing.Point(511, 166);
+      this.label61.Location = new System.Drawing.Point(562, 164);
       this.label61.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label61.Name = "label61";
       this.label61.Size = new System.Drawing.Size(25, 16);
@@ -2283,7 +2339,7 @@
       // 
       this.label65.AutoSize = true;
       this.label65.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label65.Location = new System.Drawing.Point(921, 217);
+      this.label65.Location = new System.Drawing.Point(972, 215);
       this.label65.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label65.Name = "label65";
       this.label65.Size = new System.Drawing.Size(25, 16);
@@ -2294,7 +2350,7 @@
       // 
       this.label66.AutoSize = true;
       this.label66.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label66.Location = new System.Drawing.Point(951, 495);
+      this.label66.Location = new System.Drawing.Point(1002, 493);
       this.label66.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label66.Name = "label66";
       this.label66.Size = new System.Drawing.Size(13, 16);
@@ -2305,7 +2361,7 @@
       // 
       this.label67.AutoSize = true;
       this.label67.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label67.Location = new System.Drawing.Point(921, 497);
+      this.label67.Location = new System.Drawing.Point(972, 495);
       this.label67.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label67.Name = "label67";
       this.label67.Size = new System.Drawing.Size(25, 16);
@@ -2316,7 +2372,7 @@
       // 
       this.label68.AutoSize = true;
       this.label68.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label68.Location = new System.Drawing.Point(1346, 82);
+      this.label68.Location = new System.Drawing.Point(1397, 80);
       this.label68.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label68.Name = "label68";
       this.label68.Size = new System.Drawing.Size(25, 16);
@@ -2327,7 +2383,7 @@
       // 
       this.label69.AutoSize = true;
       this.label69.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label69.Location = new System.Drawing.Point(1346, 150);
+      this.label69.Location = new System.Drawing.Point(1397, 148);
       this.label69.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label69.Name = "label69";
       this.label69.Size = new System.Drawing.Size(25, 16);
@@ -2338,7 +2394,7 @@
       // 
       this.label70.AutoSize = true;
       this.label70.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label70.Location = new System.Drawing.Point(695, 190);
+      this.label70.Location = new System.Drawing.Point(746, 188);
       this.label70.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label70.Name = "label70";
       this.label70.Size = new System.Drawing.Size(44, 16);
@@ -2349,7 +2405,7 @@
       // 
       this.label71.AutoSize = true;
       this.label71.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label71.Location = new System.Drawing.Point(695, 470);
+      this.label71.Location = new System.Drawing.Point(746, 468);
       this.label71.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label71.Name = "label71";
       this.label71.Size = new System.Drawing.Size(44, 16);
@@ -2362,7 +2418,7 @@
       this.WATER_HEATER_CHECK.Checked = true;
       this.WATER_HEATER_CHECK.CheckState = System.Windows.Forms.CheckState.Checked;
       this.WATER_HEATER_CHECK.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.WATER_HEATER_CHECK.Location = new System.Drawing.Point(433, 593);
+      this.WATER_HEATER_CHECK.Location = new System.Drawing.Point(484, 591);
       this.WATER_HEATER_CHECK.Name = "WATER_HEATER_CHECK";
       this.WATER_HEATER_CHECK.Size = new System.Drawing.Size(191, 20);
       this.WATER_HEATER_CHECK.TabIndex = 153;
@@ -2374,7 +2430,7 @@
       // 
       this.label72.AutoSize = true;
       this.label72.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label72.Location = new System.Drawing.Point(1346, 216);
+      this.label72.Location = new System.Drawing.Point(1397, 214);
       this.label72.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label72.Name = "label72";
       this.label72.Size = new System.Drawing.Size(25, 16);
@@ -2385,7 +2441,7 @@
       // 
       this.panel20.BackColor = System.Drawing.SystemColors.Window;
       this.panel20.Controls.Add(this.OUTDOOR_HEATER_UNIT);
-      this.panel20.Location = new System.Drawing.Point(1235, 209);
+      this.panel20.Location = new System.Drawing.Point(1286, 207);
       this.panel20.Margin = new System.Windows.Forms.Padding(48, 0, 3, 3);
       this.panel20.Name = "panel20";
       this.panel20.Padding = new System.Windows.Forms.Padding(5);
@@ -2407,7 +2463,7 @@
       // 
       this.label73.AutoSize = true;
       this.label73.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label73.Location = new System.Drawing.Point(1233, 182);
+      this.label73.Location = new System.Drawing.Point(1284, 180);
       this.label73.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label73.Name = "label73";
       this.label73.Size = new System.Drawing.Size(177, 24);
@@ -2445,7 +2501,7 @@
             "23",
             "24",
             "25"});
-      this.OUTDOOR_HEATER_UNIT_AMOUNT.Location = new System.Drawing.Point(1235, 282);
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.Location = new System.Drawing.Point(1286, 280);
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Margin = new System.Windows.Forms.Padding(0);
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Name = "OUTDOOR_HEATER_UNIT_AMOUNT";
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Size = new System.Drawing.Size(56, 28);
@@ -2456,7 +2512,7 @@
       // 
       this.label64.AutoSize = true;
       this.label64.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label64.Location = new System.Drawing.Point(951, 215);
+      this.label64.Location = new System.Drawing.Point(1002, 213);
       this.label64.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label64.Name = "label64";
       this.label64.Size = new System.Drawing.Size(13, 16);
@@ -2466,7 +2522,7 @@
       // label75
       // 
       this.label75.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label75.Location = new System.Drawing.Point(1233, 240);
+      this.label75.Location = new System.Drawing.Point(1284, 238);
       this.label75.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label75.Name = "label75";
       this.label75.Size = new System.Drawing.Size(230, 43);
@@ -2476,7 +2532,7 @@
       // ESTIMATE_CONDENSER
       // 
       this.ESTIMATE_CONDENSER.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.ESTIMATE_CONDENSER.Location = new System.Drawing.Point(1378, 76);
+      this.ESTIMATE_CONDENSER.Location = new System.Drawing.Point(1429, 74);
       this.ESTIMATE_CONDENSER.Name = "ESTIMATE_CONDENSER";
       this.ESTIMATE_CONDENSER.Size = new System.Drawing.Size(85, 28);
       this.ESTIMATE_CONDENSER.TabIndex = 49;
@@ -2487,7 +2543,7 @@
       // ESTIMATE_FAN_COIL
       // 
       this.ESTIMATE_FAN_COIL.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.ESTIMATE_FAN_COIL.Location = new System.Drawing.Point(1378, 143);
+      this.ESTIMATE_FAN_COIL.Location = new System.Drawing.Point(1429, 141);
       this.ESTIMATE_FAN_COIL.Name = "ESTIMATE_FAN_COIL";
       this.ESTIMATE_FAN_COIL.Size = new System.Drawing.Size(85, 28);
       this.ESTIMATE_FAN_COIL.TabIndex = 51;
@@ -2499,7 +2555,7 @@
       // 
       this.TOTAL_CUSTOM_LOAD_CALCULATION.AutoSize = true;
       this.TOTAL_CUSTOM_LOAD_CALCULATION.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.TOTAL_CUSTOM_LOAD_CALCULATION.Location = new System.Drawing.Point(1209, 539);
+      this.TOTAL_CUSTOM_LOAD_CALCULATION.Location = new System.Drawing.Point(1282, 542);
       this.TOTAL_CUSTOM_LOAD_CALCULATION.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.TOTAL_CUSTOM_LOAD_CALCULATION.Name = "TOTAL_CUSTOM_LOAD_CALCULATION";
       this.TOTAL_CUSTOM_LOAD_CALCULATION.Size = new System.Drawing.Size(19, 20);
@@ -2509,7 +2565,7 @@
       // label76
       // 
       this.label76.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label76.Location = new System.Drawing.Point(1209, 519);
+      this.label76.Location = new System.Drawing.Point(1282, 522);
       this.label76.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label76.Name = "label76";
       this.label76.Size = new System.Drawing.Size(269, 22);
@@ -2520,7 +2576,7 @@
       // 
       this.label79.AutoSize = true;
       this.label79.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label79.Location = new System.Drawing.Point(558, 75);
+      this.label79.Location = new System.Drawing.Point(609, 73);
       this.label79.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label79.Name = "label79";
       this.label79.Size = new System.Drawing.Size(59, 16);
@@ -2531,7 +2587,7 @@
       // 
       this.GENERAL_LIGHTING_TOTAL.AutoSize = true;
       this.GENERAL_LIGHTING_TOTAL.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.GENERAL_LIGHTING_TOTAL.Location = new System.Drawing.Point(557, 96);
+      this.GENERAL_LIGHTING_TOTAL.Location = new System.Drawing.Point(608, 94);
       this.GENERAL_LIGHTING_TOTAL.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.GENERAL_LIGHTING_TOTAL.Name = "GENERAL_LIGHTING_TOTAL";
       this.GENERAL_LIGHTING_TOTAL.Size = new System.Drawing.Size(20, 24);
@@ -2545,7 +2601,7 @@
       this.groupBox5.Controls.Add(this.LIGHTING_HOTEL_MOTEL);
       this.groupBox5.Controls.Add(this.LIGHTING_DWELLING);
       this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.groupBox5.Location = new System.Drawing.Point(219, 75);
+      this.groupBox5.Location = new System.Drawing.Point(270, 73);
       this.groupBox5.Name = "groupBox5";
       this.groupBox5.Size = new System.Drawing.Size(328, 54);
       this.groupBox5.TabIndex = 7;
@@ -2610,7 +2666,7 @@
       // 
       this.label63.AutoSize = true;
       this.label63.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label63.Location = new System.Drawing.Point(1376, 412);
+      this.label63.Location = new System.Drawing.Point(1449, 415);
       this.label63.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label63.Name = "label63";
       this.label63.Size = new System.Drawing.Size(25, 16);
@@ -2621,7 +2677,7 @@
       // 
       this.label74.AutoSize = true;
       this.label74.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label74.Location = new System.Drawing.Point(1375, 457);
+      this.label74.Location = new System.Drawing.Point(1448, 460);
       this.label74.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label74.Name = "label74";
       this.label74.Size = new System.Drawing.Size(25, 16);
@@ -2632,7 +2688,7 @@
       // 
       this.label77.AutoSize = true;
       this.label77.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label77.Location = new System.Drawing.Point(1375, 501);
+      this.label77.Location = new System.Drawing.Point(1448, 504);
       this.label77.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label77.Name = "label77";
       this.label77.Size = new System.Drawing.Size(25, 16);
@@ -2643,7 +2699,7 @@
       // 
       this.label78.AutoSize = true;
       this.label78.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label78.Location = new System.Drawing.Point(1375, 544);
+      this.label78.Location = new System.Drawing.Point(1448, 547);
       this.label78.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label78.Name = "label78";
       this.label78.Size = new System.Drawing.Size(25, 16);
@@ -2654,7 +2710,7 @@
       // 
       this.label80.AutoSize = true;
       this.label80.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label80.Location = new System.Drawing.Point(1375, 586);
+      this.label80.Location = new System.Drawing.Point(1448, 589);
       this.label80.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label80.Name = "label80";
       this.label80.Size = new System.Drawing.Size(16, 16);
@@ -2809,7 +2865,7 @@
       this.Margin = new System.Windows.Forms.Padding(0);
       this.Name = "UnitLoadCalculation";
       this.Padding = new System.Windows.Forms.Padding(12);
-      this.Size = new System.Drawing.Size(1478, 627);
+      this.Size = new System.Drawing.Size(1545, 627);
       this.panel1.ResumeLayout(false);
       this.panel1.PerformLayout();
       this.groupBox1.ResumeLayout(false);
@@ -3049,5 +3105,9 @@
     private System.Windows.Forms.Label label77;
     private System.Windows.Forms.Label label78;
     private System.Windows.Forms.Label label80;
+    private System.Windows.Forms.RadioButton NA_HEATER;
+    private System.Windows.Forms.RadioButton NA_DRYER;
+    private System.Windows.Forms.RadioButton NA_OVEN;
+    private System.Windows.Forms.RadioButton NA_COOKTOP;
   }
 }

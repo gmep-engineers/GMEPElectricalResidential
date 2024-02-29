@@ -41,13 +41,7 @@ namespace GMEPElectricalResidential
       else
       {
         _unitNullFlag = true;
-        _unitInformation = new UnitInformation();
-        _unitInformation.GeneralLoads = new UnitGeneralLoadContainer();
-        _unitInformation.Totals = new UnitTotalContainer();
-        _unitInformation.ACLoads = new UnitACLoadContainer();
-        _unitInformation.DwellingArea = new UnitDwellingArea();
-        _unitInformation.GeneralLoads.LightingCode = "220.42";
-        _unitInformation.ID = tabId;
+        _unitInformation = new UnitInformation(tabId);
       }
 
       this.Load += new EventHandler(UnitLoadCalculation_Load);
@@ -71,14 +65,21 @@ namespace GMEPElectricalResidential
       VOLTAGE.Text = unitInformation.Voltage;
 
       // Set Radio Buttons
-      ELECTRIC_HEATER.Checked = unitInformation.DwellingArea.ElectricHeater;
-      GAS_HEATER.Checked = !unitInformation.DwellingArea.ElectricHeater;
-      ELECTRIC_DRYER.Checked = unitInformation.DwellingArea.ElectricDryer;
-      GAS_DRYER.Checked = !unitInformation.DwellingArea.ElectricDryer;
-      ELECTRIC_OVEN.Checked = unitInformation.DwellingArea.ElectricOven;
-      GAS_OVEN.Checked = !unitInformation.DwellingArea.ElectricOven;
-      ELECTRIC_COOKTOP.Checked = unitInformation.DwellingArea.ElectricCooktop;
-      GAS_COOKTOP.Checked = !unitInformation.DwellingArea.ElectricCooktop;
+      ELECTRIC_HEATER.Checked = unitInformation.DwellingArea.Heater == ApplianceType.Electric;
+      GAS_HEATER.Checked = unitInformation.DwellingArea.Heater == ApplianceType.Gas;
+      NA_HEATER.Checked = unitInformation.DwellingArea.Heater == ApplianceType.NA;
+
+      ELECTRIC_DRYER.Checked = unitInformation.DwellingArea.Dryer == ApplianceType.Electric;
+      GAS_DRYER.Checked = unitInformation.DwellingArea.Dryer == ApplianceType.Gas;
+      NA_DRYER.Checked = unitInformation.DwellingArea.Dryer == ApplianceType.NA;
+
+      ELECTRIC_OVEN.Checked = unitInformation.DwellingArea.Oven == ApplianceType.Electric;
+      GAS_OVEN.Checked = unitInformation.DwellingArea.Oven == ApplianceType.Gas;
+      NA_OVEN.Checked = unitInformation.DwellingArea.Oven == ApplianceType.NA;
+
+      ELECTRIC_COOKTOP.Checked = unitInformation.DwellingArea.Cooktop == ApplianceType.Electric;
+      GAS_COOKTOP.Checked = unitInformation.DwellingArea.Cooktop == ApplianceType.Gas;
+      NA_COOKTOP.Checked = unitInformation.DwellingArea.Cooktop == ApplianceType.NA;
 
       // Set area
       AREA.Text = unitInformation.DwellingArea.FloorArea.ToString();
@@ -320,13 +321,7 @@ namespace GMEPElectricalResidential
 
     private void UpdateDwellingData()
     {
-      var dwellingArea = new UnitDwellingArea();
-      dwellingArea.FloorArea = AREA.Text;
-      dwellingArea.ElectricHeater = ELECTRIC_HEATER.Checked;
-      dwellingArea.ElectricDryer = ELECTRIC_DRYER.Checked;
-      dwellingArea.ElectricCooktop = ELECTRIC_COOKTOP.Checked;
-      dwellingArea.ElectricOven = ELECTRIC_OVEN.Checked;
-      _unitInformation.DwellingArea = dwellingArea;
+      _unitInformation.DwellingArea.FloorArea = AREA.Text;
     }
 
     private void UpdateGeneralData()
@@ -681,73 +676,133 @@ namespace GMEPElectricalResidential
     private void ELECTRIC_HEATER_CheckedChanged(object sender, EventArgs e)
     {
       var radioButton = sender as RadioButton;
-      if (radioButton != null && radioButton.Checked && WATER_HEATER_VA.Text == "180")
+      if (!radioButton.Checked) return;
+
+      if (WATER_HEATER_VA.Text == "180")
       {
         WATER_HEATER_VA.Text = "5000";
       }
+
+      _unitInformation.DwellingArea.Heater = ApplianceType.Electric;
     }
 
     private void GAS_HEATER_CheckedChanged(object sender, EventArgs e)
     {
       var radioButton = sender as RadioButton;
-      if (radioButton != null && radioButton.Checked)
-      {
-        WATER_HEATER_VA.Text = "180";
-      }
+      if (!radioButton.Checked) return;
+
+      WATER_HEATER_VA.Text = "180";
+
+      _unitInformation.DwellingArea.Heater = ApplianceType.Gas;
+    }
+
+    private void NA_HEATER_CheckedChanged(object sender, EventArgs e)
+    {
+      var radioButton = sender as RadioButton;
+      if (!radioButton.Checked) return;
+
+      WATER_HEATER_VA.Text = "0";
+
+      _unitInformation.DwellingArea.Heater = ApplianceType.NA;
     }
 
     private void ELECTRIC_DRYER_CheckedChanged(object sender, EventArgs e)
     {
       var radioButton = sender as RadioButton;
-      if (radioButton != null && radioButton.Checked && DRYER_VA.Text == "180")
+      if (!radioButton.Checked) return;
+
+      if (DRYER_VA.Text == "180")
       {
         DRYER_VA.Text = "5000";
       }
+
+      _unitInformation.DwellingArea.Dryer = ApplianceType.Electric;
     }
 
     private void GAS_DRYER_CheckedChanged(object sender, EventArgs e)
     {
       var radioButton = sender as RadioButton;
-      if (radioButton != null && radioButton.Checked)
-      {
-        DRYER_VA.Text = "180";
-      }
+      if (!radioButton.Checked) return;
+
+      DRYER_VA.Text = "180";
+
+      _unitInformation.DwellingArea.Dryer = ApplianceType.Gas;
+    }
+
+    private void NA_DRYER_CheckedChanged(object sender, EventArgs e)
+    {
+      var radioButton = sender as RadioButton;
+      if (!radioButton.Checked) return;
+
+      DRYER_VA.Text = "0";
+
+      _unitInformation.DwellingArea.Dryer = ApplianceType.NA;
     }
 
     private void ELECTRIC_OVEN_CheckedChanged(object sender, EventArgs e)
     {
       var radioButton = sender as RadioButton;
-      if (radioButton != null && radioButton.Checked && OVEN_VA.Text == "180")
+      if (!radioButton.Checked) return;
+
+      if (OVEN_VA.Text == "180")
       {
         OVEN_VA.Text = "8000";
       }
+
+      _unitInformation.DwellingArea.Oven = ApplianceType.Electric;
     }
 
     private void GAS_OVEN_CheckedChanged(object sender, EventArgs e)
     {
       var radioButton = sender as RadioButton;
-      if (radioButton != null && radioButton.Checked)
-      {
-        OVEN_VA.Text = "180";
-      }
+      if (!radioButton.Checked) return;
+
+      OVEN_VA.Text = "180";
+
+      _unitInformation.DwellingArea.Oven = ApplianceType.Gas;
+    }
+
+    private void NA_OVEN_CheckedChanged(object sender, EventArgs e)
+    {
+      var radioButton = sender as RadioButton;
+      if (!radioButton.Checked) return;
+
+      OVEN_VA.Text = "0";
+
+      _unitInformation.DwellingArea.Oven = ApplianceType.NA;
     }
 
     private void ELECTRIC_COOKTOP_CheckedChanged(object sender, EventArgs e)
     {
       var radioButton = sender as RadioButton;
-      if (radioButton != null && radioButton.Checked && COOKTOP_VA.Text == "180")
+      if (!radioButton.Checked) return;
+
+      if (COOKTOP_VA.Text == "180")
       {
-        COOKTOP_VA.Text = "3000";
+        COOKTOP_VA.Text = "8000";
       }
+
+      _unitInformation.DwellingArea.Cooktop = ApplianceType.Electric;
     }
 
     private void GAS_COOKTOP_CheckedChanged(object sender, EventArgs e)
     {
       var radioButton = sender as RadioButton;
-      if (radioButton != null && radioButton.Checked)
-      {
-        COOKTOP_VA.Text = "180";
-      }
+      if (!radioButton.Checked) return;
+
+      COOKTOP_VA.Text = "180";
+
+      _unitInformation.DwellingArea.Cooktop = ApplianceType.Gas;
+    }
+
+    private void NA_COOKTOP_CheckedChanged(object sender, EventArgs e)
+    {
+      var radioButton = sender as RadioButton;
+      if (!radioButton.Checked) return;
+
+      COOKTOP_VA.Text = "0";
+
+      _unitInformation.DwellingArea.Cooktop = ApplianceType.NA;
     }
 
     private void AREA_TextChanged(object sender, EventArgs e)
@@ -1091,15 +1146,32 @@ namespace GMEPElectricalResidential
     public List<UnitLoad> CustomLoads { get; set; }
     public UnitACLoadContainer ACLoads { get; set; }
     public UnitTotalContainer Totals { get; set; }
+
+    public UnitInformation(int id)
+    {
+      ID = id;
+      DwellingArea = new UnitDwellingArea();
+      GeneralLoads = new UnitGeneralLoadContainer() { LightingCode = "220.42" };
+      CustomLoads = new List<UnitLoad>();
+      ACLoads = new UnitACLoadContainer();
+      Totals = new UnitTotalContainer();
+    }
+  }
+
+  public enum ApplianceType
+  {
+    Electric,
+    Gas,
+    NA
   }
 
   public class UnitDwellingArea
   {
     public string FloorArea { get; set; }
-    public bool ElectricHeater { get; set; }
-    public bool ElectricDryer { get; set; }
-    public bool ElectricOven { get; set; }
-    public bool ElectricCooktop { get; set; }
+    public ApplianceType Heater { get; set; }
+    public ApplianceType Dryer { get; set; }
+    public ApplianceType Oven { get; set; }
+    public ApplianceType Cooktop { get; set; }
   }
 
   public class UnitGeneralLoadContainer
