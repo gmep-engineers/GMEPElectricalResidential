@@ -3,8 +3,8 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
-using GMEPUtilities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -43,14 +43,13 @@ namespace GMEPElectricalResidential
     [CommandMethod("GetObjectData")]
     public static void GetObjectData()
     {
-      var data = new List<object>();
+      var data = new List<BaseData>();
 
       Autodesk.AutoCAD.EditorInput.Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor;
       Autodesk.AutoCAD.EditorInput.PromptSelectionResult selectionResult = ed.GetSelection();
       if (selectionResult.Status == Autodesk.AutoCAD.EditorInput.PromptStatus.OK)
       {
         Autodesk.AutoCAD.EditorInput.SelectionSet selectionSet = selectionResult.Value;
-
         Autodesk.AutoCAD.EditorInput.PromptPointOptions originOptions = new Autodesk.AutoCAD.EditorInput.PromptPointOptions("Select an origin point: ");
         Autodesk.AutoCAD.EditorInput.PromptPointResult originResult = ed.GetPoint(originOptions);
         if (originResult.Status == Autodesk.AutoCAD.EditorInput.PromptStatus.OK)
@@ -62,8 +61,6 @@ namespace GMEPElectricalResidential
             using (Transaction transaction = objectId.Database.TransactionManager.StartTransaction())
             {
               Autodesk.AutoCAD.DatabaseServices.DBObject obj = transaction.GetObject(objectId, Autodesk.AutoCAD.DatabaseServices.OpenMode.ForRead);
-
-              ed.WriteMessage(obj.GetType().ToString());
 
               if (obj is Autodesk.AutoCAD.DatabaseServices.Polyline)
               {
@@ -100,7 +97,7 @@ namespace GMEPElectricalResidential
         }
       }
 
-      HelperMethods.SaveDataToJsonFile(data, "data.json");
+      SaveDataToJsonFile(data, "data.json");
     }
 
     [CommandMethod("CreateObjectFromData")]
@@ -110,7 +107,7 @@ namespace GMEPElectricalResidential
       string filePath = Path.Combine(desktopPath, "data.json");
       string jsonData = File.ReadAllText(filePath);
 
-      List<object> objectDataList = JsonConvert.DeserializeObject<List<object>>(jsonData);
+      List<BaseData> objectDataList = JsonConvert.DeserializeObject<List<BaseData>>(jsonData);
 
       Document acDoc = Application.DocumentManager.MdiActiveDocument;
       Database acCurDb = acDoc.Database;
@@ -132,33 +129,63 @@ namespace GMEPElectricalResidential
 
         foreach (var objectData in objectDataList)
         {
-          if (objectData is PolylineData polylineData)
+          switch (objectData.Type)
           {
-            basePoint = CreatePolyline(basePoint, acTrans, acBlkTblRec, polylineData);
-          }
-          else if (objectData is LineData lineData)
-          {
-            basePoint = CreateLine(basePoint, acTrans, acBlkTblRec, lineData);
-          }
-          else if (objectData is ArcData arcData)
-          {
-            basePoint = CreateArc(basePoint, acTrans, acBlkTblRec, arcData);
-          }
-          else if (objectData is CircleData circleData)
-          {
-            basePoint = CreateCircle(basePoint, acTrans, acBlkTblRec, circleData);
-          }
-          else if (objectData is EllipseData ellipseData)
-          {
-            basePoint = CreateEllipse(basePoint, acTrans, acBlkTblRec, ellipseData);
-          }
-          else if (objectData is MTextData mTextData)
-          {
-            basePoint = CreateMText(basePoint, acTrans, acBlkTblRec, mTextData);
-          }
-          else if (objectData is SolidData solidData)
-          {
-            basePoint = CreateSolid(basePoint, acTrans, acBlkTblRec, solidData);
+            case "PolylineData":
+              var polylineData = objectData as PolylineData;
+              if (polylineData != null)
+              {
+                basePoint = CreatePolyline(basePoint, acTrans, acBlkTblRec, polylineData);
+              }
+              break;
+
+            case "LineData":
+              var lineData = objectData as LineData;
+              if (lineData != null)
+              {
+                basePoint = CreateLine(basePoint, acTrans, acBlkTblRec, lineData);
+              }
+              break;
+
+            case "ArcData":
+              var arcData = objectData as ArcData;
+              if (arcData != null)
+              {
+                basePoint = CreateArc(basePoint, acTrans, acBlkTblRec, arcData);
+              }
+              break;
+
+            case "CircleData":
+              var circleData = objectData as CircleData;
+              if (circleData != null)
+              {
+                basePoint = CreateCircle(basePoint, acTrans, acBlkTblRec, circleData);
+              }
+              break;
+
+            case "EllipseData":
+              var ellipseData = objectData as EllipseData;
+              if (ellipseData != null)
+              {
+                basePoint = CreateEllipse(basePoint, acTrans, acBlkTblRec, ellipseData);
+              }
+              break;
+
+            case "MTextData":
+              var mTextData = objectData as MTextData;
+              if (mTextData != null)
+              {
+                basePoint = CreateMText(basePoint, acTrans, acBlkTblRec, mTextData);
+              }
+              break;
+
+            case "SolidData":
+              var solidData = objectData as SolidData;
+              if (solidData != null)
+              {
+                basePoint = CreateSolid(basePoint, acTrans, acBlkTblRec, solidData);
+              }
+              break;
           }
         }
 
@@ -288,14 +315,15 @@ namespace GMEPElectricalResidential
       return basePoint;
     }
 
-    private static List<object> HandlePolyline(Polyline polyline, List<object> data, Point3d origin)
+    private static List<BaseData> HandlePolyline(Polyline polyline, List<BaseData> data, Point3d origin)
     {
       var polylineData = new PolylineData
       {
         Layer = polyline.Layer,
         Vectors = new List<SimpleVector3d>(),
         LineType = polyline.Linetype,
-        Closed = polyline.Closed
+        Closed = polyline.Closed,
+        Type = "PolylineData"
       };
 
       for (int i = 0; i < polyline.NumberOfVertices; i++)
@@ -310,7 +338,7 @@ namespace GMEPElectricalResidential
       return data;
     }
 
-    private static List<object> HandleArc(Arc arc, List<object> data, Point3d origin)
+    private static List<BaseData> HandleArc(Arc arc, List<BaseData> data, Point3d origin)
     {
       var arcData = new ArcData
       {
@@ -323,7 +351,8 @@ namespace GMEPElectricalResidential
         },
         Radius = arc.Radius,
         StartAngle = arc.StartAngle,
-        EndAngle = arc.EndAngle
+        EndAngle = arc.EndAngle,
+        Type = "PolylineData"
       };
 
       data.Add(arcData);
@@ -331,7 +360,7 @@ namespace GMEPElectricalResidential
       return data;
     }
 
-    private static List<object> HandleCircle(Circle circle, List<object> data, Point3d origin)
+    private static List<BaseData> HandleCircle(Circle circle, List<BaseData> data, Point3d origin)
     {
       var circleData = new CircleData
       {
@@ -342,7 +371,8 @@ namespace GMEPElectricalResidential
           Y = circle.Center.Y - origin.Y,
           Z = circle.Center.Z - origin.Z
         },
-        Radius = circle.Radius
+        Radius = circle.Radius,
+        Type = "CircleData"
       };
 
       data.Add(circleData);
@@ -350,7 +380,7 @@ namespace GMEPElectricalResidential
       return data;
     }
 
-    private static List<object> HandleEllipse(Ellipse ellipse, List<object> data, Point3d origin)
+    private static List<BaseData> HandleEllipse(Ellipse ellipse, List<BaseData> data, Point3d origin)
     {
       var ellipseData = new EllipseData
       {
@@ -376,7 +406,8 @@ namespace GMEPElectricalResidential
         MajorRadius = ellipse.MajorRadius,
         MinorRadius = ellipse.MinorRadius,
         StartAngle = ellipse.StartAngle,
-        EndAngle = ellipse.EndAngle
+        EndAngle = ellipse.EndAngle,
+        Type = "EllipseData"
       };
 
       data.Add(ellipseData);
@@ -384,7 +415,7 @@ namespace GMEPElectricalResidential
       return data;
     }
 
-    private static List<object> HandleMText(MText mText, List<object> data, Point3d origin)
+    private static List<BaseData> HandleMText(MText mText, List<BaseData> data, Point3d origin)
     {
       var mTextData = new MTextData
       {
@@ -401,7 +432,8 @@ namespace GMEPElectricalResidential
         LineSpaceDistance = mText.LineSpaceDistance,
         Height = mText.ActualHeight,
         Width = mText.ActualWidth,
-        Rotation = mText.Rotation
+        Rotation = mText.Rotation,
+        Type = "MTextData"
       };
 
       data.Add(mTextData);
@@ -409,12 +441,13 @@ namespace GMEPElectricalResidential
       return data;
     }
 
-    private static List<object> HandleSolid(Solid solid, List<object> data, Point3d origin)
+    private static List<BaseData> HandleSolid(Solid solid, List<BaseData> data, Point3d origin)
     {
       var solidData = new SolidData
       {
         Layer = solid.Layer,
-        Vertices = new List<SimpleVector3d>()
+        Vertices = new List<SimpleVector3d>(),
+        Type = "SolidData"
       };
 
       for (short i = 0; i < 4; i++)
@@ -429,7 +462,7 @@ namespace GMEPElectricalResidential
       return data;
     }
 
-    private static List<object> HandleLine(Line line, List<object> data, Point3d origin)
+    private static List<BaseData> HandleLine(Line line, List<BaseData> data, Point3d origin)
     {
       var lineData = new LineData
       {
@@ -445,16 +478,30 @@ namespace GMEPElectricalResidential
           X = line.EndPoint.X - origin.X,
           Y = line.EndPoint.Y - origin.Y,
           Z = line.EndPoint.Z - origin.Z
-        }
+        },
+        Type = "LineData"
       };
 
       data.Add(lineData);
 
       return data;
     }
+
+    public static void SaveDataToJsonFile(object data, string fileName)
+    {
+      Console.WriteLine("Saving data to file...");
+      Console.WriteLine(data.GetType());
+      var settings = new JsonSerializerSettings
+      {
+        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+      };
+
+      string jsonData = JsonConvert.SerializeObject(data, Formatting.Indented, settings);
+      File.WriteAllText(fileName, jsonData);
+    }
   }
 
-  internal class PolylineData
+  internal class PolylineData : BaseData
   {
     public string Layer { get; set; }
     public List<SimpleVector3d> Vectors { get; set; }
@@ -462,14 +509,14 @@ namespace GMEPElectricalResidential
     public bool Closed { get; set; }
   }
 
-  internal class LineData
+  internal class LineData : BaseData
   {
     public string Layer { get; set; }
     public SimpleVector3d StartPoint { get; set; }
     public SimpleVector3d EndPoint { get; set; }
   }
 
-  internal class ArcData
+  internal class ArcData : BaseData
   {
     public string Layer { get; set; }
     public SimpleVector3d Center { get; set; }
@@ -478,14 +525,14 @@ namespace GMEPElectricalResidential
     public double EndAngle { get; set; }
   }
 
-  internal class CircleData
+  internal class CircleData : BaseData
   {
     public string Layer { get; set; }
     public SimpleVector3d Center { get; set; }
     public double Radius { get; set; }
   }
 
-  internal class EllipseData
+  internal class EllipseData : BaseData
   {
     public string Layer { get; set; }
     public SimpleVector3d UnitNormal { get; set; }
@@ -509,7 +556,7 @@ namespace GMEPElectricalResidential
     }
   }
 
-  internal class MTextData
+  internal class MTextData : BaseData
   {
     public string Layer { get; set; }
     public string Style { get; set; }
@@ -522,10 +569,16 @@ namespace GMEPElectricalResidential
     public double Rotation { get; set; }
   }
 
-  internal class SolidData
+  internal class SolidData : BaseData
   {
     public string Layer { get; set; }
     public List<SimpleVector3d> Vertices { get; set; }
+  }
+
+  [JsonConverter(typeof(BaseDataConverter))]
+  public class BaseData
+  {
+    public string Type { get; set; }
   }
 
   public class SimpleVector3d
@@ -533,5 +586,80 @@ namespace GMEPElectricalResidential
     public double X { get; set; }
     public double Y { get; set; }
     public double Z { get; set; }
+  }
+
+  public class BaseDataConverter : JsonConverter
+  {
+    public override bool CanConvert(Type objectType)
+    {
+      return (objectType == typeof(BaseData));
+    }
+
+    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    {
+      JObject jo = JObject.Load(reader);
+      switch (jo["Type"].Value<string>())
+      {
+        case "PolylineData":
+          return jo.ToObject<PolylineData>(serializer);
+
+        case "LineData":
+          return jo.ToObject<LineData>(serializer);
+
+        case "ArcData":
+          return jo.ToObject<ArcData>(serializer);
+
+        case "CircleData":
+          return jo.ToObject<CircleData>(serializer);
+
+        case "EllipseData":
+          return jo.ToObject<EllipseData>(serializer);
+
+        case "MTextData":
+          return jo.ToObject<MTextData>(serializer);
+
+        case "SolidData":
+          return jo.ToObject<SolidData>(serializer);
+
+        default:
+          throw new System.Exception("Type property not found!");
+      }
+    }
+
+    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    {
+      if (value is PolylineData polylineData)
+      {
+        serializer.Serialize(writer, polylineData);
+      }
+      else if (value is LineData lineData)
+      {
+        serializer.Serialize(writer, lineData);
+      }
+      else if (value is ArcData arcData)
+      {
+        serializer.Serialize(writer, arcData);
+      }
+      else if (value is CircleData circleData)
+      {
+        serializer.Serialize(writer, circleData);
+      }
+      else if (value is EllipseData ellipseData)
+      {
+        serializer.Serialize(writer, ellipseData);
+      }
+      else if (value is MTextData mTextData)
+      {
+        serializer.Serialize(writer, mTextData);
+      }
+      else if (value is SolidData solidData)
+      {
+        serializer.Serialize(writer, solidData);
+      }
+      else
+      {
+        throw new System.Exception("Unknown type!");
+      }
+    }
   }
 }
