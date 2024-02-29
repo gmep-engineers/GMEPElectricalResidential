@@ -1,4 +1,7 @@
-﻿using GMEPUtilities;
+﻿using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.Geometry;
+using Autodesk.AutoCAD.Runtime;
+using GMEPUtilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
