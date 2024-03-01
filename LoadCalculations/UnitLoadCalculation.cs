@@ -1150,7 +1150,7 @@ namespace GMEPElectricalResidential
     {
       ID = id;
       DwellingArea = new UnitDwellingArea();
-      GeneralLoads = new UnitGeneralLoadContainer() { LightingCode = "220.42" };
+      GeneralLoads = new UnitGeneralLoadContainer();
       CustomLoads = new List<UnitLoad>();
       ACLoads = new UnitACLoadContainer();
       Totals = new UnitTotalContainer();
@@ -1175,6 +1175,7 @@ namespace GMEPElectricalResidential
 
   public class UnitGeneralLoadContainer
   {
+    public static string LightingCode = "220.42";
     public UnitLoad Lighting { get; set; }
     public UnitLoad SmallAppliance { get; set; }
     public UnitLoad Laundry { get; set; }
@@ -1191,7 +1192,6 @@ namespace GMEPElectricalResidential
     public UnitLoad WaterHeater { get; set; }
     public UnitLoad Cooktop { get; set; }
     public List<UnitLoad> Customs { get; set; }
-    public string LightingCode { get; set; }
     public string LightingOccupancyType { get; set; }
   }
 

@@ -198,15 +198,78 @@ namespace GMEPElectricalResidential
 
       currentHeight += generalCalcSectionHeight;
 
+      ObjectData airConditioningBodyData = ShiftData(bodyData, -currentHeight);
+      airConditioningBodyData = UpdateAirConditioningData(airConditioningBodyData, unitInfo);
+      double airConditioningSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, airConditioningBodyData.NumberOfRows);
+
       string modifiedHeaderData = JsonConvert.SerializeObject(headerData);
       string modifiedDwellingBodyData = JsonConvert.SerializeObject(dwellingBodyData);
       string modifiedGeneralBodyData = JsonConvert.SerializeObject(generalBodyData);
       string modifiedGeneralBodyCalcData = JsonConvert.SerializeObject(generalBodyCalcData);
+      string modifiedAirConditioningBodyData = JsonConvert.SerializeObject(airConditioningBodyData);
 
       CreateObjectFromData(modifiedHeaderData, point);
       CreateObjectFromData(modifiedDwellingBodyData, point);
       CreateObjectFromData(modifiedGeneralBodyData, point);
       CreateObjectFromData(modifiedGeneralBodyCalcData, point);
+      CreateObjectFromData(modifiedAirConditioningBodyData, point);
+    }
+
+    private static ObjectData UpdateAirConditioningData(ObjectData airConditioningBodyData, UnitInformation unitInfo)
+    {
+      int startingRows = 2;
+      var headers = airConditioningBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
+      if (headers != null)
+      {
+        headers.Contents = "";
+        string dwellingSubtitles = "Air Conditioning Calculation:".Underline().NewLine();
+        if (unitInfo.ACLoads.Condenser > 0)
+        {
+          dwellingSubtitles += "Outdoor Condensing Unit:".NewLine();
+          startingRows++;
+        }
+        if (unitInfo.ACLoads.FanCoil > 0)
+        {
+          dwellingSubtitles += "Indoor Fan Coil Unit:".NewLine();
+          startingRows++;
+        }
+        if (unitInfo.ACLoads.HeatingUnit.Heating > 0)
+        {
+          dwellingSubtitles += "Heating Unit" + $" {(unitInfo.ACLoads.HeatingUnit.NumberOfUnits > 1 ? $"({unitInfo.ACLoads.HeatingUnit.NumberOfUnits}):" : ":")}".NewLine();
+          startingRows++;
+        }
+
+        dwellingSubtitles += $"Total AC Load (CEC {unitInfo.ACLoads.ElectricalCode}):".NewLine();
+
+        headers.Contents = dwellingSubtitles.SetFont("Arial");
+      }
+
+      var values = airConditioningBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
+      if (values != null)
+      {
+        values.Contents = "";
+        string dwellingValues = "".NewLine();
+        if (unitInfo.ACLoads.Condenser > 0)
+        {
+          dwellingValues += $"{unitInfo.ACLoads.Condenser}VA".NewLine();
+        }
+        if (unitInfo.ACLoads.FanCoil > 0)
+        {
+          dwellingValues += $"{unitInfo.ACLoads.FanCoil}VA".NewLine();
+        }
+        if (unitInfo.ACLoads.HeatingUnit.Heating > 0)
+        {
+          dwellingValues += $"{unitInfo.ACLoads.HeatingUnit.Heating}VA".NewLine();
+        }
+
+        dwellingValues += $"{unitInfo.Totals.TotalACLoad}VA".NewLine();
+
+        values.Contents = dwellingValues.SetFont("Arial");
+      }
+
+      airConditioningBodyData.NumberOfRows = startingRows;
+
+      return airConditioningBodyData;
     }
 
     private static ObjectData UpdateGeneralCalculationData(ObjectData generalBodyCalcData, UnitInformation unitInfo)
@@ -248,10 +311,10 @@ namespace GMEPElectricalResidential
       {
         headers.Contents = "";
         string dwellingTitle = "General Load:".Underline().NewLine();
-        string dwellingSubtitles = "General Lighting (Floor Area x 3VA/ft²):".NewLine() +
+        string dwellingSubtitles = $"General Lighting (Floor Area x 3VA/ft²) (CEC {UnitGeneralLoadContainer.LightingCode}):".NewLine() +
                            $"Small Appliance (3-20ACK by CEC 210.11){((unitInfo.GeneralLoads.SmallAppliance.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.SmallAppliance.Multiplier}):")}".NewLine() +
-                           $"Laundry (1-20ACKT by CEC210.11){((unitInfo.GeneralLoads.Laundry.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Laundry.Multiplier}):")}".NewLine() +
-                           $"Bathroom (1-20ACKT by CEC210.11){((unitInfo.GeneralLoads.Bathroom.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Bathroom.Multiplier}):")}".NewLine() +
+                           $"Laundry (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Laundry.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Laundry.Multiplier}):")}".NewLine() +
+                           $"Bathroom (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Bathroom.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Bathroom.Multiplier}):")}".NewLine() +
                            $"Dishwasher{((unitInfo.GeneralLoads.Dishwasher.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Dishwasher.Multiplier}):")}".NewLine() +
                            $"Microwave Oven{((unitInfo.GeneralLoads.MicrowaveOven.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.MicrowaveOven.Multiplier}):")}".NewLine() +
                            $"Garbage Disposal{((unitInfo.GeneralLoads.GarbageDisposal.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.GarbageDisposal.Multiplier}):")}".NewLine() +
@@ -279,29 +342,29 @@ namespace GMEPElectricalResidential
       if (values != null)
       {
         values.Contents = "";
-        string dwellingValues = "".NewLine() +
-                                $"{unitInfo.GeneralLoads.Lighting.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.SmallAppliance.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.Laundry.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.Bathroom.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.Dishwasher.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.MicrowaveOven.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.GarbageDisposal.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.BathroomFans.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.GarageDoorOpener.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.Dryer.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.Range.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.Refrigerator.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.Oven.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.WaterHeater.VA}VA".NewLine() +
-                                $"{unitInfo.GeneralLoads.Cooktop.VA}VA".NewLine();
+        string generalValues = "".NewLine() +
+                       $"{unitInfo.GeneralLoads.Lighting.VA * unitInfo.GeneralLoads.Lighting.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.SmallAppliance.VA * unitInfo.GeneralLoads.SmallAppliance.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.Laundry.VA * unitInfo.GeneralLoads.Laundry.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.Bathroom.VA * unitInfo.GeneralLoads.Bathroom.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.Dishwasher.VA * unitInfo.GeneralLoads.Dishwasher.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.MicrowaveOven.VA * unitInfo.GeneralLoads.MicrowaveOven.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.GarbageDisposal.VA * unitInfo.GeneralLoads.GarbageDisposal.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.BathroomFans.VA * unitInfo.GeneralLoads.BathroomFans.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.GarageDoorOpener.VA * unitInfo.GeneralLoads.GarageDoorOpener.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.Dryer.VA * unitInfo.GeneralLoads.Dryer.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.Range.VA * unitInfo.GeneralLoads.Range.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.Refrigerator.VA * unitInfo.GeneralLoads.Refrigerator.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.Oven.VA * unitInfo.GeneralLoads.Oven.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.WaterHeater.VA * unitInfo.GeneralLoads.WaterHeater.Multiplier}VA".NewLine() +
+                       $"{unitInfo.GeneralLoads.Cooktop.VA * unitInfo.GeneralLoads.Cooktop.Multiplier}VA".NewLine();
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
-          dwellingValues += $"{customLoad.VA}VA".NewLine();
+          generalValues += $"{customLoad.VA}VA".NewLine();
         });
 
-        values.Contents = dwellingValues.SetFont("Arial");
+        values.Contents = generalValues.SetFont("Arial");
       }
 
       generalBodyData.NumberOfRows = startingRows;
@@ -330,7 +393,7 @@ namespace GMEPElectricalResidential
       {
         values.Contents = "";
         string dwellingValues = "".NewLine() +
-                                $"{unitInfo.DwellingArea.FloorArea} ft\u00B2".NewLine() +
+                                $"{unitInfo.DwellingArea.FloorArea}ft\u00B2".NewLine() +
                                 $"{unitInfo.DwellingArea.Heater}".NewLine() +
                                 $"{unitInfo.DwellingArea.Dryer}".NewLine() +
                                 $"{unitInfo.DwellingArea.Oven}".NewLine() +
