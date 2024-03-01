@@ -677,10 +677,7 @@ namespace GMEPElectricalResidential
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      if (WATER_HEATER_VA.Text == "180")
-      {
-        WATER_HEATER_VA.Text = "5000";
-      }
+      WATER_HEATER_VA.Text = "5000";
 
       _unitInformation.DwellingArea.Heater = ApplianceType.Electric;
     }
@@ -710,10 +707,7 @@ namespace GMEPElectricalResidential
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      if (DRYER_VA.Text == "180")
-      {
-        DRYER_VA.Text = "5000";
-      }
+      DRYER_VA.Text = "5000";
 
       _unitInformation.DwellingArea.Dryer = ApplianceType.Electric;
     }
@@ -743,10 +737,7 @@ namespace GMEPElectricalResidential
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      if (OVEN_VA.Text == "180")
-      {
-        OVEN_VA.Text = "8000";
-      }
+      OVEN_VA.Text = "8000";
 
       _unitInformation.DwellingArea.Oven = ApplianceType.Electric;
     }
@@ -776,10 +767,7 @@ namespace GMEPElectricalResidential
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      if (COOKTOP_VA.Text == "180")
-      {
-        COOKTOP_VA.Text = "8000";
-      }
+      COOKTOP_VA.Text = "8000";
 
       _unitInformation.DwellingArea.Cooktop = ApplianceType.Electric;
     }
