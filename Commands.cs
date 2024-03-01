@@ -103,7 +103,7 @@ namespace GMEPElectricalResidential
       SaveDataToJsonFile(data, "data.json");
     }
 
-    public static void CreateObjectFromData(string jsonData, Point3d basePoint)
+    public static void CreateObjectFromData(string jsonData, Point3d basePoint, BlockTableRecord block)
     {
       ObjectData objectData = JsonConvert.DeserializeObject<ObjectData>(jsonData);
 
@@ -112,18 +112,7 @@ namespace GMEPElectricalResidential
 
       using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
       {
-        BlockTable acBlkTbl;
-        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
-        BlockTableRecord acBlkTblRec;
-
-        if (acCurDb.TileMode)
-        {
-          acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
-        }
-        else
-        {
-          acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.PaperSpace], OpenMode.ForWrite) as BlockTableRecord;
-        }
+        BlockTableRecord acBlkTblRec = block;
 
         foreach (var polyline in objectData.Polylines)
         {
@@ -169,63 +158,126 @@ namespace GMEPElectricalResidential
       }
     }
 
-    public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d point)
+    public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d placementPoint)
     {
       double HEADER_HEIGHT = 0.75;
       double currentHeight = HEADER_HEIGHT;
+      string blockName = $"Unit {unitInfo.Name}";
 
-      ObjectData headerData = GetCopyPasteData("UnitLoadCalculationHeader");
-      ObjectData bodyData = GetCopyPasteData("UnitLoadCalculationBody");
+      var acCurDb = Application.DocumentManager.MdiActiveDocument.Database;
 
-      ObjectData dwellingBodyData = ShiftData(bodyData, -currentHeight);
-      dwellingBodyData = UpdateDwellingData(dwellingBodyData, unitInfo);
-      double dwellingSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, dwellingBodyData.NumberOfRows);
+      using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
+      {
+        Point3d point = new Point3d(0, 0, 0);
+        BlockTable acBlkTbl;
+        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
 
-      currentHeight += dwellingSectionHeight;
+        BlockTableRecord acBlkTblRec;
+        acBlkTblRec = new BlockTableRecord();
+        acBlkTblRec.Name = blockName;
 
-      ObjectData generalBodyData = ShiftData(bodyData, -currentHeight);
-      generalBodyData = UpdateGeneralData(generalBodyData, unitInfo);
-      double generalSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, generalBodyData.NumberOfRows);
+        int suffix = 1;
+        while (acBlkTbl.Has(acBlkTblRec.Name))
+        {
+          acBlkTblRec.Name = blockName + "(" + suffix + ")";
+          suffix++;
+        }
 
-      currentHeight += generalSectionHeight;
+        acBlkTbl.UpgradeOpen();
+        acBlkTbl.Add(acBlkTblRec);
+        acTrans.AddNewlyCreatedDBObject(acBlkTblRec, true);
 
-      ObjectData generalBodyCalcData = ShiftData(bodyData, -currentHeight);
-      generalBodyCalcData = UpdateGeneralCalculationData(generalBodyCalcData, unitInfo);
-      double generalCalcSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, generalBodyCalcData.NumberOfRows);
+        ObjectData headerData = GetCopyPasteData("UnitLoadCalculationHeader");
+        ObjectData bodyData = GetCopyPasteData("UnitLoadCalculationBody");
 
-      currentHeight += generalCalcSectionHeight;
+        headerData = UpdateHeaderData(headerData, unitInfo);
 
-      ObjectData airConditioningBodyData = ShiftData(bodyData, -currentHeight);
-      airConditioningBodyData = UpdateAirConditioningData(airConditioningBodyData, unitInfo);
-      double airConditioningSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, airConditioningBodyData.NumberOfRows);
+        ObjectData dwellingBodyData = ShiftData(bodyData, -currentHeight);
+        dwellingBodyData = UpdateDwellingData(dwellingBodyData, unitInfo);
+        double dwellingSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, dwellingBodyData.NumberOfRows, acBlkTblRec);
 
-      currentHeight += airConditioningSectionHeight;
+        currentHeight += dwellingSectionHeight;
 
-      ObjectData customBodyData = ShiftData(bodyData, -currentHeight);
-      customBodyData = UpdateCustomData(customBodyData, unitInfo);
-      double customSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, customBodyData.NumberOfRows);
+        ObjectData generalBodyData = ShiftData(bodyData, -currentHeight);
+        generalBodyData = UpdateGeneralData(generalBodyData, unitInfo);
+        double generalSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, generalBodyData.NumberOfRows, acBlkTblRec);
 
-      currentHeight += customSectionHeight;
+        currentHeight += generalSectionHeight;
 
-      ObjectData serviceBodyData = ShiftData(bodyData, -currentHeight);
-      serviceBodyData = UpdateServiceData(serviceBodyData, unitInfo);
-      double _ = CreateUnitLoadCalculationRectangle(point, -currentHeight, serviceBodyData.NumberOfRows);
+        ObjectData generalBodyCalcData = ShiftData(bodyData, -currentHeight);
+        generalBodyCalcData = UpdateGeneralCalculationData(generalBodyCalcData, unitInfo);
+        double generalCalcSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, generalBodyCalcData.NumberOfRows, acBlkTblRec);
 
-      string modifiedHeaderData = JsonConvert.SerializeObject(headerData);
-      string modifiedDwellingBodyData = JsonConvert.SerializeObject(dwellingBodyData);
-      string modifiedGeneralBodyData = JsonConvert.SerializeObject(generalBodyData);
-      string modifiedGeneralBodyCalcData = JsonConvert.SerializeObject(generalBodyCalcData);
-      string modifiedAirConditioningBodyData = JsonConvert.SerializeObject(airConditioningBodyData);
-      string modifiedCustomBodyData = JsonConvert.SerializeObject(customBodyData);
-      string modifiedServiceBodyData = JsonConvert.SerializeObject(serviceBodyData);
+        currentHeight += generalCalcSectionHeight;
 
-      CreateObjectFromData(modifiedHeaderData, point);
-      CreateObjectFromData(modifiedDwellingBodyData, point);
-      CreateObjectFromData(modifiedGeneralBodyData, point);
-      CreateObjectFromData(modifiedGeneralBodyCalcData, point);
-      CreateObjectFromData(modifiedAirConditioningBodyData, point);
-      CreateObjectFromData(modifiedCustomBodyData, point);
-      CreateObjectFromData(modifiedServiceBodyData, point);
+        ObjectData airConditioningBodyData = ShiftData(bodyData, -currentHeight);
+        airConditioningBodyData = UpdateAirConditioningData(airConditioningBodyData, unitInfo);
+        double airConditioningSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, airConditioningBodyData.NumberOfRows, acBlkTblRec);
+
+        currentHeight += airConditioningSectionHeight;
+
+        ObjectData customBodyData = ShiftData(bodyData, -currentHeight);
+        customBodyData = UpdateCustomData(customBodyData, unitInfo);
+        double customSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, customBodyData.NumberOfRows, acBlkTblRec);
+
+        currentHeight += customSectionHeight;
+
+        ObjectData serviceBodyData = ShiftData(bodyData, -currentHeight);
+        serviceBodyData = UpdateServiceData(serviceBodyData, unitInfo);
+        double _ = CreateUnitLoadCalculationRectangle(point, -currentHeight, serviceBodyData.NumberOfRows, acBlkTblRec);
+
+        string modifiedHeaderData = JsonConvert.SerializeObject(headerData);
+        string modifiedDwellingBodyData = JsonConvert.SerializeObject(dwellingBodyData);
+        string modifiedGeneralBodyData = JsonConvert.SerializeObject(generalBodyData);
+        string modifiedGeneralBodyCalcData = JsonConvert.SerializeObject(generalBodyCalcData);
+        string modifiedAirConditioningBodyData = JsonConvert.SerializeObject(airConditioningBodyData);
+        string modifiedCustomBodyData = JsonConvert.SerializeObject(customBodyData);
+        string modifiedServiceBodyData = JsonConvert.SerializeObject(serviceBodyData);
+
+        CreateObjectFromData(modifiedHeaderData, point, acBlkTblRec);
+        CreateObjectFromData(modifiedDwellingBodyData, point, acBlkTblRec);
+        CreateObjectFromData(modifiedGeneralBodyData, point, acBlkTblRec);
+        CreateObjectFromData(modifiedGeneralBodyCalcData, point, acBlkTblRec);
+        CreateObjectFromData(modifiedAirConditioningBodyData, point, acBlkTblRec);
+        CreateObjectFromData(modifiedCustomBodyData, point, acBlkTblRec);
+        CreateObjectFromData(modifiedServiceBodyData, point, acBlkTblRec);
+
+        acTrans.Commit();
+      }
+
+      using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
+      {
+        BlockTable acBlkTbl;
+        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
+        BlockTableRecord acBlkTblRec;
+
+        if (acCurDb.TileMode)
+        {
+          acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+        }
+        else
+        {
+          acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.PaperSpace], OpenMode.ForWrite) as BlockTableRecord;
+        }
+
+        if (acBlkTbl.Has(blockName))
+        {
+          BlockReference acBlkRef = new BlockReference(placementPoint, acBlkTbl[blockName]);
+
+          acBlkTblRec.AppendEntity(acBlkRef);
+
+          acTrans.AddNewlyCreatedDBObject(acBlkRef, true);
+        }
+
+        acTrans.Commit();
+      }
+    }
+
+    private static ObjectData UpdateHeaderData(ObjectData headerData, UnitInformation unitInfo)
+    {
+      var serviceLoadCalculationMText = headerData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
+      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - UNIT {unitInfo.Name}");
+      return headerData;
     }
 
     private static ObjectData UpdateServiceData(ObjectData serviceBodyData, UnitInformation unitInfo)
@@ -488,7 +540,7 @@ namespace GMEPElectricalResidential
       return dwellingBodyData;
     }
 
-    private static double CreateUnitLoadCalculationRectangle(Point3d point, double shiftY, int numberOfRows)
+    private static double CreateUnitLoadCalculationRectangle(Point3d point, double shiftY, int numberOfRows, BlockTableRecord block)
     {
       if (numberOfRows == 0)
       {
@@ -510,30 +562,19 @@ namespace GMEPElectricalResidential
 
       List<Point3d> points = new List<Point3d> { topRight, topLeft, bottomLeft, bottomRight };
 
-      CreateClosedPolylineGivenPoints(points);
+      CreateClosedPolylineGivenPoints(points, block);
 
       return height;
     }
 
-    private static void CreateClosedPolylineGivenPoints(List<Point3d> points)
+    private static void CreateClosedPolylineGivenPoints(List<Point3d> points, BlockTableRecord block)
     {
       Document acDoc = Application.DocumentManager.MdiActiveDocument;
       Database acCurDb = acDoc.Database;
 
       using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
       {
-        BlockTable acBlkTbl;
-        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
-
-        BlockTableRecord acBlkTblRec;
-        if (acCurDb.TileMode)
-        {
-          acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
-        }
-        else
-        {
-          acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.PaperSpace], OpenMode.ForWrite) as BlockTableRecord;
-        }
+        BlockTableRecord acBlkTblRec = block;
 
         Polyline acPoly = new Polyline();
         for (int i = 0; i < points.Count; i++)

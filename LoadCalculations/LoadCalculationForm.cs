@@ -242,6 +242,7 @@ namespace GMEPElectricalResidential
         foreach (var unitInfo in allUnitInfo)
         {
           Commands.CreateUnitLoadCalculationTable(unitInfo, point);
+          point = new Point3d(point.X - 7, point.Y, point.Z);
         }
       }
     }

@@ -1248,7 +1248,7 @@ namespace GMEPElectricalResidential
 
     public int ServiceRating()
     {
-      int[] possibleValues = { 200, 400, 600, 800, 1000, 1200, 1600, 2000, 2500, 3000, 4000 };
+      int[] possibleValues = { 30, 60, 100, 125, 150, 200, 400, 600, 800, 1000, 1200, 1600, 2000, 2500, 3000, 4000 };
       return possibleValues.FirstOrDefault(value => value >= ServiceLoad);
     }
   }
