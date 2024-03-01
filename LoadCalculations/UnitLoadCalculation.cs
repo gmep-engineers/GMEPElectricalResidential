@@ -1054,6 +1054,12 @@ namespace GMEPElectricalResidential
     {
       var units = new List<int> { 60, 48, 42, 36, 30, 24, 18 };
       var bestCombination = new List<int>();
+      var startingCombination = new List<int>();
+      while (kBTU >= 300)
+      {
+        startingCombination.Add(60);
+        kBTU -= 60;
+      }
 
       void FindCombination(int remainingBTU, List<int> currentCombination, int startIndex)
       {
@@ -1076,7 +1082,7 @@ namespace GMEPElectricalResidential
         }
       }
 
-      FindCombination(kBTU, new List<int>(), 0);
+      FindCombination(kBTU, startingCombination, 0);
       return bestCombination;
     }
 
