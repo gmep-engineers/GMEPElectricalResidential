@@ -175,28 +175,178 @@ namespace GMEPElectricalResidential
     public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d point)
     {
       double HEADER_HEIGHT = 0.75;
-      int dwellingNumberOfLines = 6;
+      double currentHeight = HEADER_HEIGHT;
 
       ObjectData headerData = GetCopyPasteData("UnitLoadCalculationHeader");
       ObjectData bodyData = GetCopyPasteData("UnitLoadCalculationBody");
 
-      ObjectData dwellingBodyData = ShiftData(bodyData, -HEADER_HEIGHT);
+      ObjectData dwellingBodyData = ShiftData(bodyData, -currentHeight);
       dwellingBodyData = UpdateDwellingData(dwellingBodyData, unitInfo);
-      double dwellingSectionHeight = CreateUnitLoadCalculationRectangle(point, -HEADER_HEIGHT, dwellingNumberOfLines);
+      double dwellingSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, dwellingBodyData.NumberOfRows);
 
-      ObjectData generalBodyData = ShiftData(bodyData, -HEADER_HEIGHT - dwellingSectionHeight);
+      currentHeight += dwellingSectionHeight;
+
+      ObjectData generalBodyData = ShiftData(bodyData, -currentHeight);
+      generalBodyData = UpdateGeneralData(generalBodyData, unitInfo);
+      double generalSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, generalBodyData.NumberOfRows);
+
+      currentHeight += generalSectionHeight;
+
+      ObjectData generalBodyCalcData = ShiftData(bodyData, -currentHeight);
+      generalBodyCalcData = UpdateGeneralCalculationData(generalBodyCalcData, unitInfo);
+      double generalCalcSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, generalBodyCalcData.NumberOfRows);
+
+      currentHeight += generalCalcSectionHeight;
 
       string modifiedHeaderData = JsonConvert.SerializeObject(headerData);
       string modifiedDwellingBodyData = JsonConvert.SerializeObject(dwellingBodyData);
+      string modifiedGeneralBodyData = JsonConvert.SerializeObject(generalBodyData);
+      string modifiedGeneralBodyCalcData = JsonConvert.SerializeObject(generalBodyCalcData);
 
       CreateObjectFromData(modifiedHeaderData, point);
       CreateObjectFromData(modifiedDwellingBodyData, point);
+      CreateObjectFromData(modifiedGeneralBodyData, point);
+      CreateObjectFromData(modifiedGeneralBodyCalcData, point);
+    }
+
+    private static ObjectData UpdateGeneralCalculationData(ObjectData generalBodyCalcData, UnitInformation unitInfo)
+    {
+      var headers = generalBodyCalcData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
+      if (headers != null)
+      {
+        headers.Contents = "";
+        string dwellingSubtitles = "Total General Load:".NewLine() +
+                                   "First 10 KVA at 100%:".NewLine() +
+                                   $"Remainder at 40% ({unitInfo.Totals.AmountOver10KVA()}VA x 0.4):".NewLine() +
+                                   "Subtotal General Load:".NewLine();
+
+        headers.Contents = dwellingSubtitles.SetFont("Arial");
+      }
+
+      var values = generalBodyCalcData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
+      if (values != null)
+      {
+        values.Contents = "";
+        string dwellingValues = $"{unitInfo.Totals.TotalGeneralLoad}VA".NewLine() +
+                                $"{unitInfo.Totals.First10KVA()}VA".NewLine() +
+                                $"{unitInfo.Totals.RemainderAt40Percent()}VA".NewLine() +
+                                $"{unitInfo.Totals.SubtotalGeneralLoad}VA".NewLine();
+
+        values.Contents = dwellingValues.SetFont("Arial");
+      }
+
+      generalBodyCalcData.NumberOfRows = 4;
+
+      return generalBodyCalcData;
+    }
+
+    private static ObjectData UpdateGeneralData(ObjectData generalBodyData, UnitInformation unitInfo)
+    {
+      int startingRows = 16;
+      var headers = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
+      if (headers != null)
+      {
+        headers.Contents = "";
+        string dwellingTitle = "General Load:".Underline().NewLine();
+        string dwellingSubtitles = "General Lighting (Floor Area x 3VA/ft²):".NewLine() +
+                           $"Small Appliance (3-20ACK by CEC 210.11){((unitInfo.GeneralLoads.SmallAppliance.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.SmallAppliance.Multiplier}):")}".NewLine() +
+                           $"Laundry (1-20ACKT by CEC210.11){((unitInfo.GeneralLoads.Laundry.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Laundry.Multiplier}):")}".NewLine() +
+                           $"Bathroom (1-20ACKT by CEC210.11){((unitInfo.GeneralLoads.Bathroom.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Bathroom.Multiplier}):")}".NewLine() +
+                           $"Dishwasher{((unitInfo.GeneralLoads.Dishwasher.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Dishwasher.Multiplier}):")}".NewLine() +
+                           $"Microwave Oven{((unitInfo.GeneralLoads.MicrowaveOven.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.MicrowaveOven.Multiplier}):")}".NewLine() +
+                           $"Garbage Disposal{((unitInfo.GeneralLoads.GarbageDisposal.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.GarbageDisposal.Multiplier}):")}".NewLine() +
+                           $"Bathroom Fans{((unitInfo.GeneralLoads.BathroomFans.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.BathroomFans.Multiplier}):")}".NewLine() +
+                           $"Garage Door Opener{((unitInfo.GeneralLoads.GarageDoorOpener.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.GarageDoorOpener.Multiplier}):")}".NewLine() +
+                           $"Dryer{((unitInfo.GeneralLoads.Dryer.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Dryer.Multiplier}):")}".NewLine() +
+                           $"Range{((unitInfo.GeneralLoads.Range.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Range.Multiplier}):")}".NewLine() +
+                           $"Refrigerator{((unitInfo.GeneralLoads.Refrigerator.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Refrigerator.Multiplier}):")}".NewLine() +
+                           $"Oven{((unitInfo.GeneralLoads.Oven.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Oven.Multiplier}):")}".NewLine() +
+                           $"Water Heater{((unitInfo.GeneralLoads.WaterHeater.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.WaterHeater.Multiplier}):")}".NewLine() +
+                           $"Cooktop{((unitInfo.GeneralLoads.Cooktop.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Cooktop.Multiplier}):")}".NewLine();
+
+        unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
+        {
+          dwellingSubtitles += $"{customLoad.Name}{((customLoad.Multiplier <= 1) ? ":" : $" ({customLoad.Multiplier}):")}".NewLine();
+          startingRows++;
+        });
+
+        string dwellingTitleAndSubtitles = dwellingTitle + dwellingSubtitles;
+
+        headers.Contents = dwellingTitleAndSubtitles.SetFont("Arial");
+      }
+
+      var values = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
+      if (values != null)
+      {
+        values.Contents = "";
+        string dwellingValues = "".NewLine() +
+                                $"{unitInfo.GeneralLoads.Lighting.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.SmallAppliance.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.Laundry.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.Bathroom.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.Dishwasher.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.MicrowaveOven.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.GarbageDisposal.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.BathroomFans.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.GarageDoorOpener.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.Dryer.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.Range.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.Refrigerator.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.Oven.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.WaterHeater.VA}VA".NewLine() +
+                                $"{unitInfo.GeneralLoads.Cooktop.VA}VA".NewLine();
+
+        unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
+        {
+          dwellingValues += $"{customLoad.VA}VA".NewLine();
+        });
+
+        values.Contents = dwellingValues.SetFont("Arial");
+      }
+
+      generalBodyData.NumberOfRows = startingRows;
+
+      return generalBodyData;
+    }
+
+    private static ObjectData UpdateDwellingData(ObjectData dwellingBodyData, UnitInformation unitInfo)
+    {
+      var headers = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
+      if (headers != null)
+      {
+        headers.Contents = "";
+        string dwellingTitle = "Dwelling Information:".Underline().NewLine();
+        string dwellingSubtitles = "Floor Area:".NewLine() +
+                                   "Heater:".NewLine() +
+                                   "Dryer:".NewLine() +
+                                   "Oven:".NewLine() +
+                                   "Cooktop:";
+        string dwellingTitleAndSubtitles = dwellingTitle + dwellingSubtitles;
+        headers.Contents = dwellingTitleAndSubtitles.SetFont("Arial");
+      }
+
+      var values = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
+      if (values != null)
+      {
+        values.Contents = "";
+        string dwellingValues = "".NewLine() +
+                                $"{unitInfo.DwellingArea.FloorArea} ft\u00B2".NewLine() +
+                                $"{unitInfo.DwellingArea.Heater}".NewLine() +
+                                $"{unitInfo.DwellingArea.Dryer}".NewLine() +
+                                $"{unitInfo.DwellingArea.Oven}".NewLine() +
+                                $"{unitInfo.DwellingArea.Cooktop}";
+        values.Contents = dwellingValues.SetFont("Arial");
+      }
+
+      dwellingBodyData.NumberOfRows = 6;
+
+      return dwellingBodyData;
     }
 
     private static double CreateUnitLoadCalculationRectangle(Point3d point, double shiftY, int numberOfRows)
     {
       double MARGIN_TOP_BOT = 0.16;
-      double ROW_HEIGHT = 0.234;
+      double ROW_HEIGHT = 0.245;
       double WIDTH = 7.0;
 
       Point3d topRight = new Point3d(point.X, point.Y + shiftY, point.Z);
@@ -248,38 +398,6 @@ namespace GMEPElectricalResidential
 
         acTrans.Commit();
       }
-    }
-
-    private static ObjectData UpdateDwellingData(ObjectData dwellingBodyData, UnitInformation unitInfo)
-    {
-      var headers = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
-      if (headers != null)
-      {
-        headers.Contents = "";
-        string dwellingTitle = "Dwelling Information:".Underline().NewLine();
-        string dwellingSubtitles = "Floor Area:".NewLine() +
-                                   "Heater:".NewLine() +
-                                   "Dryer:".NewLine() +
-                                   "Oven:".NewLine() +
-                                   "Cooktop:";
-        string dwellingTitleAndSubtitles = dwellingTitle + dwellingSubtitles;
-        headers.Contents = dwellingTitleAndSubtitles.SetFont("Arial");
-      }
-
-      var values = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
-      if (values != null)
-      {
-        values.Contents = "";
-        string dwellingValues = "".NewLine() +
-                                $"{unitInfo.DwellingArea.FloorArea} ft\u00B2".NewLine() +
-                                $"{unitInfo.DwellingArea.Heater}".NewLine() +
-                                $"{unitInfo.DwellingArea.Dryer}".NewLine() +
-                                $"{unitInfo.DwellingArea.Oven}".NewLine() +
-                                $"{unitInfo.DwellingArea.Cooktop}";
-        values.Contents = dwellingValues.SetFont("Arial");
-      }
-
-      return dwellingBodyData;
     }
 
     private static ObjectData ShiftData(ObjectData bodyData, double shiftHeight)
@@ -739,8 +857,7 @@ namespace GMEPElectricalResidential
     public List<MTextData> MTexts { get; set; }
     public List<TextData> Texts { get; set; }
     public List<SolidData> Solids { get; set; }
-
-    public double TotalHeight { get; set; }
+    public int NumberOfRows { get; set; }
 
     public ObjectData()
     {

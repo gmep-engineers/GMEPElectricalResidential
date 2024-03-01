@@ -167,11 +167,11 @@ namespace GMEPElectricalResidential
       OUTDOOR_HEATER_UNIT_AMOUNT.Text = unitInformation.ACLoads.HeatingUnit.NumberOfUnits.ToString();
 
       // Set totals
-      TOTAL_GENERAL_LOAD_CALCULATION.Text = unitInformation.Totals.TotalGeneralLoad;
-      TOTAL_AC_LOAD_CALCULATION.Text = unitInformation.Totals.TotalACLoad;
-      SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = unitInformation.Totals.SubtotalGeneralLoad;
-      TOTAL_CUSTOM_LOAD_CALCULATION.Text = unitInformation.Totals.CustomLoad;
-      CALCULATED_LOAD_FOR_SERVICE.Text = unitInformation.Totals.ServiceLoad;
+      TOTAL_GENERAL_LOAD_CALCULATION.Text = unitInformation.Totals.TotalGeneralLoad.ToString();
+      TOTAL_AC_LOAD_CALCULATION.Text = unitInformation.Totals.TotalACLoad.ToString();
+      SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = unitInformation.Totals.SubtotalGeneralLoad.ToString();
+      TOTAL_CUSTOM_LOAD_CALCULATION.Text = unitInformation.Totals.CustomLoad.ToString();
+      CALCULATED_LOAD_FOR_SERVICE.Text = unitInformation.Totals.ServiceLoad.ToString();
     }
 
     public UnitInformation RetrieveUnitInformation()
@@ -312,9 +312,9 @@ namespace GMEPElectricalResidential
 
         if (int.TryParse(voltageText, out int voltage) && voltage != 0) // Avoid division by zero
         {
-          var amperage = Math.Ceiling((double)(subtotalGeneralLoad + totalACLoad + totalCustomLoad) / voltage);
+          var amperage = (int)Math.Ceiling((double)(subtotalGeneralLoad + totalACLoad + totalCustomLoad) / voltage);
           CALCULATED_LOAD_FOR_SERVICE.Text = amperage.ToString();
-          _unitInformation.Totals.ServiceLoad = amperage.ToString();
+          _unitInformation.Totals.ServiceLoad = amperage;
         }
       }
     }
@@ -337,7 +337,7 @@ namespace GMEPElectricalResidential
       {
         totalLoad += customLoad.GetLoad();
       }
-      _unitInformation.Totals.CustomLoad = totalLoad.ToString();
+      _unitInformation.Totals.CustomLoad = totalLoad;
       TOTAL_CUSTOM_LOAD_CALCULATION.Text = totalLoad.ToString();
     }
 
@@ -371,8 +371,7 @@ namespace GMEPElectricalResidential
       var loadCode = ACInformation.Item2;
 
       TOTAL_AC_LOAD_CALCULATION.Text = loadValue.ToString();
-      _unitInformation.Totals.TotalACLoad = loadValue.ToString();
-
+      _unitInformation.Totals.TotalACLoad = loadValue;
       _unitInformation.ACLoads.ElectricalCode = loadCode;
     }
 
@@ -487,20 +486,20 @@ namespace GMEPElectricalResidential
         totalLoad += customLoad.GetLoad();
       }
 
-      _unitInformation.Totals.TotalGeneralLoad = totalLoad.ToString();
+      _unitInformation.Totals.TotalGeneralLoad = totalLoad;
       TOTAL_GENERAL_LOAD_CALCULATION.Text = totalLoad.ToString();
 
       if (totalLoad <= 10000)
       {
         SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = totalLoad.ToString();
-        _unitInformation.Totals.SubtotalGeneralLoad = totalLoad.ToString();
+        _unitInformation.Totals.SubtotalGeneralLoad = totalLoad;
       }
       else
       {
         double subtotal = 10000 + 0.4 * (totalLoad - 10000);
         int roundedSubtotal = (int)Math.Ceiling(subtotal);
         SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = roundedSubtotal.ToString();
-        _unitInformation.Totals.SubtotalGeneralLoad = roundedSubtotal.ToString();
+        _unitInformation.Totals.SubtotalGeneralLoad = roundedSubtotal;
       }
     }
 
@@ -1226,11 +1225,26 @@ namespace GMEPElectricalResidential
 
   public class UnitTotalContainer
   {
-    public string TotalGeneralLoad { get; set; }
-    public string TotalACLoad { get; set; }
-    public string SubtotalGeneralLoad { get; set; }
-    public string CustomLoad { get; set; }
-    public string ServiceLoad { get; set; }
+    public int TotalGeneralLoad { get; set; }
+    public int TotalACLoad { get; set; }
+    public int SubtotalGeneralLoad { get; set; }
+    public int CustomLoad { get; set; }
+    public int ServiceLoad { get; set; }
+
+    public int First10KVA()
+    {
+      return TotalGeneralLoad > 10000 ? 10000 : TotalGeneralLoad;
+    }
+
+    public int RemainderAt40Percent()
+    {
+      return TotalGeneralLoad < 10000 ? 0 : (int)Math.Ceiling((TotalGeneralLoad - 10000) * 0.4);
+    }
+
+    public int AmountOver10KVA()
+    {
+      return TotalGeneralLoad < 10000 ? 0 : TotalGeneralLoad - 10000;
+    }
   }
 
   public class HeatingUnit
