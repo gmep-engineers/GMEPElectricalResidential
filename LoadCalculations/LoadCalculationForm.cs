@@ -20,6 +20,7 @@ namespace GMEPElectricalResidential
   public partial class LoadCalculationForm : Form
   {
     private int _tabID = 0;
+
     public Commands Commands { get; }
 
     public LoadCalculationForm(Commands commands)
@@ -246,6 +247,14 @@ namespace GMEPElectricalResidential
           point = new Point3d(point.X - 7, point.Y, point.Z);
         }
       }
+    }
+
+    public static void SaveDataToJsonFile(object data, string fileName)
+    {
+      string jsonData = JsonConvert.SerializeObject(data, Formatting.Indented);
+      string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+      string fullPath = Path.Combine(desktopPath, fileName);
+      File.WriteAllText(fullPath, jsonData);
     }
 
     private Point3d UserClick()

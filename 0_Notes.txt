@@ -75,6 +75,5 @@ Load Calculations are done
 - Per meter section (or breaker off service)
 
 TODO
-3. Create a block and put the load calculation form inside
 4. Add an update button to loadcalculationform
 5. Attempt to update the block with new form data

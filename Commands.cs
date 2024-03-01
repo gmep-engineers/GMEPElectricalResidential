@@ -162,30 +162,32 @@ namespace GMEPElectricalResidential
     {
       double HEADER_HEIGHT = 0.75;
       double currentHeight = HEADER_HEIGHT;
-      string blockName = $"Unit {unitInfo.Name}";
+      string blockName = $"Unit {unitInfo.Name}" + $" ID{unitInfo.ID}"; ;
 
       var acCurDb = Application.DocumentManager.MdiActiveDocument.Database;
 
       using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
       {
         Point3d point = new Point3d(0, 0, 0);
+
         BlockTable acBlkTbl;
         acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
 
         BlockTableRecord acBlkTblRec;
-        acBlkTblRec = new BlockTableRecord();
-        acBlkTblRec.Name = blockName;
 
-        int suffix = 1;
-        while (acBlkTbl.Has(acBlkTblRec.Name))
+        if (acBlkTbl.Has(blockName))
         {
-          acBlkTblRec.Name = blockName + "(" + suffix + ")";
-          suffix++;
+          acBlkTblRec = acTrans.GetObject(acBlkTbl[blockName], OpenMode.ForWrite) as BlockTableRecord;
+          WipeExistingBlockContent(acBlkTblRec);
         }
-
-        acBlkTbl.UpgradeOpen();
-        acBlkTbl.Add(acBlkTblRec);
-        acTrans.AddNewlyCreatedDBObject(acBlkTblRec, true);
+        else
+        {
+          acBlkTbl.UpgradeOpen();
+          acBlkTblRec = new BlockTableRecord();
+          acBlkTblRec.Name = blockName;
+          acBlkTbl.Add(acBlkTblRec);
+          acTrans.AddNewlyCreatedDBObject(acBlkTblRec, true);
+        }
 
         ObjectData headerData = GetCopyPasteData("UnitLoadCalculationHeader");
         ObjectData bodyData = GetCopyPasteData("UnitLoadCalculationBody");
@@ -269,7 +271,49 @@ namespace GMEPElectricalResidential
           acTrans.AddNewlyCreatedDBObject(acBlkRef, true);
         }
 
+        UpdateAllBlockReferences(blockName);
+
         acTrans.Commit();
+      }
+    }
+
+    private static void UpdateAllBlockReferences(string blockName)
+    {
+      var acCurDb = Application.DocumentManager.MdiActiveDocument.Database;
+
+      using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
+      {
+        BlockTable acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
+
+        if (!acBlkTbl.Has(blockName))
+          return;
+
+        ObjectId blockId = acBlkTbl[blockName];
+
+        foreach (ObjectId btrId in acBlkTbl)
+        {
+          BlockTableRecord btr = (BlockTableRecord)acTrans.GetObject(btrId, OpenMode.ForRead);
+          foreach (ObjectId entId in btr)
+          {
+            Entity ent = acTrans.GetObject(entId, OpenMode.ForRead) as Entity;
+            if (ent is BlockReference br && br.BlockTableRecord == blockId)
+            {
+              br.UpgradeOpen();
+              br.RecordGraphicsModified(true);
+            }
+          }
+        }
+
+        acTrans.Commit();
+      }
+    }
+
+    private static void WipeExistingBlockContent(BlockTableRecord acBlkTblRec)
+    {
+      foreach (ObjectId id in acBlkTblRec)
+      {
+        DBObject obj = id.GetObject(OpenMode.ForWrite);
+        obj.Erase();
       }
     }
 
@@ -440,70 +484,98 @@ namespace GMEPElectricalResidential
     private static ObjectData UpdateGeneralData(ObjectData generalBodyData, UnitInformation unitInfo)
     {
       int startingRows = 16;
+      List<string> contents;
       var headers = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
       if (headers != null)
       {
-        headers.Contents = "";
-        string generalTitles = "General Load:".Underline().NewLine();
-        string generalSubtitles = $"General Lighting (Floor Area x 3VA/ft²) (CEC {UnitGeneralLoadContainer.LightingCode}):".NewLine() +
-                           $"Small Appliance (3-20ACK by CEC 210.11){((unitInfo.GeneralLoads.SmallAppliance.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.SmallAppliance.Multiplier}):")}".NewLine() +
-                           $"Laundry (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Laundry.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Laundry.Multiplier}):")}".NewLine() +
-                           $"Bathroom (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Bathroom.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Bathroom.Multiplier}):")}".NewLine() +
-                           $"Dishwasher{((unitInfo.GeneralLoads.Dishwasher.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Dishwasher.Multiplier}):")}".NewLine() +
-                           $"Microwave Oven{((unitInfo.GeneralLoads.MicrowaveOven.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.MicrowaveOven.Multiplier}):")}".NewLine() +
-                           $"Garbage Disposal{((unitInfo.GeneralLoads.GarbageDisposal.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.GarbageDisposal.Multiplier}):")}".NewLine() +
-                           $"Bathroom Fans{((unitInfo.GeneralLoads.BathroomFans.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.BathroomFans.Multiplier}):")}".NewLine() +
-                           $"Garage Door Opener{((unitInfo.GeneralLoads.GarageDoorOpener.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.GarageDoorOpener.Multiplier}):")}".NewLine() +
-                           $"Dryer{((unitInfo.GeneralLoads.Dryer.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Dryer.Multiplier}):")}".NewLine() +
-                           $"Range{((unitInfo.GeneralLoads.Range.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Range.Multiplier}):")}".NewLine() +
-                           $"Refrigerator{((unitInfo.GeneralLoads.Refrigerator.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Refrigerator.Multiplier}):")}".NewLine() +
-                           $"Oven{((unitInfo.GeneralLoads.Oven.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Oven.Multiplier}):")}".NewLine() +
-                           $"Water Heater{((unitInfo.GeneralLoads.WaterHeater.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.WaterHeater.Multiplier}):")}".NewLine() +
-                           $"Cooktop{((unitInfo.GeneralLoads.Cooktop.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Cooktop.Multiplier}):")}".NewLine();
+        contents = new List<string>
+        {
+            "General Load:",
+            $"General Lighting (Floor Area x 3VA/ft²) (CEC {UnitGeneralLoadContainer.LightingCode}):",
+            $"Small Appliance (3-20ACK by CEC 210.11){((unitInfo.GeneralLoads.SmallAppliance.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.SmallAppliance.Multiplier}):")}",
+            $"Laundry (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Laundry.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Laundry.Multiplier}):")}",
+            $"Bathroom (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Bathroom.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Bathroom.Multiplier}):")}",
+            $"Dishwasher{((unitInfo.GeneralLoads.Dishwasher.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Dishwasher.Multiplier}):")}",
+            $"Microwave Oven{((unitInfo.GeneralLoads.MicrowaveOven.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.MicrowaveOven.Multiplier}):")}",
+            $"Garbage Disposal{((unitInfo.GeneralLoads.GarbageDisposal.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.GarbageDisposal.Multiplier}):")}",
+            $"Bathroom Fans{((unitInfo.GeneralLoads.BathroomFans.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.BathroomFans.Multiplier}):")}",
+            $"Garage Door Opener{((unitInfo.GeneralLoads.GarageDoorOpener.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.GarageDoorOpener.Multiplier}):")}",
+            $"Dryer{((unitInfo.GeneralLoads.Dryer.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Dryer.Multiplier}):")}",
+            $"Range{((unitInfo.GeneralLoads.Range.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Range.Multiplier}):")}",
+            $"Refrigerator{((unitInfo.GeneralLoads.Refrigerator.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Refrigerator.Multiplier}):")}",
+            $"Oven{((unitInfo.GeneralLoads.Oven.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Oven.Multiplier}):")}",
+            $"Water Heater{((unitInfo.GeneralLoads.WaterHeater.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.WaterHeater.Multiplier}):")}",
+            $"Cooktop{((unitInfo.GeneralLoads.Cooktop.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Cooktop.Multiplier}):")}"
+        };
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
-          generalSubtitles += $"{customLoad.Name}{((customLoad.Multiplier <= 1) ? ":" : $" ({customLoad.Multiplier}):")}".NewLine();
+          contents.Add($"{customLoad.Name}{((customLoad.Multiplier <= 1) ? ":" : $" ({customLoad.Multiplier}):")}");
           startingRows++;
         });
 
-        string generalTitleAndSubtitles = generalTitles + generalSubtitles;
+        AddTextObjectsToObjectData(generalBodyData, contents, headers, 0.25, 0.16);
 
-        headers.Contents = generalTitleAndSubtitles.SetFont("Arial");
+        headers.Contents = "";
       }
 
       var values = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
       if (values != null)
       {
-        values.Contents = "";
-        string generalValues = "".NewLine() +
-                       $"{unitInfo.GeneralLoads.Lighting.VA * unitInfo.GeneralLoads.Lighting.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.SmallAppliance.VA * unitInfo.GeneralLoads.SmallAppliance.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.Laundry.VA * unitInfo.GeneralLoads.Laundry.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.Bathroom.VA * unitInfo.GeneralLoads.Bathroom.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.Dishwasher.VA * unitInfo.GeneralLoads.Dishwasher.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.MicrowaveOven.VA * unitInfo.GeneralLoads.MicrowaveOven.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.GarbageDisposal.VA * unitInfo.GeneralLoads.GarbageDisposal.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.BathroomFans.VA * unitInfo.GeneralLoads.BathroomFans.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.GarageDoorOpener.VA * unitInfo.GeneralLoads.GarageDoorOpener.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.Dryer.VA * unitInfo.GeneralLoads.Dryer.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.Range.VA * unitInfo.GeneralLoads.Range.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.Refrigerator.VA * unitInfo.GeneralLoads.Refrigerator.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.Oven.VA * unitInfo.GeneralLoads.Oven.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.WaterHeater.VA * unitInfo.GeneralLoads.WaterHeater.Multiplier}VA".NewLine() +
-                       $"{unitInfo.GeneralLoads.Cooktop.VA * unitInfo.GeneralLoads.Cooktop.Multiplier}VA".NewLine();
+        List<string> generalValues = new List<string>
+        {
+            "",
+            $"{unitInfo.GeneralLoads.Lighting.VA * unitInfo.GeneralLoads.Lighting.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.SmallAppliance.VA * unitInfo.GeneralLoads.SmallAppliance.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.Laundry.VA * unitInfo.GeneralLoads.Laundry.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.Bathroom.VA * unitInfo.GeneralLoads.Bathroom.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.Dishwasher.VA * unitInfo.GeneralLoads.Dishwasher.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.MicrowaveOven.VA * unitInfo.GeneralLoads.MicrowaveOven.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.GarbageDisposal.VA * unitInfo.GeneralLoads.GarbageDisposal.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.BathroomFans.VA * unitInfo.GeneralLoads.BathroomFans.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.GarageDoorOpener.VA * unitInfo.GeneralLoads.GarageDoorOpener.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.Dryer.VA * unitInfo.GeneralLoads.Dryer.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.Range.VA * unitInfo.GeneralLoads.Range.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.Refrigerator.VA * unitInfo.GeneralLoads.Refrigerator.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.Oven.VA * unitInfo.GeneralLoads.Oven.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.WaterHeater.VA * unitInfo.GeneralLoads.WaterHeater.Multiplier}VA",
+            $"{unitInfo.GeneralLoads.Cooktop.VA * unitInfo.GeneralLoads.Cooktop.Multiplier}VA"
+        };
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
-          generalValues += $"{customLoad.VA}VA".NewLine();
+          generalValues.Add($"{customLoad.VA}VA");
         });
 
-        values.Contents = generalValues.SetFont("Arial");
+        AddTextObjectsToObjectData(generalBodyData, generalValues, values, 0.25, 0.16);
+
+        values.Contents = "";
       }
 
       generalBodyData.NumberOfRows = startingRows;
 
       return generalBodyData;
+    }
+
+    private static void AddTextObjectsToObjectData(ObjectData objectData, List<string> lines, MTextData mText, double spacing, double marginTop)
+    {
+      List<TextData> textData = new List<TextData>();
+      for (int i = 0; i < lines.Count; i++)
+      {
+        TextData text = new TextData
+        {
+          Contents = lines[i],
+          Location = new SimpleVector3d(mText.Location.X, mText.Location.Y - marginTop - (spacing * i), 0),
+          Height = mText.TextHeight,
+          Layer = mText.Layer,
+          Rotation = mText.Rotation,
+          Style = mText.Style,
+          HorizontalMode = mText.Justification.Replace("Top", "")
+        };
+        textData.Add(text);
+      }
+
+      objectData.Texts.AddRange(textData);
     }
 
     private static ObjectData UpdateDwellingData(ObjectData dwellingBodyData, UnitInformation unitInfo)
@@ -657,16 +729,35 @@ namespace GMEPElectricalResidential
     private static Point3d CreateText(Point3d basePoint, Transaction acTrans, BlockTableRecord acBlkTblRec, TextData text)
     {
       DBText dbText = new DBText();
-      dbText.Layer = text.Layer;
-      dbText.TextString = text.Contents;
-      dbText.Position = new Point3d(basePoint.X + text.Location.X, basePoint.Y + text.Location.Y, basePoint.Z + text.Location.Z);
-      dbText.Height = text.Height;
-      dbText.Rotation = text.Rotation;
-      dbText.WidthFactor = text.LineSpaceDistance;
-      SetTextStyleByName(dbText, text.Style);
+      var textStyleObject = new TextStyle(0.0, 1.0, "Arial.ttf");
+      textStyleObject.CreateStyleIfNotExisting("Load Calcs");
 
-      acBlkTblRec.AppendEntity(dbText);
-      acTrans.AddNewlyCreatedDBObject(dbText, true);
+      Document acDoc = Application.DocumentManager.MdiActiveDocument;
+      Database acCurDb = acDoc.Database;
+
+      using (Transaction trans = acCurDb.TransactionManager.StartTransaction())
+      {
+        dbText.Layer = text.Layer;
+        dbText.TextString = text.Contents;
+        dbText.Height = text.Height;
+        dbText.Rotation = text.Rotation;
+        SetTextStyleByName(dbText, "Load Calcs");
+
+        dbText.HorizontalMode = (text.HorizontalMode != "Left") ? TextHorizontalMode.TextRight : TextHorizontalMode.TextLeft;
+
+        dbText.Position = new Point3d(basePoint.X + text.Location.X, basePoint.Y + text.Location.Y, basePoint.Z + text.Location.Z);
+
+        if (dbText.HorizontalMode == TextHorizontalMode.TextRight)
+        {
+          dbText.AlignmentPoint = dbText.Position;
+        }
+
+        acBlkTblRec.AppendEntity(dbText);
+        trans.AddNewlyCreatedDBObject(dbText, true);
+
+        trans.Commit();
+      }
+
       return basePoint;
     }
 
@@ -1039,6 +1130,76 @@ namespace GMEPElectricalResidential
     }
   }
 
+  internal class TextStyle
+  {
+    public double height { get; set; }
+    public double widthFactor { get; set; }
+    public string fontName { get; set; }
+
+    public TextStyle(double height, double widthFactor, string fontName)
+    {
+      this.height = height;
+      this.widthFactor = widthFactor;
+      this.fontName = fontName;
+    }
+
+    public void CreateStyleIfNotExisting(string name)
+    {
+      Document acDoc = Application.DocumentManager.MdiActiveDocument;
+      Database acCurDb = acDoc.Database;
+
+      using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
+      {
+        TextStyleTable acTextStyleTable;
+        acTextStyleTable = acTrans.GetObject(acCurDb.TextStyleTableId, OpenMode.ForRead) as TextStyleTable;
+
+        if (acTextStyleTable.Has(name) == false)
+        {
+          acTextStyleTable.UpgradeOpen();
+
+          TextStyleTableRecord acTextStyleTableRec;
+          acTextStyleTableRec = new TextStyleTableRecord();
+
+          acTextStyleTableRec.Name = name;
+          acTextStyleTableRec.FileName = this.fontName;
+          acTextStyleTableRec.TextSize = this.height;
+          acTextStyleTableRec.XScale = this.widthFactor;
+
+          acTextStyleTable.Add(acTextStyleTableRec);
+          acTrans.AddNewlyCreatedDBObject(acTextStyleTableRec, true);
+        }
+
+        acTrans.Commit();
+      }
+    }
+
+    public List<string> GetStyles()
+    {
+      List<string> styles = new List<string>();
+
+      Document acDoc = Application.DocumentManager.MdiActiveDocument;
+      Database acCurDb = acDoc.Database;
+
+      using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
+      {
+        TextStyleTable acTextStyleTable;
+        acTextStyleTable = acTrans.GetObject(acCurDb.TextStyleTableId, OpenMode.ForRead) as TextStyleTable;
+
+        foreach (var styleId in acTextStyleTable)
+        {
+          TextStyleTableRecord acTextStyleTableRec;
+          acTextStyleTableRec = acTrans.GetObject(styleId, OpenMode.ForRead) as TextStyleTableRecord;
+
+          styles.Add(acTextStyleTableRec.Name);
+        }
+
+        acTrans.Commit();
+      }
+
+      return styles;
+    }
+  }
+
   internal class ObjectData
   {
     public List<PolylineData> Polylines { get; set; }
@@ -1074,6 +1235,7 @@ namespace GMEPElectricalResidential
     public double Height { get; set; }
     public double Rotation { get; set; }
     public SimpleVector3d AlignmentPoint { get; set; }
+    public string HorizontalMode { get; set; }
     public bool IsMirroredInX { get; set; }
     public bool IsMirroredInY { get; set; }
   }
@@ -1155,6 +1317,13 @@ namespace GMEPElectricalResidential
 
   public class SimpleVector3d
   {
+    public SimpleVector3d(double X = 0, double Y = 0, double Z = 0)
+    {
+      this.X = X;
+      this.Y = Y;
+      this.Z = Z;
+    }
+
     public double X { get; set; }
     public double Y { get; set; }
     public double Z { get; set; }
