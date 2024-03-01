@@ -1,15 +1,12 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
-using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Data;
 
 namespace GMEPElectricalResidential
 {
@@ -202,17 +199,62 @@ namespace GMEPElectricalResidential
       airConditioningBodyData = UpdateAirConditioningData(airConditioningBodyData, unitInfo);
       double airConditioningSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, airConditioningBodyData.NumberOfRows);
 
+      currentHeight += airConditioningSectionHeight;
+
+      ObjectData customBodyData = ShiftData(bodyData, -currentHeight);
+      customBodyData = UpdateCustomData(customBodyData, unitInfo);
+      double customSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, customBodyData.NumberOfRows);
+
       string modifiedHeaderData = JsonConvert.SerializeObject(headerData);
       string modifiedDwellingBodyData = JsonConvert.SerializeObject(dwellingBodyData);
       string modifiedGeneralBodyData = JsonConvert.SerializeObject(generalBodyData);
       string modifiedGeneralBodyCalcData = JsonConvert.SerializeObject(generalBodyCalcData);
       string modifiedAirConditioningBodyData = JsonConvert.SerializeObject(airConditioningBodyData);
+      string modifiedCustomBodyData = JsonConvert.SerializeObject(customBodyData);
 
       CreateObjectFromData(modifiedHeaderData, point);
       CreateObjectFromData(modifiedDwellingBodyData, point);
       CreateObjectFromData(modifiedGeneralBodyData, point);
       CreateObjectFromData(modifiedGeneralBodyCalcData, point);
       CreateObjectFromData(modifiedAirConditioningBodyData, point);
+      CreateObjectFromData(modifiedCustomBodyData, point);
+    }
+
+    private static ObjectData UpdateCustomData(ObjectData customBodyData, UnitInformation unitInfo)
+    {
+      int startingRows = 0;
+      var headers = customBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
+      if (headers != null)
+      {
+        headers.Contents = "";
+        string customSubtitles = "";
+
+        unitInfo.CustomLoads.ForEach(customLoad =>
+        {
+          customSubtitles += $"{customLoad.Name}{((customLoad.Multiplier <= 1) ? ":" : $" ({customLoad.Multiplier}):")}".NewLine();
+          startingRows++;
+        });
+
+        headers.Contents = customSubtitles.SetFont("Arial");
+      }
+
+      var values = customBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
+      if (values != null)
+      {
+        values.Contents = "";
+        string customValues = "";
+
+        unitInfo.CustomLoads.ForEach(customLoad =>
+        {
+          customValues += $"{customLoad.VA}VA".NewLine();
+        });
+
+        values.Contents = customValues.SetFont("Arial");
+      }
+
+      customBodyData.NumberOfRows = startingRows;
+
+      return customBodyData;
     }
 
     private static ObjectData UpdateAirConditioningData(ObjectData airConditioningBodyData, UnitInformation unitInfo)
@@ -310,8 +352,8 @@ namespace GMEPElectricalResidential
       if (headers != null)
       {
         headers.Contents = "";
-        string dwellingTitle = "General Load:".Underline().NewLine();
-        string dwellingSubtitles = $"General Lighting (Floor Area x 3VA/ft²) (CEC {UnitGeneralLoadContainer.LightingCode}):".NewLine() +
+        string generalTitles = "General Load:".Underline().NewLine();
+        string generalSubtitles = $"General Lighting (Floor Area x 3VA/ft²) (CEC {UnitGeneralLoadContainer.LightingCode}):".NewLine() +
                            $"Small Appliance (3-20ACK by CEC 210.11){((unitInfo.GeneralLoads.SmallAppliance.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.SmallAppliance.Multiplier}):")}".NewLine() +
                            $"Laundry (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Laundry.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Laundry.Multiplier}):")}".NewLine() +
                            $"Bathroom (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Bathroom.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Bathroom.Multiplier}):")}".NewLine() +
@@ -329,13 +371,13 @@ namespace GMEPElectricalResidential
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
-          dwellingSubtitles += $"{customLoad.Name}{((customLoad.Multiplier <= 1) ? ":" : $" ({customLoad.Multiplier}):")}".NewLine();
+          generalSubtitles += $"{customLoad.Name}{((customLoad.Multiplier <= 1) ? ":" : $" ({customLoad.Multiplier}):")}".NewLine();
           startingRows++;
         });
 
-        string dwellingTitleAndSubtitles = dwellingTitle + dwellingSubtitles;
+        string generalTitleAndSubtitles = generalTitles + generalSubtitles;
 
-        headers.Contents = dwellingTitleAndSubtitles.SetFont("Arial");
+        headers.Contents = generalTitleAndSubtitles.SetFont("Arial");
       }
 
       var values = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
@@ -408,14 +450,20 @@ namespace GMEPElectricalResidential
 
     private static double CreateUnitLoadCalculationRectangle(Point3d point, double shiftY, int numberOfRows)
     {
-      double MARGIN_TOP_BOT = 0.16;
-      double ROW_HEIGHT = 0.245;
+      if (numberOfRows == 0)
+      {
+        return 0;
+      }
+
+      double MARGIN_TOP = 0.16;
+      double MARGIN_BOT = 0.08;
+      double ROW_HEIGHT = 0.25;
       double WIDTH = 7.0;
 
       Point3d topRight = new Point3d(point.X, point.Y + shiftY, point.Z);
       Point3d topLeft = new Point3d(point.X - WIDTH, point.Y + shiftY, point.Z);
 
-      double height = MARGIN_TOP_BOT * 2 + (ROW_HEIGHT * numberOfRows);
+      double height = MARGIN_TOP + MARGIN_BOT + (ROW_HEIGHT * numberOfRows);
 
       Point3d bottomLeft = new Point3d(point.X - WIDTH, point.Y + shiftY - height, point.Z);
       Point3d bottomRight = new Point3d(point.X, point.Y + shiftY - height, point.Z);
