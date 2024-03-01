@@ -192,6 +192,7 @@ namespace GMEPElectricalResidential
     private void CREATE_UNIT_BUTTON_Click(object sender, EventArgs e)
     {
       AddNewTab();
+      TAB_CONTROL.SelectedIndex = TAB_CONTROL.TabCount - 1;
     }
 
     private void DELETE_UNIT_BUTTON_Click(object sender, EventArgs e)
