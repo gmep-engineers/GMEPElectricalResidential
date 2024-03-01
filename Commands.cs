@@ -205,12 +205,19 @@ namespace GMEPElectricalResidential
       customBodyData = UpdateCustomData(customBodyData, unitInfo);
       double customSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, customBodyData.NumberOfRows);
 
+      currentHeight += customSectionHeight;
+
+      ObjectData serviceBodyData = ShiftData(bodyData, -currentHeight);
+      serviceBodyData = UpdateServiceData(serviceBodyData, unitInfo);
+      double _ = CreateUnitLoadCalculationRectangle(point, -currentHeight, serviceBodyData.NumberOfRows);
+
       string modifiedHeaderData = JsonConvert.SerializeObject(headerData);
       string modifiedDwellingBodyData = JsonConvert.SerializeObject(dwellingBodyData);
       string modifiedGeneralBodyData = JsonConvert.SerializeObject(generalBodyData);
       string modifiedGeneralBodyCalcData = JsonConvert.SerializeObject(generalBodyCalcData);
       string modifiedAirConditioningBodyData = JsonConvert.SerializeObject(airConditioningBodyData);
       string modifiedCustomBodyData = JsonConvert.SerializeObject(customBodyData);
+      string modifiedServiceBodyData = JsonConvert.SerializeObject(serviceBodyData);
 
       CreateObjectFromData(modifiedHeaderData, point);
       CreateObjectFromData(modifiedDwellingBodyData, point);
@@ -218,6 +225,39 @@ namespace GMEPElectricalResidential
       CreateObjectFromData(modifiedGeneralBodyCalcData, point);
       CreateObjectFromData(modifiedAirConditioningBodyData, point);
       CreateObjectFromData(modifiedCustomBodyData, point);
+      CreateObjectFromData(modifiedServiceBodyData, point);
+    }
+
+    private static ObjectData UpdateServiceData(ObjectData serviceBodyData, UnitInformation unitInfo)
+    {
+      int startingRows = 4;
+      var headers = serviceBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
+      if (headers != null)
+      {
+        headers.Contents = "";
+        string serviceSubtitles = "Calculated Load for Service:".Underline().NewLine();
+
+        serviceSubtitles += $"({unitInfo.Totals.SubtotalGeneralLoad}VA+{unitInfo.Totals.TotalACLoad}VA+{unitInfo.Totals.CustomLoad}VA)/{unitInfo.Voltage}={unitInfo.Totals.ServiceLoad}A (Service Rating)".NewLine().NewLine();
+
+        serviceSubtitles += "Provided Service Rating:";
+
+        headers.Contents = serviceSubtitles.SetFont("Arial");
+      }
+
+      var values = serviceBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
+      if (values != null)
+      {
+        values.Contents = "";
+        string serviceValues = "".NewLine().NewLine().NewLine();
+
+        serviceValues += $"{unitInfo.Totals.ServiceRating()}A";
+
+        values.Contents = serviceValues.SetFont("Arial");
+      }
+
+      serviceBodyData.NumberOfRows = startingRows;
+
+      return serviceBodyData;
     }
 
     private static ObjectData UpdateCustomData(ObjectData customBodyData, UnitInformation unitInfo)
