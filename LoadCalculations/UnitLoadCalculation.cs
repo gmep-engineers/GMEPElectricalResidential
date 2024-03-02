@@ -401,7 +401,9 @@ namespace GMEPElectricalResidential
     {
       UnitGeneralLoadContainer unitGeneralLoadContainer = new UnitGeneralLoadContainer();
 
-      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", GENERAL_LIGHTING_TOTAL.Text, "1");
+      int lightingLoad = int.Parse(AREA.Text) * 3;
+
+      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", lightingLoad, "1");
       unitGeneralLoadContainer.SmallAppliance = new UnitLoad("Small Appliance", SMALL_APPLIANCE_VA.Text, SMALL_APPLIANCE_MULTIPLIER.Text);
       unitGeneralLoadContainer.Laundry = new UnitLoad("Laundry", LAUNDRY_VA.Text, LAUNDRY_MULTIPLIER.Text);
       unitGeneralLoadContainer.Bathroom = new UnitLoad("Bathroom", BATHROOM_VA.Text, BATHROOM_MULTIPLIER.Text);

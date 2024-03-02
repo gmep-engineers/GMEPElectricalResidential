@@ -514,6 +514,8 @@ namespace GMEPElectricalResidential
           startingRows++;
         });
 
+        startingRows += InsertTitleLightingBreakdown(2, unitInfo, contents);
+
         AddTextObjectsToObjectData(generalBodyData, contents, headers, 0.25, 0.16);
 
         headers.Contents = "";
@@ -547,6 +549,8 @@ namespace GMEPElectricalResidential
           generalValues.Add($"{customLoad.VA}VA");
         });
 
+        InsertValueLightingBreakdown(2, unitInfo, generalValues);
+
         AddTextObjectsToObjectData(generalBodyData, generalValues, values, 0.25, 0.16);
 
         values.Contents = "";
@@ -555,6 +559,108 @@ namespace GMEPElectricalResidential
       generalBodyData.NumberOfRows = startingRows;
 
       return generalBodyData;
+    }
+
+    private static void InsertValueLightingBreakdown(int index, UnitInformation unitInfo, List<string> generalValues)
+    {
+      int lightingVA = unitInfo.GeneralLoads.Lighting.VA * unitInfo.GeneralLoads.Lighting.Multiplier;
+
+      if (unitInfo.GeneralLoads.LightingOccupancyType == "Dwelling")
+      {
+        InsertValueLightingBreakdownDwelling(index, unitInfo, generalValues, lightingVA);
+      }
+      else if (unitInfo.GeneralLoads.LightingOccupancyType == "Hotel and Motel")
+      {
+        InsertValueLightingBreakdownHotelMotel(index, unitInfo, generalValues, lightingVA);
+      }
+      else if (unitInfo.GeneralLoads.LightingOccupancyType == "Warehouse")
+      {
+        InsertValueLightingBreakdownWarehouse(index, unitInfo, generalValues, lightingVA);
+      }
+    }
+
+    private static void InsertValueLightingBreakdownDwelling(int index, UnitInformation unitInfo, List<string> generalValues, int lightingVA)
+    {
+      var firstValue = Math.Min(lightingVA, 3000);
+      var secondValue = Math.Min(Math.Max(lightingVA - 3000, 0), 117000) * 0.35;
+      var thirdValue = Math.Max(lightingVA - 120000, 0) * 0.25;
+      var total = firstValue + secondValue + thirdValue;
+
+      generalValues.Insert(index, $"{firstValue}VA");
+      generalValues.Insert(index + 1, $"{secondValue}VA");
+      generalValues.Insert(index + 2, $"{thirdValue}VA");
+      generalValues.Insert(index + 3, $"{total}VA");
+    }
+
+    private static void InsertValueLightingBreakdownHotelMotel(int index, UnitInformation unitInfo, List<string> generalValues, int lightingVA)
+    {
+      var firstValue = Math.Min(lightingVA, 20000) * 0.6;
+      var secondValue = Math.Min(Math.Max(lightingVA - 20000, 0), 80000) * 0.5;
+      var thirdValue = Math.Max(lightingVA - 100000, 0) * 0.35;
+      var total = firstValue + secondValue + thirdValue;
+
+      generalValues.Insert(index, $"{firstValue}VA");
+      generalValues.Insert(index + 1, $"{secondValue}VA");
+      generalValues.Insert(index + 2, $"{thirdValue}VA");
+      generalValues.Insert(index + 3, $"{total}VA");
+    }
+
+    private static void InsertValueLightingBreakdownWarehouse(int index, UnitInformation unitInfo, List<string> generalValues, int lightingVA)
+    {
+      var firstValue = Math.Min(lightingVA, 12500);
+      var secondValue = Math.Max(lightingVA - 12500, 0) * 0.5;
+      var total = firstValue + secondValue;
+
+      generalValues.Insert(index, $"{firstValue}VA");
+      generalValues.Insert(index + 1, $"{secondValue}VA");
+      generalValues.Insert(index + 2, $"{total}VA");
+    }
+
+    private static int InsertTitleLightingBreakdown(int index, UnitInformation unitInfo, List<string> contents)
+    {
+      int additionalRows = 0;
+      if (unitInfo.GeneralLoads.LightingOccupancyType == "Dwelling")
+      {
+        additionalRows = InsertTitleLightingBreakdownDwelling(index, unitInfo, contents);
+      }
+      else if (unitInfo.GeneralLoads.LightingOccupancyType == "Hotel and Motel")
+      {
+        additionalRows = InsertTitleLightingBreakdownHotelMotel(index, unitInfo, contents);
+      }
+      else if (unitInfo.GeneralLoads.LightingOccupancyType == "Warehouse")
+      {
+        additionalRows = InsertTitleLightingBreakdownWarehouse(index, unitInfo, contents);
+      }
+      return additionalRows;
+    }
+
+    private static int InsertTitleLightingBreakdownDwelling(int index, UnitInformation unitInfo, List<string> contents)
+    {
+      contents.Insert(index, "   0-3kVA @ 100%:");
+      contents.Insert(index + 1, "   3-120kVA @ 35%:");
+      contents.Insert(index + 2, "   120+kVA @ 25%:");
+      contents.Insert(index + 3, "   Lighting Subtotal:");
+
+      return 4;
+    }
+
+    private static int InsertTitleLightingBreakdownHotelMotel(int index, UnitInformation unitInfo, List<string> contents)
+    {
+      contents.Insert(index, "   0-20kVA @ 60%:");
+      contents.Insert(index + 1, "   20-100kVA @ 50%:");
+      contents.Insert(index + 2, "   100+kVA @ 35%:");
+      contents.Insert(index + 3, "   Lighting Subtotal:");
+
+      return 4;
+    }
+
+    private static int InsertTitleLightingBreakdownWarehouse(int index, UnitInformation unitInfo, List<string> contents)
+    {
+      contents.Insert(index, "   0-12.5kVA @ 100%:");
+      contents.Insert(index + 1, "   12.5+kVA @ 50%:");
+      contents.Insert(index + 2, "   Lighting Subtotal:");
+
+      return 3;
     }
 
     private static void AddTextObjectsToObjectData(ObjectData objectData, List<string> lines, MTextData mText, double spacing, double marginTop)
