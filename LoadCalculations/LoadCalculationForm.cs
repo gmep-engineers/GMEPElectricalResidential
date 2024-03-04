@@ -149,28 +149,28 @@ namespace GMEPElectricalResidential
       {
         var unitInformation = allUnitInformation[i];
 
-        string unitDirectory = $"Unit {unitInformation.Name} - ID{i}";
-        string saveDirectory = Path.Combine(baseSaveDirectory, unitDirectory);
+        string newUnitDirectory = $"Unit {unitInformation.Name} - ID{i}";
+        string newSaveDirectory = Path.Combine(baseSaveDirectory, newUnitDirectory);
 
-        if (!Directory.Exists(saveDirectory))
+        var existingDirectory = Directory.GetDirectories(baseSaveDirectory)
+            .FirstOrDefault(dir => dir.Contains($"ID{i}"));
+
+        if (existingDirectory != null)
         {
-          var existingDirectory = Directory.GetDirectories(baseSaveDirectory)
-              .FirstOrDefault(dir => dir.Contains($"ID{i}"));
-
-          if (existingDirectory != null)
+          if (existingDirectory != newSaveDirectory)
           {
-            Directory.Move(existingDirectory, saveDirectory);
+            Directory.Move(existingDirectory, newSaveDirectory);
           }
-          else
-          {
-            Directory.CreateDirectory(saveDirectory);
-          }
+        }
+        else
+        {
+          Directory.CreateDirectory(newSaveDirectory);
         }
 
         string json = JsonConvert.SerializeObject(unitInformation, Formatting.Indented);
 
         string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-        string savePath = Path.Combine(saveDirectory, $"{timestamp}.json");
+        string savePath = Path.Combine(newSaveDirectory, $"{timestamp}.json");
         File.WriteAllText(savePath, json);
       }
     }
