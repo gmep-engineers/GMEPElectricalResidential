@@ -483,7 +483,7 @@ namespace GMEPElectricalResidential
 
     private static ObjectData UpdateGeneralData(ObjectData generalBodyData, UnitInformation unitInfo)
     {
-      int startingRows = 16;
+      int startingRows = 15;
       List<string> contents;
       var headers = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
       if (headers != null)
@@ -504,9 +504,16 @@ namespace GMEPElectricalResidential
             $"Range{((unitInfo.GeneralLoads.Range.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Range.Multiplier}):")}",
             $"Refrigerator{((unitInfo.GeneralLoads.Refrigerator.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Refrigerator.Multiplier}):")}",
             $"Oven{((unitInfo.GeneralLoads.Oven.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Oven.Multiplier}):")}",
-            $"Water Heater{((unitInfo.GeneralLoads.WaterHeater.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.WaterHeater.Multiplier}):")}",
             $"Cooktop{((unitInfo.GeneralLoads.Cooktop.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Cooktop.Multiplier}):")}"
         };
+
+        var waterHeaterExtraRow = $"Water Heater{((unitInfo.GeneralLoads.WaterHeater.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.WaterHeater.Multiplier}):")}";
+
+        if (!unitInfo.CustomLoads.Any(load => load.Name == "Water Heater"))
+        {
+          contents.Add(waterHeaterExtraRow);
+          startingRows++;
+        }
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
@@ -540,9 +547,15 @@ namespace GMEPElectricalResidential
             $"{unitInfo.GeneralLoads.Range.VA * unitInfo.GeneralLoads.Range.Multiplier}VA",
             $"{unitInfo.GeneralLoads.Refrigerator.VA * unitInfo.GeneralLoads.Refrigerator.Multiplier}VA",
             $"{unitInfo.GeneralLoads.Oven.VA * unitInfo.GeneralLoads.Oven.Multiplier}VA",
-            $"{unitInfo.GeneralLoads.WaterHeater.VA * unitInfo.GeneralLoads.WaterHeater.Multiplier}VA",
             $"{unitInfo.GeneralLoads.Cooktop.VA * unitInfo.GeneralLoads.Cooktop.Multiplier}VA"
         };
+
+        var waterHeaterExtraValue = $"{unitInfo.GeneralLoads.WaterHeater.VA * unitInfo.GeneralLoads.WaterHeater.Multiplier}VA";
+
+        if (!unitInfo.CustomLoads.Any(load => load.Name == "Water Heater"))
+        {
+          generalValues.Add(waterHeaterExtraValue);
+        }
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
