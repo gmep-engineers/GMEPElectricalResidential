@@ -162,7 +162,7 @@ namespace GMEPElectricalResidential
     {
       double HEADER_HEIGHT = 0.75;
       double currentHeight = HEADER_HEIGHT;
-      string blockName = $"Unit {unitInfo.Name}" + $" ID{unitInfo.ID}"; ;
+      string newBlockName = $"Unit {unitInfo.Name}" + $" ID{unitInfo.ID}";
 
       var acCurDb = Application.DocumentManager.MdiActiveDocument.Database;
 
@@ -175,16 +175,26 @@ namespace GMEPElectricalResidential
 
         BlockTableRecord acBlkTblRec;
 
-        if (acBlkTbl.Has(blockName))
+        var existingBlock = acBlkTbl.Cast<ObjectId>()
+            .Select(id => acTrans.GetObject(id, OpenMode.ForRead) as BlockTableRecord)
+            .FirstOrDefault(btr => btr.Name.Contains($"ID{unitInfo.ID}"));
+
+        if (existingBlock != null)
         {
-          acBlkTblRec = acTrans.GetObject(acBlkTbl[blockName], OpenMode.ForWrite) as BlockTableRecord;
+          if (existingBlock.Name != newBlockName)
+          {
+            existingBlock.UpgradeOpen();
+            existingBlock.Name = newBlockName;
+            existingBlock.DowngradeOpen();
+          }
+          acBlkTblRec = existingBlock;
           WipeExistingBlockContent(acBlkTblRec);
         }
         else
         {
           acBlkTbl.UpgradeOpen();
           acBlkTblRec = new BlockTableRecord();
-          acBlkTblRec.Name = blockName;
+          acBlkTblRec.Name = newBlockName;
           acBlkTbl.Add(acBlkTblRec);
           acTrans.AddNewlyCreatedDBObject(acBlkTblRec, true);
         }
@@ -262,16 +272,16 @@ namespace GMEPElectricalResidential
           acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.PaperSpace], OpenMode.ForWrite) as BlockTableRecord;
         }
 
-        if (acBlkTbl.Has(blockName))
+        if (acBlkTbl.Has(newBlockName))
         {
-          BlockReference acBlkRef = new BlockReference(placementPoint, acBlkTbl[blockName]);
+          BlockReference acBlkRef = new BlockReference(placementPoint, acBlkTbl[newBlockName]);
 
           acBlkTblRec.AppendEntity(acBlkRef);
 
           acTrans.AddNewlyCreatedDBObject(acBlkRef, true);
         }
 
-        UpdateAllBlockReferences(blockName);
+        UpdateAllBlockReferences(newBlockName);
 
         acTrans.Commit();
       }
