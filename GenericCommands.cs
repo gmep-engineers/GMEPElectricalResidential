@@ -118,37 +118,29 @@ namespace GMEPElectricalResidential
       return basePoint;
     }
 
-    private static Point3d CreateText(Point3d basePoint, Transaction acTrans, BlockTableRecord acBlkTblRec, TextData text)
+    public static Point3d CreateText(Point3d basePoint, Transaction acTrans, BlockTableRecord acBlkTblRec, TextData text)
     {
       DBText dbText = new DBText();
       var textStyleObject = new TextStyle(0.0, 1.0, "Arial.ttf");
       textStyleObject.CreateStyleIfNotExisting("Load Calcs");
 
-      Document acDoc = Application.DocumentManager.MdiActiveDocument;
-      Database acCurDb = acDoc.Database;
+      dbText.Layer = text.Layer;
+      dbText.TextString = text.Contents;
+      dbText.Height = text.Height;
+      dbText.Rotation = text.Rotation;
+      SetTextStyleByName(dbText, "Load Calcs");
 
-      using (Transaction trans = acCurDb.TransactionManager.StartTransaction())
+      dbText.HorizontalMode = (text.HorizontalMode != "Left") ? TextHorizontalMode.TextRight : TextHorizontalMode.TextLeft;
+
+      dbText.Position = new Point3d(basePoint.X + text.Location.X, basePoint.Y + text.Location.Y, basePoint.Z + text.Location.Z);
+
+      if (dbText.HorizontalMode == TextHorizontalMode.TextRight)
       {
-        dbText.Layer = text.Layer;
-        dbText.TextString = text.Contents;
-        dbText.Height = text.Height;
-        dbText.Rotation = text.Rotation;
-        SetTextStyleByName(dbText, "Load Calcs");
-
-        dbText.HorizontalMode = (text.HorizontalMode != "Left") ? TextHorizontalMode.TextRight : TextHorizontalMode.TextLeft;
-
-        dbText.Position = new Point3d(basePoint.X + text.Location.X, basePoint.Y + text.Location.Y, basePoint.Z + text.Location.Z);
-
-        if (dbText.HorizontalMode == TextHorizontalMode.TextRight)
-        {
-          dbText.AlignmentPoint = dbText.Position;
-        }
-
-        acBlkTblRec.AppendEntity(dbText);
-        trans.AddNewlyCreatedDBObject(dbText, true);
-
-        trans.Commit();
+        dbText.AlignmentPoint = dbText.Position;
       }
+
+      acBlkTblRec.AppendEntity(dbText);
+      acTrans.AddNewlyCreatedDBObject(dbText, true);
 
       return basePoint;
     }

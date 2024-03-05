@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace GMEPElectricalResidential
 {
@@ -796,7 +797,10 @@ namespace GMEPElectricalResidential
 
     private static ObjectData GetCopyPasteData(string fileName)
     {
-      string relativeFilePath = $"LoadCalculations\\CopyPaste\\{fileName}.json";
+      string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+      string assemblyDirectory = Path.GetDirectoryName(assemblyLocation);
+      string relativeFilePath = Path.Combine(assemblyDirectory, $"LoadCalculations\\CopyPaste\\{fileName}.json");
+
       string jsonData = File.ReadAllText(relativeFilePath);
       ObjectData objectData = JsonConvert.DeserializeObject<ObjectData>(jsonData);
       return objectData;
