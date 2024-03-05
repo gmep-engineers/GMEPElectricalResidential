@@ -1115,20 +1115,6 @@ namespace GMEPElectricalResidential
 
       INDOOR_FAN_COIL_VA.Text = fanCoilVA.ToString();
     }
-
-    private void WriteMessageToAutoCADConsole(object thing, string preMessage = "")
-    {
-      var settings = new JsonSerializerSettings
-      {
-        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-        PreserveReferencesHandling = PreserveReferencesHandling.Objects
-      };
-
-      var message = JsonConvert.SerializeObject(thing, Formatting.Indented, settings);
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      doc.Editor.WriteMessage(preMessage);
-      doc.Editor.WriteMessage(message);
-    }
   }
 
   public class UnitInformation

@@ -1,6 +1,6 @@
 ﻿namespace GMEPElectricalResidential
 {
-  partial class LoadCalculationForm
+  partial class LOAD_CALCULATION_FORM
   {
     /// <summary>
     /// Required designer variable.
@@ -88,7 +88,7 @@
       this.CREATE.UseVisualStyleBackColor = true;
       this.CREATE.Click += new System.EventHandler(this.CREATE_Click);
       // 
-      // LoadCalculationForm
+      // LOAD_CALCULATION_FORM
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -99,8 +99,8 @@
       this.Controls.Add(this.DELETE_UNIT_BUTTON);
       this.Controls.Add(this.CREATE_UNIT_BUTTON);
       this.Controls.Add(this.TAB_CONTROL);
-      this.Name = "LoadCalculationForm";
-      this.Text = "LoadCalculationForm";
+      this.Name = "LOAD_CALCULATION_FORM";
+      this.Text = "Load Calculation Form";
       this.ResumeLayout(false);
 
     }

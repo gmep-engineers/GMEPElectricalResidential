@@ -66,6 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands.cs" />
+    <Compile Include="GenericCommands.cs" />
+    <Compile Include="HelperFiles\HelperClass.cs" />
     <Compile Include="LoadCalculations\LoadCalculationForm.cs">
       <SubType>Form</SubType>
     </Compile>

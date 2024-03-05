@@ -17,13 +17,13 @@ using System.Windows.Forms;
 
 namespace GMEPElectricalResidential
 {
-  public partial class LoadCalculationForm : Form
+  public partial class LOAD_CALCULATION_FORM : Form
   {
     private int _tabID = 0;
 
     public Commands Commands { get; }
 
-    public LoadCalculationForm(Commands commands)
+    public LOAD_CALCULATION_FORM(Commands commands)
     {
       Commands = commands;
       InitializeComponent();
@@ -33,7 +33,7 @@ namespace GMEPElectricalResidential
         AddNewTab();
       }
 
-      this.FormClosing += LoadCalculationForm_FormClosing;
+      this.FormClosing += LOAD_CALCULATION_FORM_FormClosing;
     }
 
     private bool LoadSavedUnitLoadCalculations()
@@ -65,11 +65,6 @@ namespace GMEPElectricalResidential
         }
       }
       return createdTabFlag;
-    }
-
-    private void LoadCalculationForm_FormClosing(object sender, FormClosingEventArgs e)
-    {
-      SaveLoadCalculationForm();
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -190,6 +185,11 @@ namespace GMEPElectricalResidential
       }
     }
 
+    private void LOAD_CALCULATION_FORM_FormClosing(object sender, FormClosingEventArgs e)
+    {
+      SaveLoadCalculationForm();
+    }
+
     private void CREATE_UNIT_BUTTON_Click(object sender, EventArgs e)
     {
       AddNewTab();
@@ -203,7 +203,7 @@ namespace GMEPElectricalResidential
         if (TAB_CONTROL.SelectedTab.Tag is int tabId ||
             int.TryParse(TAB_CONTROL.SelectedTab.Tag.ToString(), out tabId))
         {
-          WriteMessageToAutoCADConsole(tabId, "Tab ID: ");
+          HelperClass.WriteMessageToAutoCADConsole(tabId, "Tab ID: ");
           RemoveUnitTypeData(tabId);
         }
 
@@ -216,20 +216,6 @@ namespace GMEPElectricalResidential
       SaveLoadCalculationForm();
     }
 
-    private void WriteMessageToAutoCADConsole(object thing, string preMessage = "")
-    {
-      var settings = new JsonSerializerSettings
-      {
-        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-        PreserveReferencesHandling = PreserveReferencesHandling.Objects
-      };
-
-      var message = JsonConvert.SerializeObject(thing, Formatting.Indented, settings);
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      doc.Editor.WriteMessage(preMessage);
-      doc.Editor.WriteMessage(message);
-    }
-
     private void CREATE_Click(object sender, EventArgs e)
     {
       var allUnitInfo = AllUnitInformation();
@@ -240,41 +226,12 @@ namespace GMEPElectricalResidential
 
       using (DocumentLock docLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument())
       {
-        Point3d point = UserClick();
+        Point3d point = HelperClass.UserClick();
         foreach (var unitInfo in allUnitInfo)
         {
           Commands.CreateUnitLoadCalculationTable(unitInfo, point);
           point = new Point3d(point.X - 7, point.Y, point.Z);
         }
-      }
-    }
-
-    public static void SaveDataToJsonFile(object data, string fileName)
-    {
-      string jsonData = JsonConvert.SerializeObject(data, Formatting.Indented);
-      string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-      string fullPath = Path.Combine(desktopPath, fileName);
-      File.WriteAllText(fullPath, jsonData);
-    }
-
-    private Point3d UserClick()
-    {
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      var ed = doc.Editor;
-
-      PromptPointResult pPtRes;
-      PromptPointOptions pPtOpts = new PromptPointOptions("");
-
-      pPtOpts.Message = "\nClick a point to place the unit load calculation tables: ";
-      pPtRes = ed.GetPoint(pPtOpts);
-
-      if (pPtRes.Status == PromptStatus.OK)
-      {
-        return pPtRes.Value;
-      }
-      else
-      {
-        return new Point3d();
       }
     }
   }
