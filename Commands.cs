@@ -1,5 +1,7 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.Colors;
 using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
 using Newtonsoft.Json;
@@ -40,7 +42,7 @@ namespace GMEPElectricalResidential
     }
 
     [CommandMethod("GetObjectData")]
-    public static void GetObjectData()
+    public void GetObjectData()
     {
       var data = new ObjectData();
 
@@ -101,6 +103,167 @@ namespace GMEPElectricalResidential
       }
 
       HelperClass.SaveDataToJsonFile(data, "data.json");
+    }
+
+    [CommandMethod("SETUPXREFS")]
+    public void SetupXrefs()
+    {
+      Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+      Database currentDb = Application.DocumentManager.MdiActiveDocument.Database;
+
+      // Prompt user to select DWG files
+      System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog
+      {
+        Multiselect = true,
+        Filter = "DWG files (*.dwg)|*.dwg",
+        Title = "Select DWG Files"
+      };
+
+      if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+      {
+        foreach (string file in ofd.FileNames)
+        {
+          Database db = new Database(false, true);
+          try
+          {
+            db.ReadDwgFile(file, FileShare.ReadWrite, true, "");
+            using (Transaction tr = db.TransactionManager.StartTransaction())
+            {
+              // Create a new layer named "0-GMEP" and set its color to 8
+              LayerTable layerTable = (LayerTable)tr.GetObject(db.LayerTableId, OpenMode.ForRead);
+              if (!layerTable.Has("0-GMEP"))
+              {
+                layerTable.UpgradeOpen();
+                LayerTableRecord layerRecord = new LayerTableRecord
+                {
+                  Name = "0-GMEP",
+                  Color = Autodesk.AutoCAD.Colors.Color.FromColorIndex(Autodesk.AutoCAD.Colors.ColorMethod.ByAci, 8)
+                };
+                layerTable.Add(layerRecord);
+                tr.AddNewlyCreatedDBObject(layerRecord, true);
+              }
+
+              // Get the ObjectId of the "0" layer and the "0-GMEP" layer
+              ObjectId zeroLayerId = layerTable["0"];
+              ObjectId gmepLayerId = layerTable["0-GMEP"];
+
+              BlockTable bt = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
+              BlockTableRecord btr = (BlockTableRecord)tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+
+              foreach (ObjectId objId in btr)
+              {
+                Entity ent = tr.GetObject(objId, OpenMode.ForWrite) as Entity;
+                if (ent != null && ent.LayerId == zeroLayerId)
+                {
+                  // Move the entity from the "0" layer to the "0-GMEP" layer
+                  ent.LayerId = gmepLayerId;
+                }
+                SetEntityColorToByLayer(ent, tr, 4);
+              }
+
+              tr.Commit();
+            }
+
+            db.SaveAs(file, DwgVersion.Current);
+          }
+          catch (Autodesk.AutoCAD.Runtime.Exception ex)
+          {
+            ed.WriteMessage($"Error processing file {file}: {ex.Message}");
+          }
+          finally
+          {
+            db.Dispose();
+          }
+        }
+
+        // Call the AddDwgAsXref method with the selected files, the editor, and the database
+        AddDwgAsXref(ofd.FileNames, ed, currentDb);
+
+        ed.WriteMessage("Processing complete.");
+      }
+    }
+
+    public void AddDwgAsXref(string[] files, Editor ed, Database currentDb)
+    {
+      foreach (string file in files)
+      {
+        using (Transaction tr = currentDb.TransactionManager.StartTransaction())
+        {
+          BlockTable bt = (BlockTable)tr.GetObject(currentDb.BlockTableId, OpenMode.ForRead);
+          BlockTableRecord modelSpace = (BlockTableRecord)tr.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+
+          // Attach the DWG file as an Xref
+          ObjectId xrefId = currentDb.AttachXref(file, Path.GetFileNameWithoutExtension(file));
+
+          if (!xrefId.IsNull)
+          {
+            // Get the bounding box of the xref
+            using (Database xrefDb = new Database(false, true))
+            {
+              xrefDb.ReadDwgFile(file, FileOpenMode.OpenForReadAndAllShare, true, null);
+              using (Transaction xrefTr = xrefDb.TransactionManager.StartTransaction())
+              {
+                BlockTableRecord xrefBtr = (BlockTableRecord)xrefTr.GetObject(SymbolUtilityServices.GetBlockModelSpaceId(xrefDb), OpenMode.ForRead);
+                Extents3d? extents = null;
+                foreach (ObjectId id in xrefBtr)
+                {
+                  Entity ent = (Entity)xrefTr.GetObject(id, OpenMode.ForRead);
+                  if (ent.Bounds.HasValue)
+                  {
+                    if (extents.HasValue)
+                    {
+                      extents.Value.AddExtents(ent.Bounds.Value);
+                    }
+                    else
+                    {
+                      extents = ent.Bounds.Value;
+                    }
+                  }
+                }
+
+                Point3d center = extents.HasValue ? new Point3d(
+                    -(extents.Value.MinPoint.X + (extents.Value.MaxPoint.X - extents.Value.MinPoint.X) / 2),
+                    -(extents.Value.MinPoint.Y + (extents.Value.MaxPoint.Y - extents.Value.MinPoint.Y) / 2),
+                    -(extents.Value.MinPoint.Z + (extents.Value.MaxPoint.Z - extents.Value.MinPoint.Z) / 2)) : Point3d.Origin;
+
+                // Add the Xref to the model space at the center of its bounding box
+                BlockReference xrefReference = new BlockReference(center, xrefId);
+                modelSpace.AppendEntity(xrefReference);
+                tr.AddNewlyCreatedDBObject(xrefReference, true);
+              }
+            }
+          }
+
+          tr.Commit();
+        }
+      }
+    }
+
+    private void SetEntityColorToByLayer(Entity ent, Transaction tr, int depth)
+    {
+      if (ent != null)
+      {
+        ent.Color = Autodesk.AutoCAD.Colors.Color.FromColorIndex(Autodesk.AutoCAD.Colors.ColorMethod.ByLayer, 256);
+      }
+
+      if (depth <= 0)
+      {
+        return;
+      }
+
+      BlockReference blockRef = ent as BlockReference;
+      if (blockRef != null)
+      {
+        blockRef.Color = Autodesk.AutoCAD.Colors.Color.FromColorIndex(Autodesk.AutoCAD.Colors.ColorMethod.ByLayer, 256);
+
+        // Iterate over the entities in the block
+        BlockTableRecord blockDef = (BlockTableRecord)tr.GetObject(blockRef.BlockTableRecord, OpenMode.ForRead);
+        foreach (ObjectId entId in blockDef)
+        {
+          Entity blockEnt = tr.GetObject(entId, OpenMode.ForWrite) as Entity;
+          SetEntityColorToByLayer(blockEnt, tr, depth - 1);
+        }
+      }
     }
 
     public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d placementPoint)
