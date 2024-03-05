@@ -179,8 +179,79 @@ namespace GMEPElectricalResidential
         // Call the AddDwgAsXref method with the selected files, the editor, and the database
         AddDwgAsXref(ofd.FileNames, ed, currentDb);
 
+        // Call the GrayXref method with the selected files
+        GrayXref(ofd.FileNames);
+
+        // Call the MagentaElectricalLayers method with the selected files
+        MagentaElectricalLayers(ofd.FileNames);
+
         ed.WriteMessage("Processing complete.");
       }
+    }
+
+    public void GrayXref(string[] xrefFileNames)
+    {
+      Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+      Database currentDb = Application.DocumentManager.MdiActiveDocument.Database;
+
+      using (Transaction tr = currentDb.TransactionManager.StartTransaction())
+      {
+        // Get the LayerTable from the database
+        LayerTable layerTable = (LayerTable)tr.GetObject(currentDb.LayerTableId, OpenMode.ForRead);
+
+        // Iterate over all layers in the LayerTable
+        foreach (ObjectId layerId in layerTable)
+        {
+          LayerTableRecord layerRecord = (LayerTableRecord)tr.GetObject(layerId, OpenMode.ForWrite);
+
+          // Extract just the file name without the path and extension from each string in the xrefFileNames array
+          string[] xrefFileNamesWithoutPathAndExtension = xrefFileNames.Select(Path.GetFileNameWithoutExtension).ToArray();
+
+          // Check if the layer is from one of the xref files
+          if (xrefFileNamesWithoutPathAndExtension.Any(xrefFileName => layerRecord.Name.StartsWith(xrefFileName + "|")))
+          {
+            // Set the color of the layer to index 8
+            layerRecord.Color = Autodesk.AutoCAD.Colors.Color.FromColorIndex(Autodesk.AutoCAD.Colors.ColorMethod.ByAci, 8);
+          }
+        }
+
+        tr.Commit();
+      }
+
+      ed.WriteMessage("Processing complete.");
+    }
+
+    public void MagentaElectricalLayers(string[] xrefFileNames)
+    {
+      Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+      Database currentDb = Application.DocumentManager.MdiActiveDocument.Database;
+
+      using (Transaction tr = currentDb.TransactionManager.StartTransaction())
+      {
+        // Get the LayerTable from the database
+        LayerTable layerTable = (LayerTable)tr.GetObject(currentDb.LayerTableId, OpenMode.ForRead);
+
+        // Extract just the file name without the path and extension from each string in the xrefFileNames array
+        string[] xrefFileNamesWithoutPathAndExtension = xrefFileNames.Select(Path.GetFileNameWithoutExtension).ToArray();
+
+        // Iterate over all layers in the LayerTable
+        foreach (ObjectId layerId in layerTable)
+        {
+          LayerTableRecord layerRecord = (LayerTableRecord)tr.GetObject(layerId, OpenMode.ForWrite);
+
+          // Check if the layer is from one of the xref files and contains "LITE", "POWER", or "LIGHT"
+          if (xrefFileNamesWithoutPathAndExtension.Any(xrefFileName => layerRecord.Name.StartsWith(xrefFileName + "|")) &&
+              (layerRecord.Name.Contains("LITE") || layerRecord.Name.Contains("POWER") || layerRecord.Name.Contains("LIGHT")))
+          {
+            // Set the color of the layer to index 6
+            layerRecord.Color = Autodesk.AutoCAD.Colors.Color.FromColorIndex(Autodesk.AutoCAD.Colors.ColorMethod.ByAci, 6);
+          }
+        }
+
+        tr.Commit();
+      }
+
+      ed.WriteMessage("Processing complete.");
     }
 
     public void AddDwgAsXref(string[] files, Editor ed, Database currentDb)
