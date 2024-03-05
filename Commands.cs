@@ -121,12 +121,24 @@ namespace GMEPElectricalResidential
 
       if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
       {
+        HashSet<string> allXrefFileNames = new HashSet<string>();
+
         foreach (string file in ofd.FileNames)
         {
+          allXrefFileNames.Add(file);
+
           Database db = new Database(false, true);
           try
           {
             db.ReadDwgFile(file, FileShare.ReadWrite, true, "");
+
+            string[] xrefFileNames = GetXrefsOfXrefFile(db);
+
+            foreach (string xrefFile in xrefFileNames)
+            {
+              allXrefFileNames.Add(xrefFile);
+            }
+
             using (Transaction tr = db.TransactionManager.StartTransaction())
             {
               // Create a new layer named "0-GMEP" and set its color to 8
@@ -176,17 +188,46 @@ namespace GMEPElectricalResidential
           }
         }
 
+        // Convert allXrefFileNames to an array
+        string[] allXrefFileNamesArray = allXrefFileNames.ToArray();
+
         // Call the AddDwgAsXref method with the selected files, the editor, and the database
         AddDwgAsXref(ofd.FileNames, ed, currentDb);
 
         // Call the GrayXref method with the selected files
-        GrayXref(ofd.FileNames);
+        GrayXref(allXrefFileNamesArray);
 
         // Call the MagentaElectricalLayers method with the selected files
-        MagentaElectricalLayers(ofd.FileNames);
+        MagentaElectricalLayers(allXrefFileNamesArray);
 
         ed.WriteMessage("Processing complete.");
       }
+    }
+
+    private string[] GetXrefsOfXrefFile(Database db)
+    {
+      List<string> xrefFileNames = new List<string>();
+
+      // Get the xref graph of the database
+      XrefGraph xrefGraph = db.GetHostDwgXrefGraph(true);
+
+      // Traverse the xref graph
+      for (int i = 0; i < xrefGraph.NumNodes; i++)
+      {
+        XrefGraphNode xrefGraphNode = xrefGraph.GetXrefNode(i);
+
+        // Check if the node is an xref (not the main drawing)
+        if (xrefGraphNode.XrefStatus == XrefStatus.Resolved)
+        {
+          // Get the file path of the xref
+          string xrefFileName = xrefGraphNode.Name;
+
+          // Add the file path to xrefFileNames
+          xrefFileNames.Add(xrefFileName);
+        }
+      }
+
+      return xrefFileNames.ToArray();
     }
 
     public void GrayXref(string[] xrefFileNames)
