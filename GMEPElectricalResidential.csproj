@@ -68,18 +68,19 @@
     <Compile Include="Commands.cs" />
     <Compile Include="HelperFiles\CADObjectCommands.cs" />
     <Compile Include="HelperFiles\HelperClass.cs" />
-    <Compile Include="LoadCalculations\Unit\UnitLoadCalculation.cs" />
+    <Compile Include="LoadCalculations\Building\LoadCalculation.cs" />
+    <Compile Include="LoadCalculations\Unit\LoadCalculation.cs" />
     <Compile Include="LoadCalculations\LoadCalculationForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="LoadCalculations\LoadCalculationForm.Designer.cs">
       <DependentUpon>LoadCalculationForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LoadCalculations\UnitLoadCalculation.cs">
+    <Compile Include="LoadCalculations\Unit\LoadCalculationForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="LoadCalculations\UnitLoadCalculation.Designer.cs">
-      <DependentUpon>UnitLoadCalculation.cs</DependentUpon>
+    <Compile Include="LoadCalculations\Unit\LoadCalculationForm.Designer.cs">
+      <DependentUpon>LoadCalculationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -140,8 +141,8 @@
     <EmbeddedResource Include="LoadCalculations\LoadCalculationForm.resx">
       <DependentUpon>LoadCalculationForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LoadCalculations\UnitLoadCalculation.resx">
-      <DependentUpon>UnitLoadCalculation.cs</DependentUpon>
+    <EmbeddedResource Include="LoadCalculations\Unit\LoadCalculationForm.resx">
+      <DependentUpon>LoadCalculationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -176,10 +177,10 @@
     <Content Include="0_Notes.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BlockData\Building.json">
+    <None Include="LoadCalculations\Building\BlockData\Building.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="BlockData\UnitColumn.json">
+    <None Include="LoadCalculations\Building\BlockData\UnitColumn.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="LoadCalculations\Unit\BlockData\UnitLoadCalculationHeader.json">

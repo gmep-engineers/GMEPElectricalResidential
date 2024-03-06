@@ -10,9 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GMEPElectricalResidential
+namespace GMEPElectricalResidential.LoadCalculations.Unit
 {
-  public partial class UnitLoadCalculation : UserControl
+  public partial class LoadCalculationForm : UserControl
   {
     private string _NameWatermark = "Enter name...";
     private string _VAWatermark = "Enter VA...";
@@ -21,7 +21,7 @@ namespace GMEPElectricalResidential
     private bool _isLoaded = false;
     private bool _unitNullFlag = false;
 
-    public UnitLoadCalculation(int tabId, UnitInformation unitInformation = null)
+    public LoadCalculationForm(int tabId, UnitInformation unitInformation = null)
     {
       InitializeComponent();
       SetDefaultValues();

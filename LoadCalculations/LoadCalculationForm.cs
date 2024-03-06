@@ -57,7 +57,7 @@ namespace GMEPElectricalResidential.LoadCalculations
             var latestJsonFile = jsonFiles.OrderByDescending(f => File.GetCreationTime(f)).First();
             var json = File.ReadAllText(latestJsonFile);
 
-            var unitInformation = JsonConvert.DeserializeObject<UnitInformation>(json);
+            var unitInformation = JsonConvert.DeserializeObject<Unit.UnitInformation>(json);
 
             AddNewTab(unitInformation);
 
@@ -79,7 +79,7 @@ namespace GMEPElectricalResidential.LoadCalculations
       return base.ProcessCmdKey(ref msg, keyData);
     }
 
-    public void AddNewTab(UnitInformation unitInformation = null)
+    public void AddNewTab(Unit.UnitInformation unitInformation = null)
     {
       TabPage tabPage;
       if (unitInformation != null)
@@ -91,7 +91,7 @@ namespace GMEPElectricalResidential.LoadCalculations
         tabPage = new TabPage("Unit");
       }
 
-      GMEPElectricalResidential.UnitLoadCalculation unitLoadCalculation = new GMEPElectricalResidential.UnitLoadCalculation(_tabID, unitInformation);
+      Unit.LoadCalculationForm unitLoadCalculation = new Unit.LoadCalculationForm(_tabID, unitInformation);
       tabPage.Tag = _tabID;
       tabPage.Controls.Add(unitLoadCalculation);
       TAB_CONTROL.TabPages.Add(tabPage);
@@ -112,14 +112,14 @@ namespace GMEPElectricalResidential.LoadCalculations
       }
     }
 
-    private List<UnitInformation> AllUnitInformation()
+    private List<Unit.UnitInformation> AllUnitInformation()
     {
-      List<UnitInformation> allUnitInformation = new List<UnitInformation>();
+      List<Unit.UnitInformation> allUnitInformation = new List<Unit.UnitInformation>();
 
       for (int i = 0; i < TAB_CONTROL.TabCount; i++)
       {
         var tabPage = TAB_CONTROL.TabPages[i];
-        var unitLoadCalculation = tabPage.Controls.OfType<UnitLoadCalculation>().FirstOrDefault();
+        var unitLoadCalculation = tabPage.Controls.OfType<Unit.LoadCalculationForm>().FirstOrDefault();
 
         if (unitLoadCalculation != null)
         {
@@ -139,7 +139,7 @@ namespace GMEPElectricalResidential.LoadCalculations
 
       Directory.CreateDirectory(baseSaveDirectory);
 
-      List<UnitInformation> allUnitInformation = AllUnitInformation();
+      List<Unit.UnitInformation> allUnitInformation = AllUnitInformation();
 
       for (int i = 0; i < allUnitInformation.Count; i++)
       {
@@ -230,7 +230,7 @@ namespace GMEPElectricalResidential.LoadCalculations
         Point3d point = HelperClass.UserClick();
         foreach (var unitInfo in allUnitInfo)
         {
-          Unit.UnitLoadCalculation.CreateUnitLoadCalculationTable(unitInfo, point);
+          Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo, point);
           point = new Point3d(point.X - 7, point.Y, point.Z);
         }
       }

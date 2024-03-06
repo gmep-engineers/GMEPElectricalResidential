@@ -1,6 +1,6 @@
-﻿namespace GMEPElectricalResidential
+﻿namespace GMEPElectricalResidential.LoadCalculations.Unit
 {
-  partial class UnitLoadCalculation
+  partial class LoadCalculationForm
   {
     /// <summary> 
     /// Required designer variable.

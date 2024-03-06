@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace GMEPElectricalResidential.LoadCalculations.Unit
 {
-  public class UnitLoadCalculation
+  public class LoadCalculation
   {
     public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d placementPoint)
     {
