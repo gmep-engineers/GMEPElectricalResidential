@@ -69,6 +69,12 @@
     <Compile Include="HelperFiles\CADObjectCommands.cs" />
     <Compile Include="HelperFiles\HelperClass.cs" />
     <Compile Include="LoadCalculations\Building\LoadCalculation.cs" />
+    <Compile Include="LoadCalculations\Building\LoadCalculationForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LoadCalculations\Building\LoadCalculationForm.Designer.cs">
+      <DependentUpon>LoadCalculationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoadCalculations\Unit\LoadCalculation.cs" />
     <Compile Include="LoadCalculations\LoadCalculationForm.cs">
       <SubType>Form</SubType>
@@ -138,6 +144,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="LoadCalculations\Building\LoadCalculationForm.resx">
+      <DependentUpon>LoadCalculationForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LoadCalculations\LoadCalculationForm.resx">
       <DependentUpon>LoadCalculationForm.cs</DependentUpon>
     </EmbeddedResource>
