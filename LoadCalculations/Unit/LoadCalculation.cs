@@ -45,7 +45,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
             existingBlock.DowngradeOpen();
           }
           acBlkTblRec = existingBlock;
+          existingBlock.UpgradeOpen();
           WipeExistingBlockContent(acBlkTblRec);
+          existingBlock.DowngradeOpen();
         }
         else
         {
@@ -54,6 +56,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
           acBlkTblRec.Name = newBlockName;
           acBlkTbl.Add(acBlkTblRec);
           acTrans.AddNewlyCreatedDBObject(acBlkTblRec, true);
+          acBlkTbl.DowngradeOpen();
         }
 
         ObjectData headerData = GetCopyPasteData("UnitLoadCalculationHeader");
