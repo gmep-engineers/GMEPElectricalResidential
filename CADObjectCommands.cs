@@ -1,14 +1,79 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
+using Autodesk.AutoCAD.Runtime;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
 namespace GMEPElectricalResidential
 {
-  public class GenericCommands
+  public class CADObjectCommands
   {
+    [CommandMethod("GetObjectData")]
+    public void GetObjectData()
+    {
+      var data = new ObjectData();
+
+      Autodesk.AutoCAD.EditorInput.Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor;
+      Autodesk.AutoCAD.EditorInput.PromptSelectionResult selectionResult = ed.GetSelection();
+      if (selectionResult.Status == Autodesk.AutoCAD.EditorInput.PromptStatus.OK)
+      {
+        Autodesk.AutoCAD.EditorInput.SelectionSet selectionSet = selectionResult.Value;
+        Autodesk.AutoCAD.EditorInput.PromptPointOptions originOptions = new Autodesk.AutoCAD.EditorInput.PromptPointOptions("Select an origin point: ");
+        Autodesk.AutoCAD.EditorInput.PromptPointResult originResult = ed.GetPoint(originOptions);
+        if (originResult.Status == Autodesk.AutoCAD.EditorInput.PromptStatus.OK)
+        {
+          Point3d origin = originResult.Value;
+
+          foreach (Autodesk.AutoCAD.DatabaseServices.ObjectId objectId in selectionSet.GetObjectIds())
+          {
+            using (Transaction transaction = objectId.Database.TransactionManager.StartTransaction())
+            {
+              Autodesk.AutoCAD.DatabaseServices.DBObject obj = transaction.GetObject(objectId, Autodesk.AutoCAD.DatabaseServices.OpenMode.ForRead);
+
+              if (obj is Autodesk.AutoCAD.DatabaseServices.Polyline)
+              {
+                data = HandlePolyline(obj as Autodesk.AutoCAD.DatabaseServices.Polyline, data, origin);
+              }
+              else if (obj is Autodesk.AutoCAD.DatabaseServices.Arc)
+              {
+                data = HandleArc(obj as Autodesk.AutoCAD.DatabaseServices.Arc, data, origin);
+              }
+              else if (obj is Autodesk.AutoCAD.DatabaseServices.Circle)
+              {
+                data = HandleCircle(obj as Autodesk.AutoCAD.DatabaseServices.Circle, data, origin);
+              }
+              else if (obj is Autodesk.AutoCAD.DatabaseServices.Ellipse)
+              {
+                data = HandleEllipse(obj as Autodesk.AutoCAD.DatabaseServices.Ellipse, data, origin);
+              }
+              else if (obj is Autodesk.AutoCAD.DatabaseServices.MText)
+              {
+                data = HandleMText(obj as Autodesk.AutoCAD.DatabaseServices.MText, data, origin);
+              }
+              else if (obj is Autodesk.AutoCAD.DatabaseServices.Solid)
+              {
+                data = HandleSolid(obj as Autodesk.AutoCAD.DatabaseServices.Solid, data, origin);
+              }
+              else if (obj is Autodesk.AutoCAD.DatabaseServices.Line)
+              {
+                data = HandleLine(obj as Autodesk.AutoCAD.DatabaseServices.Line, data, origin);
+              }
+              else if (obj is Autodesk.AutoCAD.DatabaseServices.DBText)
+              {
+                data = HandleText(obj as Autodesk.AutoCAD.DatabaseServices.DBText, data, origin);
+              }
+
+              transaction.Commit();
+            }
+          }
+        }
+      }
+
+      HelperClass.SaveDataToJsonFile(data, "data.json");
+    }
+
     public static Point3d CreateArc(Point3d basePoint, Transaction acTrans, BlockTableRecord acBlkTblRec, ArcData arcData)
     {
       Arc arc = new Arc();
