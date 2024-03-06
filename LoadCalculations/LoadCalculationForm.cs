@@ -94,20 +94,21 @@ namespace GMEPElectricalResidential.LoadCalculations
       Unit.LoadCalculationForm unitLoadCalculation = new Unit.LoadCalculationForm(_tabID, unitInformation);
       tabPage.Tag = _tabID;
       tabPage.Controls.Add(unitLoadCalculation);
-      TAB_CONTROL.TabPages.Add(tabPage);
+
+      UNIT_TAB_CONTROL.TabPages.Add(tabPage);
 
       _tabID++;
     }
 
     public void RemoveCurrentTab()
     {
-      if (TAB_CONTROL.TabCount > 0)
+      if (UNIT_TAB_CONTROL.TabCount > 0)
       {
         DialogResult result = MessageBox.Show("Are you sure you want to remove this tab?", "Confirmation", MessageBoxButtons.YesNo);
 
         if (result == DialogResult.Yes)
         {
-          TAB_CONTROL.TabPages.Remove(TAB_CONTROL.SelectedTab);
+          UNIT_TAB_CONTROL.TabPages.Remove(UNIT_TAB_CONTROL.SelectedTab);
         }
       }
     }
@@ -116,9 +117,9 @@ namespace GMEPElectricalResidential.LoadCalculations
     {
       List<Unit.UnitInformation> allUnitInformation = new List<Unit.UnitInformation>();
 
-      for (int i = 0; i < TAB_CONTROL.TabCount; i++)
+      for (int i = 0; i < UNIT_TAB_CONTROL.TabCount; i++)
       {
-        var tabPage = TAB_CONTROL.TabPages[i];
+        var tabPage = UNIT_TAB_CONTROL.TabPages[i];
         var unitLoadCalculation = tabPage.Controls.OfType<Unit.LoadCalculationForm>().FirstOrDefault();
 
         if (unitLoadCalculation != null)
@@ -194,15 +195,15 @@ namespace GMEPElectricalResidential.LoadCalculations
     private void CREATE_UNIT_BUTTON_Click(object sender, EventArgs e)
     {
       AddNewTab();
-      TAB_CONTROL.SelectedIndex = TAB_CONTROL.TabCount - 1;
+      UNIT_TAB_CONTROL.SelectedIndex = UNIT_TAB_CONTROL.TabCount - 1;
     }
 
     private void DELETE_UNIT_BUTTON_Click(object sender, EventArgs e)
     {
-      if (TAB_CONTROL.SelectedTab != null)
+      if (UNIT_TAB_CONTROL.SelectedTab != null)
       {
-        if (TAB_CONTROL.SelectedTab.Tag is int tabId ||
-            int.TryParse(TAB_CONTROL.SelectedTab.Tag.ToString(), out tabId))
+        if (UNIT_TAB_CONTROL.SelectedTab.Tag is int tabId ||
+            int.TryParse(UNIT_TAB_CONTROL.SelectedTab.Tag.ToString(), out tabId))
         {
           HelperClass.WriteMessageToAutoCADConsole(tabId, "Tab ID: ");
           RemoveUnitTypeData(tabId);
@@ -210,11 +211,6 @@ namespace GMEPElectricalResidential.LoadCalculations
 
         RemoveCurrentTab();
       }
-    }
-
-    private void SAVE_BUTTON_Click(object sender, EventArgs e)
-    {
-      SaveLoadCalculationForm();
     }
 
     private void CREATE_Click(object sender, EventArgs e)
@@ -234,6 +230,11 @@ namespace GMEPElectricalResidential.LoadCalculations
           point = new Point3d(point.X - 7, point.Y, point.Z);
         }
       }
+    }
+
+    private void SAVE_BUTTON_Click(object sender, EventArgs e)
+    {
+      SaveLoadCalculationForm();
     }
   }
 }
