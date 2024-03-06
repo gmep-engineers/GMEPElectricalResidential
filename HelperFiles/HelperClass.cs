@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GMEPElectricalResidential
+namespace GMEPElectricalResidential.HelperFiles
 {
   public class HelperClass
   {
@@ -33,12 +33,18 @@ namespace GMEPElectricalResidential
       doc.Editor.WriteMessage(message);
     }
 
-    public static void SaveDataToJsonFile(object data, string fileName)
+    public static void SaveDataToJsonFileOnDesktop(object data, string fileName)
     {
       string jsonData = JsonConvert.SerializeObject(data, Formatting.Indented);
       string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
       string fullPath = Path.Combine(desktopPath, fileName);
       File.WriteAllText(fullPath, jsonData);
+    }
+
+    public static void SaveDataToJsonFile(object data, string filePath)
+    {
+      string jsonData = JsonConvert.SerializeObject(data, Formatting.Indented);
+      File.WriteAllText(filePath, jsonData);
     }
 
     public static Point3d UserClick()

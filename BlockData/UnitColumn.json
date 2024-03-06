@@ -1,0 +1,651 @@
+{
+  "Polylines": [],
+  "Lines": [
+    {
+      "StartPoint": {
+        "X": -1.25,
+        "Y": -7.5,
+        "Z": 0.0
+      },
+      "EndPoint": {
+        "X": -1.25,
+        "Y": -0.5,
+        "Z": 0.0
+      },
+      "Layer": "E-TEXT"
+    }
+  ],
+  "Arcs": [],
+  "Circles": [],
+  "Ellipses": [],
+  "MTexts": [
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;64594",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -7.3000000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;2",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -7.0500000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;5000",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -6.5500000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;648",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -6.3000000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;2714",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -5.8000000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;15.57",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -5.3000000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;5574",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -5.0500000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;10000",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -4.8000000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;23935",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -4.3000000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;1000",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -4.0500000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;5000",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -3.5500000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;8000",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -3.8000000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;0",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -3.3000000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;1200",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -3.0500000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;200",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -2.8000000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;1500",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -2.5500000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;1200",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -2.3000000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;5835",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -2.0500000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;1500",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -1.8000000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;3000",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -1.5500000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;1335",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -1.3000000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;445",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -0.80000000000000071,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;E",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.0,
+        "Y": -0.55000000000000071,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;FCU+NRH",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.2000000000000028,
+        "Y": -6.0500000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Standard",
+      "Justification": "TopLeft",
+      "Contents": "\\FArial;Outside Unit",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": -1.2000000000000028,
+        "Y": -5.5500000000000007,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    }
+  ],
+  "Texts": [],
+  "Solids": [],
+  "NumberOfRows": 0
+}

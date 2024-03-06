@@ -3,6 +3,7 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
+using GMEPElectricalResidential.HelperFiles;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GMEPElectricalResidential
+namespace GMEPElectricalResidential.LoadCalculations
 {
   public partial class LOAD_CALCULATION_FORM : Form
   {
@@ -90,7 +91,7 @@ namespace GMEPElectricalResidential
         tabPage = new TabPage("Unit");
       }
 
-      UnitLoadCalculation unitLoadCalculation = new UnitLoadCalculation(_tabID, unitInformation);
+      GMEPElectricalResidential.UnitLoadCalculation unitLoadCalculation = new GMEPElectricalResidential.UnitLoadCalculation(_tabID, unitInformation);
       tabPage.Tag = _tabID;
       tabPage.Controls.Add(unitLoadCalculation);
       TAB_CONTROL.TabPages.Add(tabPage);
@@ -229,7 +230,7 @@ namespace GMEPElectricalResidential
         Point3d point = HelperClass.UserClick();
         foreach (var unitInfo in allUnitInfo)
         {
-          Commands.CreateUnitLoadCalculationTable(unitInfo, point);
+          Unit.UnitLoadCalculation.CreateUnitLoadCalculationTable(unitInfo, point);
           point = new Point3d(point.X - 7, point.Y, point.Z);
         }
       }

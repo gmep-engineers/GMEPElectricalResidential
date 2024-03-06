@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace GMEPElectricalResidential
+namespace GMEPElectricalResidential.HelperFiles
 {
   public class CADObjectCommands
   {
@@ -71,7 +71,37 @@ namespace GMEPElectricalResidential
         }
       }
 
-      HelperClass.SaveDataToJsonFile(data, "data.json");
+      // Prompt the user to enter a name for the JSON file
+      Autodesk.AutoCAD.EditorInput.PromptStringOptions nameOptions = new Autodesk.AutoCAD.EditorInput.PromptStringOptions("Enter a name for the JSON file: ");
+
+      Autodesk.AutoCAD.EditorInput.PromptResult nameResult = ed.GetString(nameOptions);
+
+      if (nameResult.Status == Autodesk.AutoCAD.EditorInput.PromptStatus.OK)
+      {
+        string fileName = nameResult.StringResult;
+
+        // Get the directory path of the assembly
+        string assemblyDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        ed.WriteMessage($"Assembly Directory: {assemblyDirectory}");
+
+        // Go up two directories from the assembly directory to get the project directory
+        string projectDirectory = System.IO.Directory.GetParent(System.IO.Directory.GetParent(assemblyDirectory).FullName).FullName;
+        ed.WriteMessage($"Project Directory: {projectDirectory}");
+
+        // Create the BlockData directory if it doesn't exist
+        string blockDataDirectory = System.IO.Path.Combine(projectDirectory, "BlockData");
+        if (!System.IO.Directory.Exists(blockDataDirectory))
+        {
+          System.IO.Directory.CreateDirectory(blockDataDirectory);
+        }
+
+        // Generate the JSON file path
+        string jsonFilePath = System.IO.Path.Combine(blockDataDirectory, $"{fileName}.json");
+        ed.WriteMessage($"JSON File Path: {jsonFilePath}");
+
+        // Save the object data to the JSON file
+        HelperClass.SaveDataToJsonFileOnDesktop(data, jsonFilePath);
+      }
     }
 
     public static Point3d CreateArc(Point3d basePoint, Transaction acTrans, BlockTableRecord acBlkTblRec, ArcData arcData)
@@ -507,7 +537,7 @@ namespace GMEPElectricalResidential
 
     public void CreateStyleIfNotExisting(string name)
     {
-      Document acDoc = Application.DocumentManager.MdiActiveDocument;
+      Autodesk.AutoCAD.ApplicationServices.Document acDoc = Application.DocumentManager.MdiActiveDocument;
       Database acCurDb = acDoc.Database;
 
       using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
@@ -539,7 +569,7 @@ namespace GMEPElectricalResidential
     {
       List<string> styles = new List<string>();
 
-      Document acDoc = Application.DocumentManager.MdiActiveDocument;
+      Autodesk.AutoCAD.ApplicationServices.Document acDoc = Application.DocumentManager.MdiActiveDocument;
       Database acCurDb = acDoc.Database;
 
       using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())

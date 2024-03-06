@@ -1,4 +1,4 @@
-﻿namespace GMEPElectricalResidential
+﻿namespace GMEPElectricalResidential.LoadCalculations
 {
   partial class LOAD_CALCULATION_FORM
   {

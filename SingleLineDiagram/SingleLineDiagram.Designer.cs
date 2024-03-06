@@ -1,4 +1,4 @@
-﻿namespace GMEPElectricalResidential
+﻿namespace GMEPElectricalResidential.SingleLineDiagram
 {
   partial class SINGLE_LINE_DIAGRAM
   {
@@ -41,7 +41,7 @@
       this.BLOCK_INFORMATION = new System.Windows.Forms.Label();
       this.DRAG_AND_DROP = new System.Windows.Forms.Label();
       this.PLACEMENT_AREA = new System.Windows.Forms.Label();
-      this.PANEL = new GMEPElectricalResidential.DoubleBufferedPanel();
+      this.PANEL = new GMEPElectricalResidential.SingleLineDiagram.DoubleBufferedPanel();
       ((System.ComponentModel.ISupportInitialize)(this.UPWARDS_ARROW)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.TRASH)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.DOWNWARDS_ARROW)).BeginInit();

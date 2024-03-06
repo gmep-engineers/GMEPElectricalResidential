@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GMEPElectricalResidential
+namespace GMEPElectricalResidential.SingleLineDiagram
 {
   public partial class SINGLE_LINE_DIAGRAM : Form
   {

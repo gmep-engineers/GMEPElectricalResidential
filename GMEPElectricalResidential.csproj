@@ -66,8 +66,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands.cs" />
-    <Compile Include="CADObjectCommands.cs" />
+    <Compile Include="HelperFiles\CADObjectCommands.cs" />
     <Compile Include="HelperFiles\HelperClass.cs" />
+    <Compile Include="LoadCalculations\Unit\UnitLoadCalculation.cs" />
     <Compile Include="LoadCalculations\LoadCalculationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,10 +176,16 @@
     <Content Include="0_Notes.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="LoadCalculations\CopyPaste\UnitLoadCalculationHeader.json">
+    <None Include="BlockData\Building.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="LoadCalculations\CopyPaste\UnitLoadCalculationBody.json">
+    <None Include="BlockData\UnitColumn.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="LoadCalculations\Unit\BlockData\UnitLoadCalculationHeader.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="LoadCalculations\Unit\BlockData\UnitLoadCalculationBody.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
