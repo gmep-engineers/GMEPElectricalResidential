@@ -58,8 +58,14 @@ namespace GMEPElectricalResidential.LoadCalculations
             var json = File.ReadAllText(latestJsonFile);
 
             var unitInformation = JsonConvert.DeserializeObject<Unit.UnitInformation>(json);
-
-            AddNewTab(unitInformation);
+            if (unitInformation.Voltage == null)
+            {
+              AddNewTab();
+            }
+            else
+            {
+              AddNewTab(unitInformation);
+            }
 
             createdTabFlag = true;
           }
