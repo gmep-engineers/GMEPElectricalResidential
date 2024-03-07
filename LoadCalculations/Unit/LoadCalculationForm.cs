@@ -140,24 +140,21 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         }
       }
 
-      if (unitInformation.GeneralLoads.LightingOccupancyType != null)
+      if (unitInformation.GeneralLoads.LightingOccupancyType == LightingOccupancyType.Dwelling)
       {
-        if (unitInformation.GeneralLoads.LightingOccupancyType == "Dwelling")
-        {
-          LIGHTING_DWELLING.Checked = true;
-        }
-        else if (unitInformation.GeneralLoads.LightingOccupancyType == "Hotel and Motel")
-        {
-          LIGHTING_HOTEL_MOTEL.Checked = true;
-        }
-        else if (unitInformation.GeneralLoads.LightingOccupancyType == "Warehouse")
-        {
-          LIGHTING_WAREHOUSE.Checked = true;
-        }
-        else if (unitInformation.GeneralLoads.LightingOccupancyType == "Other")
-        {
-          LIGHTING_OTHER.Checked = true;
-        }
+        LIGHTING_DWELLING.Checked = true;
+      }
+      else if (unitInformation.GeneralLoads.LightingOccupancyType == LightingOccupancyType.HotelAndMotel)
+      {
+        LIGHTING_HOTEL_MOTEL.Checked = true;
+      }
+      else if (unitInformation.GeneralLoads.LightingOccupancyType == LightingOccupancyType.Warehouse)
+      {
+        LIGHTING_WAREHOUSE.Checked = true;
+      }
+      else if (unitInformation.GeneralLoads.LightingOccupancyType == LightingOccupancyType.Other)
+      {
+        LIGHTING_OTHER.Checked = true;
       }
 
       // Set AC loads
@@ -446,19 +443,19 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       if (LIGHTING_DWELLING.Checked)
       {
-        _unitInformation.GeneralLoads.LightingOccupancyType = "Dwelling";
+        _unitInformation.GeneralLoads.LightingOccupancyType = LightingOccupancyType.Dwelling;
       }
       else if (LIGHTING_HOTEL_MOTEL.Checked)
       {
-        _unitInformation.GeneralLoads.LightingOccupancyType = "Hotel and Motel";
+        _unitInformation.GeneralLoads.LightingOccupancyType = LightingOccupancyType.HotelAndMotel;
       }
       else if (LIGHTING_WAREHOUSE.Checked)
       {
-        _unitInformation.GeneralLoads.LightingOccupancyType = "Warehouse";
+        _unitInformation.GeneralLoads.LightingOccupancyType = LightingOccupancyType.Warehouse;
       }
       else if (LIGHTING_OTHER.Checked)
       {
-        _unitInformation.GeneralLoads.LightingOccupancyType = "Other";
+        _unitInformation.GeneralLoads.LightingOccupancyType = LightingOccupancyType.Other;
       }
     }
 
@@ -471,7 +468,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       var generalLoads = _unitInformation.GeneralLoads;
 
-      int totalLoad = generalLoads.Lighting.GetLoad()
+      int totalLoad = generalLoads.OccupancyLighting()
                       + generalLoads.SmallAppliance.GetLoad()
                       + generalLoads.Laundry.GetLoad()
                       + generalLoads.Bathroom.GetLoad()
@@ -1189,7 +1186,64 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     public UnitLoad WaterHeater { get; set; }
     public UnitLoad Cooktop { get; set; }
     public List<UnitLoad> Customs { get; set; }
-    public string LightingOccupancyType { get; set; }
+    public LightingOccupancyType LightingOccupancyType { get; set; }
+
+    public int OccupancyLighting()
+    {
+      switch (LightingOccupancyType)
+      {
+        case LightingOccupancyType.Dwelling:
+          return DwellingLoad();
+
+        case LightingOccupancyType.HotelAndMotel:
+          return HotelAndMotelLoad();
+
+        case LightingOccupancyType.Warehouse:
+          return WarehouseLoad();
+
+        case LightingOccupancyType.Other:
+          return OtherLoad();
+
+        default:
+          return 0;
+      }
+    }
+
+    private int DwellingLoad()
+    {
+      var firstValue = Math.Min(Lighting.VA, 3000);
+      var secondValue = Math.Min(Math.Max(Lighting.VA - 3000, 0), 117000) * 0.35;
+      var thirdValue = Math.Max(Lighting.VA - 120000, 0) * 0.25;
+      return (int)Math.Ceiling(firstValue + secondValue + thirdValue);
+    }
+
+    private int HotelAndMotelLoad()
+    {
+      var firstValue = Math.Min(Lighting.VA, 20000) * 0.6;
+      var secondValue = Math.Min(Math.Max(Lighting.VA - 20000, 0), 80000) * 0.5;
+      var thirdValue = Math.Max(Lighting.VA - 100000, 0) * 0.35;
+      return (int)Math.Ceiling(firstValue + secondValue + thirdValue);
+    }
+
+    private int WarehouseLoad()
+    {
+      var firstValue = Math.Min(Lighting.VA, 12500);
+      var secondValue = Math.Max(Lighting.VA - 12500, 0) * 0.5;
+      return (int)Math.Ceiling(firstValue + secondValue);
+    }
+
+    private int OtherLoad()
+    {
+      return Lighting.VA;
+    }
+  }
+
+  public enum LightingOccupancyType
+  {
+    Dwelling,
+    HotelAndMotel,
+    Warehouse,
+    Other
   }
 
   public class UnitLoad

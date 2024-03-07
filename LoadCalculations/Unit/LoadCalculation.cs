@@ -448,15 +448,15 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       int lightingVA = unitInfo.GeneralLoads.Lighting.VA * unitInfo.GeneralLoads.Lighting.Multiplier;
 
-      if (unitInfo.GeneralLoads.LightingOccupancyType == "Dwelling")
+      if (unitInfo.GeneralLoads.LightingOccupancyType == LightingOccupancyType.Dwelling)
       {
         InsertValueLightingBreakdownDwelling(index, unitInfo, generalValues, lightingVA);
       }
-      else if (unitInfo.GeneralLoads.LightingOccupancyType == "Hotel and Motel")
+      else if (unitInfo.GeneralLoads.LightingOccupancyType == LightingOccupancyType.HotelAndMotel)
       {
         InsertValueLightingBreakdownHotelMotel(index, unitInfo, generalValues, lightingVA);
       }
-      else if (unitInfo.GeneralLoads.LightingOccupancyType == "Warehouse")
+      else if (unitInfo.GeneralLoads.LightingOccupancyType == LightingOccupancyType.Warehouse)
       {
         InsertValueLightingBreakdownWarehouse(index, unitInfo, generalValues, lightingVA);
       }
@@ -467,6 +467,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var firstValue = Math.Min(lightingVA, 3000);
       var secondValue = Math.Min(Math.Max(lightingVA - 3000, 0), 117000) * 0.35;
       var thirdValue = Math.Max(lightingVA - 120000, 0) * 0.25;
+
       var total = firstValue + secondValue + thirdValue;
 
       generalValues.Insert(index, $"{firstValue}VA");
@@ -502,15 +503,15 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     private static int InsertTitleLightingBreakdown(int index, UnitInformation unitInfo, List<string> contents)
     {
       int additionalRows = 0;
-      if (unitInfo.GeneralLoads.LightingOccupancyType == "Dwelling")
+      if (unitInfo.GeneralLoads.LightingOccupancyType == LightingOccupancyType.Dwelling)
       {
         additionalRows = InsertTitleLightingBreakdownDwelling(index, unitInfo, contents);
       }
-      else if (unitInfo.GeneralLoads.LightingOccupancyType == "Hotel and Motel")
+      else if (unitInfo.GeneralLoads.LightingOccupancyType == LightingOccupancyType.HotelAndMotel)
       {
         additionalRows = InsertTitleLightingBreakdownHotelMotel(index, unitInfo, contents);
       }
-      else if (unitInfo.GeneralLoads.LightingOccupancyType == "Warehouse")
+      else if (unitInfo.GeneralLoads.LightingOccupancyType == LightingOccupancyType.Warehouse)
       {
         additionalRows = InsertTitleLightingBreakdownWarehouse(index, unitInfo, contents);
       }
