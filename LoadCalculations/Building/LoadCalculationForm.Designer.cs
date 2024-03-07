@@ -70,6 +70,8 @@
       this.label28 = new System.Windows.Forms.Label();
       this.TOTAL_SERVICE_SIZE = new System.Windows.Forms.Label();
       this.label30 = new System.Windows.Forms.Label();
+      this.VOLTAGE = new System.Windows.Forms.ComboBox();
+      this.label7 = new System.Windows.Forms.Label();
       this.panel1.SuspendLayout();
       this.panel2.SuspendLayout();
       this.panel3.SuspendLayout();
@@ -111,7 +113,7 @@
       // 
       this.panel2.BackColor = System.Drawing.SystemColors.Window;
       this.panel2.Controls.Add(this.HOUSE_LOAD);
-      this.panel2.Location = new System.Drawing.Point(145, 80);
+      this.panel2.Location = new System.Drawing.Point(150, 146);
       this.panel2.Margin = new System.Windows.Forms.Padding(6, 0, 48, 12);
       this.panel2.Name = "panel2";
       this.panel2.Padding = new System.Windows.Forms.Padding(5);
@@ -132,7 +134,7 @@
       // 
       this.label1.AutoSize = true;
       this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label1.Location = new System.Drawing.Point(143, 53);
+      this.label1.Location = new System.Drawing.Point(148, 119);
       this.label1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(113, 24);
@@ -145,16 +147,16 @@
       this.UNIT_TYPES.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.UNIT_TYPES.FormattingEnabled = true;
       this.UNIT_TYPES.ItemHeight = 20;
-      this.UNIT_TYPES.Location = new System.Drawing.Point(17, 206);
+      this.UNIT_TYPES.Location = new System.Drawing.Point(17, 246);
       this.UNIT_TYPES.Name = "UNIT_TYPES";
-      this.UNIT_TYPES.Size = new System.Drawing.Size(253, 282);
+      this.UNIT_TYPES.Size = new System.Drawing.Size(253, 242);
       this.UNIT_TYPES.TabIndex = 56;
       // 
       // label17
       // 
       this.label17.AutoSize = true;
       this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label17.Location = new System.Drawing.Point(15, 176);
+      this.label17.Location = new System.Drawing.Point(14, 216);
       this.label17.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label17.Name = "label17";
       this.label17.Size = new System.Drawing.Size(90, 24);
@@ -197,7 +199,7 @@
       // 
       this.label61.AutoSize = true;
       this.label61.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label61.Location = new System.Drawing.Point(245, 88);
+      this.label61.Location = new System.Drawing.Point(250, 154);
       this.label61.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label61.Name = "label61";
       this.label61.Size = new System.Drawing.Size(25, 16);
@@ -229,7 +231,7 @@
       // 
       this.label4.AutoSize = true;
       this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label4.Location = new System.Drawing.Point(14, 139);
+      this.label4.Location = new System.Drawing.Point(14, 186);
       this.label4.Margin = new System.Windows.Forms.Padding(0, 0, 0, 12);
       this.label4.Name = "label4";
       this.label4.Size = new System.Drawing.Size(178, 25);
@@ -524,9 +526,37 @@
       this.label30.TabIndex = 199;
       this.label30.Text = "Service Size";
       // 
+      // VOLTAGE
+      // 
+      this.VOLTAGE.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+      this.VOLTAGE.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.VOLTAGE.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.VOLTAGE.FormattingEnabled = true;
+      this.VOLTAGE.Items.AddRange(new object[] {
+            "208V",
+            "240V"});
+      this.VOLTAGE.Location = new System.Drawing.Point(19, 146);
+      this.VOLTAGE.Margin = new System.Windows.Forms.Padding(6, 0, 48, 24);
+      this.VOLTAGE.Name = "VOLTAGE";
+      this.VOLTAGE.Size = new System.Drawing.Size(97, 28);
+      this.VOLTAGE.TabIndex = 202;
+      // 
+      // label7
+      // 
+      this.label7.AutoSize = true;
+      this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label7.Location = new System.Drawing.Point(17, 119);
+      this.label7.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label7.Name = "label7";
+      this.label7.Size = new System.Drawing.Size(74, 24);
+      this.label7.TabIndex = 203;
+      this.label7.Text = "Voltage";
+      // 
       // LoadCalculationForm
       // 
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+      this.Controls.Add(this.VOLTAGE);
+      this.Controls.Add(this.label7);
       this.Controls.Add(this.label28);
       this.Controls.Add(this.TOTAL_SERVICE_SIZE);
       this.Controls.Add(this.label30);
@@ -623,5 +653,7 @@
     private System.Windows.Forms.Label label28;
     private System.Windows.Forms.Label TOTAL_SERVICE_SIZE;
     private System.Windows.Forms.Label label30;
+    private System.Windows.Forms.ComboBox VOLTAGE;
+    private System.Windows.Forms.Label label7;
   }
 }
