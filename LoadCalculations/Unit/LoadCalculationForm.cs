@@ -674,6 +674,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         var parentTab = this.Parent as TabPage;
         if (parentTab != null)
         {
+          _unitInformation.Name = textBox.Text;
           parentTab.Text = _unitInformation.FormattedName();
         }
       }

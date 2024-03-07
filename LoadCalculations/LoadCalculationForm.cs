@@ -242,6 +242,19 @@ namespace GMEPElectricalResidential.LoadCalculations
       }
     }
 
+    private void DisableNumberOfUnitsForAllTabs()
+    {
+      for (int i = 0; i < BUILDING_TAB_CONTROL.TabCount; i++)
+      {
+        var tabPage = BUILDING_TAB_CONTROL.TabPages[i];
+        var buildingLoadCalculationForm = tabPage.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
+        if (buildingLoadCalculationForm != null)
+        {
+          buildingLoadCalculationForm.DisableNumberOfUnits();
+        }
+      }
+    }
+
     private void TAB_CONTROL_SelectedIndexChanged(object sender, EventArgs e)
     {
       if (TAB_CONTROL.SelectedTab != null && TAB_CONTROL.SelectedTab.Text == "Building")
@@ -255,6 +268,10 @@ namespace GMEPElectricalResidential.LoadCalculations
             buildingLoadCalculationForm.SetLoadBoxValues();
           }
         }
+      }
+      else if (TAB_CONTROL.SelectedTab != null && TAB_CONTROL.SelectedTab.Text == "Unit")
+      {
+        DisableNumberOfUnitsForAllTabs();
       }
     }
 

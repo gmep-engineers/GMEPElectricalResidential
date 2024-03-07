@@ -153,6 +153,7 @@
       this.UNIT_TYPES.Name = "UNIT_TYPES";
       this.UNIT_TYPES.Size = new System.Drawing.Size(253, 242);
       this.UNIT_TYPES.TabIndex = 56;
+      this.UNIT_TYPES.SelectedIndexChanged += new System.EventHandler(this.UNIT_TYPES_SelectedIndexChanged);
       // 
       // label17
       // 
@@ -179,13 +180,13 @@
       // NUMBER_OF_UNITS
       // 
       this.NUMBER_OF_UNITS.BorderStyle = System.Windows.Forms.BorderStyle.None;
+      this.NUMBER_OF_UNITS.Enabled = false;
       this.NUMBER_OF_UNITS.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.NUMBER_OF_UNITS.Location = new System.Drawing.Point(5, 5);
       this.NUMBER_OF_UNITS.Margin = new System.Windows.Forms.Padding(0);
       this.NUMBER_OF_UNITS.Name = "NUMBER_OF_UNITS";
       this.NUMBER_OF_UNITS.Size = new System.Drawing.Size(133, 19);
       this.NUMBER_OF_UNITS.TabIndex = 0;
-      this.NUMBER_OF_UNITS.TextChanged += new System.EventHandler(this.NUMBER_OF_UNITS_TextChanged);
       // 
       // label3
       // 

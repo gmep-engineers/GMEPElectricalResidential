@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static GMEPElectricalResidential.HelperFiles.HelperClass;
 
 namespace GMEPElectricalResidential.LoadCalculations.Building
 {
@@ -35,6 +36,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       HOUSE_LOAD.KeyPress += OnlyDigitInputs;
       NUMBER_OF_UNITS.KeyPress += OnlyDigitInputs;
       NUMBER_OF_UNITS.KeyPress += OnlyWhenLoadBoxSelected;
+      NUMBER_OF_UNITS.KeyPress += UpdateUnitCountInformation;
     }
 
     private void OnlyDigitInputs(object sender, KeyPressEventArgs e)
@@ -77,6 +79,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       }
     }
 
+    public void DisableNumberOfUnits()
+    {
+      NUMBER_OF_UNITS.Enabled = false;
+      NUMBER_OF_UNITS.Text = "";
+    }
+
     private void BUILDING_NAME_TextChanged(object sender, EventArgs e)
     {
       var textBox = sender as TextBox;
@@ -85,10 +93,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         var parentTab = this.Parent as TabPage;
         if (parentTab != null)
         {
+          _buildingInformation.Name = textBox.Text;
           parentTab.Text = _buildingInformation.FormattedName();
         }
       }
-      _buildingInformation.Name = textBox.Text;
     }
 
     private void VOLTAGE_SelectedIndexChanged(object sender, EventArgs e)
@@ -101,8 +109,55 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       _buildingInformation.HouseLoad = int.Parse(HOUSE_LOAD.Text);
     }
 
-    private void NUMBER_OF_UNITS_TextChanged(object sender, EventArgs e)
+    private void UpdateUnitCountInformation(object sender, KeyPressEventArgs e)
     {
+      var allUnitInfo = _parentForm.AllUnitInformation();
+      var selectedUnit = allUnitInfo.FirstOrDefault(unit => unit.FormattedName() == UNIT_TYPES.Text);
+      var numberOfUnitsText = NUMBER_OF_UNITS.Text;
+      numberOfUnitsText = HandleNumberOfUnitsKeyPresses(e, numberOfUnitsText);
+      if (int.TryParse(numberOfUnitsText, out int numberOfUnits))
+      {
+        _buildingInformation.UpdateCounter(selectedUnit, numberOfUnits);
+      }
+      else
+      {
+        _buildingInformation.UpdateCounter(selectedUnit, 0);
+      }
+    }
+
+    private string HandleNumberOfUnitsKeyPresses(KeyPressEventArgs e, string numberOfUnitsText)
+    {
+      if (char.IsDigit(e.KeyChar))
+      {
+        numberOfUnitsText += e.KeyChar;
+      }
+      else if (e.KeyChar == '\b')
+      {
+        if (numberOfUnitsText.Length > 0)
+        {
+          int selectionStart = NUMBER_OF_UNITS.SelectionStart;
+          int selectionLength = NUMBER_OF_UNITS.SelectionLength;
+          numberOfUnitsText = numberOfUnitsText.Remove(selectionStart, selectionLength);
+        }
+      }
+
+      return numberOfUnitsText;
+    }
+
+    private void UNIT_TYPES_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      NUMBER_OF_UNITS.Enabled = true;
+      NUMBER_OF_UNITS.Text = "";
+      var allUnitInfo = _parentForm.AllUnitInformation();
+      var selectedUnit = allUnitInfo.FirstOrDefault(unit => unit.FormattedName() == UNIT_TYPES.Text);
+      if (selectedUnit != null)
+      {
+        var counter = _buildingInformation.Counters.FirstOrDefault(c => c.UnitID == selectedUnit.ID);
+        if (counter != null)
+        {
+          NUMBER_OF_UNITS.Text = counter.Count.ToString();
+        }
+      }
     }
   }
 
@@ -120,17 +175,19 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       Counters = new List<UnitCounter>();
     }
 
-    public void UpdateCounters(List<Unit.UnitInformation> unitInformation)
+    public void UpdateCounter(Unit.UnitInformation unit, int count)
     {
-      Counters = new List<UnitCounter>();
-      foreach (var unit in unitInformation)
+      var existingCounter = Counters.FirstOrDefault(c => c.UnitID == unit.ID);
+      if (existingCounter != null)
       {
-        Counters.Add(new UnitCounter
-        {
-          UnitID = unit.ID,
-          Count = 0
-        });
+        Counters.Remove(existingCounter);
       }
+
+      Counters.Add(new UnitCounter
+      {
+        UnitID = unit.ID,
+        Count = count
+      });
     }
 
     public string FormattedName()
