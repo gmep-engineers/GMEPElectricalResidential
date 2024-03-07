@@ -219,6 +219,7 @@
       this.NEXT.TabIndex = 131;
       this.NEXT.Text = "Next";
       this.NEXT.UseVisualStyleBackColor = true;
+      this.NEXT.Click += new System.EventHandler(this.NEXT_Click);
       // 
       // label2
       // 

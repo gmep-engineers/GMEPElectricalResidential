@@ -159,6 +159,25 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         }
       }
     }
+
+    private void NEXT_Click(object sender, EventArgs e)
+    {
+      if (UNIT_TYPES.Items.Count > 0)
+      {
+        if (UNIT_TYPES.SelectedIndex == -1)
+        {
+          UNIT_TYPES.SelectedIndex = 0;
+        }
+        else if (UNIT_TYPES.SelectedIndex == UNIT_TYPES.Items.Count - 1)
+        {
+          UNIT_TYPES.SelectedIndex = 0;
+        }
+        else
+        {
+          UNIT_TYPES.SelectedIndex += 1;
+        }
+      }
+    }
   }
 
   public class BuildingInformation
