@@ -36,7 +36,7 @@
       this.label1 = new System.Windows.Forms.Label();
       this.UNIT_TYPES = new System.Windows.Forms.ListBox();
       this.label17 = new System.Windows.Forms.Label();
-      this.panel3 = new System.Windows.Forms.Panel();
+      this.NUMBER_OF_UNITS_BG = new System.Windows.Forms.Panel();
       this.NUMBER_OF_UNITS = new System.Windows.Forms.TextBox();
       this.label3 = new System.Windows.Forms.Label();
       this.label61 = new System.Windows.Forms.Label();
@@ -74,7 +74,7 @@
       this.label7 = new System.Windows.Forms.Label();
       this.panel1.SuspendLayout();
       this.panel2.SuspendLayout();
-      this.panel3.SuspendLayout();
+      this.NUMBER_OF_UNITS_BG.SuspendLayout();
       this.SuspendLayout();
       // 
       // panel1
@@ -166,16 +166,16 @@
       this.label17.TabIndex = 57;
       this.label17.Text = "Unit Type";
       // 
-      // panel3
+      // NUMBER_OF_UNITS_BG
       // 
-      this.panel3.BackColor = System.Drawing.SystemColors.Window;
-      this.panel3.Controls.Add(this.NUMBER_OF_UNITS);
-      this.panel3.Location = new System.Drawing.Point(18, 526);
-      this.panel3.Margin = new System.Windows.Forms.Padding(6, 0, 48, 12);
-      this.panel3.Name = "panel3";
-      this.panel3.Padding = new System.Windows.Forms.Padding(5);
-      this.panel3.Size = new System.Drawing.Size(143, 28);
-      this.panel3.TabIndex = 58;
+      this.NUMBER_OF_UNITS_BG.BackColor = System.Drawing.SystemColors.Window;
+      this.NUMBER_OF_UNITS_BG.Controls.Add(this.NUMBER_OF_UNITS);
+      this.NUMBER_OF_UNITS_BG.Location = new System.Drawing.Point(18, 526);
+      this.NUMBER_OF_UNITS_BG.Margin = new System.Windows.Forms.Padding(6, 0, 48, 12);
+      this.NUMBER_OF_UNITS_BG.Name = "NUMBER_OF_UNITS_BG";
+      this.NUMBER_OF_UNITS_BG.Padding = new System.Windows.Forms.Padding(5);
+      this.NUMBER_OF_UNITS_BG.Size = new System.Drawing.Size(143, 28);
+      this.NUMBER_OF_UNITS_BG.TabIndex = 58;
       // 
       // NUMBER_OF_UNITS
       // 
@@ -594,7 +594,7 @@
       this.Controls.Add(this.label2);
       this.Controls.Add(this.NEXT);
       this.Controls.Add(this.label61);
-      this.Controls.Add(this.panel3);
+      this.Controls.Add(this.NUMBER_OF_UNITS_BG);
       this.Controls.Add(this.label3);
       this.Controls.Add(this.UNIT_TYPES);
       this.Controls.Add(this.label17);
@@ -608,8 +608,8 @@
       this.panel1.PerformLayout();
       this.panel2.ResumeLayout(false);
       this.panel2.PerformLayout();
-      this.panel3.ResumeLayout(false);
-      this.panel3.PerformLayout();
+      this.NUMBER_OF_UNITS_BG.ResumeLayout(false);
+      this.NUMBER_OF_UNITS_BG.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -625,7 +625,7 @@
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.ListBox UNIT_TYPES;
     private System.Windows.Forms.Label label17;
-    private System.Windows.Forms.Panel panel3;
+    private System.Windows.Forms.Panel NUMBER_OF_UNITS_BG;
     private System.Windows.Forms.TextBox NUMBER_OF_UNITS;
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Label label61;

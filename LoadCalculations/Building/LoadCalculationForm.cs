@@ -37,6 +37,16 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       NUMBER_OF_UNITS.KeyPress += OnlyDigitInputs;
       NUMBER_OF_UNITS.KeyPress += OnlyWhenLoadBoxSelected;
       NUMBER_OF_UNITS.KeyPress += UpdateUnitCountInformation;
+      NUMBER_OF_UNITS_BG.Click += InformUserHowToEnable;
+    }
+
+    private void InformUserHowToEnable(object sender, EventArgs e)
+    {
+      if (!NUMBER_OF_UNITS.Enabled)
+      {
+        _toolTip.SetToolTip(NUMBER_OF_UNITS, "Please select a unit type first");
+        _toolTip.Show("Please select a unit type first", NUMBER_OF_UNITS, 0, -20, 2000);
+      }
     }
 
     private void OnlyDigitInputs(object sender, KeyPressEventArgs e)
@@ -140,6 +150,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           numberOfUnitsText = numberOfUnitsText.Remove(selectionStart, selectionLength);
         }
       }
+      else if (e.KeyChar == '\r')
+      {
+        SelectNextItem();
+      }
 
       return numberOfUnitsText;
     }
@@ -161,6 +175,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     }
 
     private void NEXT_Click(object sender, EventArgs e)
+    {
+      NUMBER_OF_UNITS.Text = "";
+      SelectNextItem();
+    }
+
+    private void SelectNextItem()
     {
       if (UNIT_TYPES.Items.Count > 0)
       {
