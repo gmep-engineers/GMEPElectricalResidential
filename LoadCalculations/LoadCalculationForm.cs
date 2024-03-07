@@ -4,6 +4,7 @@ using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
 using GMEPElectricalResidential.HelperFiles;
+using GMEPElectricalResidential.LoadCalculations.Unit;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -167,6 +168,25 @@ namespace GMEPElectricalResidential.LoadCalculations
       return allUnitInformation;
     }
 
+    public List<Building.BuildingInformation> AllBuildingInformation()
+    {
+      List<Building.BuildingInformation> allBuildingInformation = new List<Building.BuildingInformation>();
+
+      for (int i = 0; i < BUILDING_TAB_CONTROL.TabCount; i++)
+      {
+        var tabPage = BUILDING_TAB_CONTROL.TabPages[i];
+        var buildingLoadCalculation = tabPage.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
+
+        if (buildingLoadCalculation != null)
+        {
+          var buildingInformation = buildingLoadCalculation.RetrieveBuildingInformation();
+          allBuildingInformation.Add(buildingInformation);
+        }
+      }
+
+      return allBuildingInformation;
+    }
+
     private void SaveLoadCalculationForm()
     {
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
@@ -190,6 +210,11 @@ namespace GMEPElectricalResidential.LoadCalculations
       Directory.CreateDirectory(baseSaveDirectory);
 
       List<Unit.UnitInformation> allUnitInformation = AllUnitInformation();
+      HandleUnitDataSaving(baseSaveDirectory, allUnitInformation);
+    }
+
+    private static void HandleUnitDataSaving(string baseSaveDirectory, List<UnitInformation> allUnitInformation)
+    {
       for (int i = 0; i < allUnitInformation.Count; i++)
       {
         var unitInformation = allUnitInformation[i];

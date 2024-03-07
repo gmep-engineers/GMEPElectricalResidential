@@ -24,7 +24,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       InitializeComponent();
       _parentForm = parent;
-      _buildingInformation = new BuildingInformation(tabID, this);
+      _buildingInformation = new BuildingInformation(tabID);
+    }
+
+    public BuildingInformation RetrieveBuildingInformation()
+    {
+      return _buildingInformation;
     }
   }
 
@@ -32,15 +37,26 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
   {
     public string Name { get; set; }
     public string Voltage { get; set; }
-    public int ID { get; set; }
-    public List<Unit.UnitInformation> Units { get; set; }
+    public int ID { get; }
     public List<UnitCounter> Counters { get; set; }
 
-    public BuildingInformation(int id, LoadCalculationForm buildingForm)
+    public BuildingInformation(int id)
     {
       ID = id;
-      Units = buildingForm._parentForm.AllUnitInformation();
       Counters = new List<UnitCounter>();
+    }
+
+    public void UpdateCounters(List<Unit.UnitInformation> unitInformation)
+    {
+      Counters = new List<UnitCounter>();
+      foreach (var unit in unitInformation)
+      {
+        Counters.Add(new UnitCounter
+        {
+          UnitID = unit.ID,
+          Count = 0
+        });
+      }
     }
   }
 
