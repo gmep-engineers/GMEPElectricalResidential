@@ -34,6 +34,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       HOUSE_LOAD.KeyPress += OnlyDigitInputs;
       NUMBER_OF_UNITS.KeyPress += OnlyDigitInputs;
+      NUMBER_OF_UNITS.KeyPress += OnlyWhenLoadBoxSelected;
     }
 
     private void OnlyDigitInputs(object sender, KeyPressEventArgs e)
@@ -42,6 +43,15 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         e.Handled = true;
         _toolTip.Show("Input must be a digit", (Control)sender, 0, -20, 2000);
+      }
+    }
+
+    private void OnlyWhenLoadBoxSelected(object sender, KeyPressEventArgs e)
+    {
+      if (UNIT_TYPES.SelectedIndex == -1)
+      {
+        e.Handled = true;
+        _toolTip.Show("Select a unit type first", (Control)sender, 0, -20, 2000);
       }
     }
 
