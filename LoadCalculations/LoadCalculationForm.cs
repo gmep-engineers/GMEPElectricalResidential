@@ -20,7 +20,8 @@ namespace GMEPElectricalResidential.LoadCalculations
 {
   public partial class LOAD_CALCULATION_FORM : Form
   {
-    private int _tabID = 0;
+    private int _UnitTabID = 0;
+    private int _BuildingTabID = 0;
 
     public Commands Commands { get; }
 
@@ -28,50 +29,14 @@ namespace GMEPElectricalResidential.LoadCalculations
     {
       Commands = commands;
       InitializeComponent();
-      bool createdTab = LoadSavedUnitLoadCalculations();
-      if (!createdTab)
+      bool createdUnitTab = LoadSavedUnitLoadCalculations();
+      if (!createdUnitTab)
       {
-        AddNewTab();
+        AddNewUnitTab();
       }
+      AddNewBuildingTab();
 
       this.FormClosing += LOAD_CALCULATION_FORM_FormClosing;
-    }
-
-    private bool LoadSavedUnitLoadCalculations()
-    {
-      var createdTabFlag = false;
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
-      string baseSaveDirectory = Path.Combine(dwgDirectory, "Load Calculation Saves");
-
-      if (Directory.Exists(baseSaveDirectory))
-      {
-        var unitDirectories = Directory.GetDirectories(baseSaveDirectory);
-
-        foreach (var unitDirectory in unitDirectories)
-        {
-          var jsonFiles = Directory.GetFiles(unitDirectory, "*.json");
-
-          if (jsonFiles.Length > 0)
-          {
-            var latestJsonFile = jsonFiles.OrderByDescending(f => File.GetCreationTime(f)).First();
-            var json = File.ReadAllText(latestJsonFile);
-
-            var unitInformation = JsonConvert.DeserializeObject<Unit.UnitInformation>(json);
-            if (unitInformation.Voltage == null)
-            {
-              AddNewTab();
-            }
-            else
-            {
-              AddNewTab(unitInformation);
-            }
-
-            createdTabFlag = true;
-          }
-        }
-      }
-      return createdTabFlag;
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -85,7 +50,58 @@ namespace GMEPElectricalResidential.LoadCalculations
       return base.ProcessCmdKey(ref msg, keyData);
     }
 
-    public void AddNewTab(Unit.UnitInformation unitInformation = null)
+    public void AddNewBuildingTab(Building.BuildingInformation buildingInformation = null)
+    {
+      TabPage tabPage;
+      if (buildingInformation != null)
+      {
+        tabPage = new TabPage("Building " + buildingInformation.Name);
+      }
+      else
+      {
+        tabPage = new TabPage("Building");
+      }
+
+      Building.LoadCalculationForm buildingLoadCalculation = new Building.LoadCalculationForm(this, _BuildingTabID, buildingInformation);
+      tabPage.Tag = _BuildingTabID;
+      tabPage.Controls.Add(buildingLoadCalculation);
+
+      BUILDING_TAB_CONTROL.TabPages.Add(tabPage);
+
+      _BuildingTabID++;
+    }
+
+    private bool LoadSavedUnitLoadCalculations()
+    {
+      var createdTabFlag = false;
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
+      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculation Saves");
+
+      if (Directory.Exists(baseSaveDirectory))
+      {
+        var unitDirectories = Directory.GetDirectories(baseSaveDirectory);
+        foreach (var unitDirectory in unitDirectories)
+        {
+          var jsonFiles = Directory.GetFiles(unitDirectory, "*.json");
+          if (jsonFiles.Length > 0)
+          {
+            var latestJsonFile = jsonFiles.OrderByDescending(f => File.GetCreationTime(f)).First();
+            var json = File.ReadAllText(latestJsonFile);
+            var unitInformation = JsonConvert.DeserializeObject<Unit.UnitInformation>(json);
+
+            if (unitInformation.Voltage != null)
+            {
+              AddNewUnitTab(unitInformation);
+            }
+            createdTabFlag = true;
+          }
+        }
+      }
+      return createdTabFlag;
+    }
+
+    public void AddNewUnitTab(Unit.UnitInformation unitInformation = null)
     {
       TabPage tabPage;
       if (unitInformation != null)
@@ -97,29 +113,42 @@ namespace GMEPElectricalResidential.LoadCalculations
         tabPage = new TabPage("Unit");
       }
 
-      Unit.LoadCalculationForm unitLoadCalculation = new Unit.LoadCalculationForm(_tabID, unitInformation);
-      tabPage.Tag = _tabID;
+      Unit.LoadCalculationForm unitLoadCalculation = new Unit.LoadCalculationForm(_UnitTabID, unitInformation);
+      tabPage.Tag = _UnitTabID;
       tabPage.Controls.Add(unitLoadCalculation);
 
       UNIT_TAB_CONTROL.TabPages.Add(tabPage);
 
-      _tabID++;
+      _UnitTabID++;
     }
 
     public void RemoveCurrentTab()
     {
-      if (UNIT_TAB_CONTROL.TabCount > 0)
+      if (TAB_CONTROL.SelectedTab == UNIT_TAB)
       {
-        DialogResult result = MessageBox.Show("Are you sure you want to remove this tab?", "Confirmation", MessageBoxButtons.YesNo);
-
-        if (result == DialogResult.Yes)
+        if (UNIT_TAB_CONTROL.TabCount > 0)
         {
-          UNIT_TAB_CONTROL.TabPages.Remove(UNIT_TAB_CONTROL.SelectedTab);
+          DialogResult result = MessageBox.Show("Are you sure you want to remove this unit tab?", "Confirmation", MessageBoxButtons.YesNo);
+          if (result == DialogResult.Yes)
+          {
+            UNIT_TAB_CONTROL.TabPages.Remove(UNIT_TAB_CONTROL.SelectedTab);
+          }
+        }
+      }
+      else if (TAB_CONTROL.SelectedTab == BUILDING_TAB)
+      {
+        if (BUILDING_TAB_CONTROL.TabCount > 0)
+        {
+          DialogResult result = MessageBox.Show("Are you sure you want to remove this building tab?", "Confirmation", MessageBoxButtons.YesNo);
+          if (result == DialogResult.Yes)
+          {
+            BUILDING_TAB_CONTROL.TabPages.Remove(BUILDING_TAB_CONTROL.SelectedTab);
+          }
         }
       }
     }
 
-    private List<Unit.UnitInformation> AllUnitInformation()
+    public List<Unit.UnitInformation> AllUnitInformation()
     {
       List<Unit.UnitInformation> allUnitInformation = new List<Unit.UnitInformation>();
 
@@ -142,54 +171,39 @@ namespace GMEPElectricalResidential.LoadCalculations
     {
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
       string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
-      string baseSaveDirectory = Path.Combine(dwgDirectory, "Load Calculation Saves");
+      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculation Saves");
 
+      // Delete the current Load Calculation Saves directory if it exists
+      if (Directory.Exists(baseSaveDirectory))
+      {
+        Directory.Delete(baseSaveDirectory, true);
+      }
+
+      // Create the Saves directory if it doesn't exist
+      string savesDirectory = Path.Combine(dwgDirectory, "Saves");
+      if (!Directory.Exists(savesDirectory))
+      {
+        Directory.CreateDirectory(savesDirectory);
+      }
+
+      // Create the Load Calculation Saves directory inside the Saves directory
       Directory.CreateDirectory(baseSaveDirectory);
 
       List<Unit.UnitInformation> allUnitInformation = AllUnitInformation();
-
       for (int i = 0; i < allUnitInformation.Count; i++)
       {
         var unitInformation = allUnitInformation[i];
 
-        string newUnitDirectory = $"Unit {unitInformation.Name} - ID{i}";
-        string newSaveDirectory = Path.Combine(baseSaveDirectory, newUnitDirectory);
+        // Create the Unit Type directory
+        string unitDirectory = $"Unit {unitInformation.Name} - ID{unitInformation.ID}";
+        string saveDirectory = Path.Combine(baseSaveDirectory, unitDirectory);
+        Directory.CreateDirectory(saveDirectory);
 
-        var existingDirectory = Directory.GetDirectories(baseSaveDirectory)
-            .FirstOrDefault(dir => dir.Contains($"ID{i}"));
-
-        if (existingDirectory != null)
-        {
-          if (existingDirectory != newSaveDirectory)
-          {
-            Directory.Move(existingDirectory, newSaveDirectory);
-          }
-        }
-        else
-        {
-          Directory.CreateDirectory(newSaveDirectory);
-        }
-
+        // Create the JSON file with the current data
         string json = JsonConvert.SerializeObject(unitInformation, Formatting.Indented);
-
         string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-        string savePath = Path.Combine(newSaveDirectory, $"{timestamp}.json");
+        string savePath = Path.Combine(saveDirectory, $"{timestamp}.json");
         File.WriteAllText(savePath, json);
-      }
-    }
-
-    public void RemoveUnitTypeData(int tabID)
-    {
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
-      string baseSaveDirectory = Path.Combine(dwgDirectory, "Load Calculation Saves");
-
-      var unitDirectory = Directory.GetDirectories(baseSaveDirectory)
-          .FirstOrDefault(dir => dir.Contains($"ID{tabID}"));
-
-      if (unitDirectory != null)
-      {
-        Directory.Delete(unitDirectory, true);
       }
     }
 
@@ -200,22 +214,33 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private void CREATE_UNIT_BUTTON_Click(object sender, EventArgs e)
     {
-      AddNewTab();
-      UNIT_TAB_CONTROL.SelectedIndex = UNIT_TAB_CONTROL.TabCount - 1;
+      if (TAB_CONTROL.SelectedTab == UNIT_TAB)
+      {
+        AddNewUnitTab();
+        UNIT_TAB_CONTROL.SelectedIndex = UNIT_TAB_CONTROL.TabCount - 1;
+      }
+      else if (TAB_CONTROL.SelectedTab == BUILDING_TAB)
+      {
+        AddNewBuildingTab();
+        BUILDING_TAB_CONTROL.SelectedIndex = BUILDING_TAB_CONTROL.TabCount - 1;
+      }
     }
 
     private void DELETE_UNIT_BUTTON_Click(object sender, EventArgs e)
     {
-      if (UNIT_TAB_CONTROL.SelectedTab != null)
+      if (TAB_CONTROL.SelectedTab == UNIT_TAB)
       {
-        if (UNIT_TAB_CONTROL.SelectedTab.Tag is int tabId ||
-            int.TryParse(UNIT_TAB_CONTROL.SelectedTab.Tag.ToString(), out tabId))
+        if (UNIT_TAB_CONTROL.SelectedTab != null)
         {
-          HelperClass.WriteMessageToAutoCADConsole(tabId, "Tab ID: ");
-          RemoveUnitTypeData(tabId);
+          RemoveCurrentTab();
         }
-
-        RemoveCurrentTab();
+      }
+      else if (TAB_CONTROL.SelectedTab == BUILDING_TAB)
+      {
+        if (BUILDING_TAB_CONTROL.SelectedTab != null)
+        {
+          RemoveCurrentTab();
+        }
       }
     }
 

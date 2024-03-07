@@ -82,11 +82,9 @@ namespace GMEPElectricalResidential.HelperFiles
 
         // Get the directory path of the assembly
         string assemblyDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        ed.WriteMessage($"Assembly Directory: {assemblyDirectory}");
 
         // Go up two directories from the assembly directory to get the project directory
         string projectDirectory = System.IO.Directory.GetParent(System.IO.Directory.GetParent(assemblyDirectory).FullName).FullName;
-        ed.WriteMessage($"Project Directory: {projectDirectory}");
 
         // Create the BlockData directory if it doesn't exist
         string blockDataDirectory = System.IO.Path.Combine(projectDirectory, "BlockData");
@@ -97,10 +95,9 @@ namespace GMEPElectricalResidential.HelperFiles
 
         // Generate the JSON file path
         string jsonFilePath = System.IO.Path.Combine(blockDataDirectory, $"{fileName}.json");
-        ed.WriteMessage($"JSON File Path: {jsonFilePath}");
 
         // Save the object data to the JSON file
-        HelperClass.SaveDataToJsonFileOnDesktop(data, jsonFilePath);
+        HelperClass.SaveDataToJsonFile(data, jsonFilePath);
       }
     }
 

@@ -33,11 +33,26 @@ namespace GMEPElectricalResidential.HelperFiles
       doc.Editor.WriteMessage(message);
     }
 
-    public static void SaveDataToJsonFileOnDesktop(object data, string fileName)
+    public static void SaveDataToJsonFileOnDesktop(object data, string fileName, bool noOverride = false)
     {
       string jsonData = JsonConvert.SerializeObject(data, Formatting.Indented);
       string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
       string fullPath = Path.Combine(desktopPath, fileName);
+
+      if (noOverride && File.Exists(fullPath))
+      {
+        int fileNumber = 1;
+        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+        string fileExtension = Path.GetExtension(fileName);
+
+        while (File.Exists(fullPath))
+        {
+          string newFileName = $"{fileNameWithoutExtension} ({fileNumber}){fileExtension}";
+          fullPath = Path.Combine(desktopPath, newFileName);
+          fileNumber++;
+        }
+      }
+
       File.WriteAllText(fullPath, jsonData);
     }
 
