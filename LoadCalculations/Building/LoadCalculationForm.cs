@@ -23,9 +23,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     public LoadCalculationForm(LOAD_CALCULATION_FORM parent, int tabID, BuildingInformation buildingInformation = null)
     {
       InitializeComponent();
-      SetDefaultValues();
       _parentForm = parent;
       _buildingInformation = new BuildingInformation(tabID);
+
+      SetDefaultValues();
     }
 
     public BuildingInformation RetrieveBuildingInformation()
@@ -36,6 +37,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     private void SetDefaultValues()
     {
       VOLTAGE.SelectedIndex = 0;
+      SetLoadBoxValues();
     }
 
     public void SetLoadBoxValues()
