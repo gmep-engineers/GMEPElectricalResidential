@@ -4,7 +4,6 @@ using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
 using GMEPElectricalResidential.HelperFiles;
-using GMEPElectricalResidential.LoadCalculations.Unit;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -23,6 +22,8 @@ namespace GMEPElectricalResidential.LoadCalculations
   {
     private int _UnitTabID = 0;
     private int _BuildingTabID = 0;
+    private List<int> _unitCannotBeIDs;
+    private List<int> _buildingCannotBeIDs;
 
     public Commands Commands { get; }
 
@@ -30,6 +31,10 @@ namespace GMEPElectricalResidential.LoadCalculations
     {
       Commands = commands;
       InitializeComponent();
+
+      _unitCannotBeIDs = new List<int>();
+      _buildingCannotBeIDs = new List<int>();
+
       bool createdUnitTab = LoadSavedUnitLoadCalculations();
       if (!createdUnitTab)
       {
@@ -38,6 +43,7 @@ namespace GMEPElectricalResidential.LoadCalculations
       AddNewBuildingTab();
 
       this.FormClosing += LOAD_CALCULATION_FORM_FormClosing;
+      this.TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -94,6 +100,7 @@ namespace GMEPElectricalResidential.LoadCalculations
             if (unitInformation.Voltage != null)
             {
               AddNewUnitTab(unitInformation);
+              _unitCannotBeIDs.Add(unitInformation.ID);
             }
             createdTabFlag = true;
           }
@@ -107,11 +114,11 @@ namespace GMEPElectricalResidential.LoadCalculations
       TabPage tabPage;
       if (unitInformation != null)
       {
-        tabPage = new TabPage("Unit " + unitInformation.Name);
+        tabPage = new TabPage(unitInformation.FormattedName());
       }
       else
       {
-        tabPage = new TabPage("Unit");
+        tabPage = new TabPage($"Unit");
       }
 
       Unit.LoadCalculationForm unitLoadCalculation = new Unit.LoadCalculationForm(_UnitTabID, unitInformation);
@@ -121,6 +128,11 @@ namespace GMEPElectricalResidential.LoadCalculations
       UNIT_TAB_CONTROL.TabPages.Add(tabPage);
 
       _UnitTabID++;
+
+      while (_unitCannotBeIDs.Contains(_UnitTabID))
+      {
+        _UnitTabID++;
+      }
     }
 
     public void RemoveCurrentTab()
@@ -213,22 +225,36 @@ namespace GMEPElectricalResidential.LoadCalculations
       HandleUnitDataSaving(baseSaveDirectory, allUnitInformation);
     }
 
-    private static void HandleUnitDataSaving(string baseSaveDirectory, List<UnitInformation> allUnitInformation)
+    private static void HandleUnitDataSaving(string baseSaveDirectory, List<Unit.UnitInformation> allUnitInformation)
     {
       for (int i = 0; i < allUnitInformation.Count; i++)
       {
         var unitInformation = allUnitInformation[i];
 
-        // Create the Unit Type directory
-        string unitDirectory = $"Unit {unitInformation.Name} - ID{unitInformation.ID}";
+        string unitDirectory = unitInformation.FormattedName();
         string saveDirectory = Path.Combine(baseSaveDirectory, unitDirectory);
         Directory.CreateDirectory(saveDirectory);
 
-        // Create the JSON file with the current data
         string json = JsonConvert.SerializeObject(unitInformation, Formatting.Indented);
         string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         string savePath = Path.Combine(saveDirectory, $"{timestamp}.json");
         File.WriteAllText(savePath, json);
+      }
+    }
+
+    private void TAB_CONTROL_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      if (TAB_CONTROL.SelectedTab != null && TAB_CONTROL.SelectedTab.Text == "Building")
+      {
+        for (int i = 0; i < BUILDING_TAB_CONTROL.TabCount; i++)
+        {
+          var tabPage = BUILDING_TAB_CONTROL.TabPages[i];
+          var buildingLoadCalculationForm = tabPage.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
+          if (buildingLoadCalculationForm != null)
+          {
+            buildingLoadCalculationForm.SetLoadBoxValues();
+          }
+        }
       }
     }
 

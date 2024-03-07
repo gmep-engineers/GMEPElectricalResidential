@@ -37,6 +37,16 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       VOLTAGE.SelectedIndex = 0;
     }
+
+    public void SetLoadBoxValues()
+    {
+      var allUnitInfo = _parentForm.AllUnitInformation();
+      UNIT_TYPES.Items.Clear();
+      foreach (var unit in allUnitInfo)
+      {
+        UNIT_TYPES.Items.Add(unit.FormattedName());
+      }
+    }
   }
 
   public class BuildingInformation

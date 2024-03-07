@@ -644,6 +644,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     private void SetDefaultValues()
     {
       VOLTAGE.SelectedIndex = 0;
+      var parentTab = this.Parent as TabPage;
+      if (parentTab != null)
+      {
+        parentTab.Text = _unitInformation.FormattedName();
+      }
     }
 
     private bool isGreaterThanZero(string multiplier)
@@ -669,7 +674,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         var parentTab = this.Parent as TabPage;
         if (parentTab != null)
         {
-          parentTab.Text = $"Unit {textBox.Text}";
+          parentTab.Text = _unitInformation.FormattedName();
         }
       }
     }
@@ -1136,6 +1141,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       CustomLoads = new List<UnitLoad>();
       ACLoads = new UnitACLoadContainer();
       Totals = new UnitTotalContainer();
+    }
+
+    public string FormattedName()
+    {
+      return $"Unit {Name} - ID{ID}";
     }
   }
 
