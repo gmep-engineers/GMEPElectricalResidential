@@ -25,8 +25,24 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       InitializeComponent();
       _parentForm = parent;
       _buildingInformation = new BuildingInformation(tabID);
-
+      _toolTip = new ToolTip();
       SetDefaultValues();
+      DetectIncorrectInputs();
+    }
+
+    private void DetectIncorrectInputs()
+    {
+      HOUSE_LOAD.KeyPress += OnlyDigitInputs;
+      NUMBER_OF_UNITS.KeyPress += OnlyDigitInputs;
+    }
+
+    private void OnlyDigitInputs(object sender, KeyPressEventArgs e)
+    {
+      if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+      {
+        e.Handled = true;
+        _toolTip.Show("Input must be a digit", (Control)sender, 0, -20, 2000);
+      }
     }
 
     public BuildingInformation RetrieveBuildingInformation()
@@ -37,6 +53,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     private void SetDefaultValues()
     {
       VOLTAGE.SelectedIndex = 0;
+      _buildingInformation.Voltage = VOLTAGE.Text;
       SetLoadBoxValues();
     }
 
@@ -49,6 +66,34 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         UNIT_TYPES.Items.Add(unit.FormattedName());
       }
     }
+
+    private void BUILDING_NAME_TextChanged(object sender, EventArgs e)
+    {
+      var textBox = sender as TextBox;
+      if (textBox != null)
+      {
+        var parentTab = this.Parent as TabPage;
+        if (parentTab != null)
+        {
+          parentTab.Text = _buildingInformation.FormattedName();
+        }
+      }
+      _buildingInformation.Name = textBox.Text;
+    }
+
+    private void VOLTAGE_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      _buildingInformation.Voltage = VOLTAGE.Text;
+    }
+
+    private void HOUSE_LOAD_TextChanged(object sender, EventArgs e)
+    {
+      _buildingInformation.HouseLoad = int.Parse(HOUSE_LOAD.Text);
+    }
+
+    private void NUMBER_OF_UNITS_TextChanged(object sender, EventArgs e)
+    {
+    }
   }
 
   public class BuildingInformation
@@ -56,6 +101,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     public string Name { get; set; }
     public string Voltage { get; set; }
     public int ID { get; }
+    public int HouseLoad { get; set; }
     public List<UnitCounter> Counters { get; set; }
 
     public BuildingInformation(int id)
@@ -75,6 +121,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           Count = 0
         });
       }
+    }
+
+    public string FormattedName()
+    {
+      return $"Building {Name} - ID:{ID}";
     }
   }
 

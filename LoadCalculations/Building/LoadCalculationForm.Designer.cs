@@ -97,6 +97,7 @@
       this.BUILDING_NAME.Name = "BUILDING_NAME";
       this.BUILDING_NAME.Size = new System.Drawing.Size(86, 19);
       this.BUILDING_NAME.TabIndex = 0;
+      this.BUILDING_NAME.TextChanged += new System.EventHandler(this.BUILDING_NAME_TextChanged);
       // 
       // labelname
       // 
@@ -129,6 +130,7 @@
       this.HOUSE_LOAD.Name = "HOUSE_LOAD";
       this.HOUSE_LOAD.Size = new System.Drawing.Size(86, 19);
       this.HOUSE_LOAD.TabIndex = 0;
+      this.HOUSE_LOAD.TextChanged += new System.EventHandler(this.HOUSE_LOAD_TextChanged);
       // 
       // label1
       // 
@@ -183,6 +185,7 @@
       this.NUMBER_OF_UNITS.Name = "NUMBER_OF_UNITS";
       this.NUMBER_OF_UNITS.Size = new System.Drawing.Size(133, 19);
       this.NUMBER_OF_UNITS.TabIndex = 0;
+      this.NUMBER_OF_UNITS.TextChanged += new System.EventHandler(this.NUMBER_OF_UNITS_TextChanged);
       // 
       // label3
       // 
@@ -540,6 +543,7 @@
       this.VOLTAGE.Name = "VOLTAGE";
       this.VOLTAGE.Size = new System.Drawing.Size(97, 28);
       this.VOLTAGE.TabIndex = 202;
+      this.VOLTAGE.SelectedIndexChanged += new System.EventHandler(this.VOLTAGE_SelectedIndexChanged);
       // 
       // label7
       // 
