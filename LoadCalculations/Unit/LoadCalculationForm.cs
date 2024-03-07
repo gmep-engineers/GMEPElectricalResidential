@@ -401,7 +401,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       UnitGeneralLoadContainer unitGeneralLoadContainer = new UnitGeneralLoadContainer();
 
-      int lightingLoad = int.Parse(AREA.Text) * 3;
+      int lightingLoad = 0;
+      if (!string.IsNullOrEmpty(AREA.Text))
+      {
+        lightingLoad = int.Parse(AREA.Text) * 3;
+      }
 
       unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", lightingLoad, "1");
       unitGeneralLoadContainer.SmallAppliance = new UnitLoad("Small Appliance", SMALL_APPLIANCE_VA.Text, SMALL_APPLIANCE_MULTIPLIER.Text);

@@ -140,15 +140,21 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       if (char.IsDigit(e.KeyChar))
       {
         numberOfUnitsText += e.KeyChar;
+        UpdateSubtotalOfUnitLoads(numberOfUnitsText);
       }
       else if (e.KeyChar == '\b')
       {
-        if (numberOfUnitsText.Length > 0)
+        int selectionStart = NUMBER_OF_UNITS.SelectionStart;
+        int selectionLength = NUMBER_OF_UNITS.SelectionLength;
+        if (selectionLength > 1)
         {
-          int selectionStart = NUMBER_OF_UNITS.SelectionStart;
-          int selectionLength = NUMBER_OF_UNITS.SelectionLength;
           numberOfUnitsText = numberOfUnitsText.Remove(selectionStart, selectionLength);
         }
+        else if (selectionStart > 0)
+        {
+          numberOfUnitsText = numberOfUnitsText.Remove(selectionStart - 1, 1);
+        }
+        UpdateSubtotalOfUnitLoads(numberOfUnitsText);
       }
       else if (e.KeyChar == '\r')
       {
@@ -156,6 +162,25 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       }
 
       return numberOfUnitsText;
+    }
+
+    private void UpdateSubtotalOfUnitLoads(string numberOfUnitsText)
+    {
+      var allUnitInfo = _parentForm.AllUnitInformation();
+      var selectedUnit = allUnitInfo.FirstOrDefault(unit => unit.FormattedName() == UNIT_TYPES.Text);
+      if (selectedUnit != null)
+      {
+        int count;
+        if (int.TryParse(numberOfUnitsText, out count))
+        {
+          var subtotal = count * selectedUnit.Totals.TotalGeneralLoad;
+          SUBTOTAL_UNIT_LOADS.Text = subtotal.ToString();
+        }
+        else
+        {
+          SUBTOTAL_UNIT_LOADS.Text = "0";
+        }
+      }
     }
 
     private void UNIT_TYPES_SelectedIndexChanged(object sender, EventArgs e)
