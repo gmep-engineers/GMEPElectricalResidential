@@ -125,14 +125,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       var selectedUnit = allUnitInfo.FirstOrDefault(unit => unit.FormattedName() == UNIT_TYPES.Text);
       var numberOfUnitsText = NUMBER_OF_UNITS.Text;
       numberOfUnitsText = HandleNumberOfUnitsKeyPresses(e, numberOfUnitsText);
-      if (int.TryParse(numberOfUnitsText, out int numberOfUnits))
-      {
-        _buildingInformation.UpdateCounter(selectedUnit, numberOfUnits);
-      }
-      else
-      {
-        _buildingInformation.UpdateCounter(selectedUnit, 0);
-      }
     }
 
     private string HandleNumberOfUnitsKeyPresses(KeyPressEventArgs e, string numberOfUnitsText)
@@ -174,12 +166,15 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         if (int.TryParse(numberOfUnitsText, out count))
         {
           var subtotal = count * selectedUnit.Totals.TotalGeneralLoad;
+          _buildingInformation.UpdateCounter(selectedUnit, count, subtotal);
           SUBTOTAL_UNIT_LOADS.Text = subtotal.ToString();
         }
         else
         {
+          _buildingInformation.UpdateCounter(selectedUnit, 0, 0);
           SUBTOTAL_UNIT_LOADS.Text = "0";
         }
+        TOTAL_NUMBER_OF_UNITS.Text = _buildingInformation.TotalUnitCount().ToString();
       }
     }
 
@@ -195,6 +190,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         if (counter != null)
         {
           NUMBER_OF_UNITS.Text = counter.Count.ToString();
+          SUBTOTAL_UNIT_LOADS.Text = counter.SubtotalLoad.ToString();
+        }
+        else
+        {
+          SUBTOTAL_UNIT_LOADS.Text = "0";
         }
       }
     }
@@ -239,7 +239,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       Counters = new List<UnitCounter>();
     }
 
-    public void UpdateCounter(Unit.UnitInformation unit, int count)
+    public void UpdateCounter(Unit.UnitInformation unit, int count, int subtotal)
     {
       var existingCounter = Counters.FirstOrDefault(c => c.UnitID == unit.ID);
       if (existingCounter != null)
@@ -250,8 +250,29 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       Counters.Add(new UnitCounter
       {
         UnitID = unit.ID,
-        Count = count
+        Count = count,
+        SubtotalLoad = subtotal
       });
+    }
+
+    public int TotalUnitCount()
+    {
+      int total = 0;
+      foreach (var counter in Counters)
+      {
+        total += counter.Count;
+      }
+      return total;
+    }
+
+    public int TotalSubtotalLoad()
+    {
+      int total = 0;
+      foreach (var counter in Counters)
+      {
+        total += counter.SubtotalLoad;
+      }
+      return total;
     }
 
     public string FormattedName()
@@ -264,5 +285,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
   {
     public int UnitID { get; set; }
     public int Count { get; set; }
+    public int SubtotalLoad { get; set; }
   }
 }
