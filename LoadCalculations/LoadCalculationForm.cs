@@ -36,14 +36,22 @@ namespace GMEPElectricalResidential.LoadCalculations
       _buildingCannotBeIDs = new List<int>();
 
       bool createdUnitTab = LoadSavedUnitLoadCalculations();
+      bool createdBuildingTab = LoadSavedBuildingLoadCalculations();
+
       if (!createdUnitTab)
       {
         AddNewUnitTab();
       }
-      AddNewBuildingTab();
+
+      if (!createdBuildingTab)
+      {
+        AddNewBuildingTab();
+      }
 
       this.FormClosing += LOAD_CALCULATION_FORM_FormClosing;
       this.TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
+      this.BUILDING_TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
+      this.UNIT_TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -76,37 +84,11 @@ namespace GMEPElectricalResidential.LoadCalculations
       BUILDING_TAB_CONTROL.TabPages.Add(tabPage);
 
       _BuildingTabID++;
-    }
 
-    private bool LoadSavedUnitLoadCalculations()
-    {
-      var createdTabFlag = false;
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
-      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculation Saves");
-
-      if (Directory.Exists(baseSaveDirectory))
+      while (_buildingCannotBeIDs.Contains(_BuildingTabID))
       {
-        var unitDirectories = Directory.GetDirectories(baseSaveDirectory);
-        foreach (var unitDirectory in unitDirectories)
-        {
-          var jsonFiles = Directory.GetFiles(unitDirectory, "*.json");
-          if (jsonFiles.Length > 0)
-          {
-            var latestJsonFile = jsonFiles.OrderByDescending(f => File.GetCreationTime(f)).First();
-            var json = File.ReadAllText(latestJsonFile);
-            var unitInformation = JsonConvert.DeserializeObject<Unit.UnitInformation>(json);
-
-            if (unitInformation.Voltage != null)
-            {
-              AddNewUnitTab(unitInformation);
-              _unitCannotBeIDs.Add(unitInformation.ID);
-            }
-            createdTabFlag = true;
-          }
-        }
+        _BuildingTabID++;
       }
-      return createdTabFlag;
     }
 
     public void AddNewUnitTab(Unit.UnitInformation unitInformation = null)
@@ -133,6 +115,68 @@ namespace GMEPElectricalResidential.LoadCalculations
       {
         _UnitTabID++;
       }
+    }
+
+    private bool LoadSavedUnitLoadCalculations()
+    {
+      var createdTabFlag = false;
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
+      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculation Saves", "Unit");
+
+      if (Directory.Exists(baseSaveDirectory))
+      {
+        var unitDirectories = Directory.GetDirectories(baseSaveDirectory);
+        foreach (var unitDirectory in unitDirectories)
+        {
+          var jsonFiles = Directory.GetFiles(unitDirectory, "*.json");
+          if (jsonFiles.Length > 0)
+          {
+            var latestJsonFile = jsonFiles.OrderByDescending(f => File.GetCreationTime(f)).First();
+            var json = File.ReadAllText(latestJsonFile);
+            var unitInformation = JsonConvert.DeserializeObject<Unit.UnitInformation>(json);
+
+            if (unitInformation.Voltage != null)
+            {
+              AddNewUnitTab(unitInformation);
+              _unitCannotBeIDs.Add(unitInformation.ID);
+            }
+            createdTabFlag = true;
+          }
+        }
+      }
+      return createdTabFlag;
+    }
+
+    private bool LoadSavedBuildingLoadCalculations()
+    {
+      var createdTabFlag = false;
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
+      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculation Saves", "Building");
+
+      if (Directory.Exists(baseSaveDirectory))
+      {
+        var buildingDirectories = Directory.GetDirectories(baseSaveDirectory);
+        foreach (var buildingDirectory in buildingDirectories)
+        {
+          var jsonFiles = Directory.GetFiles(buildingDirectory, "*.json");
+          if (jsonFiles.Length > 0)
+          {
+            var latestJsonFile = jsonFiles.OrderByDescending(f => File.GetCreationTime(f)).First();
+            var json = File.ReadAllText(latestJsonFile);
+            var buildingInformation = JsonConvert.DeserializeObject<Building.BuildingInformation>(json);
+
+            if (buildingInformation.Name != null)
+            {
+              AddNewBuildingTab(buildingInformation);
+              _buildingCannotBeIDs.Add(buildingInformation.ID);
+            }
+            createdTabFlag = true;
+          }
+        }
+      }
+      return createdTabFlag;
     }
 
     public void RemoveCurrentTab()
@@ -283,21 +327,19 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private void TAB_CONTROL_SelectedIndexChanged(object sender, EventArgs e)
     {
-      if (TAB_CONTROL.SelectedTab != null && TAB_CONTROL.SelectedTab.Text == "Building")
-      {
-        for (int i = 0; i < BUILDING_TAB_CONTROL.TabCount; i++)
-        {
-          var tabPage = BUILDING_TAB_CONTROL.TabPages[i];
-          var buildingLoadCalculationForm = tabPage.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
-          if (buildingLoadCalculationForm != null)
-          {
-            buildingLoadCalculationForm.SetLoadBoxValues();
-          }
-        }
-      }
-      else if (TAB_CONTROL.SelectedTab != null && TAB_CONTROL.SelectedTab.Text == "Unit")
+      if (TAB_CONTROL.SelectedTab != null && TAB_CONTROL.SelectedTab.Text == "Unit")
       {
         DisableNumberOfUnitsForAllTabs();
+      }
+
+      for (int i = 0; i < BUILDING_TAB_CONTROL.TabCount; i++)
+      {
+        var tabPage = BUILDING_TAB_CONTROL.TabPages[i];
+        var buildingLoadCalculationForm = tabPage.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
+        if (buildingLoadCalculationForm != null)
+        {
+          buildingLoadCalculationForm.SetLoadBoxValues();
+        }
       }
     }
 

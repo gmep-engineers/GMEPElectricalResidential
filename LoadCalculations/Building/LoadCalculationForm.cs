@@ -19,16 +19,63 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     public LOAD_CALCULATION_FORM _parentForm;
     private ToolTip _toolTip;
     private bool _isLoaded = false;
-    private bool _unitNullFlag = false;
+    private bool _buildingNullFlag = false;
 
     public LoadCalculationForm(LOAD_CALCULATION_FORM parent, int tabID, BuildingInformation buildingInformation = null)
     {
       InitializeComponent();
       _parentForm = parent;
-      _buildingInformation = new BuildingInformation(tabID);
       _toolTip = new ToolTip();
-      SetDefaultValues();
+
+      if (buildingInformation != null)
+      {
+        _buildingInformation = buildingInformation;
+      }
+      else
+      {
+        _buildingNullFlag = true;
+        _buildingInformation = new BuildingInformation(tabID);
+        SetDefaultValues();
+      }
+
       DetectIncorrectInputs();
+
+      this.Load += new EventHandler(UnitLoadCalculation_Load);
+    }
+
+    private void UnitLoadCalculation_Load(object sender, EventArgs e)
+    {
+      if (!_buildingNullFlag)
+      {
+        PopulateUserControlWithUnitInformation(_buildingInformation);
+      }
+      _isLoaded = true;
+    }
+
+    private void PopulateUserControlWithUnitInformation(BuildingInformation buildingInformation)
+    {
+      if (buildingInformation == null) return;
+
+      BUILDING_NAME.Text = buildingInformation.Name;
+      VOLTAGE.Text = buildingInformation.Voltage;
+      HOUSE_LOAD.Text = buildingInformation.HouseLoad.ToString();
+      HOUSE_LOAD_COPY.Text = buildingInformation.HouseLoad.ToString();
+      TOTAL_NUMBER_OF_UNITS.Text = buildingInformation.TotalUnitCount().ToString();
+      SUBTOTAL_RESIDENTIAL_LOAD.Text = buildingInformation.TotalSubtotalLoad().ToString();
+      DEMAND_FACTOR.Text = buildingInformation.DemandFactor().ToString();
+      TOTAL_DEMAND_LOAD.Text = buildingInformation.TotalDemandLoad().ToString();
+      TOTAL_DEMAND_HOUSE_LOAD.Text = buildingInformation.TotalDemandHouseLoad().ToString();
+      TOTAL_AMPERAGE.Text = buildingInformation.TotalAmperage().ToString();
+      SERVICE_RATING.Text = buildingInformation.ServiceRating().ToString();
+
+      foreach (var counter in buildingInformation.Counters)
+      {
+        var unit = _parentForm.AllUnitInformation().FirstOrDefault(u => u.ID == counter.UnitID);
+        if (unit != null)
+        {
+          UNIT_TYPES.Items.Add(unit.FormattedName());
+        }
+      }
     }
 
     private void DetectIncorrectInputs()
@@ -128,6 +175,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         houseLoadText += e.KeyChar;
         if (int.TryParse(houseLoadText, out int houseLoad))
         {
+          WriteMessageToAutoCADConsole($"House Load: {houseLoad}\n");
           _buildingInformation.HouseLoad = houseLoad;
           HOUSE_LOAD_COPY.Text = _buildingInformation.HouseLoad.ToString();
         }
@@ -170,6 +218,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       var selectedUnit = allUnitInfo.FirstOrDefault(unit => unit.FormattedName() == UNIT_TYPES.Text);
       var numberOfUnitsText = NUMBER_OF_UNITS.Text;
       numberOfUnitsText = HandleNumberOfUnitsKeyPresses(e, numberOfUnitsText);
+
+      if (string.IsNullOrEmpty(HOUSE_LOAD.Text))
+      {
+        HOUSE_LOAD.Text = "0";
+      }
     }
 
     private string HandleNumberOfUnitsKeyPresses(KeyPressEventArgs e, string numberOfUnitsText)
@@ -285,6 +338,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     public BuildingInformation(int id)
     {
       ID = id;
+      HouseLoad = 0;
       Counters = new List<UnitCounter>();
     }
 
