@@ -141,6 +141,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       NUMBER_OF_UNITS.Enabled = false;
       NUMBER_OF_UNITS.Text = "";
+      SUBTOTAL_UNIT_LOADS.Text = "0";
     }
 
     private void BUILDING_NAME_TextChanged(object sender, EventArgs e)

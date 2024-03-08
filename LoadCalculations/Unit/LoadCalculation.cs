@@ -235,6 +235,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         headers.Contents = "";
         string customSubtitles = "";
 
+        if (unitInfo.CustomLoads.Count > 0)
+        {
+          customSubtitles = "Additional Load:".Underline().NewLine();
+          startingRows++;
+        }
+
         unitInfo.CustomLoads.ForEach(customLoad =>
         {
           customSubtitles += $"{customLoad.Name}{((customLoad.Multiplier <= 1) ? ":" : $" ({customLoad.Multiplier}):")}".NewLine();
@@ -249,6 +255,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         values.Contents = "";
         string customValues = "";
+
+        if (unitInfo.CustomLoads.Count > 0)
+        {
+          customValues = "".NewLine();
+        }
 
         unitInfo.CustomLoads.ForEach(customLoad =>
         {
@@ -270,7 +281,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       if (headers != null)
       {
         headers.Contents = "";
-        string dwellingSubtitles = "Air Conditioning Calculation:".Underline().NewLine();
+        string dwellingSubtitles = "AC Load:".Underline().NewLine();
         if (unitInfo.ACLoads.Condenser > 0)
         {
           dwellingSubtitles += "Outdoor Condensing Unit:".NewLine();

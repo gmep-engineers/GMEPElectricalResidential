@@ -2466,9 +2466,9 @@
       this.label73.Location = new System.Drawing.Point(1284, 180);
       this.label73.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label73.Name = "label73";
-      this.label73.Size = new System.Drawing.Size(177, 24);
+      this.label73.Size = new System.Drawing.Size(134, 24);
       this.label73.TabIndex = 155;
-      this.label73.Text = "Outdoor Heater Unit";
+      this.label73.Text = "Space Heating";
       // 
       // OUTDOOR_HEATER_UNIT_AMOUNT
       // 
@@ -2527,7 +2527,7 @@
       this.label75.Name = "label75";
       this.label75.Size = new System.Drawing.Size(230, 43);
       this.label75.TabIndex = 159;
-      this.label75.Text = "Number of Separately Controlled Heater Units";
+      this.label75.Text = "Number of Separately Controlled Space Heater Units";
       // 
       // ESTIMATE_CONDENSER
       // 
@@ -2717,7 +2717,7 @@
       this.label80.TabIndex = 178;
       this.label80.Text = "A";
       // 
-      // UnitLoadCalculation
+      // LoadCalculationForm
       // 
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
@@ -2863,7 +2863,7 @@
       this.Controls.Add(this.label2);
       this.Controls.Add(this.label1);
       this.Margin = new System.Windows.Forms.Padding(0);
-      this.Name = "UnitLoadCalculation";
+      this.Name = "LoadCalculationForm";
       this.Padding = new System.Windows.Forms.Padding(12);
       this.Size = new System.Drawing.Size(1545, 627);
       this.panel1.ResumeLayout(false);
