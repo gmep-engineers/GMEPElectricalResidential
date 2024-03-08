@@ -34,6 +34,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     private void DetectIncorrectInputs()
     {
       HOUSE_LOAD.KeyPress += OnlyDigitInputs;
+      HOUSE_LOAD.KeyPress += UpdateHouseLoad;
       NUMBER_OF_UNITS.KeyPress += OnlyDigitInputs;
       NUMBER_OF_UNITS.KeyPress += OnlyWhenLoadBoxSelected;
       NUMBER_OF_UNITS.KeyPress += UpdateUnitCountInformation;
@@ -114,9 +115,37 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       _buildingInformation.Voltage = VOLTAGE.Text;
     }
 
-    private void HOUSE_LOAD_TextChanged(object sender, EventArgs e)
+    private void UpdateHouseLoad(object sender, KeyPressEventArgs e)
     {
-      _buildingInformation.HouseLoad = int.Parse(HOUSE_LOAD.Text);
+      string houseLoadText = HOUSE_LOAD.Text;
+
+      if (char.IsDigit(e.KeyChar))
+      {
+        houseLoadText += e.KeyChar;
+        if (int.TryParse(houseLoadText, out int houseLoad))
+        {
+          _buildingInformation.HouseLoad = houseLoad;
+          HOUSE_LOAD_COPY.Text = _buildingInformation.HouseLoad.ToString();
+        }
+      }
+      else if (e.KeyChar == '\b')
+      {
+        int selectionStart = HOUSE_LOAD.SelectionStart;
+        int selectionLength = HOUSE_LOAD.SelectionLength;
+        if (selectionLength > 1)
+        {
+          houseLoadText = houseLoadText.Remove(selectionStart, selectionLength);
+        }
+        else if (selectionStart > 0)
+        {
+          houseLoadText = houseLoadText.Remove(selectionStart - 1, 1);
+        }
+        if (int.TryParse(houseLoadText, out int houseLoad))
+        {
+          _buildingInformation.HouseLoad = houseLoad;
+          HOUSE_LOAD_COPY.Text = _buildingInformation.HouseLoad.ToString();
+        }
+      }
     }
 
     private void UpdateUnitCountInformation(object sender, KeyPressEventArgs e)
@@ -175,6 +204,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           SUBTOTAL_UNIT_LOADS.Text = "0";
         }
         TOTAL_NUMBER_OF_UNITS.Text = _buildingInformation.TotalUnitCount().ToString();
+        SUBTOTAL_RESIDENTIAL_LOAD.Text = _buildingInformation.TotalSubtotalLoad().ToString();
+        DEMAND_FACTOR.Text = _buildingInformation.DemandFactor().ToString();
+        TOTAL_DEMAND_LOAD.Text = _buildingInformation.TotalDemandLoad().ToString();
+        TOTAL_DEMAND_HOUSE_LOAD.Text = _buildingInformation.TotalDemandHouseLoad().ToString();
+        TOTAL_AMPERAGE.Text = _buildingInformation.TotalAmperage().ToString();
+        SERVICE_RATING.Text = _buildingInformation.ServiceRating().ToString();
       }
     }
 
@@ -230,7 +265,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     public string Name { get; set; }
     public string Voltage { get; set; }
     public int ID { get; }
-    public int HouseLoad { get; set; }
+    public int? HouseLoad { get; set; }
     public List<UnitCounter> Counters { get; set; }
 
     public BuildingInformation(int id)
@@ -278,6 +313,81 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     public string FormattedName()
     {
       return $"Building {Name} - ID:{ID}";
+    }
+
+    public double TotalDemandLoad()
+    {
+      return Math.Round(TotalSubtotalLoad() * DemandFactor(), 1);
+    }
+
+    public double DemandFactor()
+    {
+      var dwellingUnits = TotalUnitCount();
+      if (dwellingUnits >= 3 && dwellingUnits <= 5)
+        return 45.0 / 100.0;
+      else if (dwellingUnits >= 6 && dwellingUnits <= 7)
+        return 44.0 / 100.0;
+      else if (dwellingUnits >= 8 && dwellingUnits <= 10)
+        return 43.0 / 100.0;
+      else if (dwellingUnits == 11)
+        return 42.0 / 100.0;
+      else if (dwellingUnits >= 12 && dwellingUnits <= 13)
+        return 41.0 / 100.0;
+      else if (dwellingUnits >= 14 && dwellingUnits <= 15)
+        return 40.0 / 100.0;
+      else if (dwellingUnits >= 16 && dwellingUnits <= 17)
+        return 39.0 / 100.0;
+      else if (dwellingUnits >= 18 && dwellingUnits <= 20)
+        return 38.0 / 100.0;
+      else if (dwellingUnits == 21)
+        return 37.0 / 100.0;
+      else if (dwellingUnits >= 22 && dwellingUnits <= 23)
+        return 36.0 / 100.0;
+      else if (dwellingUnits >= 24 && dwellingUnits <= 25)
+        return 35.0 / 100.0;
+      else if (dwellingUnits >= 26 && dwellingUnits <= 27)
+        return 34.0 / 100.0;
+      else if (dwellingUnits >= 28 && dwellingUnits <= 30)
+        return 33.0 / 100.0;
+      else if (dwellingUnits == 31)
+        return 32.0 / 100.0;
+      else if (dwellingUnits >= 32 && dwellingUnits <= 33)
+        return 31.0 / 100.0;
+      else if (dwellingUnits >= 34 && dwellingUnits <= 36)
+        return 30.0 / 100.0;
+      else if (dwellingUnits >= 37 && dwellingUnits <= 38)
+        return 29.0 / 100.0;
+      else if (dwellingUnits >= 39 && dwellingUnits <= 42)
+        return 28.0 / 100.0;
+      else if (dwellingUnits >= 43 && dwellingUnits <= 45)
+        return 27.0 / 100.0;
+      else if (dwellingUnits >= 46 && dwellingUnits <= 50)
+        return 26.0 / 100.0;
+      else if (dwellingUnits >= 51 && dwellingUnits <= 55)
+        return 25.0 / 100.0;
+      else if (dwellingUnits >= 56 && dwellingUnits <= 61)
+        return 24.0 / 100.0;
+      else if (dwellingUnits >= 62)
+        return 23.0 / 100.0;
+      else
+        return 1.0;
+    }
+
+    public double TotalDemandHouseLoad()
+    {
+      return (HouseLoad ?? 0) + TotalDemandLoad();
+    }
+
+    public double TotalAmperage()
+    {
+      int voltage = int.Parse(Voltage.TrimEnd('V'));
+      return Math.Ceiling(TotalDemandLoad() / voltage);
+    }
+
+    public int ServiceRating()
+    {
+      int[] possibleValues = { 30, 60, 100, 125, 150, 200, 400, 600, 800, 1000, 1200, 1600, 2000, 2500, 3000, 4000 };
+      return possibleValues.FirstOrDefault(value => value >= TotalAmperage());
     }
   }
 

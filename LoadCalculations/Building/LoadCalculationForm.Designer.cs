@@ -68,7 +68,7 @@
       this.TOTAL_AMPERAGE = new System.Windows.Forms.Label();
       this.label27 = new System.Windows.Forms.Label();
       this.label28 = new System.Windows.Forms.Label();
-      this.TOTAL_SERVICE_SIZE = new System.Windows.Forms.Label();
+      this.SERVICE_RATING = new System.Windows.Forms.Label();
       this.label30 = new System.Windows.Forms.Label();
       this.VOLTAGE = new System.Windows.Forms.ComboBox();
       this.label7 = new System.Windows.Forms.Label();
@@ -130,7 +130,6 @@
       this.HOUSE_LOAD.Name = "HOUSE_LOAD";
       this.HOUSE_LOAD.Size = new System.Drawing.Size(86, 19);
       this.HOUSE_LOAD.TabIndex = 0;
-      this.HOUSE_LOAD.TextChanged += new System.EventHandler(this.HOUSE_LOAD_TextChanged);
       // 
       // label1
       // 
@@ -378,9 +377,9 @@
       this.label15.Location = new System.Drawing.Point(484, 214);
       this.label15.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label15.Name = "label15";
-      this.label15.Size = new System.Drawing.Size(25, 16);
+      this.label15.Size = new System.Drawing.Size(33, 16);
       this.label15.TabIndex = 189;
-      this.label15.Text = "VA";
+      this.label15.Text = "KVA";
       // 
       // TOTAL_DEMAND_LOAD
       // 
@@ -510,16 +509,16 @@
       this.label28.TabIndex = 201;
       this.label28.Text = "A";
       // 
-      // TOTAL_SERVICE_SIZE
+      // SERVICE_RATING
       // 
-      this.TOTAL_SERVICE_SIZE.AutoSize = true;
-      this.TOTAL_SERVICE_SIZE.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.TOTAL_SERVICE_SIZE.Location = new System.Drawing.Point(317, 387);
-      this.TOTAL_SERVICE_SIZE.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.TOTAL_SERVICE_SIZE.Name = "TOTAL_SERVICE_SIZE";
-      this.TOTAL_SERVICE_SIZE.Size = new System.Drawing.Size(19, 20);
-      this.TOTAL_SERVICE_SIZE.TabIndex = 200;
-      this.TOTAL_SERVICE_SIZE.Text = "0";
+      this.SERVICE_RATING.AutoSize = true;
+      this.SERVICE_RATING.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.SERVICE_RATING.Location = new System.Drawing.Point(317, 387);
+      this.SERVICE_RATING.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.SERVICE_RATING.Name = "SERVICE_RATING";
+      this.SERVICE_RATING.Size = new System.Drawing.Size(19, 20);
+      this.SERVICE_RATING.TabIndex = 200;
+      this.SERVICE_RATING.Text = "0";
       // 
       // label30
       // 
@@ -564,7 +563,7 @@
       this.Controls.Add(this.VOLTAGE);
       this.Controls.Add(this.label7);
       this.Controls.Add(this.label28);
-      this.Controls.Add(this.TOTAL_SERVICE_SIZE);
+      this.Controls.Add(this.SERVICE_RATING);
       this.Controls.Add(this.label30);
       this.Controls.Add(this.label25);
       this.Controls.Add(this.TOTAL_AMPERAGE);
@@ -657,7 +656,7 @@
     private System.Windows.Forms.Label TOTAL_AMPERAGE;
     private System.Windows.Forms.Label label27;
     private System.Windows.Forms.Label label28;
-    private System.Windows.Forms.Label TOTAL_SERVICE_SIZE;
+    private System.Windows.Forms.Label SERVICE_RATING;
     private System.Windows.Forms.Label label30;
     private System.Windows.Forms.ComboBox VOLTAGE;
     private System.Windows.Forms.Label label7;
