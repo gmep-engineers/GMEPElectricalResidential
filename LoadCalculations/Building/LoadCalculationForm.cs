@@ -121,6 +121,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
       if (char.IsDigit(e.KeyChar))
       {
+        if (HOUSE_LOAD.SelectionLength > 0)
+        {
+          houseLoadText = houseLoadText.Remove(HOUSE_LOAD.SelectionStart, HOUSE_LOAD.SelectionLength);
+        }
         houseLoadText += e.KeyChar;
         if (int.TryParse(houseLoadText, out int houseLoad))
         {
@@ -146,6 +150,18 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           HOUSE_LOAD_COPY.Text = _buildingInformation.HouseLoad.ToString();
         }
       }
+      UpdateBuildingInformation();
+    }
+
+    private void UpdateBuildingInformation()
+    {
+      TOTAL_NUMBER_OF_UNITS.Text = _buildingInformation.TotalUnitCount().ToString();
+      SUBTOTAL_RESIDENTIAL_LOAD.Text = _buildingInformation.TotalSubtotalLoad().ToString();
+      DEMAND_FACTOR.Text = _buildingInformation.DemandFactor().ToString();
+      TOTAL_DEMAND_LOAD.Text = _buildingInformation.TotalDemandLoad().ToString();
+      TOTAL_DEMAND_HOUSE_LOAD.Text = _buildingInformation.TotalDemandHouseLoad().ToString();
+      TOTAL_AMPERAGE.Text = _buildingInformation.TotalAmperage().ToString();
+      SERVICE_RATING.Text = _buildingInformation.ServiceRating().ToString();
     }
 
     private void UpdateUnitCountInformation(object sender, KeyPressEventArgs e)
@@ -160,6 +176,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       if (char.IsDigit(e.KeyChar))
       {
+        if (NUMBER_OF_UNITS.SelectionLength > 0)
+        {
+          numberOfUnitsText = numberOfUnitsText.Remove(NUMBER_OF_UNITS.SelectionStart, NUMBER_OF_UNITS.SelectionLength);
+        }
         numberOfUnitsText += e.KeyChar;
         UpdateSubtotalOfUnitLoads(numberOfUnitsText);
       }
@@ -203,13 +223,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           _buildingInformation.UpdateCounter(selectedUnit, 0, 0);
           SUBTOTAL_UNIT_LOADS.Text = "0";
         }
-        TOTAL_NUMBER_OF_UNITS.Text = _buildingInformation.TotalUnitCount().ToString();
-        SUBTOTAL_RESIDENTIAL_LOAD.Text = _buildingInformation.TotalSubtotalLoad().ToString();
-        DEMAND_FACTOR.Text = _buildingInformation.DemandFactor().ToString();
-        TOTAL_DEMAND_LOAD.Text = _buildingInformation.TotalDemandLoad().ToString();
-        TOTAL_DEMAND_HOUSE_LOAD.Text = _buildingInformation.TotalDemandHouseLoad().ToString();
-        TOTAL_AMPERAGE.Text = _buildingInformation.TotalAmperage().ToString();
-        SERVICE_RATING.Text = _buildingInformation.ServiceRating().ToString();
+        UpdateBuildingInformation();
       }
     }
 
@@ -381,13 +395,26 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     public double TotalAmperage()
     {
       int voltage = int.Parse(Voltage.TrimEnd('V'));
-      return Math.Ceiling(TotalDemandLoad() / voltage);
+      return Math.Ceiling(TotalDemandHouseLoad() / voltage);
     }
 
     public int ServiceRating()
     {
-      int[] possibleValues = { 30, 60, 100, 125, 150, 200, 400, 600, 800, 1000, 1200, 1600, 2000, 2500, 3000, 4000 };
-      return possibleValues.FirstOrDefault(value => value >= TotalAmperage());
+      int[] possibleValues = { 30, 60, 100, 125, 150, 200, 400, 600, 800, 1000, 1200, 1600, 2000, 2500, 3000 };
+      int totalAmperage = (int)Math.Ceiling(TotalAmperage());
+      int? serviceRating = possibleValues.FirstOrDefault(value => value >= totalAmperage);
+
+      if (serviceRating == 0)
+      {
+        serviceRating = 3000;
+        int increment = 1000;
+        while (serviceRating <= totalAmperage)
+        {
+          serviceRating += increment;
+        }
+      }
+
+      return serviceRating ?? 0;
     }
   }
 

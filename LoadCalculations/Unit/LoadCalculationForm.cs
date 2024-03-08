@@ -1299,8 +1299,21 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     public int ServiceRating()
     {
-      int[] possibleValues = { 30, 60, 100, 125, 150, 200, 400, 600, 800, 1000, 1200, 1600, 2000, 2500, 3000, 4000 };
-      return possibleValues.FirstOrDefault(value => value >= ServiceLoad);
+      int[] possibleValues = { 30, 60, 100, 125, 150, 200, 400, 600, 800, 1000, 1200, 1600, 2000, 2500, 3000 };
+      int totalAmperage = ServiceLoad;
+      int? serviceRating = possibleValues.FirstOrDefault(value => value >= totalAmperage);
+
+      if (serviceRating == 0)
+      {
+        serviceRating = 3000;
+        int increment = 1000;
+        while (serviceRating <= totalAmperage)
+        {
+          serviceRating += increment;
+        }
+      }
+
+      return serviceRating ?? 0;
     }
   }
 
