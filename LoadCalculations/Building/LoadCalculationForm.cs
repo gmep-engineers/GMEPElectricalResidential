@@ -326,7 +326,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
     public string FormattedName()
     {
-      return $"Building {Name} - ID:{ID}";
+      return $"Building {Name} - ID{ID}";
     }
 
     public double TotalDemandLoad()

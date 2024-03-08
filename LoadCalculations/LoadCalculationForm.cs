@@ -221,21 +221,47 @@ namespace GMEPElectricalResidential.LoadCalculations
       // Create the Load Calculation Saves directory inside the Saves directory
       Directory.CreateDirectory(baseSaveDirectory);
 
+      // Create the Unit directory inside the Load Calculation Saves directory
+      string unitDirectory = Path.Combine(baseSaveDirectory, "Unit");
+      Directory.CreateDirectory(unitDirectory);
+
+      // Create the Building directory inside the Load Calculation Saves directory
+      string buildingDirectory = Path.Combine(baseSaveDirectory, "Building");
+      Directory.CreateDirectory(buildingDirectory);
+
       List<Unit.UnitInformation> allUnitInformation = AllUnitInformation();
-      HandleUnitDataSaving(baseSaveDirectory, allUnitInformation);
+      HandleUnitDataSaving(unitDirectory, allUnitInformation);
+
+      List<Building.BuildingInformation> allBuildingInformation = AllBuildingInformation();
+      HandleBuildingDataSaving(buildingDirectory, allBuildingInformation);
     }
 
-    private static void HandleUnitDataSaving(string baseSaveDirectory, List<Unit.UnitInformation> allUnitInformation)
+    private static void HandleUnitDataSaving(string unitDirectory, List<Unit.UnitInformation> allUnitInformation)
     {
       for (int i = 0; i < allUnitInformation.Count; i++)
       {
         var unitInformation = allUnitInformation[i];
 
-        string unitDirectory = unitInformation.FormattedName();
-        string saveDirectory = Path.Combine(baseSaveDirectory, unitDirectory);
+        string saveDirectory = Path.Combine(unitDirectory, unitInformation.FormattedName());
         Directory.CreateDirectory(saveDirectory);
 
         string json = JsonConvert.SerializeObject(unitInformation, Formatting.Indented);
+        string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+        string savePath = Path.Combine(saveDirectory, $"{timestamp}.json");
+        File.WriteAllText(savePath, json);
+      }
+    }
+
+    private static void HandleBuildingDataSaving(string buildingDirectory, List<Building.BuildingInformation> allBuildingInformation)
+    {
+      for (int i = 0; i < allBuildingInformation.Count; i++)
+      {
+        var buildingInformation = allBuildingInformation[i];
+
+        string saveDirectory = Path.Combine(buildingDirectory, buildingInformation.FormattedName());
+        Directory.CreateDirectory(saveDirectory);
+
+        string json = JsonConvert.SerializeObject(buildingInformation, Formatting.Indented);
         string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         string savePath = Path.Combine(saveDirectory, $"{timestamp}.json");
         File.WriteAllText(savePath, json);
