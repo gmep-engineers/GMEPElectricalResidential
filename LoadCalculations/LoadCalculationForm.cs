@@ -425,5 +425,10 @@ namespace GMEPElectricalResidential.LoadCalculations
         }
       }
     }
+
+    private void UPDATE_Click(object sender, EventArgs e)
+    {
+
+    }
   }
 }

@@ -338,9 +338,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         headers.Contents = "";
         string dwellingSubtitles = "Total General Load:".NewLine() +
-                                   "First 10 KVA at 100%:".NewLine() +
-                                   $"Remainder at 40% ({unitInfo.Totals.AmountOver10KVA()}VA x 0.4):".NewLine() +
-                                   "Subtotal General Load:".NewLine();
+                                   "First 10 KVA @ 100% (CEC  220.82(B)):".NewLine() +
+                                   $"Remainder @ 40% ({unitInfo.Totals.AmountOver10KVA()}VA x 0.4) (CEC 220.82(B)):".NewLine() +
+                                   "General Calculated Load (CEC  220.82(B)):".NewLine();
 
         headers.Contents = dwellingSubtitles.SetFont("Arial");
       }
@@ -377,7 +377,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
             $"Laundry (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Laundry.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Laundry.Multiplier}):")}",
             $"Bathroom (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Bathroom.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Bathroom.Multiplier}):")}",
             $"Dishwasher{((unitInfo.GeneralLoads.Dishwasher.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Dishwasher.Multiplier}):")}",
-            $"Microwave Oven{((unitInfo.GeneralLoads.MicrowaveOven.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.MicrowaveOven.Multiplier}):")}",
+            $"Microwave{((unitInfo.GeneralLoads.MicrowaveOven.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.MicrowaveOven.Multiplier}):")}",
             $"Garbage Disposal{((unitInfo.GeneralLoads.GarbageDisposal.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.GarbageDisposal.Multiplier}):")}",
             $"Bathroom Fans{((unitInfo.GeneralLoads.BathroomFans.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.BathroomFans.Multiplier}):")}",
             $"Garage Door Opener{((unitInfo.GeneralLoads.GarageDoorOpener.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.GarageDoorOpener.Multiplier}):")}",

@@ -37,6 +37,7 @@
       this.DELETE_UNIT_BUTTON = new System.Windows.Forms.Button();
       this.SAVE_BUTTON = new System.Windows.Forms.Button();
       this.CREATE = new System.Windows.Forms.Button();
+      this.UPDATE = new System.Windows.Forms.Button();
       this.TAB_CONTROL.SuspendLayout();
       this.UNIT_TAB.SuspendLayout();
       this.BUILDING_TAB.SuspendLayout();
@@ -138,12 +139,24 @@
       this.CREATE.UseVisualStyleBackColor = true;
       this.CREATE.Click += new System.EventHandler(this.CREATE_Click);
       // 
+      // UPDATE
+      // 
+      this.UPDATE.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.UPDATE.Location = new System.Drawing.Point(12, 132);
+      this.UPDATE.Name = "UPDATE";
+      this.UPDATE.Size = new System.Drawing.Size(83, 34);
+      this.UPDATE.TabIndex = 6;
+      this.UPDATE.Text = "Update";
+      this.UPDATE.UseVisualStyleBackColor = true;
+      this.UPDATE.Click += new System.EventHandler(this.UPDATE_Click);
+      // 
       // LOAD_CALCULATION_FORM
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Control;
       this.ClientSize = new System.Drawing.Size(1671, 727);
+      this.Controls.Add(this.UPDATE);
       this.Controls.Add(this.CREATE);
       this.Controls.Add(this.SAVE_BUTTON);
       this.Controls.Add(this.DELETE_UNIT_BUTTON);
@@ -169,5 +182,6 @@
     private System.Windows.Forms.TabPage BUILDING_TAB;
     private System.Windows.Forms.TabControl UNIT_TAB_CONTROL;
     private System.Windows.Forms.TabControl BUILDING_TAB_CONTROL;
+    private System.Windows.Forms.Button UPDATE;
   }
 }
