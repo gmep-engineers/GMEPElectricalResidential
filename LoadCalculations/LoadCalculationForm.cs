@@ -393,8 +393,6 @@ namespace GMEPElectricalResidential.LoadCalculations
     {
       var allUnitInfo = AllUnitInformation();
 
-      Close();
-
       Autodesk.AutoCAD.ApplicationServices.Application.MainWindow.Focus();
 
       using (DocumentLock docLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument())
@@ -428,7 +426,18 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private void UPDATE_Click(object sender, EventArgs e)
     {
+      var allUnitInfo = AllUnitInformation();
 
+      Autodesk.AutoCAD.ApplicationServices.Application.MainWindow.Focus();
+
+      using (DocumentLock docLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument())
+      {
+        Point3d point = new Point3d(0, 0, 0);
+        foreach (var unitInfo in allUnitInfo)
+        {
+          Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo, point, false);
+        }
+      }
     }
   }
 }

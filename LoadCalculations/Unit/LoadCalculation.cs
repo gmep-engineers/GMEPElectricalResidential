@@ -15,7 +15,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 {
   public class LoadCalculation
   {
-    public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d placementPoint)
+    public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d placementPoint, bool placeTheBlocks = true)
     {
       double HEADER_HEIGHT = 0.75;
       double currentHeight = HEADER_HEIGHT;
@@ -114,36 +114,39 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         CADObjectCommands.CreateObjectFromData(modifiedCustomBodyData, point, acBlkTblRec);
         CADObjectCommands.CreateObjectFromData(modifiedServiceBodyData, point, acBlkTblRec);
 
-        acTrans.Commit();
-      }
-
-      using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
-      {
-        BlockTable acBlkTbl;
-        acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
-        BlockTableRecord acBlkTblRec;
-
-        if (acCurDb.TileMode)
-        {
-          acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
-        }
-        else
-        {
-          acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.PaperSpace], OpenMode.ForWrite) as BlockTableRecord;
-        }
-
-        if (acBlkTbl.Has(newBlockName))
-        {
-          BlockReference acBlkRef = new BlockReference(placementPoint, acBlkTbl[newBlockName]);
-
-          acBlkTblRec.AppendEntity(acBlkRef);
-
-          acTrans.AddNewlyCreatedDBObject(acBlkRef, true);
-        }
-
         UpdateAllBlockReferences(newBlockName);
 
         acTrans.Commit();
+      }
+
+      if (placeTheBlocks)
+      {
+        using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
+        {
+          BlockTable acBlkTbl;
+          acBlkTbl = acTrans.GetObject(acCurDb.BlockTableId, OpenMode.ForRead) as BlockTable;
+          BlockTableRecord acBlkTblRec;
+
+          if (acCurDb.TileMode)
+          {
+            acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+          }
+          else
+          {
+            acBlkTblRec = acTrans.GetObject(acBlkTbl[BlockTableRecord.PaperSpace], OpenMode.ForWrite) as BlockTableRecord;
+          }
+
+          if (acBlkTbl.Has(newBlockName))
+          {
+            BlockReference acBlkRef = new BlockReference(placementPoint, acBlkTbl[newBlockName]);
+
+            acBlkTblRec.AppendEntity(acBlkRef);
+
+            acTrans.AddNewlyCreatedDBObject(acBlkRef, true);
+          }
+
+          acTrans.Commit();
+        }
       }
     }
 
