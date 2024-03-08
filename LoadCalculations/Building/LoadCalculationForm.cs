@@ -175,7 +175,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         houseLoadText += e.KeyChar;
         if (int.TryParse(houseLoadText, out int houseLoad))
         {
-          WriteMessageToAutoCADConsole($"House Load: {houseLoad}\n");
           _buildingInformation.HouseLoad = houseLoad;
           HOUSE_LOAD_COPY.Text = _buildingInformation.HouseLoad.ToString();
         }
@@ -192,16 +191,22 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         {
           houseLoadText = houseLoadText.Remove(selectionStart - 1, 1);
         }
+
+        if (string.IsNullOrEmpty(houseLoadText))
+        {
+          houseLoadText = "0";
+        }
+
         if (int.TryParse(houseLoadText, out int houseLoad))
         {
           _buildingInformation.HouseLoad = houseLoad;
           HOUSE_LOAD_COPY.Text = _buildingInformation.HouseLoad.ToString();
         }
       }
-      UpdateBuildingInformation();
+      UpdateBuildingFormInformation();
     }
 
-    private void UpdateBuildingInformation()
+    private void UpdateBuildingFormInformation()
     {
       TOTAL_NUMBER_OF_UNITS.Text = _buildingInformation.TotalUnitCount().ToString();
       SUBTOTAL_RESIDENTIAL_LOAD.Text = _buildingInformation.TotalSubtotalLoad().ToString();
@@ -248,6 +253,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         {
           numberOfUnitsText = numberOfUnitsText.Remove(selectionStart - 1, 1);
         }
+
+        if (string.IsNullOrEmpty(numberOfUnitsText))
+        {
+          numberOfUnitsText = "0";
+        }
+
         UpdateSubtotalOfUnitLoads(numberOfUnitsText);
       }
       else if (e.KeyChar == '\r')
@@ -267,16 +278,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         int count;
         if (int.TryParse(numberOfUnitsText, out count))
         {
-          var subtotal = count * selectedUnit.Totals.TotalGeneralLoad;
+          var subtotal = count * (selectedUnit.Totals.TotalGeneralLoad + selectedUnit.Totals.CustomLoad);
           _buildingInformation.UpdateCounter(selectedUnit, count, subtotal);
           SUBTOTAL_UNIT_LOADS.Text = subtotal.ToString();
         }
-        else
-        {
-          _buildingInformation.UpdateCounter(selectedUnit, 0, 0);
-          SUBTOTAL_UNIT_LOADS.Text = "0";
-        }
-        UpdateBuildingInformation();
+        UpdateBuildingFormInformation();
       }
     }
 
@@ -324,6 +330,21 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           UNIT_TYPES.SelectedIndex += 1;
         }
       }
+    }
+
+    public void UpdateUnitData(Unit.UnitInformation unitInformation)
+    {
+      if (_buildingInformation == null) return;
+      if (_buildingInformation.Counters == null) return;
+      if (unitInformation == null) return;
+
+      var counter = _buildingInformation.Counters.FirstOrDefault(c => c.UnitID == unitInformation.ID);
+      if (counter == null) return;
+
+      var existingNumberOfUnits = counter.Count;
+      var newSubtotal = (unitInformation.Totals.TotalGeneralLoad + unitInformation.Totals.CustomLoad) * existingNumberOfUnits;
+      _buildingInformation.UpdateCounter(unitInformation, existingNumberOfUnits, newSubtotal);
+      UpdateBuildingFormInformation();
     }
   }
 
@@ -385,7 +406,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
     public double TotalDemandLoad()
     {
-      return Math.Round(TotalSubtotalLoad() * DemandFactor(), 1);
+      return Math.Round(TotalSubtotalLoad() * DemandFactor() / 1000, 1);
     }
 
     public double DemandFactor()
@@ -441,15 +462,15 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         return 1.0;
     }
 
-    public double TotalDemandHouseLoad()
+    public int TotalDemandHouseLoad()
     {
-      return (HouseLoad ?? 0) + TotalDemandLoad();
+      return (HouseLoad ?? 0) + (int)Math.Ceiling(TotalDemandLoad() * 1000);
     }
 
     public double TotalAmperage()
     {
       int voltage = int.Parse(Voltage.TrimEnd('V'));
-      return Math.Ceiling(TotalDemandHouseLoad() / voltage);
+      return TotalDemandHouseLoad() / voltage;
     }
 
     public int ServiceRating()

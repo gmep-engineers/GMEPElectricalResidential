@@ -252,7 +252,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
         unitInfo.CustomLoads.ForEach(customLoad =>
         {
-          customValues += $"{customLoad.VA}VA".NewLine();
+          customValues += $"{customLoad.VA * customLoad.Multiplier}VA".NewLine();
         });
 
         values.Contents = customValues.SetFont("Arial");

@@ -12,6 +12,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -77,18 +78,18 @@ namespace GMEPElectricalResidential.LoadCalculations
         tabPage = new TabPage("Building");
       }
 
+      while (_buildingCannotBeIDs.Contains(_BuildingTabID))
+      {
+        _BuildingTabID++;
+      }
+
+      _buildingCannotBeIDs.Add(_BuildingTabID);
+
       Building.LoadCalculationForm buildingLoadCalculation = new Building.LoadCalculationForm(this, _BuildingTabID, buildingInformation);
       tabPage.Tag = _BuildingTabID;
       tabPage.Controls.Add(buildingLoadCalculation);
 
       BUILDING_TAB_CONTROL.TabPages.Add(tabPage);
-
-      _BuildingTabID++;
-
-      while (_buildingCannotBeIDs.Contains(_BuildingTabID))
-      {
-        _BuildingTabID++;
-      }
     }
 
     public void AddNewUnitTab(Unit.UnitInformation unitInformation = null)
@@ -103,18 +104,18 @@ namespace GMEPElectricalResidential.LoadCalculations
         tabPage = new TabPage($"Unit");
       }
 
-      Unit.LoadCalculationForm unitLoadCalculation = new Unit.LoadCalculationForm(_UnitTabID, unitInformation);
-      tabPage.Tag = _UnitTabID;
-      tabPage.Controls.Add(unitLoadCalculation);
-
-      UNIT_TAB_CONTROL.TabPages.Add(tabPage);
-
-      _UnitTabID++;
-
       while (_unitCannotBeIDs.Contains(_UnitTabID))
       {
         _UnitTabID++;
       }
+
+      _unitCannotBeIDs.Add(_UnitTabID);
+
+      Unit.LoadCalculationForm unitLoadCalculation = new Unit.LoadCalculationForm(this, _UnitTabID, unitInformation);
+      tabPage.Tag = _UnitTabID;
+      tabPage.Controls.Add(unitLoadCalculation);
+
+      UNIT_TAB_CONTROL.TabPages.Add(tabPage);
     }
 
     private bool LoadSavedUnitLoadCalculations()
@@ -122,7 +123,7 @@ namespace GMEPElectricalResidential.LoadCalculations
       var createdTabFlag = false;
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
       string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
-      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculation Saves", "Unit");
+      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculations", "Unit");
 
       if (Directory.Exists(baseSaveDirectory))
       {
@@ -153,7 +154,7 @@ namespace GMEPElectricalResidential.LoadCalculations
       var createdTabFlag = false;
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
       string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
-      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculation Saves", "Building");
+      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculations", "Building");
 
       if (Directory.Exists(baseSaveDirectory))
       {
@@ -189,6 +190,14 @@ namespace GMEPElectricalResidential.LoadCalculations
           if (result == DialogResult.Yes)
           {
             UNIT_TAB_CONTROL.TabPages.Remove(UNIT_TAB_CONTROL.SelectedTab);
+
+            var id = (int)UNIT_TAB_CONTROL.SelectedTab.Tag;
+            var allBuildingInformation = AllBuildingInformation();
+            foreach (var buildingInformation in allBuildingInformation)
+            {
+              var counterToRemove = buildingInformation.Counters.FirstOrDefault(counter => counter.UnitID == id);
+              buildingInformation.Counters.Remove(counterToRemove);
+            }
           }
         }
       }
@@ -247,9 +256,9 @@ namespace GMEPElectricalResidential.LoadCalculations
     {
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
       string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
-      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculation Saves");
+      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculations");
 
-      // Delete the current Load Calculation Saves directory if it exists
+      // Delete the current Load Calculations directory if it exists
       if (Directory.Exists(baseSaveDirectory))
       {
         Directory.Delete(baseSaveDirectory, true);
@@ -262,14 +271,14 @@ namespace GMEPElectricalResidential.LoadCalculations
         Directory.CreateDirectory(savesDirectory);
       }
 
-      // Create the Load Calculation Saves directory inside the Saves directory
+      // Create the Load Calculations directory inside the Saves directory
       Directory.CreateDirectory(baseSaveDirectory);
 
-      // Create the Unit directory inside the Load Calculation Saves directory
+      // Create the Unit directory inside the Load Calculations directory
       string unitDirectory = Path.Combine(baseSaveDirectory, "Unit");
       Directory.CreateDirectory(unitDirectory);
 
-      // Create the Building directory inside the Load Calculation Saves directory
+      // Create the Building directory inside the Load Calculations directory
       string buildingDirectory = Path.Combine(baseSaveDirectory, "Building");
       Directory.CreateDirectory(buildingDirectory);
 
@@ -402,6 +411,19 @@ namespace GMEPElectricalResidential.LoadCalculations
     private void SAVE_BUTTON_Click(object sender, EventArgs e)
     {
       SaveLoadCalculationForm();
+    }
+
+    public void UpdateBuildingData(Unit.UnitInformation unitInformation)
+    {
+      for (int i = 0; i < BUILDING_TAB_CONTROL.TabCount; i++)
+      {
+        var tabPage = BUILDING_TAB_CONTROL.TabPages[i];
+        var buildingLoadCalculationForm = tabPage.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
+        if (buildingLoadCalculationForm != null)
+        {
+          buildingLoadCalculationForm.UpdateUnitData(unitInformation);
+        }
+      }
     }
   }
 }

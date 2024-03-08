@@ -18,10 +18,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     private string _VAWatermark = "Enter VA...";
     private ToolTip _toolTip;
     private UnitInformation _unitInformation;
+    private LOAD_CALCULATION_FORM _parent;
     private bool _isLoaded = false;
     private bool _unitNullFlag = false;
 
-    public LoadCalculationForm(int tabId, UnitInformation unitInformation = null)
+    public LoadCalculationForm(LOAD_CALCULATION_FORM parent, int tabId, UnitInformation unitInformation = null)
     {
       InitializeComponent();
       SetDefaultValues();
@@ -32,6 +33,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       SubscribeComboBoxesToTextChangedEvent(this.Controls);
       SubscribeTextBoxesToTextEnterEvent(this.Controls);
 
+      _parent = parent;
       _toolTip = new ToolTip();
 
       if (unitInformation != null)
@@ -293,6 +295,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       UpdateTotalCustomLoadCalculation();
 
       UpdateServiceLoadDataAndCalculation();
+      _parent.UpdateBuildingData(_unitInformation);
     }
 
     private void UpdateServiceLoadDataAndCalculation()
