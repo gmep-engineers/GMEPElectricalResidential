@@ -77,49 +77,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         ObjectData titleData = GetCopyPasteData("Title");
         ObjectData rowData = GetCopyPasteData("Row");
 
-        titleData = UpdateBuildingHeaderData(titleData, buildingInfo);
+        titleData = UpdateBuildingTitleData(titleData, buildingInfo);
 
-        ObjectData buildingInformationBodyData = ShiftData(rowData, -currentHeight);
-        buildingInformationBodyData = UpdateBuildingInformationData(buildingInformationBodyData, buildingInfo);
-        double buildingInformationSectionHeight = CreateBuildingLoadCalculationRectangle(point, -currentHeight, buildingInformationBodyData.NumberOfRows, acBlkTblRec);
+        string modifiedTitleData = JsonConvert.SerializeObject(titleData);
 
-        currentHeight += buildingInformationSectionHeight;
-
-        ObjectData unitsBodyData = ShiftData(rowData, -currentHeight);
-        unitsBodyData = UpdateUnitsData(unitsBodyData, buildingInfo);
-        double unitsSectionHeight = CreateBuildingLoadCalculationRectangle(point, -currentHeight, unitsBodyData.NumberOfRows, acBlkTblRec);
-
-        currentHeight += unitsSectionHeight;
-
-        ObjectData houseLoadBodyData = ShiftData(rowData, -currentHeight);
-        houseLoadBodyData = UpdateHouseLoadData(houseLoadBodyData, buildingInfo);
-        double houseLoadSectionHeight = CreateBuildingLoadCalculationRectangle(point, -currentHeight, houseLoadBodyData.NumberOfRows, acBlkTblRec);
-
-        currentHeight += houseLoadSectionHeight;
-
-        ObjectData calculationBodyData = ShiftData(rowData, -currentHeight);
-        calculationBodyData = UpdateCalculationData(calculationBodyData, buildingInfo);
-        double calculationSectionHeight = CreateBuildingLoadCalculationRectangle(point, -currentHeight, calculationBodyData.NumberOfRows, acBlkTblRec);
-
-        currentHeight += calculationSectionHeight;
-
-        ObjectData serviceBodyData = ShiftData(rowData, -currentHeight);
-        serviceBodyData = UpdateServiceData(serviceBodyData, buildingInfo);
-        double _ = CreateBuildingLoadCalculationRectangle(point, -currentHeight, serviceBodyData.NumberOfRows, acBlkTblRec);
-
-        string modifiedHeaderData = JsonConvert.SerializeObject(titleData);
-        string modifiedBuildingInformationBodyData = JsonConvert.SerializeObject(buildingInformationBodyData);
-        string modifiedUnitsBodyData = JsonConvert.SerializeObject(unitsBodyData);
-        string modifiedHouseLoadBodyData = JsonConvert.SerializeObject(houseLoadBodyData);
-        string modifiedCalculationBodyData = JsonConvert.SerializeObject(calculationBodyData);
-        string modifiedServiceBodyData = JsonConvert.SerializeObject(serviceBodyData);
-
-        CADObjectCommands.CreateObjectFromData(modifiedHeaderData, point, acBlkTblRec);
-        CADObjectCommands.CreateObjectFromData(modifiedBuildingInformationBodyData, point, acBlkTblRec);
-        CADObjectCommands.CreateObjectFromData(modifiedUnitsBodyData, point, acBlkTblRec);
-        CADObjectCommands.CreateObjectFromData(modifiedHouseLoadBodyData, point, acBlkTblRec);
-        CADObjectCommands.CreateObjectFromData(modifiedCalculationBodyData, point, acBlkTblRec);
-        CADObjectCommands.CreateObjectFromData(modifiedServiceBodyData, point, acBlkTblRec);
+        CADObjectCommands.CreateObjectFromData(modifiedTitleData, point, acBlkTblRec);
 
         UpdateAllBlockReferences(newBlockName);
 
@@ -262,11 +224,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       return objectData;
     }
 
-    private static ObjectData UpdateBuildingHeaderData(ObjectData headerData, BuildingInformation buildingInfo)
+    private static ObjectData UpdateBuildingTitleData(ObjectData titleData, BuildingInformation buildingInfo)
     {
-      var serviceLoadCalculationMText = headerData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
+      var serviceLoadCalculationMText = titleData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
       serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - BUILDING {buildingInfo.Name}");
-      return headerData;
+      return titleData;
     }
 
     private static ObjectData UpdateBuildingInformationData(ObjectData buildingInformationBodyData, BuildingInformation buildingInfo)
@@ -317,15 +279,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       // ...
 
       return serviceBodyData;
-    }
-
-    private static double CreateBuildingLoadCalculationRectangle(Point3d point, double shiftY, int numberOfRows, BlockTableRecord block)
-    {
-      // Implement the logic to create the building load calculation rectangle
-      // Similar to CreateUnitLoadCalculationRectangle in the CreateUnitLoadCalculationTable method
-      // ...
-
-      return height;
     }
 
     private static Point3d GetStartingPoint(BuildingInformation buildingInfo, Point3d point, double COLUMN_WIDTH, double widthNoCols)

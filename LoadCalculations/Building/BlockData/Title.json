@@ -1,46 +1,34 @@
 {
-  "Polylines": [],
-  "Lines": [
+  "Polylines": [
     {
-      "StartPoint": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "EndPoint": {
-        "X": 8.2033907256843577,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Layer": "E-TEXT"
-    },
-    {
-      "StartPoint": {
-        "X": 6.7033907256843577,
-        "Y": -0.75000000000000711,
-        "Z": 0.0
-      },
-      "EndPoint": {
-        "X": 6.7033907256843577,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Layer": "E-TEXT"
-    },
-    {
-      "StartPoint": {
-        "X": 0.0,
-        "Y": -0.75000000000000355,
-        "Z": 0.0
-      },
-      "EndPoint": {
-        "X": 8.2033907256843577,
-        "Y": -0.75000000000000355,
-        "Z": 0.0
-      },
+      "Vectors": [
+        {
+          "X": 8.2033907256843577,
+          "Y": 0.0,
+          "Z": 0.0
+        },
+        {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0
+        },
+        {
+          "X": 0.0,
+          "Y": -0.75000000000000355,
+          "Z": 0.0
+        },
+        {
+          "X": 8.2033907256843577,
+          "Y": -0.75000000000000355,
+          "Z": 0.0
+        }
+      ],
+      "LineType": "ByLayer",
+      "Closed": true,
       "Layer": "E-TEXT"
     }
   ],
+  "Lines": [],
   "Arcs": [],
   "Circles": [],
   "Ellipses": [],
@@ -48,7 +36,7 @@
     {
       "Style": "Standard",
       "Justification": "MiddleCenter",
-      "Contents": "{\\Farial|c0;MSB}",
+      "Contents": "{\\Farial|c0;SERVICE LOAD CALCULATION}",
       "Direction": {
         "LargestElement": 0,
         "LengthSqrd": 1.0,
@@ -58,33 +46,8 @@
         "X": 1.0
       },
       "Location": {
-        "X": 7.4533907256843577,
-        "Y": -0.37500000000000355,
-        "Z": 0.0
-      },
-      "LineSpaceDistance": 0.33333333333333331,
-      "LineSpaceFactor": 1.0,
-      "LineSpacingStyle": 1,
-      "TextHeight": 0.2,
-      "Width": 0.0,
-      "Rotation": 0.0,
-      "Layer": "E-TEXT"
-    },
-    {
-      "Style": "Standard",
-      "Justification": "MiddleCenter",
-      "Contents": "{\\Farial|c0;ELECTRICAL LOAD CALCULATIONS - BUILDING}",
-      "Direction": {
-        "LargestElement": 0,
-        "LengthSqrd": 1.0,
-        "Length": 1.0,
-        "Z": 0.0,
-        "Y": 0.0,
-        "X": 1.0
-      },
-      "Location": {
-        "X": 3.3516953628421788,
-        "Y": -0.37500000000000711,
+        "X": 4.1016953628421788,
+        "Y": -0.375,
         "Z": 0.0
       },
       "LineSpaceDistance": 0.33333333333333331,
