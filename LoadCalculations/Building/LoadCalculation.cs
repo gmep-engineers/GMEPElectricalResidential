@@ -231,56 +231,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       return titleData;
     }
 
-    private static ObjectData UpdateBuildingInformationData(ObjectData buildingInformationBodyData, BuildingInformation buildingInfo)
-    {
-      // Implement the logic to update the building information data
-      // based on the buildingInfo object
-      // Similar to UpdateDwellingData in the CreateUnitLoadCalculationTable method
-      // ...
-
-      return buildingInformationBodyData;
-    }
-
-    private static ObjectData UpdateUnitsData(ObjectData unitsBodyData, BuildingInformation buildingInfo)
-    {
-      // Implement the logic to update the units data
-      // based on the buildingInfo object
-      // Similar to UpdateGeneralData in the CreateUnitLoadCalculationTable method
-      // ...
-
-      return unitsBodyData;
-    }
-
-    private static ObjectData UpdateHouseLoadData(ObjectData houseLoadBodyData, BuildingInformation buildingInfo)
-    {
-      // Implement the logic to update the house load data
-      // based on the buildingInfo object
-      // Similar to UpdateAirConditioningData in the CreateUnitLoadCalculationTable method
-      // ...
-
-      return houseLoadBodyData;
-    }
-
-    private static ObjectData UpdateCalculationData(ObjectData calculationBodyData, BuildingInformation buildingInfo)
-    {
-      // Implement the logic to update the calculation data
-      // based on the buildingInfo object
-      // Similar to UpdateGeneralCalculationData in the CreateUnitLoadCalculationTable method
-      // ...
-
-      return calculationBodyData;
-    }
-
-    private static ObjectData UpdateServiceData(ObjectData serviceBodyData, BuildingInformation buildingInfo)
-    {
-      // Implement the logic to update the service data
-      // based on the buildingInfo object
-      // Similar to UpdateServiceData in the CreateUnitLoadCalculationTable method
-      // ...
-
-      return serviceBodyData;
-    }
-
     private static Point3d GetStartingPoint(BuildingInformation buildingInfo, Point3d point, double COLUMN_WIDTH, double widthNoCols)
     {
       var numberOfUnitTypes = GetNumberOfUnitTypes(buildingInfo);
@@ -297,5 +247,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
       return numberOfUnitTypes;
     }
+  }
+
+  public class BuildingGrid
+  {
   }
 }

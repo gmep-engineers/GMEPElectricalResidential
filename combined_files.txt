@@ -1606,49 +1606,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         ObjectData titleData = GetCopyPasteData("Title");
         ObjectData rowData = GetCopyPasteData("Row");
 
-        titleData = UpdateBuildingHeaderData(titleData, buildingInfo);
+        titleData = UpdateBuildingTitleData(titleData, buildingInfo);
 
-        ObjectData buildingInformationBodyData = ShiftData(rowData, -currentHeight);
-        buildingInformationBodyData = UpdateBuildingInformationData(buildingInformationBodyData, buildingInfo);
-        double buildingInformationSectionHeight = CreateBuildingLoadCalculationRectangle(point, -currentHeight, buildingInformationBodyData.NumberOfRows, acBlkTblRec);
+        string modifiedTitleData = JsonConvert.SerializeObject(titleData);
 
-        currentHeight += buildingInformationSectionHeight;
-
-        ObjectData unitsBodyData = ShiftData(rowData, -currentHeight);
-        unitsBodyData = UpdateUnitsData(unitsBodyData, buildingInfo);
-        double unitsSectionHeight = CreateBuildingLoadCalculationRectangle(point, -currentHeight, unitsBodyData.NumberOfRows, acBlkTblRec);
-
-        currentHeight += unitsSectionHeight;
-
-        ObjectData houseLoadBodyData = ShiftData(rowData, -currentHeight);
-        houseLoadBodyData = UpdateHouseLoadData(houseLoadBodyData, buildingInfo);
-        double houseLoadSectionHeight = CreateBuildingLoadCalculationRectangle(point, -currentHeight, houseLoadBodyData.NumberOfRows, acBlkTblRec);
-
-        currentHeight += houseLoadSectionHeight;
-
-        ObjectData calculationBodyData = ShiftData(rowData, -currentHeight);
-        calculationBodyData = UpdateCalculationData(calculationBodyData, buildingInfo);
-        double calculationSectionHeight = CreateBuildingLoadCalculationRectangle(point, -currentHeight, calculationBodyData.NumberOfRows, acBlkTblRec);
-
-        currentHeight += calculationSectionHeight;
-
-        ObjectData serviceBodyData = ShiftData(rowData, -currentHeight);
-        serviceBodyData = UpdateServiceData(serviceBodyData, buildingInfo);
-        double _ = CreateBuildingLoadCalculationRectangle(point, -currentHeight, serviceBodyData.NumberOfRows, acBlkTblRec);
-
-        string modifiedHeaderData = JsonConvert.SerializeObject(titleData);
-        string modifiedBuildingInformationBodyData = JsonConvert.SerializeObject(buildingInformationBodyData);
-        string modifiedUnitsBodyData = JsonConvert.SerializeObject(unitsBodyData);
-        string modifiedHouseLoadBodyData = JsonConvert.SerializeObject(houseLoadBodyData);
-        string modifiedCalculationBodyData = JsonConvert.SerializeObject(calculationBodyData);
-        string modifiedServiceBodyData = JsonConvert.SerializeObject(serviceBodyData);
-
-        CADObjectCommands.CreateObjectFromData(modifiedHeaderData, point, acBlkTblRec);
-        CADObjectCommands.CreateObjectFromData(modifiedBuildingInformationBodyData, point, acBlkTblRec);
-        CADObjectCommands.CreateObjectFromData(modifiedUnitsBodyData, point, acBlkTblRec);
-        CADObjectCommands.CreateObjectFromData(modifiedHouseLoadBodyData, point, acBlkTblRec);
-        CADObjectCommands.CreateObjectFromData(modifiedCalculationBodyData, point, acBlkTblRec);
-        CADObjectCommands.CreateObjectFromData(modifiedServiceBodyData, point, acBlkTblRec);
+        CADObjectCommands.CreateObjectFromData(modifiedTitleData, point, acBlkTblRec);
 
         UpdateAllBlockReferences(newBlockName);
 
@@ -1791,70 +1753,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       return objectData;
     }
 
-    private static ObjectData UpdateBuildingHeaderData(ObjectData headerData, BuildingInformation buildingInfo)
+    private static ObjectData UpdateBuildingTitleData(ObjectData titleData, BuildingInformation buildingInfo)
     {
-      var serviceLoadCalculationMText = headerData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
+      var serviceLoadCalculationMText = titleData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
       serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - BUILDING {buildingInfo.Name}");
-      return headerData;
-    }
-
-    private static ObjectData UpdateBuildingInformationData(ObjectData buildingInformationBodyData, BuildingInformation buildingInfo)
-    {
-      // Implement the logic to update the building information data
-      // based on the buildingInfo object
-      // Similar to UpdateDwellingData in the CreateUnitLoadCalculationTable method
-      // ...
-
-      return buildingInformationBodyData;
-    }
-
-    private static ObjectData UpdateUnitsData(ObjectData unitsBodyData, BuildingInformation buildingInfo)
-    {
-      // Implement the logic to update the units data
-      // based on the buildingInfo object
-      // Similar to UpdateGeneralData in the CreateUnitLoadCalculationTable method
-      // ...
-
-      return unitsBodyData;
-    }
-
-    private static ObjectData UpdateHouseLoadData(ObjectData houseLoadBodyData, BuildingInformation buildingInfo)
-    {
-      // Implement the logic to update the house load data
-      // based on the buildingInfo object
-      // Similar to UpdateAirConditioningData in the CreateUnitLoadCalculationTable method
-      // ...
-
-      return houseLoadBodyData;
-    }
-
-    private static ObjectData UpdateCalculationData(ObjectData calculationBodyData, BuildingInformation buildingInfo)
-    {
-      // Implement the logic to update the calculation data
-      // based on the buildingInfo object
-      // Similar to UpdateGeneralCalculationData in the CreateUnitLoadCalculationTable method
-      // ...
-
-      return calculationBodyData;
-    }
-
-    private static ObjectData UpdateServiceData(ObjectData serviceBodyData, BuildingInformation buildingInfo)
-    {
-      // Implement the logic to update the service data
-      // based on the buildingInfo object
-      // Similar to UpdateServiceData in the CreateUnitLoadCalculationTable method
-      // ...
-
-      return serviceBodyData;
-    }
-
-    private static double CreateBuildingLoadCalculationRectangle(Point3d point, double shiftY, int numberOfRows, BlockTableRecord block)
-    {
-      // Implement the logic to create the building load calculation rectangle
-      // Similar to CreateUnitLoadCalculationRectangle in the CreateUnitLoadCalculationTable method
-      // ...
-
-      return height;
+      return titleData;
     }
 
     private static Point3d GetStartingPoint(BuildingInformation buildingInfo, Point3d point, double COLUMN_WIDTH, double widthNoCols)
@@ -1873,6 +1776,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
       return numberOfUnitTypes;
     }
+  }
+
+  public class BuildingGrid
+  {
   }
 } 
  
@@ -3050,35 +2957,36 @@ File: C:\Users\JacobH\source\repos\GMEPElectricalResidential\LoadCalculations\Bu
  
 File: C:\Users\JacobH\source\repos\GMEPElectricalResidential\LoadCalculations\Building\BlockData\Row.json 
 {
-  "Polylines": [],
-  "Lines": [
+  "Polylines": [
     {
-      "StartPoint": {
-        "X": 0.0,
-        "Y": -0.25000000000000355,
-        "Z": 0.0
-      },
-      "EndPoint": {
-        "X": 8.2033907256843577,
-        "Y": -0.25,
-        "Z": 0.0
-      },
-      "Layer": "E-TEXT"
-    },
-    {
-      "StartPoint": {
-        "X": 6.7033907256843577,
-        "Y": -0.25000000000000178,
-        "Z": 0.0
-      },
-      "EndPoint": {
-        "X": 6.7033907256843577,
-        "Y": -1.7763568394002505E-15,
-        "Z": 0.0
-      },
+      "Vectors": [
+        {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0
+        },
+        {
+          "X": 8.2033907256843577,
+          "Y": 0.0,
+          "Z": 0.0
+        },
+        {
+          "X": 8.2033907256843577,
+          "Y": -0.25,
+          "Z": 0.0
+        },
+        {
+          "X": 0.0,
+          "Y": -0.25,
+          "Z": 0.0
+        }
+      ],
+      "LineType": "ByLayer",
+      "Closed": true,
       "Layer": "E-TEXT"
     }
   ],
+  "Lines": [],
   "Arcs": [],
   "Circles": [],
   "Ellipses": [],
@@ -3133,24 +3041,79 @@ File: C:\Users\JacobH\source\repos\GMEPElectricalResidential\LoadCalculations\Bu
   "NumberOfRows": 0
 } 
  
-File: C:\Users\JacobH\source\repos\GMEPElectricalResidential\LoadCalculations\Building\BlockData\Subtitle.json 
+File: C:\Users\JacobH\source\repos\GMEPElectricalResidential\LoadCalculations\Building\BlockData\Spacer.json 
 {
-  "Polylines": [],
-  "Lines": [
+  "Polylines": [
     {
-      "StartPoint": {
-        "X": 0.0,
-        "Y": -0.5,
-        "Z": 0.0
-      },
-      "EndPoint": {
-        "X": 8.2033907256843577,
-        "Y": -0.5,
-        "Z": 0.0
-      },
+      "Vectors": [
+        {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0
+        },
+        {
+          "X": 8.2033907256843577,
+          "Y": 0.0,
+          "Z": 0.0
+        },
+        {
+          "X": 8.2033907256843577,
+          "Y": -0.24999999999999822,
+          "Z": 0.0
+        },
+        {
+          "X": 0.0,
+          "Y": -0.24999999999999822,
+          "Z": 0.0
+        }
+      ],
+      "LineType": "ByLayer",
+      "Closed": true,
       "Layer": "E-TEXT"
     }
   ],
+  "Lines": [],
+  "Arcs": [],
+  "Circles": [],
+  "Ellipses": [],
+  "MTexts": [],
+  "Texts": [],
+  "Solids": [],
+  "NumberOfRows": 0
+} 
+ 
+File: C:\Users\JacobH\source\repos\GMEPElectricalResidential\LoadCalculations\Building\BlockData\Subtitle.json 
+{
+  "Polylines": [
+    {
+      "Vectors": [
+        {
+          "X": 8.2033907256843577,
+          "Y": 0.0,
+          "Z": 0.0
+        },
+        {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0
+        },
+        {
+          "X": 0.0,
+          "Y": -0.5,
+          "Z": 0.0
+        },
+        {
+          "X": 8.2033907256843577,
+          "Y": -0.5,
+          "Z": 0.0
+        }
+      ],
+      "LineType": "ByLayer",
+      "Closed": true,
+      "Layer": "E-TEXT"
+    }
+  ],
+  "Lines": [],
   "Arcs": [],
   "Circles": [],
   "Ellipses": [],
@@ -3158,7 +3121,7 @@ File: C:\Users\JacobH\source\repos\GMEPElectricalResidential\LoadCalculations\Bu
     {
       "Style": "Standard",
       "Justification": "MiddleLeft",
-      "Contents": "{\\Farial|c0;Dwelling Information}",
+      "Contents": "{\\Farial|c0;\\LDwelling Information:}",
       "Direction": {
         "LargestElement": 0,
         "LengthSqrd": 1.0,
@@ -3168,8 +3131,8 @@ File: C:\Users\JacobH\source\repos\GMEPElectricalResidential\LoadCalculations\Bu
         "X": 1.0
       },
       "Location": {
-        "X": 0.19996033047140926,
-        "Y": -0.25,
+        "X": 0.19996033047138795,
+        "Y": -0.25003672061541238,
         "Z": 0.0
       },
       "LineSpaceDistance": 0.25,
@@ -3188,48 +3151,36 @@ File: C:\Users\JacobH\source\repos\GMEPElectricalResidential\LoadCalculations\Bu
  
 File: C:\Users\JacobH\source\repos\GMEPElectricalResidential\LoadCalculations\Building\BlockData\Title.json 
 {
-  "Polylines": [],
-  "Lines": [
+  "Polylines": [
     {
-      "StartPoint": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "EndPoint": {
-        "X": 8.2033907256843577,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Layer": "E-TEXT"
-    },
-    {
-      "StartPoint": {
-        "X": 6.7033907256843577,
-        "Y": -0.75000000000000711,
-        "Z": 0.0
-      },
-      "EndPoint": {
-        "X": 6.7033907256843577,
-        "Y": 0.0,
-        "Z": 0.0
-      },
-      "Layer": "E-TEXT"
-    },
-    {
-      "StartPoint": {
-        "X": 0.0,
-        "Y": -0.75000000000000355,
-        "Z": 0.0
-      },
-      "EndPoint": {
-        "X": 8.2033907256843577,
-        "Y": -0.75000000000000355,
-        "Z": 0.0
-      },
+      "Vectors": [
+        {
+          "X": 8.2033907256843577,
+          "Y": 0.0,
+          "Z": 0.0
+        },
+        {
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0
+        },
+        {
+          "X": 0.0,
+          "Y": -0.75000000000000355,
+          "Z": 0.0
+        },
+        {
+          "X": 8.2033907256843577,
+          "Y": -0.75000000000000355,
+          "Z": 0.0
+        }
+      ],
+      "LineType": "ByLayer",
+      "Closed": true,
       "Layer": "E-TEXT"
     }
   ],
+  "Lines": [],
   "Arcs": [],
   "Circles": [],
   "Ellipses": [],
@@ -3237,7 +3188,7 @@ File: C:\Users\JacobH\source\repos\GMEPElectricalResidential\LoadCalculations\Bu
     {
       "Style": "Standard",
       "Justification": "MiddleCenter",
-      "Contents": "{\\Farial|c0;MSB}",
+      "Contents": "{\\Farial|c0;SERVICE LOAD CALCULATION}",
       "Direction": {
         "LargestElement": 0,
         "LengthSqrd": 1.0,
@@ -3247,33 +3198,8 @@ File: C:\Users\JacobH\source\repos\GMEPElectricalResidential\LoadCalculations\Bu
         "X": 1.0
       },
       "Location": {
-        "X": 7.4533907256843577,
-        "Y": -0.37500000000000355,
-        "Z": 0.0
-      },
-      "LineSpaceDistance": 0.33333333333333331,
-      "LineSpaceFactor": 1.0,
-      "LineSpacingStyle": 1,
-      "TextHeight": 0.2,
-      "Width": 0.0,
-      "Rotation": 0.0,
-      "Layer": "E-TEXT"
-    },
-    {
-      "Style": "Standard",
-      "Justification": "MiddleCenter",
-      "Contents": "{\\Farial|c0;ELECTRICAL LOAD CALCULATIONS - BUILDING}",
-      "Direction": {
-        "LargestElement": 0,
-        "LengthSqrd": 1.0,
-        "Length": 1.0,
-        "Z": 0.0,
-        "Y": 0.0,
-        "X": 1.0
-      },
-      "Location": {
-        "X": 3.3516953628421788,
-        "Y": -0.37500000000000711,
+        "X": 4.1016953628421788,
+        "Y": -0.375,
         "Z": 0.0
       },
       "LineSpaceDistance": 0.33333333333333331,
