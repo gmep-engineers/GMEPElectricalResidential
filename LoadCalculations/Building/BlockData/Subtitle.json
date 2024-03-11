@@ -1,0 +1,51 @@
+{
+  "Polylines": [],
+  "Lines": [
+    {
+      "StartPoint": {
+        "X": 0.0,
+        "Y": -0.5,
+        "Z": 0.0
+      },
+      "EndPoint": {
+        "X": 8.2033907256843577,
+        "Y": -0.5,
+        "Z": 0.0
+      },
+      "Layer": "E-TEXT"
+    }
+  ],
+  "Arcs": [],
+  "Circles": [],
+  "Ellipses": [],
+  "MTexts": [
+    {
+      "Style": "Standard",
+      "Justification": "MiddleLeft",
+      "Contents": "{\\Farial|c0;Dwelling Information}",
+      "Direction": {
+        "LargestElement": 0,
+        "LengthSqrd": 1.0,
+        "Length": 1.0,
+        "Z": 0.0,
+        "Y": 0.0,
+        "X": 1.0
+      },
+      "Location": {
+        "X": 0.19996033047140926,
+        "Y": -0.25,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 0.25,
+      "LineSpaceFactor": 1.0,
+      "LineSpacingStyle": 1,
+      "TextHeight": 0.15,
+      "Width": 0.0,
+      "Rotation": 0.0,
+      "Layer": "E-TEXT"
+    }
+  ],
+  "Texts": [],
+  "Solids": [],
+  "NumberOfRows": 0
+}

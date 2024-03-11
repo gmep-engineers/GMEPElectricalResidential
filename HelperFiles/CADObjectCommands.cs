@@ -10,8 +10,8 @@ namespace GMEPElectricalResidential.HelperFiles
 {
   public class CADObjectCommands
   {
-    [CommandMethod("GetObjectData")]
-    public void GetObjectData()
+    [CommandMethod("GetBlockData")]
+    public void GetBlockData()
     {
       var data = new ObjectData();
 

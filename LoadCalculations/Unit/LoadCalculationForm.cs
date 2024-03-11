@@ -56,6 +56,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         PopulateUserControlWithUnitInformation(_unitInformation);
       }
       _isLoaded = true;
+      UpdateDataAndLoads();
     }
 
     private void PopulateUserControlWithUnitInformation(UnitInformation unitInformation)

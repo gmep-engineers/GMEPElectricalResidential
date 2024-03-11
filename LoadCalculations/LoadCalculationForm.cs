@@ -391,6 +391,7 @@ namespace GMEPElectricalResidential.LoadCalculations
     private void CREATE_Click(object sender, EventArgs e)
     {
       var allUnitInfo = AllUnitInformation();
+      var allBuildingInfo = AllBuildingInformation();
 
       Autodesk.AutoCAD.ApplicationServices.Application.MainWindow.Focus();
 
@@ -400,6 +401,12 @@ namespace GMEPElectricalResidential.LoadCalculations
         foreach (var unitInfo in allUnitInfo)
         {
           Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo, point);
+          point = new Point3d(point.X - 7, point.Y, point.Z);
+        }
+
+        foreach (var buildingInfo in allBuildingInfo)
+        {
+          Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, point);
           point = new Point3d(point.X - 7, point.Y, point.Z);
         }
       }

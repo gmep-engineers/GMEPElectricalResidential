@@ -21,6 +21,16 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       double currentHeight = HEADER_HEIGHT;
       string newBlockName = $"Unit {unitInfo.Name}" + $" ID{unitInfo.ID}";
 
+      if (unitInfo == null)
+      {
+        return;
+      }
+
+      if (unitInfo.Name == null)
+      {
+        unitInfo.Name = "";
+      }
+
       var acCurDb = Application.DocumentManager.MdiActiveDocument.Database;
 
       using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
@@ -372,6 +382,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var headers = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
       if (headers != null)
       {
+        HelperClass.SaveDataToJsonFileOnDesktop(unitInfo, "unitInfo.json");
         contents = new List<string>
         {
             "%%uGeneral Load:",

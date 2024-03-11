@@ -186,10 +186,13 @@
     <Content Include="0_Notes.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="LoadCalculations\Building\BlockData\Building.json">
+    <None Include="LoadCalculations\Building\BlockData\Row.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="LoadCalculations\Building\BlockData\UnitColumn.json">
+    <None Include="LoadCalculations\Building\BlockData\Subtitle.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="LoadCalculations\Building\BlockData\Title.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="LoadCalculations\Unit\BlockData\UnitLoadCalculationHeader.json">

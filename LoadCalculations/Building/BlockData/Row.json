@@ -1,0 +1,83 @@
+{
+  "Polylines": [],
+  "Lines": [
+    {
+      "StartPoint": {
+        "X": 0.0,
+        "Y": -0.25000000000000355,
+        "Z": 0.0
+      },
+      "EndPoint": {
+        "X": 8.2033907256843577,
+        "Y": -0.25,
+        "Z": 0.0
+      },
+      "Layer": "E-TEXT"
+    },
+    {
+      "StartPoint": {
+        "X": 6.7033907256843577,
+        "Y": -0.25000000000000178,
+        "Z": 0.0
+      },
+      "EndPoint": {
+        "X": 6.7033907256843577,
+        "Y": -1.7763568394002505E-15,
+        "Z": 0.0
+      },
+      "Layer": "E-TEXT"
+    }
+  ],
+  "Arcs": [],
+  "Circles": [],
+  "Ellipses": [],
+  "MTexts": [],
+  "Texts": [
+    {
+      "Style": "Load Calcs",
+      "Justification": null,
+      "Contents": "Unit:",
+      "Location": {
+        "X": 0.20000000000000284,
+        "Y": -0.19397062333007575,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 1.0,
+      "Height": 0.15,
+      "Rotation": 0.0,
+      "AlignmentPoint": {
+        "X": 31.709260330471409,
+        "Y": -15.962236720615405,
+        "Z": 0.0
+      },
+      "HorizontalMode": null,
+      "IsMirroredInX": false,
+      "IsMirroredInY": false,
+      "Layer": "E-TEXT"
+    },
+    {
+      "Style": "Load Calcs",
+      "Justification": null,
+      "Contents": "A",
+      "Location": {
+        "X": 7.3835066874851769,
+        "Y": -0.20000000000000107,
+        "Z": 0.0
+      },
+      "LineSpaceDistance": 1.0,
+      "Height": 0.15,
+      "Rotation": 0.0,
+      "AlignmentPoint": {
+        "X": 7.4533907256843577,
+        "Y": -0.12500000000000178,
+        "Z": 0.0
+      },
+      "HorizontalMode": null,
+      "IsMirroredInX": false,
+      "IsMirroredInY": false,
+      "Layer": "E-TEXT"
+    }
+  ],
+  "Solids": [],
+  "NumberOfRows": 0
+}
