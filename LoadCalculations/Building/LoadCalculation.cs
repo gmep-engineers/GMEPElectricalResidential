@@ -11,8 +11,25 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
   {
     public static void CreateBuildingLoadCalculationTable(BuildingInformation buildingInfo, Point3d point)
     {
-      HelperFiles.HelperClass.WriteMessageToAutoCADConsole(buildingInfo, "Building Information: ");
-      HelperFiles.HelperClass.WriteMessageToAutoCADConsole(point, "Point: ");
+      HelperFiles.HelperClass.SaveDataToJsonFileOnDesktop(buildingInfo, "building.json");
+      HelperFiles.HelperClass.SaveDataToJsonFileOnDesktop(point, "point.json");
+
+      var COLUMN_WIDTH = 1.5;
+      var initialWidth = 8.2034;
+      var widthNoCols = initialWidth - COLUMN_WIDTH;
+
+      var numberOfUnitTypes = GetNumberOfUnitTypes(buildingInfo);
+      var totalWidth = widthNoCols + (COLUMN_WIDTH * numberOfUnitTypes);
+
+      var newPoint = new Point3d(point.X - totalWidth, point.Y, point.Z);
+    }
+
+    private static int GetNumberOfUnitTypes(BuildingInformation buildingInfo)
+    {
+      var counters = buildingInfo.Counters;
+      var numberOfUnitTypes = counters.Count(c => c.Count > 0);
+
+      return numberOfUnitTypes;
     }
   }
 }
