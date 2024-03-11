@@ -1,4 +1,1 @@
-﻿I am currently saving lists of unit data and lists of building data in a json file.
-I am adding a checkbox to the loadcalcultion form and I would like for its state to be saved as well.
-I am looking for help in saving and loading the state of the checkbox into the form.
-The name of the checkbox is "FORMAT".
+﻿

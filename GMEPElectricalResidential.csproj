@@ -186,6 +186,7 @@
     <Content Include="0_Notes.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="singleFile.bat" />
     <None Include="LoadCalculations\Building\BlockData\Row.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

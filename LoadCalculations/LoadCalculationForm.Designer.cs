@@ -154,15 +154,16 @@
       // FORMAT
       // 
       this.FORMAT.AutoSize = true;
-      this.FORMAT.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.FORMAT.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
       this.FORMAT.Checked = true;
       this.FORMAT.CheckState = System.Windows.Forms.CheckState.Checked;
       this.FORMAT.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.FORMAT.Location = new System.Drawing.Point(11, 184);
+      this.FORMAT.Location = new System.Drawing.Point(19, 172);
       this.FORMAT.Name = "FORMAT";
-      this.FORMAT.Size = new System.Drawing.Size(84, 64);
+      this.FORMAT.Size = new System.Drawing.Size(69, 78);
       this.FORMAT.TabIndex = 205;
       this.FORMAT.Text = "Group\r\nBuilding\r\nCalcs";
+      this.FORMAT.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       this.FORMAT.UseVisualStyleBackColor = true;
       // 
       // LOAD_CALCULATION_FORM
