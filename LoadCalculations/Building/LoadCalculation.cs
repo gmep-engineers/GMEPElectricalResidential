@@ -52,7 +52,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
         var existingBlock = acBlkTbl.Cast<ObjectId>()
             .Select(id => acTrans.GetObject(id, OpenMode.ForRead) as BlockTableRecord)
-            .FirstOrDefault(btr => btr.Name.Contains($"ID{buildingInfo.ID}"));
+            .FirstOrDefault(btr => btr.Name.Contains($"ID{buildingInfo.ID}") && btr.Name.Contains("Building"));
 
         if (existingBlock != null)
         {
