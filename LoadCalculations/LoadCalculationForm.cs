@@ -427,7 +427,7 @@ namespace GMEPElectricalResidential.LoadCalculations
 
         foreach (var buildingInfo in allBuildingInfo)
         {
-          Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, point);
+          Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point);
           point = new Point3d(point.X - 7, point.Y, point.Z);
         }
       }
@@ -468,7 +468,7 @@ namespace GMEPElectricalResidential.LoadCalculations
 
         foreach (var buildingInfo in allBuildingInfo)
         {
-          Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, point, false);
+          Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point, false);
         }
       }
     }

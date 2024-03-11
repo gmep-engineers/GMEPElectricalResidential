@@ -8,12 +8,12 @@
           "Z": 0.0
         },
         {
-          "X": 8.2033907256843577,
+          "X": 6.7033907256843577,
           "Y": 0.0,
           "Z": 0.0
         },
         {
-          "X": 8.2033907256843577,
+          "X": 6.7033907256843577,
           "Y": -0.25,
           "Z": 0.0
         },
@@ -49,28 +49,6 @@
       "AlignmentPoint": {
         "X": 31.709260330471409,
         "Y": -15.962236720615405,
-        "Z": 0.0
-      },
-      "HorizontalMode": null,
-      "IsMirroredInX": false,
-      "IsMirroredInY": false,
-      "Layer": "E-TEXT"
-    },
-    {
-      "Style": "Load Calcs",
-      "Justification": null,
-      "Contents": "A",
-      "Location": {
-        "X": 7.3835066874851769,
-        "Y": -0.20000000000000107,
-        "Z": 0.0
-      },
-      "LineSpaceDistance": 1.0,
-      "Height": 0.15,
-      "Rotation": 0.0,
-      "AlignmentPoint": {
-        "X": 7.4533907256843577,
-        "Y": -0.12500000000000178,
         "Z": 0.0
       },
       "HorizontalMode": null,

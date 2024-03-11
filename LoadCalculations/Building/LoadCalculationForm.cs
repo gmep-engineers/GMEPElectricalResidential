@@ -380,6 +380,25 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       });
     }
 
+    public List<Unit.UnitInformation> GetListOfBuildingUnitTypes(List<Unit.UnitInformation> allUnitInformation)
+    {
+      var buildingUnitTypes = new List<Unit.UnitInformation>();
+
+      foreach (var counter in Counters)
+      {
+        if (counter.Count > 0)
+        {
+          var unitInformation = allUnitInformation.FirstOrDefault(u => u.ID == counter.UnitID);
+          if (unitInformation != null)
+          {
+            buildingUnitTypes.Add(unitInformation);
+          }
+        }
+      }
+
+      return buildingUnitTypes;
+    }
+
     public int TotalUnitCount()
     {
       int total = 0;

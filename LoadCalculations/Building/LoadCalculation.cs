@@ -2,6 +2,7 @@
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using GMEPElectricalResidential.HelperFiles;
+using GMEPElectricalResidential.LoadCalculations.Unit;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 {
   public class LoadCalculation
   {
-    public static void CreateBuildingLoadCalculationTable(BuildingInformation buildingInfo, Point3d placementPoint, bool placeTheBlocks = true)
+    public static void CreateBuildingLoadCalculationTable(BuildingInformation buildingInfo, List<UnitInformation> allUnitInformation, Point3d placementPoint, bool placeTheBlocks = true)
     {
       double HEADER_HEIGHT = 0.75;
       double COLUMN_WIDTH = 1.5;
       double WIDTH_NO_COLS = 6.7034;
       double currentHeight = HEADER_HEIGHT;
       string newBlockName = $"Building {buildingInfo.Name}" + $" ID{buildingInfo.ID}";
+      var buildingUnitInfo = buildingInfo.GetListOfBuildingUnitTypes(allUnitInformation);
 
       placementPoint = GetStartingPoint(buildingInfo, placementPoint, COLUMN_WIDTH, WIDTH_NO_COLS);
 
@@ -75,9 +77,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         }
 
         ObjectData titleData = GetCopyPasteData("Title");
-        ObjectData rowData = GetCopyPasteData("Row");
 
-        titleData = UpdateBuildingTitleData(titleData, buildingInfo);
+        titleData = UpdateBuildingTitleData(titleData, buildingInfo, buildingUnitInfo, COLUMN_WIDTH);
+
+        CreateDwellingSection(point, buildingUnitInfo);
 
         string modifiedTitleData = JsonConvert.SerializeObject(titleData);
 
@@ -117,6 +120,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           acTrans.Commit();
         }
       }
+    }
+
+    private static void CreateDwellingSection(Point3d point, List<UnitInformation> buildingUnitInfo)
+    {
     }
 
     private static void UpdateAllBlockReferences(string blockName)
@@ -224,10 +231,32 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       return objectData;
     }
 
-    private static ObjectData UpdateBuildingTitleData(ObjectData titleData, BuildingInformation buildingInfo)
+    private static ObjectData UpdateBuildingTitleData(ObjectData titleData, BuildingInformation buildingInfo, List<Unit.UnitInformation> buildingUnitInfo, double COLUMN_WIDTH)
     {
       var serviceLoadCalculationMText = titleData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
       serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - BUILDING {buildingInfo.Name}");
+
+      if (buildingUnitInfo.Count > 1)
+      {
+        double additionalWidth = (buildingUnitInfo.Count - 1) * COLUMN_WIDTH;
+
+        foreach (var polyline in titleData.Polylines)
+        {
+          for (int i = 0; i < polyline.Vectors.Count; i++)
+          {
+            if (polyline.Vectors[i].X == 8.2033907256843577)
+            {
+              polyline.Vectors[i].X += additionalWidth;
+            }
+          }
+        }
+
+        foreach (var mText in titleData.MTexts)
+        {
+          mText.Location.X += additionalWidth / 2;
+        }
+      }
+
       return titleData;
     }
 
@@ -247,9 +276,5 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
       return numberOfUnitTypes;
     }
-  }
-
-  public class BuildingGrid
-  {
   }
 }
