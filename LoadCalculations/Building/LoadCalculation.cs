@@ -20,6 +20,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     public static void CreateBuildingLoadCalculationTable(BuildingInformation buildingInfo, List<UnitInformation> allUnitInformation, Point3d placementPoint, bool placeTheBlocks = true)
     {
       double HEADER_HEIGHT = 0.75;
+      double SUBTITLE_HEIGHT = 0.5;
       double COLUMN_WIDTH = 1.5;
       double WIDTH_NO_COLS = 6.7034;
       double currentHeight = HEADER_HEIGHT;
@@ -77,14 +78,27 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         }
 
         ObjectData titleData = GetCopyPasteData("Title");
+        ObjectData rowHeader = GetCopyPasteData("RowHeader");
+        ObjectData rowEntry = GetCopyPasteData("RowEntry");
+        ObjectData subtitleData = GetCopyPasteData("Subtitle");
 
-        titleData = UpdateBuildingTitleData(titleData, buildingInfo, buildingUnitInfo, COLUMN_WIDTH);
+        double additionalWidth = CalculateAdditionalWidth(buildingUnitInfo, COLUMN_WIDTH);
 
-        CreateDwellingSection(point, buildingUnitInfo);
-
+        // Title
+        titleData = UpdateBuildingTitleData(titleData, buildingInfo, additionalWidth);
+        var shiftHeight = -HEADER_HEIGHT;
         string modifiedTitleData = JsonConvert.SerializeObject(titleData);
-
         CADObjectCommands.CreateObjectFromData(modifiedTitleData, point, acBlkTblRec);
+
+        // Subtitle
+        subtitleData = ShiftData(subtitleData, shiftHeight);
+        subtitleData = UpdateBuildingSubtitleData(subtitleData, additionalWidth, "Dwelling Information");
+        shiftHeight -= SUBTITLE_HEIGHT;
+        string modifiedSubtitleData = JsonConvert.SerializeObject(subtitleData);
+        CADObjectCommands.CreateObjectFromData(modifiedSubtitleData, point, acBlkTblRec);
+
+        // Row Header
+        rowHeader = ShiftData(rowHeader, shiftHeight);
 
         UpdateAllBlockReferences(newBlockName);
 
@@ -122,8 +136,22 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       }
     }
 
-    private static void CreateDwellingSection(Point3d point, List<UnitInformation> buildingUnitInfo)
+    private static ObjectData UpdateBuildingSubtitleData(ObjectData subtitleData, double additionalWidth, string message)
     {
+      var textObj = subtitleData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Dwelling Information"));
+      textObj.Contents = textObj.Contents.Replace("Dwelling Information", message);
+      UpdateTitleOrSubtitleText(subtitleData, additionalWidth, true);
+
+      return subtitleData;
+    }
+
+    private static ObjectData UpdateBuildingTitleData(ObjectData titleData, BuildingInformation buildingInfo, double additionalWidth)
+    {
+      var serviceLoadCalculationMText = titleData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
+      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - BUILDING {buildingInfo.Name}");
+      UpdateTitleOrSubtitleText(titleData, additionalWidth);
+
+      return titleData;
     }
 
     private static void UpdateAllBlockReferences(string blockName)
@@ -231,33 +259,38 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       return objectData;
     }
 
-    private static ObjectData UpdateBuildingTitleData(ObjectData titleData, BuildingInformation buildingInfo, List<Unit.UnitInformation> buildingUnitInfo, double COLUMN_WIDTH)
+    private static double CalculateAdditionalWidth(List<Unit.UnitInformation> buildingUnitInfo, double COLUMN_WIDTH)
     {
-      var serviceLoadCalculationMText = titleData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
-      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - BUILDING {buildingInfo.Name}");
-
       if (buildingUnitInfo.Count > 1)
       {
         double additionalWidth = (buildingUnitInfo.Count - 1) * COLUMN_WIDTH;
+        return additionalWidth;
+      }
+      return 0;
+    }
 
-        foreach (var polyline in titleData.Polylines)
+    private static void UpdateTitleOrSubtitleText(ObjectData titleData, double additionalWidth, bool isSubtitle = false)
+    {
+      var INITIAL_WIDTH = 8.2033907256843577;
+
+      foreach (var polyline in titleData.Polylines)
+      {
+        for (int i = 0; i < polyline.Vectors.Count; i++)
         {
-          for (int i = 0; i < polyline.Vectors.Count; i++)
+          if (polyline.Vectors[i].X == INITIAL_WIDTH)
           {
-            if (polyline.Vectors[i].X == 8.2033907256843577)
-            {
-              polyline.Vectors[i].X += additionalWidth;
-            }
+            polyline.Vectors[i].X += additionalWidth;
           }
         }
+      }
 
+      if (!isSubtitle)
+      {
         foreach (var mText in titleData.MTexts)
         {
           mText.Location.X += additionalWidth / 2;
         }
       }
-
-      return titleData;
     }
 
     private static Point3d GetStartingPoint(BuildingInformation buildingInfo, Point3d point, double COLUMN_WIDTH, double widthNoCols)
