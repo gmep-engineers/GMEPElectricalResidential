@@ -189,9 +189,8 @@ namespace GMEPElectricalResidential.LoadCalculations
           DialogResult result = MessageBox.Show("Are you sure you want to remove this unit tab?", "Confirmation", MessageBoxButtons.YesNo);
           if (result == DialogResult.Yes)
           {
-            UNIT_TAB_CONTROL.TabPages.Remove(UNIT_TAB_CONTROL.SelectedTab);
-
             var id = (int)UNIT_TAB_CONTROL.SelectedTab.Tag;
+            UNIT_TAB_CONTROL.TabPages.Remove(UNIT_TAB_CONTROL.SelectedTab);
             var allBuildingInformation = AllBuildingInformation();
             foreach (var buildingInformation in allBuildingInformation)
             {
