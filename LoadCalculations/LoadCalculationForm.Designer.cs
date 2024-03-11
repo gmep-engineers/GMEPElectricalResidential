@@ -38,6 +38,7 @@
       this.SAVE_BUTTON = new System.Windows.Forms.Button();
       this.CREATE = new System.Windows.Forms.Button();
       this.UPDATE = new System.Windows.Forms.Button();
+      this.FORMAT = new System.Windows.Forms.CheckBox();
       this.TAB_CONTROL.SuspendLayout();
       this.UNIT_TAB.SuspendLayout();
       this.BUILDING_TAB.SuspendLayout();
@@ -150,12 +151,27 @@
       this.UPDATE.UseVisualStyleBackColor = true;
       this.UPDATE.Click += new System.EventHandler(this.UPDATE_Click);
       // 
+      // FORMAT
+      // 
+      this.FORMAT.AutoSize = true;
+      this.FORMAT.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+      this.FORMAT.Checked = true;
+      this.FORMAT.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.FORMAT.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.FORMAT.Location = new System.Drawing.Point(11, 184);
+      this.FORMAT.Name = "FORMAT";
+      this.FORMAT.Size = new System.Drawing.Size(84, 64);
+      this.FORMAT.TabIndex = 205;
+      this.FORMAT.Text = "Group\r\nBuilding\r\nCalcs";
+      this.FORMAT.UseVisualStyleBackColor = true;
+      // 
       // LOAD_CALCULATION_FORM
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Control;
       this.ClientSize = new System.Drawing.Size(1671, 727);
+      this.Controls.Add(this.FORMAT);
       this.Controls.Add(this.UPDATE);
       this.Controls.Add(this.CREATE);
       this.Controls.Add(this.SAVE_BUTTON);
@@ -168,6 +184,7 @@
       this.UNIT_TAB.ResumeLayout(false);
       this.BUILDING_TAB.ResumeLayout(false);
       this.ResumeLayout(false);
+      this.PerformLayout();
 
     }
 
@@ -183,5 +200,6 @@
     private System.Windows.Forms.TabControl UNIT_TAB_CONTROL;
     private System.Windows.Forms.TabControl BUILDING_TAB_CONTROL;
     private System.Windows.Forms.Button UPDATE;
+    private System.Windows.Forms.CheckBox FORMAT;
   }
 }

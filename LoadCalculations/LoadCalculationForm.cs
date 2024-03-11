@@ -27,6 +27,7 @@ namespace GMEPElectricalResidential.LoadCalculations
     private List<int> _buildingCannotBeIDs;
 
     public Commands Commands { get; }
+    public bool FormatCheckboxChecked { get; set; }
 
     public LOAD_CALCULATION_FORM(Commands commands)
     {
@@ -38,6 +39,7 @@ namespace GMEPElectricalResidential.LoadCalculations
 
       bool createdUnitTab = LoadSavedUnitLoadCalculations();
       bool createdBuildingTab = LoadSavedBuildingLoadCalculations();
+      LoadCheckboxState();
 
       if (!createdUnitTab)
       {
@@ -53,6 +55,21 @@ namespace GMEPElectricalResidential.LoadCalculations
       this.TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
       this.BUILDING_TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
       this.UNIT_TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
+    }
+
+    private void LoadCheckboxState()
+    {
+      // Load the checkbox state from the JSON file
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
+      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculations");
+      string checkboxStatePath = Path.Combine(baseSaveDirectory, "CheckboxState.json");
+      if (File.Exists(checkboxStatePath))
+      {
+        string checkboxStateJson = File.ReadAllText(checkboxStatePath);
+        var checkboxState = JsonConvert.DeserializeAnonymousType(checkboxStateJson, new { FormatCheckboxChecked = false });
+        FORMAT.Checked = checkboxState.FormatCheckboxChecked;
+      }
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -286,6 +303,10 @@ namespace GMEPElectricalResidential.LoadCalculations
 
       List<Building.BuildingInformation> allBuildingInformation = AllBuildingInformation();
       HandleBuildingDataSaving(buildingDirectory, allBuildingInformation);
+
+      string checkboxStatePath = Path.Combine(baseSaveDirectory, "CheckboxState.json");
+      string checkboxStateJson = JsonConvert.SerializeObject(new { FormatCheckboxChecked = FORMAT.Checked });
+      File.WriteAllText(checkboxStatePath, checkboxStateJson);
     }
 
     private static void HandleUnitDataSaving(string unitDirectory, List<Unit.UnitInformation> allUnitInformation)
