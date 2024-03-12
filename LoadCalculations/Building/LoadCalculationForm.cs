@@ -279,7 +279,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         int count;
         if (int.TryParse(numberOfUnitsText, out count))
         {
-          var subtotal = count * (selectedUnit.Totals.TotalGeneralLoad + selectedUnit.Totals.CustomLoad);
+          var subtotal = count * (selectedUnit.Totals.TotalGeneralLoad + selectedUnit.Totals.CustomLoad + selectedUnit.Totals.TotalACLoad);
           _buildingInformation.UpdateCounter(selectedUnit, count, subtotal);
           SUBTOTAL_UNIT_LOADS.Text = subtotal.ToString();
         }
@@ -346,7 +346,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       if (counter == null) return;
 
       var existingNumberOfUnits = counter.Count;
-      var newSubtotal = (unitInformation.Totals.TotalGeneralLoad + unitInformation.Totals.CustomLoad) * existingNumberOfUnits;
+      var newSubtotal = (unitInformation.Totals.TotalGeneralLoad + unitInformation.Totals.CustomLoad + unitInformation.Totals.TotalACLoad) * existingNumberOfUnits;
       _buildingInformation.UpdateCounter(unitInformation, existingNumberOfUnits, newSubtotal);
       UpdateBuildingFormInformation();
     }

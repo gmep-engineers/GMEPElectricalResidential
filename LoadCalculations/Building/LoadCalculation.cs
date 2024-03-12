@@ -1,6 +1,7 @@
 ﻿using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
+using Autodesk.AutoCAD.Internal.DatabaseServices;
 using GMEPElectricalResidential.HelperFiles;
 using GMEPElectricalResidential.LoadCalculations.Unit;
 using Newtonsoft.Json;
@@ -103,7 +104,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
         // Create Rows
         List<string> dwellingRowHeaders = RowHeaders.Dwelling;
-        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, dwellingRowHeaders);
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, dwellingRowHeaders);
         shiftHeight -= ROW_HEIGHT * dwellingRowHeaders.Count;
 
         // General Load Area
@@ -113,7 +114,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
         // Create Rows
         List<string> generalLoadRowHeaders = RowHeaders.GeneralLoad;
-        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, generalLoadRowHeaders);
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, generalLoadRowHeaders);
         shiftHeight -= ROW_HEIGHT * generalLoadRowHeaders.Count;
 
         // Optional Water Heater
@@ -121,14 +122,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         {
           // Create Rows
           List<string> optionalWaterHeaterRowHeaders = new List<string> { RowHeaders.OptionalWaterHeater };
-          CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, optionalWaterHeaterRowHeaders);
+          CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, optionalWaterHeaterRowHeaders);
           shiftHeight -= ROW_HEIGHT * optionalWaterHeaterRowHeaders.Count;
         }
 
         // Custom General Loads
         // Create Rows
         List<string> customGeneralLoadRowHeaders = buildingUnitInfo.SelectMany(unit => unit.GeneralLoads.Customs.Select(customLoad => customLoad.Name)).Distinct().ToList();
-        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, customGeneralLoadRowHeaders);
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, customGeneralLoadRowHeaders);
         shiftHeight -= ROW_HEIGHT * customGeneralLoadRowHeaders.Count;
 
         // General Load Calculations
@@ -138,7 +139,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
         // Create Rows
         List<string> generalLoadCalculationsRowHeaders = RowHeaders.GeneralLoadCalculations;
-        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, generalLoadCalculationsRowHeaders);
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, generalLoadCalculationsRowHeaders);
         shiftHeight -= ROW_HEIGHT * generalLoadCalculationsRowHeaders.Count;
 
         // AC Load Area
@@ -148,8 +149,40 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
         // Create Rows
         List<string> acLoadRowHeaders = RowHeaders.ACLoad;
-        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, acLoadRowHeaders);
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, acLoadRowHeaders);
         shiftHeight -= ROW_HEIGHT * acLoadRowHeaders.Count;
+
+        // Custom Loads if they exist
+        if (buildingUnitInfo.Any(unit => unit.CustomLoads.Count > 0))
+        {
+          // Create Subtitle
+          CreateSubtitle(subtitleData, shiftHeight, additionalWidth, point, acBlkTblRec, "Additional Load");
+          shiftHeight -= SUBTITLE_HEIGHT;
+
+          // Create Rows
+          List<string> customLoadRowHeaders = buildingUnitInfo.SelectMany(unit => unit.CustomLoads.Select(customLoad => customLoad.Name)).Distinct().ToList();
+          CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, customLoadRowHeaders, true);
+          shiftHeight -= ROW_HEIGHT * customLoadRowHeaders.Count;
+        }
+
+        // Service Sizing Area
+        // Create Subtitle
+        CreateSubtitle(subtitleData, shiftHeight, additionalWidth, point, acBlkTblRec, "Calculated Load for Service");
+        shiftHeight -= SUBTITLE_HEIGHT;
+
+        // Create Rows
+        List<string> serviceSizingRowHeaders = RowHeaders.ServiceSizingUnits;
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, serviceSizingRowHeaders, false, buildingInfo);
+        shiftHeight -= ROW_HEIGHT * serviceSizingRowHeaders.Count;
+
+        // Create Spacer
+        CreateSpacer(spacerData, shiftHeight, additionalWidth, point, acBlkTblRec);
+        shiftHeight -= ROW_HEIGHT;
+
+        // Create Rows
+        List<string> serviceSizingBuildingRowHeaders = RowHeaders.ServiceSizingBuilding;
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, serviceSizingBuildingRowHeaders, false, buildingInfo, true);
+        shiftHeight -= ROW_HEIGHT * serviceSizingBuildingRowHeaders.Count;
 
         UpdateAllBlockReferences(newBlockName);
 
@@ -228,10 +261,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       CADObjectCommands.CreateObjectFromData(modifiedSubtitleData, point, acBlkTblRec);
     }
 
-    private static void CreateRow(ObjectData rowHeaderData, ObjectData rowEntryData, double shiftHeight, List<UnitInformation> buildingUnitInfo, double additionalWidth, int columnCount, Point3d point, BlockTableRecord acBlkTblRec, List<string> dwellingRowHeaders)
+    private static void CreateRow(ObjectData rowHeaderData, ObjectData rowEntryData, double shiftHeight, List<UnitInformation> buildingUnitInfo, int columnCount, Point3d point, BlockTableRecord acBlkTblRec, List<string> rowHeaders, bool isCustom = false, BuildingInformation buildingInfo = null, bool isBuildingData = false)
     {
       double ROW_HEIGHT = 0.25;
-      foreach (var header in dwellingRowHeaders)
+      foreach (var header in rowHeaders)
       {
         var copiedRowHeaderData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowHeaderData));
         var copiedRowEntryData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowEntryData));
@@ -239,7 +272,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         copiedRowHeaderData = ShiftDataVertically(copiedRowHeaderData, shiftHeight);
         copiedRowEntryData = ShiftDataVertically(copiedRowEntryData, shiftHeight);
 
-        var allRowData = UpdateRowData(copiedRowHeaderData, copiedRowEntryData, buildingUnitInfo, columnCount, header);
+        var allRowData = UpdateRowData(copiedRowHeaderData, copiedRowEntryData, buildingUnitInfo, columnCount, header, isCustom, buildingInfo, isBuildingData);
 
         foreach (var rowData in allRowData)
         {
@@ -251,7 +284,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       }
     }
 
-    private static List<ObjectData> UpdateRowData(ObjectData rowHeaderData, ObjectData rowEntryData, List<UnitInformation> unitInfo, int colCount, string message)
+    private static List<ObjectData> UpdateRowData(ObjectData rowHeaderData, ObjectData rowEntryData, List<UnitInformation> unitInfo, int colCount, string message, bool isCustom = false, BuildingInformation buildingInfo = null, bool isBuildingData = false)
     {
       var startPoint = 6.7033907256843577;
       var COLUMN_WIDTH = 1.5;
@@ -266,15 +299,16 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
       unitInfo = unitInfo.OrderBy(u => u.ID).ToList();
 
-      for (int i = 0; i < colCount; i++)
+      if (isBuildingData)
       {
         var copiedRowEntryData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowEntryData));
 
-        copiedRowEntryData = ShiftDataHorizontally(copiedRowEntryData, COLUMN_WIDTH * i);
+        copiedRowEntryData = ExtendRectangleHorizontally(copiedRowEntryData, COLUMN_WIDTH * (colCount - 1));
+        copiedRowEntryData = ShiftTextHorizontally(copiedRowEntryData, COLUMN_WIDTH * (colCount - 1));
 
-        if (i < unitInfo.Count)
+        if (buildingInfo != null)
         {
-          string value = RowHeaders.GetValueFromUnitInfo(message, unitInfo[i]);
+          string value = RowHeaders.GetValueFromBuildingInfo(message, buildingInfo);
           var textObj = copiedRowEntryData.Texts.FirstOrDefault(text => text.Contents.Contains("A"));
           if (textObj != null)
           {
@@ -284,8 +318,66 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
         rowData.Add(copiedRowEntryData);
       }
+      else
+      {
+        for (int i = 0; i < colCount; i++)
+        {
+          var copiedRowEntryData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowEntryData));
+
+          copiedRowEntryData = ShiftDataHorizontally(copiedRowEntryData, COLUMN_WIDTH * i);
+
+          if (i < unitInfo.Count)
+          {
+            string value = "";
+            if (!isCustom)
+            {
+              value = RowHeaders.GetValueFromUnitInfo(message, unitInfo[i], buildingInfo);
+            }
+            else
+            {
+              value = RowHeaders.GetValueFromCustomUnitInfo(message, unitInfo[i]);
+            }
+            var textObj = copiedRowEntryData.Texts.FirstOrDefault(text => text.Contents.Contains("A"));
+            if (textObj != null)
+            {
+              textObj.Contents = textObj.Contents.Replace("A", value);
+            }
+          }
+
+          rowData.Add(copiedRowEntryData);
+        }
+      }
 
       return rowData;
+    }
+
+    private static ObjectData ShiftTextHorizontally(ObjectData copiedRowEntryData, double shiftDistance)
+    {
+      foreach (var text in copiedRowEntryData.Texts)
+      {
+        text.Location.X += shiftDistance / 2;
+        text.AlignmentPoint.X += shiftDistance / 2;
+      }
+
+      return copiedRowEntryData;
+    }
+
+    private static ObjectData ExtendRectangleHorizontally(ObjectData copiedRowEntryData, double extendDistance)
+    {
+      foreach (var polyline in copiedRowEntryData.Polylines)
+      {
+        for (int i = 0; i < polyline.Vectors.Count; i++)
+        {
+          if (polyline.Vectors[i].X == 8.2033907256843577)
+          {
+            polyline.Vectors[i].X += extendDistance;
+          }
+        }
+      }
+
+      HelperClass.SaveDataToJsonFileOnDesktop(copiedRowEntryData, "copiedRowEntryData.json");
+
+      return copiedRowEntryData;
     }
 
     private static ObjectData UpdateBuildingSubtitleData(ObjectData subtitleData, double additionalWidth, string message)
@@ -562,8 +654,28 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       "Total AC Load (CEC 220.82(C))"
     };
 
-    public static string GetValueFromUnitInfo(string message, UnitInformation unitInfo)
+    public static List<string> ServiceSizingUnits = new List<string>
     {
+      "Number of Units Per Unit Type",
+      "Load Per Unit Type ((Total General + AC + Additional) x # of Units)"
+    };
+
+    public static List<string> ServiceSizingBuilding = new List<string>
+    {
+      "Total Number Of Units",
+      "Total Building Load (Sum of Load Per Unit Types)",
+      "Demand Factor (CEC 220.84)",
+      "Total Building Load with Demand Factor Applied",
+      "House Load",
+      "Total Building Load with Demand Factor Applied & House Load",
+      "Total Amperage @120/208 1 PH",
+      "Recommended Service Size"
+    };
+
+    public static string GetValueFromUnitInfo(string message, UnitInformation unitInfo, BuildingInformation buildingInfo = null)
+    {
+      UnitCounter unitType;
+
       switch (message)
       {
         case "Unit":
@@ -648,9 +760,63 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         case "Total AC Load (CEC 220.82(C))":
           return unitInfo.Totals.TotalACLoad.ToString() + "VA";
 
+        case "Number of Units Per Unit Type":
+          unitType = buildingInfo.Counters.FirstOrDefault(c => c.UnitID == unitInfo.ID);
+          return unitType != null ? unitType.Count.ToString() : "0";
+
+        case "Load Per Unit Type ((Total General + AC + Additional) x # of Units)":
+          unitType = buildingInfo.Counters.FirstOrDefault(c => c.UnitID == unitInfo.ID);
+          return unitType != null ? unitType.SubtotalLoad.ToString() + "VA" : "0VA";
+
         default:
           return TryGeneralCustomLoads(message, unitInfo);
       }
+    }
+
+    public static string GetValueFromBuildingInfo(string message, BuildingInformation buildingInfo)
+    {
+      switch (message)
+      {
+        case "Total Number Of Units":
+          return buildingInfo.TotalUnitCount().ToString();
+
+        case "Total Building Load (Sum of Load Per Unit Types)":
+          return buildingInfo.TotalSubtotalLoad().ToString() + "VA";
+
+        case "Demand Factor (CEC 220.84)":
+          return buildingInfo.DemandFactor().ToString();
+
+        case "Total Building Load with Demand Factor Applied":
+          return buildingInfo.TotalDemandLoad().ToString() + "KVA";
+
+        case "House Load":
+          return buildingInfo.HouseLoad.ToString() + "VA";
+
+        case "Total Building Load with Demand Factor Applied & House Load":
+          return buildingInfo.TotalDemandHouseLoad().ToString() + "VA";
+
+        case "Total Amperage @120/208 1 PH":
+          return buildingInfo.TotalAmperage().ToString() + "A";
+
+        case "Recommended Service Size":
+          return buildingInfo.ServiceRating().ToString() + "A";
+
+        default:
+          return "0VA";
+      }
+    }
+
+    public static string GetValueFromCustomUnitInfo(string message, UnitInformation unitInfo)
+    {
+      foreach (var customLoad in unitInfo.CustomLoads)
+      {
+        if (customLoad.Name == message)
+        {
+          return customLoad.GetLoad().ToString() + "VA";
+        }
+      }
+
+      return "0VA";
     }
 
     private static string TryGeneralCustomLoads(string message, UnitInformation unitInfo)

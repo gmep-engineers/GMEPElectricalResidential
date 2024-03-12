@@ -925,9 +925,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         _toolTip.Hide(multiplierComboBox);
       }
 
-      TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-      name = textInfo.ToTitleCase(name.ToLower());
-
       string newEntry = $"{name}, {va}, {multiplier}";
 
       listBox.Items.Add(newEntry);

@@ -194,9 +194,9 @@
       this.label3.Location = new System.Drawing.Point(16, 499);
       this.label3.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(145, 24);
+      this.label3.Size = new System.Drawing.Size(263, 24);
       this.label3.TabIndex = 59;
-      this.label3.Text = "Number of Units";
+      this.label3.Text = "Number of Units per Unit Type";
       // 
       // label61
       // 
@@ -281,9 +281,9 @@
       this.label16.Location = new System.Drawing.Point(16, 566);
       this.label16.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label16.Name = "label16";
-      this.label16.Size = new System.Drawing.Size(245, 21);
+      this.label16.Size = new System.Drawing.Size(390, 21);
       this.label16.TabIndex = 175;
-      this.label16.Text = "Subtotal Unit Loads";
+      this.label16.Text = "Load per Unit Type (Total General + AC + Additional) ";
       // 
       // label6
       // 
