@@ -88,6 +88,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         ObjectData rowHeaderData = GetCopyPasteData("RowHeader");
         ObjectData rowEntryData = GetCopyPasteData("RowEntry");
         ObjectData subtitleData = GetCopyPasteData("Subtitle");
+        ObjectData spacerData = GetCopyPasteData("Spacer");
 
         // Title
         titleData = UpdateBuildingTitleData(titleData, buildingInfo, additionalWidth);
@@ -130,6 +131,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, customGeneralLoadRowHeaders);
         shiftHeight -= ROW_HEIGHT * customGeneralLoadRowHeaders.Count;
 
+        // General Load Calculations
+        // Create Spacer
+        CreateSpacer(spacerData, shiftHeight, additionalWidth, point, acBlkTblRec);
+        shiftHeight -= ROW_HEIGHT;
+
         UpdateAllBlockReferences(newBlockName);
 
         acTrans.Commit();
@@ -166,6 +172,29 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       }
 
       return INITIAL_WIDTH + additionalWidth;
+    }
+
+    private static void CreateSpacer(ObjectData spacerData, double shiftHeight, double additionalWidth, Point3d point, BlockTableRecord acBlkTblRec)
+    {
+      double INITIAL_WIDTH = 8.2033907256843577;
+
+      var copiedSpacerData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(spacerData));
+
+      copiedSpacerData = ShiftDataVertically(copiedSpacerData, shiftHeight);
+
+      foreach (var polyline in copiedSpacerData.Polylines)
+      {
+        for (int i = 0; i < polyline.Vectors.Count; i++)
+        {
+          if (Math.Abs(polyline.Vectors[i].X - INITIAL_WIDTH) < 0.001)
+          {
+            polyline.Vectors[i].X = INITIAL_WIDTH + additionalWidth;
+          }
+        }
+      }
+
+      string modifiedSpacerData = JsonConvert.SerializeObject(copiedSpacerData);
+      CADObjectCommands.CreateObjectFromData(modifiedSpacerData, point, acBlkTblRec);
     }
 
     private static bool IsWHCustomLoadForAllUnits(List<UnitInformation> allUnitInformation)
@@ -429,7 +458,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       if (buildingUnitInfo.Count > 1)
       {
-        double additionalWidth = (buildingUnitInfo.Count) * COLUMN_WIDTH;
+        double additionalWidth = (buildingUnitInfo.Count - 1) * COLUMN_WIDTH;
         return additionalWidth;
       }
       return 0;
