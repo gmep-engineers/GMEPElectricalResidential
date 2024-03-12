@@ -291,6 +291,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       NUMBER_OF_UNITS.Enabled = true;
       NUMBER_OF_UNITS.Text = "";
+      NUMBER_OF_UNITS.Focus();
+
       var allUnitInfo = _parentForm.AllUnitInformation();
       var selectedUnit = allUnitInfo.FirstOrDefault(unit => unit.FormattedName() == UNIT_TYPES.Text);
       if (selectedUnit != null)
@@ -305,6 +307,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         {
           SUBTOTAL_UNIT_LOADS.Text = "0";
         }
+        NUMBER_OF_UNITS.SelectAll();
       }
     }
 

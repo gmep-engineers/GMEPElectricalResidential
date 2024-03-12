@@ -136,6 +136,21 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         CreateSpacer(spacerData, shiftHeight, additionalWidth, point, acBlkTblRec);
         shiftHeight -= ROW_HEIGHT;
 
+        // Create Rows
+        List<string> generalLoadCalculationsRowHeaders = RowHeaders.GeneralLoadCalculations;
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, generalLoadCalculationsRowHeaders);
+        shiftHeight -= ROW_HEIGHT * generalLoadCalculationsRowHeaders.Count;
+
+        // AC Load Area
+        // Create Subtitle
+        CreateSubtitle(subtitleData, shiftHeight, additionalWidth, point, acBlkTblRec, "AC Load");
+        shiftHeight -= SUBTITLE_HEIGHT;
+
+        // Create Rows
+        List<string> acLoadRowHeaders = RowHeaders.ACLoad;
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, acLoadRowHeaders);
+        shiftHeight -= ROW_HEIGHT * acLoadRowHeaders.Count;
+
         UpdateAllBlockReferences(newBlockName);
 
         acTrans.Commit();
@@ -247,20 +262,16 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       rowHeaderTextObj.Contents = rowHeaderTextObj.Contents.Replace("Unit", message);
       rowData.Add(rowHeaderData);
 
-      // Shift the rowEntryData to the right by the value of startPoint
       rowEntryData = ShiftDataHorizontally(rowEntryData, startPoint);
 
       unitInfo = unitInfo.OrderBy(u => u.ID).ToList();
 
-      // Create a copy of rowEntryData for each column
       for (int i = 0; i < colCount; i++)
       {
         var copiedRowEntryData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowEntryData));
 
-        // Shift the copied rowEntryData to the right by COLUMN_WIDTH * i
         copiedRowEntryData = ShiftDataHorizontally(copiedRowEntryData, COLUMN_WIDTH * i);
 
-        // Update the value of the copied rowEntryData based on the UnitInformation
         if (i < unitInfo.Count)
         {
           string value = RowHeaders.GetValueFromUnitInfo(message, unitInfo[i]);
@@ -543,6 +554,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       "General Calculated Load (CEC 220.82(B))"
     };
 
+    public static List<string> ACLoad = new List<string>
+    {
+      "Outdoor Condensing Unit Load",
+      "Indoor Fan Coil Unit Load",
+      "Space Heating Unit Load",
+      "Total AC Load (CEC 220.82(C))"
+    };
+
     public static string GetValueFromUnitInfo(string message, UnitInformation unitInfo)
     {
       switch (message)
@@ -616,6 +635,18 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         case "General Calculated Load (CEC 220.82(B))":
           int generalCalculatedLoad = unitInfo.Totals.First10KVA() + unitInfo.Totals.RemainderAt40Percent();
           return generalCalculatedLoad.ToString() + "VA";
+
+        case "Outdoor Condensing Unit Load":
+          return unitInfo.ACLoads.Condenser.ToString() + "VA";
+
+        case "Indoor Fan Coil Unit Load":
+          return unitInfo.ACLoads.FanCoil.ToString() + "VA";
+
+        case "Space Heating Unit Load":
+          return unitInfo.ACLoads.HeatingUnit.Heating.ToString() + "VA";
+
+        case "Total AC Load (CEC 220.82(C))":
+          return unitInfo.Totals.TotalACLoad.ToString() + "VA";
 
         default:
           return TryGeneralCustomLoads(message, unitInfo);
