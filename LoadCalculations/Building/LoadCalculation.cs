@@ -17,21 +17,23 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 {
   public class LoadCalculation
   {
-    public static void CreateBuildingLoadCalculationTable(BuildingInformation buildingInfo, List<UnitInformation> allUnitInformation, Point3d placementPoint, bool placeTheBlocks = true)
+    public static double CreateBuildingLoadCalculationTable(BuildingInformation buildingInfo, List<UnitInformation> allUnitInformation, Point3d placementPoint, bool placeTheBlocks = true)
     {
       double HEADER_HEIGHT = 0.75;
       double SUBTITLE_HEIGHT = 0.5;
       double COLUMN_WIDTH = 1.5;
       double WIDTH_NO_COLS = 6.7034;
+      double INITIAL_WIDTH = 8.2033907256843577;
       double currentHeight = HEADER_HEIGHT;
       string newBlockName = $"Building {buildingInfo.Name}" + $" ID{buildingInfo.ID}";
       var buildingUnitInfo = buildingInfo.GetListOfBuildingUnitTypes(allUnitInformation);
+      double additionalWidth = CalculateAdditionalWidth(buildingUnitInfo, COLUMN_WIDTH);
 
       placementPoint = GetStartingPoint(buildingInfo, placementPoint, COLUMN_WIDTH, WIDTH_NO_COLS);
 
       if (buildingInfo == null)
       {
-        return;
+        return 0;
       }
 
       if (buildingInfo.Name == null)
@@ -81,8 +83,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         ObjectData rowHeader = GetCopyPasteData("RowHeader");
         ObjectData rowEntry = GetCopyPasteData("RowEntry");
         ObjectData subtitleData = GetCopyPasteData("Subtitle");
-
-        double additionalWidth = CalculateAdditionalWidth(buildingUnitInfo, COLUMN_WIDTH);
 
         // Title
         titleData = UpdateBuildingTitleData(titleData, buildingInfo, additionalWidth);
@@ -134,6 +134,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           acTrans.Commit();
         }
       }
+
+      return INITIAL_WIDTH + additionalWidth;
     }
 
     private static ObjectData UpdateBuildingSubtitleData(ObjectData subtitleData, double additionalWidth, string message)

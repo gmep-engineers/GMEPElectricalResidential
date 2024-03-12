@@ -427,8 +427,8 @@ namespace GMEPElectricalResidential.LoadCalculations
 
         foreach (var buildingInfo in allBuildingInfo)
         {
-          Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point);
-          point = new Point3d(point.X - 7, point.Y, point.Z);
+          double width = Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point);
+          point = new Point3d(point.X - width, point.Y, point.Z);
         }
       }
     }
