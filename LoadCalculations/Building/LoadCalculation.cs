@@ -11,7 +11,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Media.Media3D;
+using Application = Autodesk.AutoCAD.ApplicationServices.Application;
 
 namespace GMEPElectricalResidential.LoadCalculations.Building
 {
@@ -21,12 +23,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       double HEADER_HEIGHT = 0.75;
       double SUBTITLE_HEIGHT = 0.5;
+      double ROW_HEIGHT = 0.25;
       double COLUMN_WIDTH = 1.5;
       double WIDTH_NO_COLS = 6.7034;
       double INITIAL_WIDTH = 8.2033907256843577;
       double currentHeight = HEADER_HEIGHT;
       string newBlockName = $"Building {buildingInfo.Name}" + $" ID{buildingInfo.ID}";
       var buildingUnitInfo = buildingInfo.GetListOfBuildingUnitTypes(allUnitInformation);
+      var columnCount = buildingUnitInfo.Count;
       double additionalWidth = CalculateAdditionalWidth(buildingUnitInfo, COLUMN_WIDTH);
 
       placementPoint = GetStartingPoint(buildingInfo, placementPoint, COLUMN_WIDTH, WIDTH_NO_COLS);
@@ -80,25 +84,41 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         }
 
         ObjectData titleData = GetCopyPasteData("Title");
-        ObjectData rowHeader = GetCopyPasteData("RowHeader");
-        ObjectData rowEntry = GetCopyPasteData("RowEntry");
+        ObjectData rowHeaderData = GetCopyPasteData("RowHeader");
+        ObjectData rowEntryData = GetCopyPasteData("RowEntry");
         ObjectData subtitleData = GetCopyPasteData("Subtitle");
 
         // Title
         titleData = UpdateBuildingTitleData(titleData, buildingInfo, additionalWidth);
-        var shiftHeight = -HEADER_HEIGHT;
         string modifiedTitleData = JsonConvert.SerializeObject(titleData);
         CADObjectCommands.CreateObjectFromData(modifiedTitleData, point, acBlkTblRec);
 
+        var shiftHeight = -HEADER_HEIGHT;
+
         // Subtitle
-        subtitleData = ShiftData(subtitleData, shiftHeight);
+        subtitleData = ShiftDataVertically(subtitleData, shiftHeight);
         subtitleData = UpdateBuildingSubtitleData(subtitleData, additionalWidth, "Dwelling Information");
-        shiftHeight -= SUBTITLE_HEIGHT;
         string modifiedSubtitleData = JsonConvert.SerializeObject(subtitleData);
         CADObjectCommands.CreateObjectFromData(modifiedSubtitleData, point, acBlkTblRec);
 
-        // Row Header
-        rowHeader = ShiftData(rowHeader, shiftHeight);
+        shiftHeight -= SUBTITLE_HEIGHT;
+
+        // Row
+        var copiedRowHeaderData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowHeaderData));
+        var copiedRowEntryData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowEntryData));
+
+        copiedRowHeaderData = ShiftDataVertically(copiedRowHeaderData, shiftHeight);
+        copiedRowEntryData = ShiftDataVertically(copiedRowEntryData, shiftHeight);
+
+        var allRowData = UpdateRowData(copiedRowHeaderData, copiedRowEntryData, buildingUnitInfo, additionalWidth, columnCount, "Unit");
+
+        foreach (var rowData in allRowData)
+        {
+          string modifiedRowData = JsonConvert.SerializeObject(rowData);
+          CADObjectCommands.CreateObjectFromData(modifiedRowData, point, acBlkTblRec);
+        }
+
+        shiftHeight -= ROW_HEIGHT;
 
         UpdateAllBlockReferences(newBlockName);
 
@@ -136,6 +156,45 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       }
 
       return INITIAL_WIDTH + additionalWidth;
+    }
+
+    private static List<ObjectData> UpdateRowData(ObjectData rowHeaderData, ObjectData rowEntryData, List<UnitInformation> unitInfo, double additionalWidth, int colCount, string message)
+    {
+      var startPoint = 6.7033907256843577;
+      var COLUMN_WIDTH = 1.5;
+      List<ObjectData> rowData = new List<ObjectData>();
+
+      var rowHeaderTextObj = rowHeaderData.Texts.FirstOrDefault(text => text.Contents.Contains("Unit"));
+      rowHeaderTextObj.Contents = rowHeaderTextObj.Contents.Replace("Unit", message);
+
+      rowData.Add(rowHeaderData);
+
+      // Shift the rowEntryData to the right by the value of startPoint
+      rowEntryData = ShiftDataHorizontally(rowEntryData, startPoint);
+
+      // Create a copy of rowEntryData for each column
+      for (int i = 0; i < colCount; i++)
+      {
+        var copiedRowEntryData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowEntryData));
+
+        // Shift the copied rowEntryData to the right by COLUMN_WIDTH * i
+        copiedRowEntryData = ShiftDataHorizontally(copiedRowEntryData, COLUMN_WIDTH * i);
+
+        // Update the value of the copied rowEntryData based on the UnitInformation
+        if (i < unitInfo.Count)
+        {
+          var unitName = unitInfo[i].Name;
+          var textObj = copiedRowEntryData.Texts.FirstOrDefault(text => text.Contents.Contains("A"));
+          if (textObj != null)
+          {
+            textObj.Contents = textObj.Contents.Replace("A", unitName);
+          }
+        }
+
+        rowData.Add(copiedRowEntryData);
+      }
+
+      return rowData;
     }
 
     private static ObjectData UpdateBuildingSubtitleData(ObjectData subtitleData, double additionalWidth, string message)
@@ -196,7 +255,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       }
     }
 
-    private static ObjectData ShiftData(ObjectData bodyData, double shiftHeight)
+    private static ObjectData ShiftDataVertically(ObjectData bodyData, double shiftHeight)
     {
       bodyData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(bodyData));
 
@@ -237,6 +296,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       foreach (var text in bodyData.Texts)
       {
         text.Location.Y += shiftHeight;
+        text.AlignmentPoint.Y += shiftHeight;
       }
 
       foreach (var solid in bodyData.Solids)
@@ -244,6 +304,61 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         for (int i = 0; i < solid.Vertices.Count; i++)
         {
           solid.Vertices[i].Y += shiftHeight;
+        }
+      }
+
+      return bodyData;
+    }
+
+    private static ObjectData ShiftDataHorizontally(ObjectData bodyData, double shiftWidth)
+    {
+      bodyData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(bodyData));
+
+      foreach (var polyline in bodyData.Polylines)
+      {
+        for (int i = 0; i < polyline.Vectors.Count; i++)
+        {
+          polyline.Vectors[i].X += shiftWidth;
+        }
+      }
+
+      foreach (var line in bodyData.Lines)
+      {
+        line.StartPoint.X += shiftWidth;
+        line.EndPoint.X += shiftWidth;
+      }
+
+      foreach (var arc in bodyData.Arcs)
+      {
+        arc.Center.X += shiftWidth;
+      }
+
+      foreach (var circle in bodyData.Circles)
+      {
+        circle.Center.X += shiftWidth;
+      }
+
+      foreach (var ellipse in bodyData.Ellipses)
+      {
+        ellipse.Center.X += shiftWidth;
+      }
+
+      foreach (var mText in bodyData.MTexts)
+      {
+        mText.Location.X += shiftWidth;
+      }
+
+      foreach (var text in bodyData.Texts)
+      {
+        text.Location.X += shiftWidth;
+        text.AlignmentPoint.X += shiftWidth;
+      }
+
+      foreach (var solid in bodyData.Solids)
+      {
+        for (int i = 0; i < solid.Vertices.Count; i++)
+        {
+          solid.Vertices[i].X += shiftWidth;
         }
       }
 

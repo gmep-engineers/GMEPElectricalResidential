@@ -222,13 +222,19 @@ namespace GMEPElectricalResidential.HelperFiles
       dbText.Rotation = text.Rotation;
       SetTextStyleByName(dbText, "Load Calcs");
 
-      dbText.HorizontalMode = (text.HorizontalMode != "Left") ? TextHorizontalMode.TextRight : TextHorizontalMode.TextLeft;
-
-      dbText.Position = new Point3d(basePoint.X + text.Location.X, basePoint.Y + text.Location.Y, basePoint.Z + text.Location.Z);
-
-      if (dbText.HorizontalMode == TextHorizontalMode.TextRight)
+      if (text.HorizontalMode == TextHorizontalMode.TextLeft)
       {
-        dbText.AlignmentPoint = dbText.Position;
+        dbText.Position = new Point3d(basePoint.X + text.Location.X, basePoint.Y + text.Location.Y, basePoint.Z + text.Location.Z);
+      }
+      else if (text.HorizontalMode == TextHorizontalMode.TextCenter)
+      {
+        dbText.HorizontalMode = TextHorizontalMode.TextCenter;
+        dbText.AlignmentPoint = new Point3d(basePoint.X + text.AlignmentPoint.X, basePoint.Y + text.AlignmentPoint.Y, basePoint.Z + text.AlignmentPoint.Z);
+      }
+      else if (text.HorizontalMode == TextHorizontalMode.TextRight)
+      {
+        dbText.HorizontalMode = TextHorizontalMode.TextRight;
+        dbText.AlignmentPoint = new Point3d(basePoint.X + text.Location.X, basePoint.Y + text.Location.Y, basePoint.Z + text.Location.Z);
       }
 
       acBlkTblRec.AppendEntity(dbText);
@@ -509,6 +515,7 @@ namespace GMEPElectricalResidential.HelperFiles
           Y = text.AlignmentPoint.Y - origin.Y,
           Z = text.AlignmentPoint.Z - origin.Z
         },
+        HorizontalMode = text.HorizontalMode,
         IsMirroredInX = text.IsMirroredInX,
         IsMirroredInY = text.IsMirroredInY
       };
@@ -624,7 +631,7 @@ namespace GMEPElectricalResidential.HelperFiles
     public double Height { get; set; }
     public double Rotation { get; set; }
     public SimpleVector3d AlignmentPoint { get; set; }
-    public string HorizontalMode { get; set; }
+    public TextHorizontalMode HorizontalMode { get; set; }
     public bool IsMirroredInX { get; set; }
     public bool IsMirroredInY { get; set; }
   }

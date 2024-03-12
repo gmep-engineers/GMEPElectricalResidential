@@ -585,7 +585,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
           Layer = mText.Layer,
           Rotation = mText.Rotation,
           Style = mText.Style,
-          HorizontalMode = mText.Justification.Replace("Top", "")
+          HorizontalMode = (mText.Justification.Contains("Left") ? TextHorizontalMode.TextLeft : TextHorizontalMode.TextRight),
         };
         textData.Add(text);
       }

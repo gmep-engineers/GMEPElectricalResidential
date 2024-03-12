@@ -14,12 +14,12 @@
         },
         {
           "X": 1.5,
-          "Y": -0.24999999999999822,
+          "Y": -0.25,
           "Z": 0.0
         },
         {
           "X": 0.0,
-          "Y": -0.24999999999999822,
+          "Y": -0.25,
           "Z": 0.0
         }
       ],
@@ -40,7 +40,7 @@
       "Contents": "A",
       "Location": {
         "X": 0.68011596180081924,
-        "Y": -0.19999999999999929,
+        "Y": -0.20000000000000107,
         "Z": 0.0
       },
       "LineSpaceDistance": 1.0,
@@ -48,10 +48,10 @@
       "Rotation": 0.0,
       "AlignmentPoint": {
         "X": 0.75,
-        "Y": -0.125,
+        "Y": -0.12500000000000178,
         "Z": 0.0
       },
-      "HorizontalMode": null,
+      "HorizontalMode": 1,
       "IsMirroredInX": false,
       "IsMirroredInY": false,
       "Layer": "E-TEXT"
