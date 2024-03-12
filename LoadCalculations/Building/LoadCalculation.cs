@@ -124,6 +124,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           shiftHeight -= ROW_HEIGHT * optionalWaterHeaterRowHeaders.Count;
         }
 
+        // Custom General Loads
+        // Create Rows
+        List<string> customGeneralLoadRowHeaders = buildingUnitInfo.SelectMany(unit => unit.GeneralLoads.Customs.Select(customLoad => customLoad.Name)).Distinct().ToList();
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, customGeneralLoadRowHeaders);
+        shiftHeight -= ROW_HEIGHT * customGeneralLoadRowHeaders.Count;
+
         UpdateAllBlockReferences(newBlockName);
 
         acTrans.Commit();
@@ -423,7 +429,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       if (buildingUnitInfo.Count > 1)
       {
-        double additionalWidth = (buildingUnitInfo.Count - 1) * COLUMN_WIDTH;
+        double additionalWidth = (buildingUnitInfo.Count) * COLUMN_WIDTH;
         return additionalWidth;
       }
       return 0;
@@ -581,8 +587,22 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           return generalCalculatedLoad.ToString() + "VA";
 
         default:
-          return "";
+          return TryGeneralCustomLoads(message, unitInfo);
       }
+    }
+
+    private static string TryGeneralCustomLoads(string message, UnitInformation unitInfo)
+    {
+      HelperClass.SaveDataToJsonFileOnDesktop(unitInfo.GeneralLoads, "GeneralLoads.json");
+      foreach (var generalCustomLoad in unitInfo.GeneralLoads.Customs)
+      {
+        if (generalCustomLoad.Name == message)
+        {
+          return generalCustomLoad.GetLoad().ToString() + "VA";
+        }
+      }
+
+      return "0VA";
     }
   }
 }
