@@ -27,6 +27,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       double COLUMN_WIDTH = 1.5;
       double WIDTH_NO_COLS = 6.7034;
       double INITIAL_WIDTH = 8.2033907256843577;
+      double shiftHeight = 0;
       double currentHeight = HEADER_HEIGHT;
       string newBlockName = $"Building {buildingInfo.Name}" + $" ID{buildingInfo.ID}";
       var buildingUnitInfo = buildingInfo.GetListOfBuildingUnitTypes(allUnitInformation);
@@ -92,33 +93,36 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         titleData = UpdateBuildingTitleData(titleData, buildingInfo, additionalWidth);
         string modifiedTitleData = JsonConvert.SerializeObject(titleData);
         CADObjectCommands.CreateObjectFromData(modifiedTitleData, point, acBlkTblRec);
+        shiftHeight -= HEADER_HEIGHT;
 
-        var shiftHeight = -HEADER_HEIGHT;
-
-        // Subtitle
-        subtitleData = ShiftDataVertically(subtitleData, shiftHeight);
-        subtitleData = UpdateBuildingSubtitleData(subtitleData, additionalWidth, "Dwelling Information");
-        string modifiedSubtitleData = JsonConvert.SerializeObject(subtitleData);
-        CADObjectCommands.CreateObjectFromData(modifiedSubtitleData, point, acBlkTblRec);
-
+        // Dwelling Area
+        // Create Subtitle
+        CreateSubtitle(subtitleData, shiftHeight, additionalWidth, point, acBlkTblRec, "Dwelling Information");
         shiftHeight -= SUBTITLE_HEIGHT;
 
-        // Row
-        var copiedRowHeaderData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowHeaderData));
-        var copiedRowEntryData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowEntryData));
+        // Create Rows
+        List<string> dwellingRowHeaders = RowHeaders.Dwelling;
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, dwellingRowHeaders);
+        shiftHeight -= ROW_HEIGHT * dwellingRowHeaders.Count;
 
-        copiedRowHeaderData = ShiftDataVertically(copiedRowHeaderData, shiftHeight);
-        copiedRowEntryData = ShiftDataVertically(copiedRowEntryData, shiftHeight);
+        // General Load Area
+        // Create Subtitle
+        CreateSubtitle(subtitleData, shiftHeight, additionalWidth, point, acBlkTblRec, "General Load");
+        shiftHeight -= SUBTITLE_HEIGHT;
 
-        var allRowData = UpdateRowData(copiedRowHeaderData, copiedRowEntryData, buildingUnitInfo, additionalWidth, columnCount, "Unit");
+        // Create Rows
+        List<string> generalLoadRowHeaders = RowHeaders.GeneralLoad;
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, generalLoadRowHeaders);
+        shiftHeight -= ROW_HEIGHT * generalLoadRowHeaders.Count;
 
-        foreach (var rowData in allRowData)
+        // Optional Water Heater
+        if (!IsWHCustomLoadForAllUnits(allUnitInformation))
         {
-          string modifiedRowData = JsonConvert.SerializeObject(rowData);
-          CADObjectCommands.CreateObjectFromData(modifiedRowData, point, acBlkTblRec);
+          // Create Rows
+          List<string> optionalWaterHeaterRowHeaders = new List<string> { RowHeaders.OptionalWaterHeater };
+          CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, additionalWidth, columnCount, point, acBlkTblRec, optionalWaterHeaterRowHeaders);
+          shiftHeight -= ROW_HEIGHT * optionalWaterHeaterRowHeaders.Count;
         }
-
-        shiftHeight -= ROW_HEIGHT;
 
         UpdateAllBlockReferences(newBlockName);
 
@@ -158,15 +162,54 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       return INITIAL_WIDTH + additionalWidth;
     }
 
+    private static bool IsWHCustomLoadForAllUnits(List<UnitInformation> allUnitInformation)
+    {
+      return allUnitInformation.All(unit => unit.CustomLoads.Any(customLoad => customLoad.Name == "Water Heater"));
+    }
+
+    private static void CreateSubtitle(ObjectData subtitleData, double shiftHeight, double additionalWidth, Point3d point, BlockTableRecord acBlkTblRec, string subtitle)
+    {
+      var copiedSubtitleData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(subtitleData));
+
+      copiedSubtitleData = ShiftDataVertically(copiedSubtitleData, shiftHeight);
+      copiedSubtitleData = UpdateBuildingSubtitleData(copiedSubtitleData, additionalWidth, subtitle);
+
+      string modifiedSubtitleData = JsonConvert.SerializeObject(copiedSubtitleData);
+      CADObjectCommands.CreateObjectFromData(modifiedSubtitleData, point, acBlkTblRec);
+    }
+
+    private static void CreateRow(ObjectData rowHeaderData, ObjectData rowEntryData, double shiftHeight, List<UnitInformation> buildingUnitInfo, double additionalWidth, int columnCount, Point3d point, BlockTableRecord acBlkTblRec, List<string> dwellingRowHeaders)
+    {
+      double ROW_HEIGHT = 0.25;
+      foreach (var header in dwellingRowHeaders)
+      {
+        var copiedRowHeaderData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowHeaderData));
+        var copiedRowEntryData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowEntryData));
+
+        copiedRowHeaderData = ShiftDataVertically(copiedRowHeaderData, shiftHeight);
+        copiedRowEntryData = ShiftDataVertically(copiedRowEntryData, shiftHeight);
+
+        var allRowData = UpdateRowData(copiedRowHeaderData, copiedRowEntryData, buildingUnitInfo, additionalWidth, columnCount, header);
+
+        foreach (var rowData in allRowData)
+        {
+          string modifiedRowData = JsonConvert.SerializeObject(rowData);
+          CADObjectCommands.CreateObjectFromData(modifiedRowData, point, acBlkTblRec);
+        }
+
+        shiftHeight -= ROW_HEIGHT;
+      }
+    }
+
     private static List<ObjectData> UpdateRowData(ObjectData rowHeaderData, ObjectData rowEntryData, List<UnitInformation> unitInfo, double additionalWidth, int colCount, string message)
     {
       var startPoint = 6.7033907256843577;
       var COLUMN_WIDTH = 1.5;
+
       List<ObjectData> rowData = new List<ObjectData>();
 
       var rowHeaderTextObj = rowHeaderData.Texts.FirstOrDefault(text => text.Contents.Contains("Unit"));
       rowHeaderTextObj.Contents = rowHeaderTextObj.Contents.Replace("Unit", message);
-
       rowData.Add(rowHeaderData);
 
       // Shift the rowEntryData to the right by the value of startPoint
@@ -183,11 +226,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         // Update the value of the copied rowEntryData based on the UnitInformation
         if (i < unitInfo.Count)
         {
-          var unitName = unitInfo[i].Name;
+          string value = RowHeaders.GetValueFromUnitInfo(message, unitInfo[i]);
           var textObj = copiedRowEntryData.Texts.FirstOrDefault(text => text.Contents.Contains("A"));
           if (textObj != null)
           {
-            textObj.Contents = textObj.Contents.Replace("A", unitName);
+            textObj.Contents = textObj.Contents.Replace("A", value);
           }
         }
 
@@ -425,6 +468,121 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       var numberOfUnitTypes = counters.Count(c => c.Count > 0);
 
       return numberOfUnitTypes;
+    }
+  }
+
+  public static class RowHeaders
+  {
+    public static List<string> Dwelling = new List<string> {
+      "Unit",
+      "Floor Area"
+    };
+
+    public static List<string> GeneralLoad = new List<string> {
+      "General Lighting Subtotal (Floor Area x 3VA/ft²) (CEC 220.42)",
+      "Small Appliance (3-20ACK by CEC 210.11)",
+      "Laundry (1-20ACKT by CEC 210.11)",
+      "Lighting And Appliance Load Total",
+      "Bathroom (1-20ACKT by CEC 210.11)",
+      "Dishwasher",
+      "Microwave",
+      "Garbage Disposal",
+      "Bathroom Fans",
+      "Garage Door Opener",
+      "Dryer",
+      "Range",
+      "Refrigerator",
+      "Oven",
+      "Cooktop",
+    };
+
+    public static string OptionalWaterHeater = "Water Heater";
+
+    public static List<string> GeneralLoadCalculations = new List<string>
+    {
+      "Total General Load",
+      "First 10 KVA @ 100% (CEC 220.82(B))",
+      "Remaining @ 40% (CEC 220.82(B))",
+      "General Calculated Load (CEC 220.82(B))"
+    };
+
+    public static string GetValueFromUnitInfo(string message, UnitInformation unitInfo)
+    {
+      switch (message)
+      {
+        case "Unit":
+          return unitInfo.Name;
+
+        case "Floor Area":
+          return unitInfo.DwellingArea.FloorArea + "ft²";
+
+        case "General Lighting Subtotal (Floor Area x 3VA/ft²) (CEC 220.42)":
+          return unitInfo.GeneralLoads.Lighting.GetLoad().ToString() + "VA";
+
+        case "Small Appliance (3-20ACK by CEC 210.11)":
+          return unitInfo.GeneralLoads.SmallAppliance.GetLoad().ToString() + "VA";
+
+        case "Laundry (1-20ACKT by CEC 210.11)":
+          return unitInfo.GeneralLoads.Laundry.GetLoad().ToString() + "VA";
+
+        case "Lighting And Appliance Load Total":
+          int lightingAndApplianceTotal = unitInfo.GeneralLoads.Lighting.GetLoad() +
+                                          unitInfo.GeneralLoads.SmallAppliance.GetLoad() +
+                                          unitInfo.GeneralLoads.Laundry.GetLoad();
+          return lightingAndApplianceTotal.ToString() + "VA";
+
+        case "Bathroom (1-20ACKT by CEC 210.11)":
+          return unitInfo.GeneralLoads.Bathroom.GetLoad().ToString() + "VA";
+
+        case "Dishwasher":
+          return unitInfo.GeneralLoads.Dishwasher.GetLoad().ToString() + "VA";
+
+        case "Microwave":
+          return unitInfo.GeneralLoads.MicrowaveOven.GetLoad().ToString() + "VA";
+
+        case "Garbage Disposal":
+          return unitInfo.GeneralLoads.GarbageDisposal.GetLoad().ToString() + "VA";
+
+        case "Bathroom Fans":
+          return unitInfo.GeneralLoads.BathroomFans.GetLoad().ToString() + "VA";
+
+        case "Garage Door Opener":
+          return unitInfo.GeneralLoads.GarageDoorOpener.GetLoad().ToString() + "VA";
+
+        case "Dryer":
+          return unitInfo.GeneralLoads.Dryer.GetLoad().ToString() + "VA";
+
+        case "Range":
+          return unitInfo.GeneralLoads.Range.GetLoad().ToString() + "VA";
+
+        case "Refrigerator":
+          return unitInfo.GeneralLoads.Refrigerator.GetLoad().ToString() + "VA";
+
+        case "Oven":
+          return unitInfo.GeneralLoads.Oven.GetLoad().ToString() + "VA";
+
+        case "Cooktop":
+          return unitInfo.GeneralLoads.Cooktop.GetLoad().ToString() + "VA";
+
+        case "Water Heater":
+          return unitInfo.GeneralLoads.WaterHeater.GetLoad().ToString() + "VA";
+
+        case "Total General Load":
+          return unitInfo.Totals.TotalGeneralLoad.ToString() + "VA";
+
+        case "First 10 KVA @ 100% (CEC 220.82(B))":
+          return unitInfo.Totals.First10KVA().ToString() + "VA";
+
+        case "Remaining @ 40% (CEC 220.82(B))":
+          return unitInfo.Totals.RemainderAt40Percent().ToString() + "VA";
+
+        case "General Calculated Load (CEC 220.82(B))":
+          int generalCalculatedLoad = unitInfo.Totals.First10KVA() + unitInfo.Totals.RemainderAt40Percent();
+          return generalCalculatedLoad.ToString() + "VA";
+
+        default:
+          return "";
+      }
     }
   }
 }
