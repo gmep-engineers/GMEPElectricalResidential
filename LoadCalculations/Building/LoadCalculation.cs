@@ -224,7 +224,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         copiedRowHeaderData = ShiftDataVertically(copiedRowHeaderData, shiftHeight);
         copiedRowEntryData = ShiftDataVertically(copiedRowEntryData, shiftHeight);
 
-        var allRowData = UpdateRowData(copiedRowHeaderData, copiedRowEntryData, buildingUnitInfo, additionalWidth, columnCount, header);
+        var allRowData = UpdateRowData(copiedRowHeaderData, copiedRowEntryData, buildingUnitInfo, columnCount, header);
 
         foreach (var rowData in allRowData)
         {
@@ -236,7 +236,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       }
     }
 
-    private static List<ObjectData> UpdateRowData(ObjectData rowHeaderData, ObjectData rowEntryData, List<UnitInformation> unitInfo, double additionalWidth, int colCount, string message)
+    private static List<ObjectData> UpdateRowData(ObjectData rowHeaderData, ObjectData rowEntryData, List<UnitInformation> unitInfo, int colCount, string message)
     {
       var startPoint = 6.7033907256843577;
       var COLUMN_WIDTH = 1.5;
@@ -249,6 +249,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
       // Shift the rowEntryData to the right by the value of startPoint
       rowEntryData = ShiftDataHorizontally(rowEntryData, startPoint);
+
+      unitInfo = unitInfo.OrderBy(u => u.ID).ToList();
 
       // Create a copy of rowEntryData for each column
       for (int i = 0; i < colCount; i++)
