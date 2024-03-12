@@ -220,6 +220,7 @@ namespace GMEPElectricalResidential.HelperFiles
       dbText.TextString = text.Contents;
       dbText.Height = text.Height;
       dbText.Rotation = text.Rotation;
+
       SetTextStyleByName(dbText, "Load Calcs");
 
       if (text.HorizontalMode == TextHorizontalMode.TextLeft)
@@ -230,6 +231,7 @@ namespace GMEPElectricalResidential.HelperFiles
       {
         dbText.HorizontalMode = TextHorizontalMode.TextCenter;
         dbText.AlignmentPoint = new Point3d(basePoint.X + text.AlignmentPoint.X, basePoint.Y + text.AlignmentPoint.Y, basePoint.Z + text.AlignmentPoint.Z);
+        dbText.Justify = text.Justification;
       }
       else if (text.HorizontalMode == TextHorizontalMode.TextRight)
       {
@@ -515,6 +517,7 @@ namespace GMEPElectricalResidential.HelperFiles
           Y = text.AlignmentPoint.Y - origin.Y,
           Z = text.AlignmentPoint.Z - origin.Z
         },
+        Justification = text.Justify,
         HorizontalMode = text.HorizontalMode,
         IsMirroredInX = text.IsMirroredInX,
         IsMirroredInY = text.IsMirroredInY
@@ -624,7 +627,7 @@ namespace GMEPElectricalResidential.HelperFiles
   public class TextData : BaseData
   {
     public string Style { get; set; }
-    public string Justification { get; set; }
+    public AttachmentPoint Justification { get; set; }
     public string Contents { get; set; }
     public SimpleVector3d Location { get; set; }
     public double LineSpaceDistance { get; set; }
