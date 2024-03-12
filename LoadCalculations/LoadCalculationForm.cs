@@ -268,6 +268,19 @@ namespace GMEPElectricalResidential.LoadCalculations
       return allBuildingInformation;
     }
 
+    public void UpdateBuildingData(Unit.UnitInformation unitInformation)
+    {
+      for (int i = 0; i < BUILDING_TAB_CONTROL.TabCount; i++)
+      {
+        var tabPage = BUILDING_TAB_CONTROL.TabPages[i];
+        var buildingLoadCalculationForm = tabPage.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
+        if (buildingLoadCalculationForm != null)
+        {
+          buildingLoadCalculationForm.UpdateUnitData(unitInformation);
+        }
+      }
+    }
+
     private void SaveLoadCalculationForm()
     {
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
@@ -436,19 +449,6 @@ namespace GMEPElectricalResidential.LoadCalculations
     private void SAVE_BUTTON_Click(object sender, EventArgs e)
     {
       SaveLoadCalculationForm();
-    }
-
-    public void UpdateBuildingData(Unit.UnitInformation unitInformation)
-    {
-      for (int i = 0; i < BUILDING_TAB_CONTROL.TabCount; i++)
-      {
-        var tabPage = BUILDING_TAB_CONTROL.TabPages[i];
-        var buildingLoadCalculationForm = tabPage.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
-        if (buildingLoadCalculationForm != null)
-        {
-          buildingLoadCalculationForm.UpdateUnitData(unitInformation);
-        }
-      }
     }
 
     private void UPDATE_Click(object sender, EventArgs e)

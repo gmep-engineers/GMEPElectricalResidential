@@ -118,7 +118,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         shiftHeight -= ROW_HEIGHT * generalLoadRowHeaders.Count;
 
         // Optional Water Heater
-        if (!IsWHCustomLoadForAllUnits(allUnitInformation))
+        if (!IsWHCustomLoadForAllUnits(buildingUnitInfo))
         {
           // Create Rows
           List<string> optionalWaterHeaterRowHeaders = new List<string> { RowHeaders.OptionalWaterHeater };
@@ -219,7 +219,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         }
       }
 
-      return INITIAL_WIDTH + additionalWidth;
+      if (columnCount == 1)
+      {
+        return INITIAL_WIDTH;
+      }
+      else
+      {
+        return INITIAL_WIDTH + additionalWidth;
+      }
     }
 
     private static void CreateSpacer(ObjectData spacerData, double shiftHeight, double additionalWidth, Point3d point, BlockTableRecord acBlkTblRec)
@@ -374,8 +381,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           }
         }
       }
-
-      HelperClass.SaveDataToJsonFileOnDesktop(copiedRowEntryData, "copiedRowEntryData.json");
 
       return copiedRowEntryData;
     }
@@ -821,7 +826,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
     private static string TryGeneralCustomLoads(string message, UnitInformation unitInfo)
     {
-      HelperClass.SaveDataToJsonFileOnDesktop(unitInfo.GeneralLoads, "GeneralLoads.json");
       foreach (var generalCustomLoad in unitInfo.GeneralLoads.Customs)
       {
         if (generalCustomLoad.Name == message)
