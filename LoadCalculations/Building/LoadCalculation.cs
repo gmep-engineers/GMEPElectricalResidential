@@ -181,6 +181,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
         // Create Rows
         List<string> serviceSizingBuildingRowHeaders = RowHeaders.ServiceSizingBuilding;
+        UpdateBuildingCalculationVoltage(serviceSizingBuildingRowHeaders, buildingInfo);
         CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, serviceSizingBuildingRowHeaders, false, buildingInfo, true);
         shiftHeight -= ROW_HEIGHT * serviceSizingBuildingRowHeaders.Count;
 
@@ -390,6 +391,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       var textObj = subtitleData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Dwelling Information"));
       textObj.Contents = textObj.Contents.Replace("Dwelling Information", message);
+      textObj.Contents = textObj.Contents.Replace("\\Farial|c0", "\\fArial Rounded MT Bold|b1|i1|c0|p34");
       UpdateTitleOrSubtitleText(subtitleData, additionalWidth, true);
 
       return subtitleData;
@@ -399,6 +401,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       var serviceLoadCalculationMText = titleData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
       serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - BUILDING {buildingInfo.Name}");
+      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("\\Farial|c0", "\\fArial Rounded MT Bold|b1|i0|c0|p34");
       UpdateTitleOrSubtitleText(titleData, additionalWidth);
 
       return titleData;
@@ -621,6 +624,18 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       var numberOfUnitTypes = counters.Count(c => c.Count > 0);
 
       return numberOfUnitTypes;
+    }
+
+    private static void UpdateBuildingCalculationVoltage(List<string> serviceSizingBuildingRowHeaders, BuildingInformation buildingInfo)
+    {
+      for (int i = 0; i < serviceSizingBuildingRowHeaders.Count; i++)
+      {
+        if (serviceSizingBuildingRowHeaders[i].Contains("120/208"))
+        {
+          serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("208", buildingInfo.Voltage.ToString());
+          break;
+        }
+      }
     }
   }
 

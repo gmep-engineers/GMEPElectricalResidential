@@ -204,7 +204,43 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var serviceLoadCalculationMText = headerData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
       serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - UNIT {unitInfo.Name}");
+      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("\\Farial|c0", "\\fArial Rounded MT Bold|b1|i0|c0|p34");
       return headerData;
+    }
+
+    private static ObjectData UpdateDwellingData(ObjectData dwellingBodyData, UnitInformation unitInfo)
+    {
+      var headers = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
+
+      if (headers != null)
+      {
+        headers.Contents = "";
+        string dwellingTitle = "Dwelling Information:".Underline().BoldItalic().NewLine();
+        string dwellingSubtitles = "Floor Area:".NewLine() +
+                                   "Heater:".NewLine() +
+                                   "Dryer:".NewLine() +
+                                   "Oven:".NewLine() +
+                                   "Cooktop:";
+        string dwellingTitleAndSubtitles = dwellingTitle + dwellingSubtitles;
+        headers.Contents = dwellingTitleAndSubtitles.SetFont("Arial");
+      }
+
+      var values = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
+      if (values != null)
+      {
+        values.Contents = "";
+        string dwellingValues = "".NewLine() +
+                                $"{unitInfo.DwellingArea.FloorArea}ft\u00B2".NewLine() +
+                                $"{unitInfo.DwellingArea.Heater}".NewLine() +
+                                $"{unitInfo.DwellingArea.Dryer}".NewLine() +
+                                $"{unitInfo.DwellingArea.Oven}".NewLine() +
+                                $"{unitInfo.DwellingArea.Cooktop}";
+        values.Contents = dwellingValues.SetFont("Arial");
+      }
+
+      dwellingBodyData.NumberOfRows = 6;
+
+      return dwellingBodyData;
     }
 
     private static ObjectData UpdateServiceData(ObjectData serviceBodyData, UnitInformation unitInfo)
@@ -214,7 +250,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       if (headers != null)
       {
         headers.Contents = "";
-        string serviceSubtitles = "Calculated Load for Service:".Underline().NewLine();
+        string serviceSubtitles = "Calculated Load for Service:".Underline().BoldItalic().NewLine();
 
         serviceSubtitles += $"({unitInfo.Totals.SubtotalGeneralLoad}VA+{unitInfo.Totals.TotalACLoad}VA+{unitInfo.Totals.CustomLoad}VA)/{unitInfo.Voltage}={unitInfo.Totals.ServiceLoad}A (Service Rating)".NewLine().NewLine();
 
@@ -250,7 +286,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
         if (unitInfo.CustomLoads.Count > 0)
         {
-          customSubtitles = "Additional Load:".Underline().NewLine();
+          customSubtitles = "Additional Load:".Underline().BoldItalic().NewLine();
           startingRows++;
         }
 
@@ -294,7 +330,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       if (headers != null)
       {
         headers.Contents = "";
-        string dwellingSubtitles = "AC Load:".Underline().NewLine();
+        string dwellingSubtitles = "AC Load:".Underline().BoldItalic().NewLine();
         if (unitInfo.ACLoads.Condenser > 0)
         {
           dwellingSubtitles += "Outdoor Condensing Unit:".NewLine();
@@ -382,10 +418,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var headers = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
       if (headers != null)
       {
-        HelperClass.SaveDataToJsonFileOnDesktop(unitInfo, "unitInfo.json");
         contents = new List<string>
         {
-            "%%uGeneral Load:",
             $"General Lighting (Floor Area x 3VA/ft²) (CEC {UnitGeneralLoadContainer.LightingCode}):",
             $"Small Appliance (3-20ACK by CEC 210.11){((unitInfo.GeneralLoads.SmallAppliance.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.SmallAppliance.Multiplier}):")}",
             $"Laundry (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Laundry.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Laundry.Multiplier}):")}",
@@ -420,7 +454,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
         AddTextObjectsToObjectData(generalBodyData, contents, headers, 0.25, 0.16);
 
-        headers.Contents = "";
+        headers.Contents = "General Load:".Underline().BoldItalic();
       }
 
       var values = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
@@ -428,7 +462,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         List<string> generalValues = new List<string>
         {
-            "",
             $"{unitInfo.GeneralLoads.Lighting.VA * unitInfo.GeneralLoads.Lighting.Multiplier}VA",
             $"{unitInfo.GeneralLoads.SmallAppliance.VA * unitInfo.GeneralLoads.SmallAppliance.Multiplier}VA",
             $"{unitInfo.GeneralLoads.Laundry.VA * unitInfo.GeneralLoads.Laundry.Multiplier}VA",
@@ -545,9 +578,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private static int InsertTitleLightingBreakdownDwelling(int index, UnitInformation unitInfo, List<string> contents)
     {
-      contents.Insert(index, "   0-3kVA @ 100%:");
-      contents.Insert(index + 1, "   3-120kVA @ 35%:");
-      contents.Insert(index + 2, "   120+kVA @ 25%:");
+      contents.Insert(index, "   0-3KVA @ 100%:");
+      contents.Insert(index + 1, "   3-120KVA @ 35%:");
+      contents.Insert(index + 2, "   120+KVA @ 25%:");
       contents.Insert(index + 3, "   Lighting Subtotal:");
 
       return 4;
@@ -555,9 +588,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private static int InsertTitleLightingBreakdownHotelMotel(int index, UnitInformation unitInfo, List<string> contents)
     {
-      contents.Insert(index, "   0-20kVA @ 60%:");
-      contents.Insert(index + 1, "   20-100kVA @ 50%:");
-      contents.Insert(index + 2, "   100+kVA @ 35%:");
+      contents.Insert(index, "   0-20KVA @ 60%:");
+      contents.Insert(index + 1, "   20-100KVA @ 50%:");
+      contents.Insert(index + 2, "   100+KVA @ 35%:");
       contents.Insert(index + 3, "   Lighting Subtotal:");
 
       return 4;
@@ -565,8 +598,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private static int InsertTitleLightingBreakdownWarehouse(int index, UnitInformation unitInfo, List<string> contents)
     {
-      contents.Insert(index, "   0-12.5kVA @ 100%:");
-      contents.Insert(index + 1, "   12.5+kVA @ 50%:");
+      contents.Insert(index, "   0-12.5KVA @ 100%:");
+      contents.Insert(index + 1, "   12.5+KVA @ 50%:");
       contents.Insert(index + 2, "   Lighting Subtotal:");
 
       return 3;
@@ -580,7 +613,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         TextData text = new TextData
         {
           Contents = lines[i],
-          Location = new SimpleVector3d(mText.Location.X, mText.Location.Y - marginTop - (spacing * i), 0),
+          Location = new SimpleVector3d(mText.Location.X, mText.Location.Y - marginTop - ((spacing * i) + 0.25), 0),
           Height = mText.TextHeight,
           Layer = mText.Layer,
           Rotation = mText.Rotation,
@@ -591,40 +624,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       }
 
       objectData.Texts.AddRange(textData);
-    }
-
-    private static ObjectData UpdateDwellingData(ObjectData dwellingBodyData, UnitInformation unitInfo)
-    {
-      var headers = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
-      if (headers != null)
-      {
-        headers.Contents = "";
-        string dwellingTitle = "Dwelling Information:".Underline().NewLine();
-        string dwellingSubtitles = "Floor Area:".NewLine() +
-                                   "Heater:".NewLine() +
-                                   "Dryer:".NewLine() +
-                                   "Oven:".NewLine() +
-                                   "Cooktop:";
-        string dwellingTitleAndSubtitles = dwellingTitle + dwellingSubtitles;
-        headers.Contents = dwellingTitleAndSubtitles.SetFont("Arial");
-      }
-
-      var values = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
-      if (values != null)
-      {
-        values.Contents = "";
-        string dwellingValues = "".NewLine() +
-                                $"{unitInfo.DwellingArea.FloorArea}ft\u00B2".NewLine() +
-                                $"{unitInfo.DwellingArea.Heater}".NewLine() +
-                                $"{unitInfo.DwellingArea.Dryer}".NewLine() +
-                                $"{unitInfo.DwellingArea.Oven}".NewLine() +
-                                $"{unitInfo.DwellingArea.Cooktop}";
-        values.Contents = dwellingValues.SetFont("Arial");
-      }
-
-      dwellingBodyData.NumberOfRows = 6;
-
-      return dwellingBodyData;
     }
 
     private static double CreateUnitLoadCalculationRectangle(Point3d point, double shiftY, int numberOfRows, BlockTableRecord block)
@@ -754,9 +753,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return "\\L" + text + "\\l";
     }
 
-    public static string MakeBold(this string text)
+    public static string BoldItalic(this string text)
     {
-      return "{\\b1;" + text + "}";
+      return "{\\fArial Rounded MT Bold|b1|i1|c0|p34;" + text + "}";
+    }
+
+    public static string Bold(this string text)
+    {
+      return "{\\fArial Rounded MT Bold|b1|i0|c0|p34;" + text + "}";
     }
 
     public static string NewLine(this string text)
