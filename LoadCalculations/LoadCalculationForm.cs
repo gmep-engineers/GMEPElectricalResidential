@@ -425,6 +425,11 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private void CREATE_Click(object sender, EventArgs e)
     {
+      CreateOrUpdateLoadCalculations(true);
+    }
+
+    private void CreateOrUpdateLoadCalculations(bool isCreate)
+    {
       var allUnitInfo = AllUnitInformation();
       var allBuildingInfo = AllBuildingInformation();
 
@@ -436,7 +441,7 @@ namespace GMEPElectricalResidential.LoadCalculations
 
         foreach (var unitInfo in allUnitInfo)
         {
-          Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo, point);
+          Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo, point, isCreate);
           point = new Point3d(point.X - 7, point.Y, point.Z);
         }
 
@@ -444,7 +449,7 @@ namespace GMEPElectricalResidential.LoadCalculations
         {
           var numberOfUnits = buildingInfo.TotalNumberOfUnits();
 
-          if (numberOfUnits <= 1) return;
+          if (numberOfUnits <= 1) continue;
 
           if (numberOfUnits == 2)
           {
@@ -453,7 +458,7 @@ namespace GMEPElectricalResidential.LoadCalculations
             if (unitInfo1 != null)
             {
               var unitInfo2 = unitInfo1;
-              Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, true, unitInfo2);
+              Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, isCreate, unitInfo2);
               point = new Point3d(point.X - 7, point.Y, point.Z);
             }
             else
@@ -472,14 +477,14 @@ namespace GMEPElectricalResidential.LoadCalculations
                   unitInfo2 = temp;
                 }
 
-                Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, true, unitInfo2);
+                Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, isCreate, unitInfo2);
                 point = new Point3d(point.X - 7, point.Y, point.Z);
               }
             }
           }
           else
           {
-            double width = Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point);
+            double width = Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point, isCreate);
             point = new Point3d(point.X - width, point.Y, point.Z);
           }
         }
@@ -493,60 +498,7 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private void UPDATE_Click(object sender, EventArgs e)
     {
-      var allUnitInfo = AllUnitInformation();
-      var allBuildingInfo = AllBuildingInformation();
-
-      Autodesk.AutoCAD.ApplicationServices.Application.MainWindow.Focus();
-
-      using (DocumentLock docLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument())
-      {
-        Point3d point = HelperClass.UserClick();
-
-        foreach (var unitInfo in allUnitInfo)
-        {
-          Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo, point, false);
-        }
-
-        foreach (var buildingInfo in allBuildingInfo)
-        {
-          var numberOfUnits = buildingInfo.TotalNumberOfUnits();
-          if (numberOfUnits <= 1) return;
-
-          if (numberOfUnits == 2)
-          {
-            var unitInfo1 = allUnitInfo.FirstOrDefault(unit => buildingInfo.Counters.Count(counter => counter.UnitID == unit.ID) == 2);
-
-            if (unitInfo1 != null)
-            {
-              var unitInfo2 = unitInfo1;
-              Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, false, unitInfo2);
-            }
-            else
-            {
-              var units = allUnitInfo.Where(unit => buildingInfo.Counters.Count(counter => counter.UnitID == unit.ID) == 1).ToList();
-
-              if (units.Count == 2)
-              {
-                unitInfo1 = units[0];
-                var unitInfo2 = units[1];
-
-                if (unitInfo1.ID > unitInfo2.ID)
-                {
-                  var temp = unitInfo1;
-                  unitInfo1 = unitInfo2;
-                  unitInfo2 = temp;
-                }
-
-                Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, false, unitInfo2);
-              }
-            }
-          }
-          else
-          {
-            double width = Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point, false);
-          }
-        }
-      }
+      CreateOrUpdateLoadCalculations(false);
     }
 
     private void DUPLICATE_Click(object sender, EventArgs e)
