@@ -316,7 +316,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
         if (buildingInfo != null)
         {
-          HelperClass.SaveDataToJsonFileOnDesktop(buildingInfo, "buildingInfo.json");
           string value = RowHeaders.GetValueFromBuildingInfo(message, buildingInfo);
           var textObj = copiedRowEntryData.Texts.FirstOrDefault(text => text.Contents.Contains("A"));
           if (textObj != null)
