@@ -39,6 +39,7 @@
       this.CREATE = new System.Windows.Forms.Button();
       this.UPDATE = new System.Windows.Forms.Button();
       this.FORMAT = new System.Windows.Forms.CheckBox();
+      this.DUPLICATE = new System.Windows.Forms.Button();
       this.TAB_CONTROL.SuspendLayout();
       this.UNIT_TAB.SuspendLayout();
       this.BUILDING_TAB.SuspendLayout();
@@ -158,7 +159,7 @@
       this.FORMAT.Checked = true;
       this.FORMAT.CheckState = System.Windows.Forms.CheckState.Checked;
       this.FORMAT.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.FORMAT.Location = new System.Drawing.Point(19, 172);
+      this.FORMAT.Location = new System.Drawing.Point(26, 212);
       this.FORMAT.Name = "FORMAT";
       this.FORMAT.Size = new System.Drawing.Size(69, 78);
       this.FORMAT.TabIndex = 205;
@@ -166,12 +167,24 @@
       this.FORMAT.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       this.FORMAT.UseVisualStyleBackColor = true;
       // 
+      // DUPLICATE
+      // 
+      this.DUPLICATE.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.DUPLICATE.Location = new System.Drawing.Point(12, 172);
+      this.DUPLICATE.Name = "DUPLICATE";
+      this.DUPLICATE.Size = new System.Drawing.Size(83, 34);
+      this.DUPLICATE.TabIndex = 206;
+      this.DUPLICATE.Text = "Duplicate";
+      this.DUPLICATE.UseVisualStyleBackColor = true;
+      this.DUPLICATE.Click += new System.EventHandler(this.DUPLICATE_Click);
+      // 
       // LOAD_CALCULATION_FORM
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Control;
       this.ClientSize = new System.Drawing.Size(1671, 727);
+      this.Controls.Add(this.DUPLICATE);
       this.Controls.Add(this.FORMAT);
       this.Controls.Add(this.UPDATE);
       this.Controls.Add(this.CREATE);
@@ -202,5 +215,6 @@
     private System.Windows.Forms.TabControl BUILDING_TAB_CONTROL;
     private System.Windows.Forms.Button UPDATE;
     private System.Windows.Forms.CheckBox FORMAT;
+    private System.Windows.Forms.Button DUPLICATE;
   }
 }

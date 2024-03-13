@@ -356,7 +356,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
   {
     public string Name { get; set; }
     public string Voltage { get; set; }
-    public int ID { get; }
+    public int ID { get; set; }
     public int? HouseLoad { get; set; }
     public List<UnitCounter> Counters { get; set; }
 
@@ -490,16 +490,17 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       return (HouseLoad ?? 0) + (int)Math.Ceiling(TotalDemandLoad() * 1000);
     }
 
-    public double TotalAmperage()
+    public int TotalAmperage()
     {
       int voltage = int.Parse(Voltage.TrimEnd('V'));
-      return TotalDemandHouseLoad() / voltage;
+      double totalDemandHouseLoad = (double)TotalDemandHouseLoad();
+      return (int)Math.Ceiling(totalDemandHouseLoad / voltage);
     }
 
     public int ServiceRating()
     {
       int[] possibleValues = { 30, 60, 100, 125, 150, 200, 400, 600, 800, 1000, 1200, 1600, 2000, 2500, 3000 };
-      int totalAmperage = (int)Math.Ceiling(TotalAmperage());
+      int totalAmperage = TotalAmperage();
       int? serviceRating = possibleValues.FirstOrDefault(value => value >= totalAmperage);
 
       if (serviceRating == 0)

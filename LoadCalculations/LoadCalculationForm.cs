@@ -472,5 +472,83 @@ namespace GMEPElectricalResidential.LoadCalculations
         }
       }
     }
+
+    private void DUPLICATE_Click(object sender, EventArgs e)
+    {
+      if (TAB_CONTROL.SelectedTab == UNIT_TAB)
+      {
+        if (UNIT_TAB_CONTROL.SelectedTab != null)
+        {
+          var selectedTabPage = UNIT_TAB_CONTROL.SelectedTab;
+          var selectedLoadCalculationForm = selectedTabPage.Controls.OfType<Unit.LoadCalculationForm>().FirstOrDefault();
+          if (selectedLoadCalculationForm != null)
+          {
+            var unitInformation = selectedLoadCalculationForm.RetrieveUnitInformation();
+
+            // Generate a new unit ID
+            int newUnitID = _UnitTabID + 1;
+            while (_unitCannotBeIDs.Contains(newUnitID))
+            {
+              newUnitID++;
+            }
+
+            var serializedUnitInformation = JsonConvert.SerializeObject(unitInformation);
+            var newUnitInformation = JsonConvert.DeserializeObject<Unit.UnitInformation>(serializedUnitInformation);
+
+            // Update the unit information with the new ID
+            newUnitInformation.ID = newUnitID;
+
+            // Add the new ID to the list of taken IDs
+            _unitCannotBeIDs.Add(newUnitID);
+
+            // Create a new tab with the updated unit information
+            TabPage newTabPage = new TabPage(newUnitInformation.FormattedName());
+            newTabPage.Tag = newUnitID;
+            Unit.LoadCalculationForm unitLoadCalculation = new Unit.LoadCalculationForm(this, newUnitID, newUnitInformation);
+            newTabPage.Controls.Add(unitLoadCalculation);
+            UNIT_TAB_CONTROL.TabPages.Add(newTabPage);
+
+            UNIT_TAB_CONTROL.SelectedIndex = UNIT_TAB_CONTROL.TabCount - 1;
+          }
+        }
+      }
+      else if (TAB_CONTROL.SelectedTab == BUILDING_TAB)
+      {
+        if (BUILDING_TAB_CONTROL.SelectedTab != null)
+        {
+          var selectedTabPage = BUILDING_TAB_CONTROL.SelectedTab;
+          var selectedLoadCalculationForm = selectedTabPage.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
+          if (selectedLoadCalculationForm != null)
+          {
+            var buildingInformation = selectedLoadCalculationForm.RetrieveBuildingInformation();
+
+            // Generate a new building ID
+            int newBuildingID = _BuildingTabID + 1;
+            while (_buildingCannotBeIDs.Contains(newBuildingID))
+            {
+              newBuildingID++;
+            }
+
+            var serializedBuildingInformation = JsonConvert.SerializeObject(buildingInformation);
+            var newBuildingInformation = JsonConvert.DeserializeObject<Building.BuildingInformation>(serializedBuildingInformation);
+
+            // Update the building information with the new ID
+            newBuildingInformation.ID = newBuildingID;
+
+            // Add the new ID to the list of taken IDs
+            _buildingCannotBeIDs.Add(newBuildingID);
+
+            // Create a new tab with the updated building information
+            TabPage newTabPage = new TabPage("Building " + newBuildingInformation.Name);
+            newTabPage.Tag = newBuildingID;
+            Building.LoadCalculationForm buildingLoadCalculation = new Building.LoadCalculationForm(this, newBuildingID, newBuildingInformation);
+            newTabPage.Controls.Add(buildingLoadCalculation);
+            BUILDING_TAB_CONTROL.TabPages.Add(newTabPage);
+
+            BUILDING_TAB_CONTROL.SelectedIndex = BUILDING_TAB_CONTROL.TabCount - 1;
+          }
+        }
+      }
+    }
   }
 }

@@ -306,7 +306,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
       unitInfo = unitInfo.OrderBy(u => u.ID).ToList();
 
-      if (isBuildingData)
+      if (isBuildingData && buildingInfo.Counters.Count != 0)
       {
         var copiedRowEntryData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowEntryData));
 
@@ -315,6 +315,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
         if (buildingInfo != null)
         {
+          HelperClass.SaveDataToJsonFileOnDesktop(buildingInfo, "buildingInfo.json");
           string value = RowHeaders.GetValueFromBuildingInfo(message, buildingInfo);
           var textObj = copiedRowEntryData.Texts.FirstOrDefault(text => text.Contents.Contains("A"));
           if (textObj != null)
@@ -571,7 +572,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         double additionalWidth = (buildingUnitInfo.Count - 1) * COLUMN_WIDTH;
         return additionalWidth;
       }
-      return 0;
+      else if (buildingUnitInfo.Count == 1)
+      {
+        return 0;
+      }
+      else
+      {
+        return -COLUMN_WIDTH;
+      }
     }
 
     private static void UpdateTitleOrSubtitleText(ObjectData titleData, double additionalWidth, bool isSubtitle = false)
