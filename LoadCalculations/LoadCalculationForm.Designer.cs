@@ -38,7 +38,7 @@
       this.SAVE_BUTTON = new System.Windows.Forms.Button();
       this.CREATE = new System.Windows.Forms.Button();
       this.UPDATE = new System.Windows.Forms.Button();
-      this.FORMAT = new System.Windows.Forms.CheckBox();
+      this.GROUP_BUILDING_CALCS = new System.Windows.Forms.CheckBox();
       this.DUPLICATE = new System.Windows.Forms.Button();
       this.TAB_CONTROL.SuspendLayout();
       this.UNIT_TAB.SuspendLayout();
@@ -152,20 +152,20 @@
       this.UPDATE.UseVisualStyleBackColor = true;
       this.UPDATE.Click += new System.EventHandler(this.UPDATE_Click);
       // 
-      // FORMAT
+      // GROUP_BUILDING_CALCS
       // 
-      this.FORMAT.AutoSize = true;
-      this.FORMAT.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
-      this.FORMAT.Checked = true;
-      this.FORMAT.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.FORMAT.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.FORMAT.Location = new System.Drawing.Point(26, 212);
-      this.FORMAT.Name = "FORMAT";
-      this.FORMAT.Size = new System.Drawing.Size(69, 78);
-      this.FORMAT.TabIndex = 205;
-      this.FORMAT.Text = "Group\r\nBuilding\r\nCalcs";
-      this.FORMAT.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-      this.FORMAT.UseVisualStyleBackColor = true;
+      this.GROUP_BUILDING_CALCS.AutoSize = true;
+      this.GROUP_BUILDING_CALCS.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
+      this.GROUP_BUILDING_CALCS.Checked = true;
+      this.GROUP_BUILDING_CALCS.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.GROUP_BUILDING_CALCS.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.GROUP_BUILDING_CALCS.Location = new System.Drawing.Point(26, 212);
+      this.GROUP_BUILDING_CALCS.Name = "GROUP_BUILDING_CALCS";
+      this.GROUP_BUILDING_CALCS.Size = new System.Drawing.Size(69, 78);
+      this.GROUP_BUILDING_CALCS.TabIndex = 205;
+      this.GROUP_BUILDING_CALCS.Text = "Group\r\nBuilding\r\nCalcs";
+      this.GROUP_BUILDING_CALCS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      this.GROUP_BUILDING_CALCS.UseVisualStyleBackColor = true;
       // 
       // DUPLICATE
       // 
@@ -185,7 +185,7 @@
       this.BackColor = System.Drawing.SystemColors.Control;
       this.ClientSize = new System.Drawing.Size(1671, 727);
       this.Controls.Add(this.DUPLICATE);
-      this.Controls.Add(this.FORMAT);
+      this.Controls.Add(this.GROUP_BUILDING_CALCS);
       this.Controls.Add(this.UPDATE);
       this.Controls.Add(this.CREATE);
       this.Controls.Add(this.SAVE_BUTTON);
@@ -214,7 +214,7 @@
     private System.Windows.Forms.TabControl UNIT_TAB_CONTROL;
     private System.Windows.Forms.TabControl BUILDING_TAB_CONTROL;
     private System.Windows.Forms.Button UPDATE;
-    private System.Windows.Forms.CheckBox FORMAT;
+    private System.Windows.Forms.CheckBox GROUP_BUILDING_CALCS;
     private System.Windows.Forms.Button DUPLICATE;
   }
 }

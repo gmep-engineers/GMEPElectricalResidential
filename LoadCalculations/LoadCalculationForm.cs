@@ -4,6 +4,8 @@ using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
 using GMEPElectricalResidential.HelperFiles;
+using GMEPElectricalResidential.LoadCalculations.Building;
+using GMEPElectricalResidential.LoadCalculations.Unit;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -69,7 +71,7 @@ namespace GMEPElectricalResidential.LoadCalculations
       {
         string checkboxStateJson = File.ReadAllText(checkboxStatePath);
         var checkboxState = JsonConvert.DeserializeAnonymousType(checkboxStateJson, new { FormatCheckboxChecked = false });
-        FORMAT.Checked = checkboxState.FormatCheckboxChecked;
+        GROUP_BUILDING_CALCS.Checked = checkboxState.FormatCheckboxChecked;
       }
     }
 
@@ -319,7 +321,7 @@ namespace GMEPElectricalResidential.LoadCalculations
       HandleBuildingDataSaving(buildingDirectory, allBuildingInformation);
 
       string checkboxStatePath = Path.Combine(baseSaveDirectory, "CheckboxState.json");
-      string checkboxStateJson = JsonConvert.SerializeObject(new { FormatCheckboxChecked = FORMAT.Checked });
+      string checkboxStateJson = JsonConvert.SerializeObject(new { FormatCheckboxChecked = GROUP_BUILDING_CALCS.Checked });
       File.WriteAllText(checkboxStatePath, checkboxStateJson);
     }
 
@@ -438,6 +440,7 @@ namespace GMEPElectricalResidential.LoadCalculations
       using (DocumentLock docLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument())
       {
         Point3d point = new Point3d(0, 0, 0);
+
         if (isCreate)
         {
           point = HelperClass.UserClick();
@@ -449,51 +452,62 @@ namespace GMEPElectricalResidential.LoadCalculations
           point = new Point3d(point.X - 7, point.Y, point.Z);
         }
 
+        int numberOfBuildingsWithThreeOrMoreUnits = allBuildingInfo.Count(building => building.TotalNumberOfUnits() >= 3);
+        bool combinedBuildingCalculation = GROUP_BUILDING_CALCS.Checked;
+
         foreach (var buildingInfo in allBuildingInfo)
         {
           var numberOfUnits = buildingInfo.TotalNumberOfUnits();
-          HelperClass.WriteMessageToAutoCADConsole($"Number of units: {numberOfUnits}\r");
 
-          if (numberOfUnits <= 1) continue;
+          if (numberOfUnits != 2) continue;
 
-          if (numberOfUnits == 2)
-          {
-            var unitInfo1 = allUnitInfo.FirstOrDefault(unit => buildingInfo.Counters.Any(counter => counter.Count == 2));
+          point = CreateComboUnitLoadCalculationTable(isCreate, allUnitInfo, point, buildingInfo);
+        }
 
-            if (unitInfo1 != null)
-            {
-              var unitInfo2 = unitInfo1;
-              Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, isCreate, unitInfo2);
-              point = new Point3d(point.X - 7, point.Y, point.Z);
-            }
-            else
-            {
-              var units = allUnitInfo.Where(unit => buildingInfo.Counters.Count(counter => counter.UnitID == unit.ID) == 1).ToList();
+        foreach (var buildingInfo in allBuildingInfo)
+        {
+          var numberOfUnits = buildingInfo.TotalNumberOfUnits();
 
-              if (units.Count == 2)
-              {
-                unitInfo1 = units[0];
-                var unitInfo2 = units[1];
+          if (numberOfUnits < 3) continue;
 
-                if (unitInfo1.ID > unitInfo2.ID)
-                {
-                  var temp = unitInfo1;
-                  unitInfo1 = unitInfo2;
-                  unitInfo2 = temp;
-                }
-
-                Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, isCreate, unitInfo2);
-                point = new Point3d(point.X - 7, point.Y, point.Z);
-              }
-            }
-          }
-          else
-          {
-            double width = Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point, isCreate);
-            point = new Point3d(point.X - width, point.Y, point.Z);
-          }
+          double width = Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point, isCreate);
+          point = new Point3d(point.X - width, point.Y, point.Z);
         }
       }
+    }
+
+    private static Point3d CreateComboUnitLoadCalculationTable(bool isCreate, List<UnitInformation> allUnitInfo, Point3d point, BuildingInformation buildingInfo)
+    {
+      var unitInfo1 = allUnitInfo.FirstOrDefault(unit => buildingInfo.Counters.Any(counter => counter.Count == 2));
+
+      if (unitInfo1 != null)
+      {
+        var unitInfo2 = unitInfo1;
+        Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, isCreate, unitInfo2);
+        point = new Point3d(point.X - 7, point.Y, point.Z);
+      }
+      else
+      {
+        var units = allUnitInfo.Where(unit => buildingInfo.Counters.Count(counter => counter.UnitID == unit.ID) == 1).ToList();
+
+        if (units.Count == 2)
+        {
+          unitInfo1 = units[0];
+          var unitInfo2 = units[1];
+
+          if (unitInfo1.ID > unitInfo2.ID)
+          {
+            var temp = unitInfo1;
+            unitInfo1 = unitInfo2;
+            unitInfo2 = temp;
+          }
+
+          Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, isCreate, unitInfo2);
+          point = new Point3d(point.X - 7, point.Y, point.Z);
+        }
+      }
+
+      return point;
     }
 
     private void SAVE_BUTTON_Click(object sender, EventArgs e)
