@@ -437,7 +437,11 @@ namespace GMEPElectricalResidential.LoadCalculations
 
       using (DocumentLock docLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument())
       {
-        Point3d point = HelperClass.UserClick();
+        Point3d point = new Point3d(0, 0, 0);
+        if (isCreate)
+        {
+          point = HelperClass.UserClick();
+        }
 
         foreach (var unitInfo in allUnitInfo)
         {
@@ -448,6 +452,7 @@ namespace GMEPElectricalResidential.LoadCalculations
         foreach (var buildingInfo in allBuildingInfo)
         {
           var numberOfUnits = buildingInfo.TotalNumberOfUnits();
+          HelperClass.WriteMessageToAutoCADConsole($"Number of units: {numberOfUnits}\r");
 
           if (numberOfUnits <= 1) continue;
 
