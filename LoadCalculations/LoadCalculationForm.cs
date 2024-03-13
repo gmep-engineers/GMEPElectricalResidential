@@ -433,6 +433,7 @@ namespace GMEPElectricalResidential.LoadCalculations
       using (DocumentLock docLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument())
       {
         Point3d point = HelperClass.UserClick();
+
         foreach (var unitInfo in allUnitInfo)
         {
           Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo, point);
@@ -442,21 +443,39 @@ namespace GMEPElectricalResidential.LoadCalculations
         foreach (var buildingInfo in allBuildingInfo)
         {
           var numberOfUnits = buildingInfo.TotalNumberOfUnits();
+
           if (numberOfUnits <= 1) return;
+
           if (numberOfUnits == 2)
           {
-            var unitInfo1 = allUnitInfo.FirstOrDefault(unit => unit.ID == buildingInfo.Counters[0].UnitID);
-            var unitInfo2 = allUnitInfo.FirstOrDefault(unit => unit.ID == buildingInfo.Counters[1].UnitID);
+            var unitInfo1 = allUnitInfo.FirstOrDefault(unit => buildingInfo.Counters.Any(counter => counter.Count == 2));
 
-            if (unitInfo1.ID > unitInfo2.ID)
+            if (unitInfo1 != null)
             {
-              var temp = unitInfo1;
-              unitInfo1 = unitInfo2;
-              unitInfo2 = temp;
+              var unitInfo2 = unitInfo1;
+              Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, true, unitInfo2);
+              point = new Point3d(point.X - 7, point.Y, point.Z);
             }
+            else
+            {
+              var units = allUnitInfo.Where(unit => buildingInfo.Counters.Count(counter => counter.UnitID == unit.ID) == 1).ToList();
 
-            Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, true, unitInfo2);
-            point = new Point3d(point.X - 7, point.Y, point.Z);
+              if (units.Count == 2)
+              {
+                unitInfo1 = units[0];
+                var unitInfo2 = units[1];
+
+                if (unitInfo1.ID > unitInfo2.ID)
+                {
+                  var temp = unitInfo1;
+                  unitInfo1 = unitInfo2;
+                  unitInfo2 = temp;
+                }
+
+                Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, true, unitInfo2);
+                point = new Point3d(point.X - 7, point.Y, point.Z);
+              }
+            }
           }
           else
           {
@@ -481,7 +500,8 @@ namespace GMEPElectricalResidential.LoadCalculations
 
       using (DocumentLock docLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument())
       {
-        Point3d point = new Point3d(0, 0, 0);
+        Point3d point = HelperClass.UserClick();
+
         foreach (var unitInfo in allUnitInfo)
         {
           Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo, point, false);
@@ -491,23 +511,39 @@ namespace GMEPElectricalResidential.LoadCalculations
         {
           var numberOfUnits = buildingInfo.TotalNumberOfUnits();
           if (numberOfUnits <= 1) return;
+
           if (numberOfUnits == 2)
           {
-            var unitInfo1 = allUnitInfo.FirstOrDefault(unit => unit.ID == buildingInfo.Counters[0].UnitID);
-            var unitInfo2 = allUnitInfo.FirstOrDefault(unit => unit.ID == buildingInfo.Counters[1].UnitID);
+            var unitInfo1 = allUnitInfo.FirstOrDefault(unit => buildingInfo.Counters.Count(counter => counter.UnitID == unit.ID) == 2);
 
-            if (unitInfo1.ID > unitInfo2.ID)
+            if (unitInfo1 != null)
             {
-              var temp = unitInfo1;
-              unitInfo1 = unitInfo2;
-              unitInfo2 = temp;
+              var unitInfo2 = unitInfo1;
+              Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, false, unitInfo2);
             }
+            else
+            {
+              var units = allUnitInfo.Where(unit => buildingInfo.Counters.Count(counter => counter.UnitID == unit.ID) == 1).ToList();
 
-            Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, false, unitInfo2);
+              if (units.Count == 2)
+              {
+                unitInfo1 = units[0];
+                var unitInfo2 = units[1];
+
+                if (unitInfo1.ID > unitInfo2.ID)
+                {
+                  var temp = unitInfo1;
+                  unitInfo1 = unitInfo2;
+                  unitInfo2 = temp;
+                }
+
+                Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, false, unitInfo2);
+              }
+            }
           }
           else
           {
-            Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point, false);
+            double width = Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point, false);
           }
         }
       }

@@ -55,7 +55,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         {
           existingBlock = acBlkTbl.Cast<ObjectId>()
               .Select(id => acTrans.GetObject(id, OpenMode.ForRead) as BlockTableRecord)
-              .FirstOrDefault(btr => btr.Name.Contains($"ID{unitInfo2.ID}") && btr.Name.Contains($"ID{unitInfo.ID}") && btr.Name.Contains("Unit"));
+              .FirstOrDefault(btr => btr.Name.Contains($"Unit {unitInfo.Name} ID{unitInfo.ID} & {unitInfo2.Name} ID{unitInfo2.ID}"));
         }
 
         if (existingBlock != null)
