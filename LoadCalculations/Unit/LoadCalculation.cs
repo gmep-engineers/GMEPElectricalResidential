@@ -15,11 +15,16 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 {
   public class LoadCalculation
   {
-    public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d placementPoint, bool placeTheBlocks = true)
+    public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d placementPoint, bool placeTheBlocks = true, UnitInformation unitInfo2 = null)
     {
       double HEADER_HEIGHT = 0.75;
       double currentHeight = HEADER_HEIGHT;
       string newBlockName = $"Unit {unitInfo.Name}" + $" ID{unitInfo.ID}";
+
+      if (unitInfo2 != null)
+      {
+        newBlockName += $" & {unitInfo2.Name}" + $" ID{unitInfo2.ID}";
+      }
 
       if (unitInfo == null)
       {
@@ -45,6 +50,13 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         var existingBlock = acBlkTbl.Cast<ObjectId>()
             .Select(id => acTrans.GetObject(id, OpenMode.ForRead) as BlockTableRecord)
             .FirstOrDefault(btr => btr.Name.Contains($"ID{unitInfo.ID}") && btr.Name.Contains("Unit"));
+
+        if (unitInfo2 != null)
+        {
+          existingBlock = acBlkTbl.Cast<ObjectId>()
+              .Select(id => acTrans.GetObject(id, OpenMode.ForRead) as BlockTableRecord)
+              .FirstOrDefault(btr => btr.Name.Contains($"ID{unitInfo2.ID}") && btr.Name.Contains($"ID{unitInfo.ID}") && btr.Name.Contains("Unit"));
+        }
 
         if (existingBlock != null)
         {
@@ -72,10 +84,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         ObjectData headerData = GetCopyPasteData("UnitLoadCalculationHeader");
         ObjectData bodyData = GetCopyPasteData("UnitLoadCalculationBody");
 
-        headerData = UpdateHeaderData(headerData, unitInfo);
+        headerData = UpdateHeaderData(headerData, unitInfo, unitInfo2);
 
         ObjectData dwellingBodyData = ShiftData(bodyData, -currentHeight);
-        dwellingBodyData = UpdateDwellingData(dwellingBodyData, unitInfo);
+        dwellingBodyData = UpdateDwellingData(dwellingBodyData, unitInfo, unitInfo2);
         double dwellingSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, dwellingBodyData.NumberOfRows, acBlkTblRec);
 
         currentHeight += dwellingSectionHeight;
@@ -200,15 +212,22 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       }
     }
 
-    private static ObjectData UpdateHeaderData(ObjectData headerData, UnitInformation unitInfo)
+    private static ObjectData UpdateHeaderData(ObjectData headerData, UnitInformation unitInfo, UnitInformation unitInfo2 = null)
     {
       var serviceLoadCalculationMText = headerData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
-      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - UNIT {unitInfo.Name}");
+      if (unitInfo2 == null)
+      {
+        serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - UNIT {unitInfo.Name}");
+      }
+      else
+      {
+        serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - UNIT {unitInfo.Name} & {unitInfo2.Name}");
+      }
       serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("\\Farial|c0", "\\fArial Rounded MT Bold|b1|i0|c0|p34");
       return headerData;
     }
 
-    private static ObjectData UpdateDwellingData(ObjectData dwellingBodyData, UnitInformation unitInfo)
+    private static ObjectData UpdateDwellingData(ObjectData dwellingBodyData, UnitInformation unitInfo, UnitInformation unitInfo2 = null)
     {
       var headers = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
 
@@ -228,13 +247,34 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var values = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
       if (values != null)
       {
+        int area1 = 0;
+        int area2 = 0;
+        string heater2 = "";
+        string dryer2 = "";
+        string oven2 = "";
+        string cooktop2 = "";
+
+        if (unitInfo2 != null)
+        {
+          area1 = int.Parse(unitInfo.DwellingArea.FloorArea);
+          area2 = int.Parse(unitInfo2.DwellingArea.FloorArea);
+          heater2 = $"/{unitInfo2.DwellingArea.Heater}";
+          dryer2 = $"/{unitInfo2.DwellingArea.Dryer}";
+          oven2 = $"/{unitInfo2.DwellingArea.Oven}";
+          cooktop2 = $"/{unitInfo2.DwellingArea.Cooktop}";
+        }
+        else
+        {
+          area1 = int.Parse(unitInfo.DwellingArea.FloorArea);
+        }
+
         values.Contents = "";
         string dwellingValues = "".NewLine() +
-                                $"{unitInfo.DwellingArea.FloorArea}ft\u00B2".NewLine() +
-                                $"{unitInfo.DwellingArea.Heater}".NewLine() +
-                                $"{unitInfo.DwellingArea.Dryer}".NewLine() +
-                                $"{unitInfo.DwellingArea.Oven}".NewLine() +
-                                $"{unitInfo.DwellingArea.Cooktop}";
+                                $"{area1 + area2}ft\u00B2".NewLine() +
+                                $"{unitInfo.DwellingArea.Heater}{heater2}".NewLine() +
+                                $"{unitInfo.DwellingArea.Dryer}{dryer2}".NewLine() +
+                                $"{unitInfo.DwellingArea.Oven}{oven2}".NewLine() +
+                                $"{unitInfo.DwellingArea.Cooktop}{cooktop2}";
         values.Contents = dwellingValues.SetFont("Arial");
       }
 

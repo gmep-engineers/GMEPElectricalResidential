@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.PerformanceData;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -440,8 +441,28 @@ namespace GMEPElectricalResidential.LoadCalculations
 
         foreach (var buildingInfo in allBuildingInfo)
         {
-          double width = Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point);
-          point = new Point3d(point.X - width, point.Y, point.Z);
+          var numberOfUnits = buildingInfo.TotalNumberOfUnits();
+          if (numberOfUnits <= 1) return;
+          if (numberOfUnits == 2)
+          {
+            var unitInfo1 = allUnitInfo.FirstOrDefault(unit => unit.ID == buildingInfo.Counters[0].UnitID);
+            var unitInfo2 = allUnitInfo.FirstOrDefault(unit => unit.ID == buildingInfo.Counters[1].UnitID);
+
+            if (unitInfo1.ID > unitInfo2.ID)
+            {
+              var temp = unitInfo1;
+              unitInfo1 = unitInfo2;
+              unitInfo2 = temp;
+            }
+
+            Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, true, unitInfo2);
+            point = new Point3d(point.X - 7, point.Y, point.Z);
+          }
+          else
+          {
+            double width = Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point);
+            point = new Point3d(point.X - width, point.Y, point.Z);
+          }
         }
       }
     }
@@ -468,7 +489,26 @@ namespace GMEPElectricalResidential.LoadCalculations
 
         foreach (var buildingInfo in allBuildingInfo)
         {
-          Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point, false);
+          var numberOfUnits = buildingInfo.TotalNumberOfUnits();
+          if (numberOfUnits <= 1) return;
+          if (numberOfUnits == 2)
+          {
+            var unitInfo1 = allUnitInfo.FirstOrDefault(unit => unit.ID == buildingInfo.Counters[0].UnitID);
+            var unitInfo2 = allUnitInfo.FirstOrDefault(unit => unit.ID == buildingInfo.Counters[1].UnitID);
+
+            if (unitInfo1.ID > unitInfo2.ID)
+            {
+              var temp = unitInfo1;
+              unitInfo1 = unitInfo2;
+              unitInfo2 = temp;
+            }
+
+            Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, false, unitInfo2);
+          }
+          else
+          {
+            Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point, false);
+          }
         }
       }
     }
