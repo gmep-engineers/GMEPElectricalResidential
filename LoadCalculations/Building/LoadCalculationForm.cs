@@ -1,4 +1,5 @@
-﻿using GMEPElectricalResidential.LoadCalculations.Unit;
+﻿using GMEPElectricalResidential.HelperFiles;
+using GMEPElectricalResidential.LoadCalculations.Unit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -185,7 +186,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         int selectionStart = HOUSE_LOAD.SelectionStart;
         int selectionLength = HOUSE_LOAD.SelectionLength;
-        if (selectionLength > 1)
+        if (selectionLength >= 1)
         {
           houseLoadText = houseLoadText.Remove(selectionStart, selectionLength);
         }
@@ -247,7 +248,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         int selectionStart = NUMBER_OF_UNITS.SelectionStart;
         int selectionLength = NUMBER_OF_UNITS.SelectionLength;
-        if (selectionLength > 1)
+        HelperClass.WriteMessageToAutoCADConsole($"Selection Start: {selectionStart}, Selection Length: {selectionLength}");
+        if (selectionLength >= 1)
         {
           numberOfUnitsText = numberOfUnitsText.Remove(selectionStart, selectionLength);
         }
