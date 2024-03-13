@@ -249,19 +249,32 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         int area1 = 0;
         int area2 = 0;
-        string heater2 = "";
-        string dryer2 = "";
-        string oven2 = "";
-        string cooktop2 = "";
+        string heater = unitInfo.DwellingArea.Heater.ToString();
+        string dryer = unitInfo.DwellingArea.Dryer.ToString();
+        string oven = unitInfo.DwellingArea.Oven.ToString();
+        string cooktop = unitInfo.DwellingArea.Cooktop.ToString();
 
         if (unitInfo2 != null)
         {
           area1 = int.Parse(unitInfo.DwellingArea.FloorArea);
           area2 = int.Parse(unitInfo2.DwellingArea.FloorArea);
-          heater2 = $"/{unitInfo2.DwellingArea.Heater}";
-          dryer2 = $"/{unitInfo2.DwellingArea.Dryer}";
-          oven2 = $"/{unitInfo2.DwellingArea.Oven}";
-          cooktop2 = $"/{unitInfo2.DwellingArea.Cooktop}";
+
+          if (unitInfo.DwellingArea.Heater != unitInfo2.DwellingArea.Heater)
+          {
+            heater += $"/{unitInfo2.DwellingArea.Heater}";
+          }
+          if (unitInfo.DwellingArea.Dryer != unitInfo2.DwellingArea.Dryer)
+          {
+            dryer += $"/{unitInfo2.DwellingArea.Dryer}";
+          }
+          if (unitInfo.DwellingArea.Oven != unitInfo2.DwellingArea.Oven)
+          {
+            oven += $"/{unitInfo2.DwellingArea.Oven}";
+          }
+          if (unitInfo.DwellingArea.Cooktop != unitInfo2.DwellingArea.Cooktop)
+          {
+            cooktop += $"/{unitInfo2.DwellingArea.Cooktop}";
+          }
         }
         else
         {
@@ -271,10 +284,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         values.Contents = "";
         string dwellingValues = "".NewLine() +
                                 $"{area1 + area2}ft\u00B2".NewLine() +
-                                $"{unitInfo.DwellingArea.Heater}{heater2}".NewLine() +
-                                $"{unitInfo.DwellingArea.Dryer}{dryer2}".NewLine() +
-                                $"{unitInfo.DwellingArea.Oven}{oven2}".NewLine() +
-                                $"{unitInfo.DwellingArea.Cooktop}{cooktop2}";
+                                $"{heater}".NewLine() +
+                                $"{dryer}".NewLine() +
+                                $"{oven}".NewLine() +
+                                $"{cooktop}";
         values.Contents = dwellingValues.SetFont("Arial");
       }
 
@@ -286,6 +299,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     private static ObjectData UpdateServiceData(ObjectData serviceBodyData, UnitInformation unitInfo, UnitInformation unitInfo2 = null)
     {
       int startingRows = 4;
+      int totalServiceRating = unitInfo.Totals.ServiceRating() + (unitInfo2?.Totals.ServiceRating() ?? 0);
       var headers = serviceBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
       if (headers != null)
       {
@@ -296,7 +310,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         int totalTotalACLoad = unitInfo.Totals.TotalACLoad + (unitInfo2?.Totals.TotalACLoad ?? 0);
         int totalCustomLoad = unitInfo.Totals.CustomLoad + (unitInfo2?.Totals.CustomLoad ?? 0);
 
-        serviceSubtitles += $"({totalSubtotalGeneralLoad}VA+{totalTotalACLoad}VA+{totalCustomLoad}VA)/{unitInfo.Voltage}={unitInfo.Totals.ServiceLoad}A (Service Rating)".NewLine().NewLine();
+        serviceSubtitles += $"({totalSubtotalGeneralLoad}VA+{totalTotalACLoad}VA+{totalCustomLoad}VA)/{unitInfo.Voltage}={totalServiceRating}A (Service Rating)".NewLine().NewLine();
 
         serviceSubtitles += "Provided Service Rating:";
 
@@ -308,8 +322,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         values.Contents = "";
         string serviceValues = "".NewLine().NewLine().NewLine();
-
-        int totalServiceRating = unitInfo.Totals.ServiceRating() + (unitInfo2?.Totals.ServiceRating() ?? 0);
 
         serviceValues += $"{totalServiceRating}A";
 
@@ -523,7 +535,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
           startingRows++;
         });
 
-        startingRows += InsertTitleLightingBreakdown(2, unitInfo, contents);
+        startingRows += InsertTitleLightingBreakdown(1, unitInfo, contents);
 
         AddTextObjectsToObjectData(generalBodyData, contents, headers, 0.25, 0.16);
 
@@ -563,7 +575,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
           generalValues.Add($"{customLoad.VA}VA");
         });
 
-        InsertValueLightingBreakdown(2, unitInfo, generalValues, unitInfo2);
+        InsertValueLightingBreakdown(1, unitInfo, generalValues, unitInfo2);
 
         AddTextObjectsToObjectData(generalBodyData, generalValues, values, 0.25, 0.16);
 
