@@ -467,11 +467,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var values = generalBodyCalcData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
       if (values != null)
       {
+        var unitTotal = new UnitTotalContainer();
+        unitTotal.TotalGeneralLoad = unitInfo.Totals.TotalGeneralLoad + (unitInfo2?.Totals.TotalGeneralLoad ?? 0);
+        unitTotal.SubtotalGeneralLoad = unitInfo.Totals.SubtotalGeneralLoad + (unitInfo2?.Totals.SubtotalGeneralLoad ?? 0);
         values.Contents = "";
-        string dwellingValues = $"{unitInfo.Totals.TotalGeneralLoad + (unitInfo2?.Totals.TotalGeneralLoad ?? 0)}VA".NewLine() +
-                                $"{unitInfo.Totals.First10KVA() + (unitInfo2?.Totals.First10KVA() ?? 0)}VA".NewLine() +
-                                $"{unitInfo.Totals.RemainderAt40Percent() + (unitInfo2?.Totals.RemainderAt40Percent() ?? 0)}VA".NewLine() +
-                                $"{unitInfo.Totals.SubtotalGeneralLoad + (unitInfo2?.Totals.SubtotalGeneralLoad ?? 0)}VA".NewLine();
+        string dwellingValues = $"{unitTotal.TotalGeneralLoad}VA".NewLine() +
+                                $"{unitTotal.First10KVA()}VA".NewLine() +
+                                $"{unitTotal.RemainderAt40Percent()}VA".NewLine() +
+                                $"{unitTotal.SubtotalGeneralLoad}VA".NewLine();
 
         values.Contents = dwellingValues.SetFont("Arial");
       }
