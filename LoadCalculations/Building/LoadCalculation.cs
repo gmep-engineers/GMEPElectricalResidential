@@ -806,28 +806,32 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       switch (message)
       {
         case "Total Number Of Units":
-          return buildingInfo.TotalUnitCount().ToString();
+          return buildingInfo.TotalNumberOfUnits().ToString();
 
         case "Total Building Load (Sum of Load Per Unit Types)":
-          return buildingInfo.TotalSubtotalLoad().ToString() + "VA";
+          return buildingInfo.TotalBuildingLoad().ConvertToKVA().ToString("0.0") + "KVA";
 
         case "Demand Factor (CEC 220.84)":
           return buildingInfo.DemandFactor().ToString();
 
         case "Total Building Load with Demand Factor Applied":
-          return buildingInfo.TotalDemandLoad().ToString() + "KVA";
+          return buildingInfo.TotalBuildingLoadWithDemandFactor().ConvertToKVA().ToString("0.0") + "KVA";
 
         case "House Load":
-          return buildingInfo.HouseLoad.ToString() + "VA";
+          int houseLoad = (buildingInfo.HouseLoad ?? 0);
+          return houseLoad.ConvertToKVA().ToString("0.0") + "KVA";
 
         case "Total Building Load with Demand Factor Applied & House Load":
-          return buildingInfo.TotalDemandHouseLoad().ToString() + "VA";
+          return buildingInfo.TotalBuildingLoadWithDemandFactorAndHouseLoad().ConvertToKVA().ToString("0.0") + "KVA";
 
-        case "Total Amperage @120/208 1 PH":
+        case "Total Amperage @120/208V 1 PH":
+          return buildingInfo.TotalAmperage().ToString() + "A";
+
+        case "Total Amperage @120/240V 1 PH":
           return buildingInfo.TotalAmperage().ToString() + "A";
 
         case "Recommended Service Size":
-          return buildingInfo.ServiceRating().ToString() + "A";
+          return buildingInfo.RecommendedServiceSize().ToString() + "A";
 
         default:
           return "0VA";
