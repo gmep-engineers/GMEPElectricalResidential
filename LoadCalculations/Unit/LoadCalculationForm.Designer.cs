@@ -74,7 +74,6 @@
       this.ADD_ENTRY = new System.Windows.Forms.Button();
       this.REMOVE_ENTRY = new System.Windows.Forms.Button();
       this.REMOVE_ENTRY_CUSTOM = new System.Windows.Forms.Button();
-      this.ADD_ENTRY_CUSTOM = new System.Windows.Forms.Button();
       this.CUSTOM_LOAD_BOX = new System.Windows.Forms.ListBox();
       this.label16 = new System.Windows.Forms.Label();
       this.TOTAL_GENERAL_LOAD_CALCULATION = new System.Windows.Forms.Label();
@@ -112,24 +111,12 @@
       this.label77 = new System.Windows.Forms.Label();
       this.label78 = new System.Windows.Forms.Label();
       this.label80 = new System.Windows.Forms.Label();
-      this.panel3 = new System.Windows.Forms.Panel();
-      this.GENERAL_CUSTOM_TOTAL = new System.Windows.Forms.TextBox();
       this.label6 = new System.Windows.Forms.Label();
-      this.label7 = new System.Windows.Forms.Label();
-      this.label9 = new System.Windows.Forms.Label();
       this.label10 = new System.Windows.Forms.Label();
-      this.label11 = new System.Windows.Forms.Label();
       this.label12 = new System.Windows.Forms.Label();
-      this.UPDATE_ENTRY = new System.Windows.Forms.Button();
-      this.UPDATE_CUSTOM_ENTRY = new System.Windows.Forms.Button();
       this.label13 = new System.Windows.Forms.Label();
-      this.label14 = new System.Windows.Forms.Label();
       this.label15 = new System.Windows.Forms.Label();
-      this.label17 = new System.Windows.Forms.Label();
-      this.label18 = new System.Windows.Forms.Label();
       this.label19 = new System.Windows.Forms.Label();
-      this.panel4 = new System.Windows.Forms.Panel();
-      this.textBox1 = new System.Windows.Forms.TextBox();
       this.label20 = new System.Windows.Forms.Label();
       this.label21 = new System.Windows.Forms.Label();
       this.panel5 = new System.Windows.Forms.Panel();
@@ -137,6 +124,17 @@
       this.panel6 = new System.Windows.Forms.Panel();
       this.CUSTOM_NAME = new System.Windows.Forms.TextBox();
       this.CUSTOM_MULTIPLIER = new System.Windows.Forms.ComboBox();
+      this.label14 = new System.Windows.Forms.Label();
+      this.CUSTOM_TOTAL = new System.Windows.Forms.TextBox();
+      this.panel4 = new System.Windows.Forms.Panel();
+      this.label18 = new System.Windows.Forms.Label();
+      this.label17 = new System.Windows.Forms.Label();
+      this.GENERAL_CUSTOM_TOTAL = new System.Windows.Forms.TextBox();
+      this.panel3 = new System.Windows.Forms.Panel();
+      this.label7 = new System.Windows.Forms.Label();
+      this.label9 = new System.Windows.Forms.Label();
+      this.label11 = new System.Windows.Forms.Label();
+      this.ADD_ENTRY_CUSTOM = new System.Windows.Forms.Button();
       this.panel1.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
@@ -149,10 +147,10 @@
       this.panel31.SuspendLayout();
       this.panel20.SuspendLayout();
       this.groupBox5.SuspendLayout();
-      this.panel3.SuspendLayout();
-      this.panel4.SuspendLayout();
       this.panel5.SuspendLayout();
       this.panel6.SuspendLayout();
+      this.panel4.SuspendLayout();
+      this.panel3.SuspendLayout();
       this.SuspendLayout();
       // 
       // label1
@@ -681,7 +679,7 @@
       this.GENERAL_CUSTOM_LOAD_BOX.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.GENERAL_CUSTOM_LOAD_BOX.FormattingEnabled = true;
       this.GENERAL_CUSTOM_LOAD_BOX.ItemHeight = 20;
-      this.GENERAL_CUSTOM_LOAD_BOX.Location = new System.Drawing.Point(272, 177);
+      this.GENERAL_CUSTOM_LOAD_BOX.Location = new System.Drawing.Point(272, 181);
       this.GENERAL_CUSTOM_LOAD_BOX.Name = "GENERAL_CUSTOM_LOAD_BOX";
       this.GENERAL_CUSTOM_LOAD_BOX.Size = new System.Drawing.Size(434, 342);
       this.GENERAL_CUSTOM_LOAD_BOX.TabIndex = 36;
@@ -689,18 +687,18 @@
       // ADD_ENTRY
       // 
       this.ADD_ENTRY.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.ADD_ENTRY.Location = new System.Drawing.Point(270, 579);
+      this.ADD_ENTRY.Location = new System.Drawing.Point(271, 582);
       this.ADD_ENTRY.Name = "ADD_ENTRY";
-      this.ADD_ENTRY.Size = new System.Drawing.Size(54, 28);
+      this.ADD_ENTRY.Size = new System.Drawing.Size(108, 28);
       this.ADD_ENTRY.TabIndex = 40;
-      this.ADD_ENTRY.Text = "Add";
+      this.ADD_ENTRY.Text = "Add/Update";
       this.ADD_ENTRY.UseVisualStyleBackColor = true;
       this.ADD_ENTRY.Click += new System.EventHandler(this.ADD_ENTRY_Click);
       // 
       // REMOVE_ENTRY
       // 
       this.REMOVE_ENTRY.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.REMOVE_ENTRY.Location = new System.Drawing.Point(330, 579);
+      this.REMOVE_ENTRY.Location = new System.Drawing.Point(385, 582);
       this.REMOVE_ENTRY.Name = "REMOVE_ENTRY";
       this.REMOVE_ENTRY.Size = new System.Drawing.Size(88, 28);
       this.REMOVE_ENTRY.TabIndex = 41;
@@ -711,24 +709,13 @@
       // REMOVE_ENTRY_CUSTOM
       // 
       this.REMOVE_ENTRY_CUSTOM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.REMOVE_ENTRY_CUSTOM.Location = new System.Drawing.Point(843, 579);
+      this.REMOVE_ENTRY_CUSTOM.Location = new System.Drawing.Point(897, 582);
       this.REMOVE_ENTRY_CUSTOM.Name = "REMOVE_ENTRY_CUSTOM";
       this.REMOVE_ENTRY_CUSTOM.Size = new System.Drawing.Size(88, 28);
       this.REMOVE_ENTRY_CUSTOM.TabIndex = 47;
       this.REMOVE_ENTRY_CUSTOM.Text = "Remove";
       this.REMOVE_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
       this.REMOVE_ENTRY_CUSTOM.Click += new System.EventHandler(this.REMOVE_ENTRY_CUSTOM_Click);
-      // 
-      // ADD_ENTRY_CUSTOM
-      // 
-      this.ADD_ENTRY_CUSTOM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.ADD_ENTRY_CUSTOM.Location = new System.Drawing.Point(783, 579);
-      this.ADD_ENTRY_CUSTOM.Name = "ADD_ENTRY_CUSTOM";
-      this.ADD_ENTRY_CUSTOM.Size = new System.Drawing.Size(54, 28);
-      this.ADD_ENTRY_CUSTOM.TabIndex = 46;
-      this.ADD_ENTRY_CUSTOM.Text = "Add";
-      this.ADD_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
-      this.ADD_ENTRY_CUSTOM.Click += new System.EventHandler(this.ADD_ENTRY_CUSTOM_Click);
       // 
       // CUSTOM_LOAD_BOX
       // 
@@ -1172,27 +1159,6 @@
       this.label80.TabIndex = 178;
       this.label80.Text = "A";
       // 
-      // panel3
-      // 
-      this.panel3.BackColor = System.Drawing.SystemColors.Window;
-      this.panel3.Controls.Add(this.GENERAL_CUSTOM_TOTAL);
-      this.panel3.Location = new System.Drawing.Point(597, 546);
-      this.panel3.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
-      this.panel3.Name = "panel3";
-      this.panel3.Padding = new System.Windows.Forms.Padding(5);
-      this.panel3.Size = new System.Drawing.Size(86, 28);
-      this.panel3.TabIndex = 39;
-      // 
-      // GENERAL_CUSTOM_TOTAL
-      // 
-      this.GENERAL_CUSTOM_TOTAL.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.GENERAL_CUSTOM_TOTAL.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.GENERAL_CUSTOM_TOTAL.Location = new System.Drawing.Point(5, 5);
-      this.GENERAL_CUSTOM_TOTAL.Margin = new System.Windows.Forms.Padding(0);
-      this.GENERAL_CUSTOM_TOTAL.Name = "GENERAL_CUSTOM_TOTAL";
-      this.GENERAL_CUSTOM_TOTAL.Size = new System.Drawing.Size(76, 19);
-      this.GENERAL_CUSTOM_TOTAL.TabIndex = 2;
-      // 
       // label6
       // 
       this.label6.AutoSize = true;
@@ -1203,28 +1169,6 @@
       this.label6.Size = new System.Drawing.Size(64, 16);
       this.label6.TabIndex = 179;
       this.label6.Text = "Individual";
-      // 
-      // label7
-      // 
-      this.label7.AutoSize = true;
-      this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label7.Location = new System.Drawing.Point(594, 525);
-      this.label7.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label7.Name = "label7";
-      this.label7.Size = new System.Drawing.Size(38, 16);
-      this.label7.TabIndex = 180;
-      this.label7.Text = "Total";
-      // 
-      // label9
-      // 
-      this.label9.AutoSize = true;
-      this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label9.Location = new System.Drawing.Point(686, 553);
-      this.label9.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label9.Name = "label9";
-      this.label9.Size = new System.Drawing.Size(25, 16);
-      this.label9.TabIndex = 181;
-      this.label9.Text = "VA";
       // 
       // label10
       // 
@@ -1237,17 +1181,6 @@
       this.label10.TabIndex = 182;
       this.label10.Text = "Amount";
       // 
-      // label11
-      // 
-      this.label11.AutoSize = true;
-      this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label11.Location = new System.Drawing.Point(567, 552);
-      this.label11.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label11.Name = "label11";
-      this.label11.Size = new System.Drawing.Size(19, 16);
-      this.label11.TabIndex = 183;
-      this.label11.Text = "or";
-      // 
       // label12
       // 
       this.label12.AutoSize = true;
@@ -1258,26 +1191,6 @@
       this.label12.Size = new System.Drawing.Size(44, 16);
       this.label12.TabIndex = 184;
       this.label12.Text = "Name";
-      // 
-      // UPDATE_ENTRY
-      // 
-      this.UPDATE_ENTRY.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.UPDATE_ENTRY.Location = new System.Drawing.Point(424, 579);
-      this.UPDATE_ENTRY.Name = "UPDATE_ENTRY";
-      this.UPDATE_ENTRY.Size = new System.Drawing.Size(88, 28);
-      this.UPDATE_ENTRY.TabIndex = 185;
-      this.UPDATE_ENTRY.Text = "Update";
-      this.UPDATE_ENTRY.UseVisualStyleBackColor = true;
-      // 
-      // UPDATE_CUSTOM_ENTRY
-      // 
-      this.UPDATE_CUSTOM_ENTRY.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.UPDATE_CUSTOM_ENTRY.Location = new System.Drawing.Point(937, 579);
-      this.UPDATE_CUSTOM_ENTRY.Name = "UPDATE_CUSTOM_ENTRY";
-      this.UPDATE_CUSTOM_ENTRY.Size = new System.Drawing.Size(88, 28);
-      this.UPDATE_CUSTOM_ENTRY.TabIndex = 186;
-      this.UPDATE_CUSTOM_ENTRY.Text = "Update";
-      this.UPDATE_CUSTOM_ENTRY.UseVisualStyleBackColor = true;
       // 
       // label13
       // 
@@ -1290,17 +1203,6 @@
       this.label13.TabIndex = 198;
       this.label13.Text = "Name";
       // 
-      // label14
-      // 
-      this.label14.AutoSize = true;
-      this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label14.Location = new System.Drawing.Point(1079, 552);
-      this.label14.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label14.Name = "label14";
-      this.label14.Size = new System.Drawing.Size(19, 16);
-      this.label14.TabIndex = 197;
-      this.label14.Text = "or";
-      // 
       // label15
       // 
       this.label15.AutoSize = true;
@@ -1312,28 +1214,6 @@
       this.label15.TabIndex = 196;
       this.label15.Text = "Amount";
       // 
-      // label17
-      // 
-      this.label17.AutoSize = true;
-      this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label17.Location = new System.Drawing.Point(1198, 553);
-      this.label17.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label17.Name = "label17";
-      this.label17.Size = new System.Drawing.Size(25, 16);
-      this.label17.TabIndex = 195;
-      this.label17.Text = "VA";
-      // 
-      // label18
-      // 
-      this.label18.AutoSize = true;
-      this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label18.Location = new System.Drawing.Point(1106, 525);
-      this.label18.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label18.Name = "label18";
-      this.label18.Size = new System.Drawing.Size(38, 16);
-      this.label18.TabIndex = 194;
-      this.label18.Text = "Total";
-      // 
       // label19
       // 
       this.label19.AutoSize = true;
@@ -1344,27 +1224,6 @@
       this.label19.Size = new System.Drawing.Size(64, 16);
       this.label19.TabIndex = 193;
       this.label19.Text = "Individual";
-      // 
-      // panel4
-      // 
-      this.panel4.BackColor = System.Drawing.SystemColors.Window;
-      this.panel4.Controls.Add(this.textBox1);
-      this.panel4.Location = new System.Drawing.Point(1109, 546);
-      this.panel4.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
-      this.panel4.Name = "panel4";
-      this.panel4.Padding = new System.Windows.Forms.Padding(5);
-      this.panel4.Size = new System.Drawing.Size(86, 28);
-      this.panel4.TabIndex = 189;
-      // 
-      // textBox1
-      // 
-      this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.textBox1.Location = new System.Drawing.Point(5, 5);
-      this.textBox1.Margin = new System.Windows.Forms.Padding(0);
-      this.textBox1.Name = "textBox1";
-      this.textBox1.Size = new System.Drawing.Size(76, 19);
-      this.textBox1.TabIndex = 2;
       // 
       // label20
       // 
@@ -1468,10 +1327,129 @@
       this.CUSTOM_MULTIPLIER.TabIndex = 190;
       this.CUSTOM_MULTIPLIER.Text = "1";
       // 
+      // label14
+      // 
+      this.label14.AutoSize = true;
+      this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label14.Location = new System.Drawing.Point(1079, 552);
+      this.label14.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label14.Name = "label14";
+      this.label14.Size = new System.Drawing.Size(19, 16);
+      this.label14.TabIndex = 197;
+      this.label14.Text = "or";
+      // 
+      // CUSTOM_TOTAL
+      // 
+      this.CUSTOM_TOTAL.BorderStyle = System.Windows.Forms.BorderStyle.None;
+      this.CUSTOM_TOTAL.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.CUSTOM_TOTAL.Location = new System.Drawing.Point(5, 5);
+      this.CUSTOM_TOTAL.Margin = new System.Windows.Forms.Padding(0);
+      this.CUSTOM_TOTAL.Name = "CUSTOM_TOTAL";
+      this.CUSTOM_TOTAL.Size = new System.Drawing.Size(76, 19);
+      this.CUSTOM_TOTAL.TabIndex = 2;
+      // 
+      // panel4
+      // 
+      this.panel4.BackColor = System.Drawing.SystemColors.Window;
+      this.panel4.Controls.Add(this.CUSTOM_TOTAL);
+      this.panel4.Location = new System.Drawing.Point(1109, 546);
+      this.panel4.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
+      this.panel4.Name = "panel4";
+      this.panel4.Padding = new System.Windows.Forms.Padding(5);
+      this.panel4.Size = new System.Drawing.Size(86, 28);
+      this.panel4.TabIndex = 189;
+      // 
+      // label18
+      // 
+      this.label18.AutoSize = true;
+      this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label18.Location = new System.Drawing.Point(1106, 525);
+      this.label18.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label18.Name = "label18";
+      this.label18.Size = new System.Drawing.Size(38, 16);
+      this.label18.TabIndex = 194;
+      this.label18.Text = "Total";
+      // 
+      // label17
+      // 
+      this.label17.AutoSize = true;
+      this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label17.Location = new System.Drawing.Point(1198, 553);
+      this.label17.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label17.Name = "label17";
+      this.label17.Size = new System.Drawing.Size(25, 16);
+      this.label17.TabIndex = 195;
+      this.label17.Text = "VA";
+      // 
+      // GENERAL_CUSTOM_TOTAL
+      // 
+      this.GENERAL_CUSTOM_TOTAL.BorderStyle = System.Windows.Forms.BorderStyle.None;
+      this.GENERAL_CUSTOM_TOTAL.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.GENERAL_CUSTOM_TOTAL.Location = new System.Drawing.Point(5, 5);
+      this.GENERAL_CUSTOM_TOTAL.Margin = new System.Windows.Forms.Padding(0);
+      this.GENERAL_CUSTOM_TOTAL.Name = "GENERAL_CUSTOM_TOTAL";
+      this.GENERAL_CUSTOM_TOTAL.Size = new System.Drawing.Size(76, 19);
+      this.GENERAL_CUSTOM_TOTAL.TabIndex = 2;
+      // 
+      // panel3
+      // 
+      this.panel3.BackColor = System.Drawing.SystemColors.Window;
+      this.panel3.Controls.Add(this.GENERAL_CUSTOM_TOTAL);
+      this.panel3.Location = new System.Drawing.Point(597, 546);
+      this.panel3.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
+      this.panel3.Name = "panel3";
+      this.panel3.Padding = new System.Windows.Forms.Padding(5);
+      this.panel3.Size = new System.Drawing.Size(86, 28);
+      this.panel3.TabIndex = 39;
+      // 
+      // label7
+      // 
+      this.label7.AutoSize = true;
+      this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label7.Location = new System.Drawing.Point(594, 525);
+      this.label7.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label7.Name = "label7";
+      this.label7.Size = new System.Drawing.Size(38, 16);
+      this.label7.TabIndex = 180;
+      this.label7.Text = "Total";
+      // 
+      // label9
+      // 
+      this.label9.AutoSize = true;
+      this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label9.Location = new System.Drawing.Point(686, 553);
+      this.label9.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label9.Name = "label9";
+      this.label9.Size = new System.Drawing.Size(25, 16);
+      this.label9.TabIndex = 181;
+      this.label9.Text = "VA";
+      // 
+      // label11
+      // 
+      this.label11.AutoSize = true;
+      this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.label11.Location = new System.Drawing.Point(567, 552);
+      this.label11.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.label11.Name = "label11";
+      this.label11.Size = new System.Drawing.Size(19, 16);
+      this.label11.TabIndex = 183;
+      this.label11.Text = "or";
+      // 
+      // ADD_ENTRY_CUSTOM
+      // 
+      this.ADD_ENTRY_CUSTOM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.ADD_ENTRY_CUSTOM.Location = new System.Drawing.Point(783, 582);
+      this.ADD_ENTRY_CUSTOM.Name = "ADD_ENTRY_CUSTOM";
+      this.ADD_ENTRY_CUSTOM.Size = new System.Drawing.Size(108, 28);
+      this.ADD_ENTRY_CUSTOM.TabIndex = 199;
+      this.ADD_ENTRY_CUSTOM.Text = "Add/Update";
+      this.ADD_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
+      // 
       // LoadCalculationForm
       // 
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+      this.Controls.Add(this.ADD_ENTRY_CUSTOM);
       this.Controls.Add(this.label13);
       this.Controls.Add(this.label14);
       this.Controls.Add(this.label15);
@@ -1484,8 +1462,6 @@
       this.Controls.Add(this.panel5);
       this.Controls.Add(this.panel6);
       this.Controls.Add(this.CUSTOM_MULTIPLIER);
-      this.Controls.Add(this.UPDATE_CUSTOM_ENTRY);
-      this.Controls.Add(this.UPDATE_ENTRY);
       this.Controls.Add(this.label12);
       this.Controls.Add(this.label11);
       this.Controls.Add(this.label10);
@@ -1525,7 +1501,6 @@
       this.Controls.Add(this.TOTAL_GENERAL_LOAD_CALCULATION);
       this.Controls.Add(this.label16);
       this.Controls.Add(this.REMOVE_ENTRY_CUSTOM);
-      this.Controls.Add(this.ADD_ENTRY_CUSTOM);
       this.Controls.Add(this.CUSTOM_LOAD_BOX);
       this.Controls.Add(this.REMOVE_ENTRY);
       this.Controls.Add(this.ADD_ENTRY);
@@ -1582,14 +1557,14 @@
       this.panel20.PerformLayout();
       this.groupBox5.ResumeLayout(false);
       this.groupBox5.PerformLayout();
-      this.panel3.ResumeLayout(false);
-      this.panel3.PerformLayout();
-      this.panel4.ResumeLayout(false);
-      this.panel4.PerformLayout();
       this.panel5.ResumeLayout(false);
       this.panel5.PerformLayout();
       this.panel6.ResumeLayout(false);
       this.panel6.PerformLayout();
+      this.panel4.ResumeLayout(false);
+      this.panel4.PerformLayout();
+      this.panel3.ResumeLayout(false);
+      this.panel3.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1639,7 +1614,6 @@
     private System.Windows.Forms.Button ADD_ENTRY;
     private System.Windows.Forms.Button REMOVE_ENTRY;
     private System.Windows.Forms.Button REMOVE_ENTRY_CUSTOM;
-    private System.Windows.Forms.Button ADD_ENTRY_CUSTOM;
     private System.Windows.Forms.ListBox CUSTOM_LOAD_BOX;
     private System.Windows.Forms.Label label16;
     private System.Windows.Forms.Label TOTAL_GENERAL_LOAD_CALCULATION;
@@ -1681,24 +1655,12 @@
     private System.Windows.Forms.RadioButton NA_DRYER;
     private System.Windows.Forms.RadioButton NA_OVEN;
     private System.Windows.Forms.RadioButton NA_COOKTOP;
-    private System.Windows.Forms.Panel panel3;
-    private System.Windows.Forms.TextBox GENERAL_CUSTOM_TOTAL;
     private System.Windows.Forms.Label label6;
-    private System.Windows.Forms.Label label7;
-    private System.Windows.Forms.Label label9;
     private System.Windows.Forms.Label label10;
-    private System.Windows.Forms.Label label11;
     private System.Windows.Forms.Label label12;
-    private System.Windows.Forms.Button UPDATE_ENTRY;
-    private System.Windows.Forms.Button UPDATE_CUSTOM_ENTRY;
     private System.Windows.Forms.Label label13;
-    private System.Windows.Forms.Label label14;
     private System.Windows.Forms.Label label15;
-    private System.Windows.Forms.Label label17;
-    private System.Windows.Forms.Label label18;
     private System.Windows.Forms.Label label19;
-    private System.Windows.Forms.Panel panel4;
-    private System.Windows.Forms.TextBox textBox1;
     private System.Windows.Forms.Label label20;
     private System.Windows.Forms.Label label21;
     private System.Windows.Forms.Panel panel5;
@@ -1706,5 +1668,16 @@
     private System.Windows.Forms.Panel panel6;
     private System.Windows.Forms.TextBox CUSTOM_NAME;
     private System.Windows.Forms.ComboBox CUSTOM_MULTIPLIER;
+    private System.Windows.Forms.Label label14;
+    private System.Windows.Forms.TextBox CUSTOM_TOTAL;
+    private System.Windows.Forms.Panel panel4;
+    private System.Windows.Forms.Label label18;
+    private System.Windows.Forms.Label label17;
+    private System.Windows.Forms.TextBox GENERAL_CUSTOM_TOTAL;
+    private System.Windows.Forms.Panel panel3;
+    private System.Windows.Forms.Label label7;
+    private System.Windows.Forms.Label label9;
+    private System.Windows.Forms.Label label11;
+    private System.Windows.Forms.Button ADD_ENTRY_CUSTOM;
   }
 }

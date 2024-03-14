@@ -32,6 +32,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       SubscribeTextBoxesToTextChangedEvent(this.Controls);
       SubscribeComboBoxesToTextChangedEvent(this.Controls);
       SubscribeTextBoxesToTextEnterEvent(this.Controls);
+      SubscribeLoadBoxToSelectionChangedEvent(this.Controls);
 
       _parent = parent;
       _toolTip = new ToolTip();
@@ -47,6 +48,51 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       }
 
       this.Load += new EventHandler(UnitLoadCalculation_Load);
+    }
+
+    private void SubscribeLoadBoxToSelectionChangedEvent(ControlCollection controls)
+    {
+      foreach (Control control in controls)
+      {
+        if (control is ListBox listBox)
+        {
+          listBox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
+        }
+      }
+    }
+
+    private void ListBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      if (sender == GENERAL_CUSTOM_LOAD_BOX)
+      {
+        PopulateBoxFormItems(GENERAL_CUSTOM_LOAD_BOX, GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_VA, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_TOTAL);
+      }
+      else if (sender == CUSTOM_LOAD_BOX)
+      {
+        PopulateBoxFormItems(CUSTOM_LOAD_BOX, CUSTOM_NAME, CUSTOM_VA, CUSTOM_MULTIPLIER, CUSTOM_TOTAL);
+      }
+    }
+
+    private void PopulateBoxFormItems(ListBox box, TextBox name, TextBox va, ComboBox multiplier, TextBox total)
+    {
+      if (GENERAL_CUSTOM_LOAD_BOX.SelectedIndex != -1)
+      {
+        var selectedItem = box.SelectedItem.ToString().Split(',');
+        name.Text = selectedItem[0].Trim();
+        va.Text = selectedItem[1].Trim();
+        multiplier.Text = selectedItem[2].Trim();
+
+        if (selectedItem.Length > 3)
+        {
+          total.Text = selectedItem[3].Trim();
+        }
+
+        name.ForeColor = Color.Black;
+        va.ForeColor = Color.Black;
+        multiplier.ForeColor = Color.Black;
+        total.ForeColor = Color.Black;
+        name.Focus();
+      }
     }
 
     private List<string> defaultGeneralValues()
@@ -454,24 +500,26 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       GENERAL_CUSTOM_NAME.KeyDown += TextBox_KeyDown;
       GENERAL_CUSTOM_VA.KeyDown += TextBox_KeyDown;
       GENERAL_CUSTOM_MULTIPLIER.KeyDown += TextBox_KeyDown;
+      GENERAL_CUSTOM_TOTAL.KeyDown += TextBox_KeyDown;
 
       // Subscribe to KeyDown event for CUSTOM controls
       CUSTOM_NAME.KeyDown += TextBox_KeyDown;
       CUSTOM_VA.KeyDown += TextBox_KeyDown;
       CUSTOM_MULTIPLIER.KeyDown += TextBox_KeyDown;
+      CUSTOM_TOTAL.KeyDown += TextBox_KeyDown;
     }
 
     private void TextBox_KeyDown(object sender, KeyEventArgs e)
     {
       if (e.KeyCode == Keys.Enter)
       {
-        if (sender == GENERAL_CUSTOM_NAME || sender == GENERAL_CUSTOM_VA || sender == GENERAL_CUSTOM_MULTIPLIER)
+        if (sender == GENERAL_CUSTOM_NAME || sender == GENERAL_CUSTOM_VA || sender == GENERAL_CUSTOM_MULTIPLIER || sender == GENERAL_CUSTOM_TOTAL)
         {
-          AddEntry(GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_VA, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_LOAD_BOX);
+          AddEntry(GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_VA, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_TOTAL, GENERAL_CUSTOM_LOAD_BOX);
         }
-        else if (sender == CUSTOM_NAME || sender == CUSTOM_VA || sender == CUSTOM_MULTIPLIER)
+        else if (sender == CUSTOM_NAME || sender == CUSTOM_VA || sender == CUSTOM_MULTIPLIER || sender == CUSTOM_TOTAL)
         {
-          AddEntry(CUSTOM_NAME, CUSTOM_VA, CUSTOM_MULTIPLIER, CUSTOM_LOAD_BOX);
+          AddEntry(CUSTOM_NAME, CUSTOM_VA, CUSTOM_MULTIPLIER, CUSTOM_TOTAL, CUSTOM_LOAD_BOX);
         }
         e.SuppressKeyPress = true;
       }
@@ -801,11 +849,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return calculatedLoads;
     }
 
-    private void AddEntry(TextBox nameTextBox, TextBox vaTextBox, ComboBox multiplierComboBox, ListBox listBox)
+    private void AddEntry(TextBox nameTextBox, TextBox vaTextBox, ComboBox multiplierComboBox, TextBox total, ListBox listBox)
     {
       string name = nameTextBox.Text;
       string va = vaTextBox.Text;
       string multiplier = multiplierComboBox.Text;
+      string totalValue = total.Text;
 
       if (string.IsNullOrEmpty(name) || name == _NameWatermark)
       {
@@ -841,11 +890,36 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       string newEntry = $"{name}, {va}, {multiplier}";
 
-      listBox.Items.Add(newEntry);
+      if (!string.IsNullOrEmpty(totalValue))
+      {
+        newEntry += $", {totalValue}";
+      }
+
+      int existingIndex = -1;
+      for (int i = 0; i < listBox.Items.Count; i++)
+      {
+        string item = listBox.Items[i].ToString();
+        string[] parts = item.Split(new[] { ", " }, StringSplitOptions.None);
+        if (parts.Length > 0 && parts[0] == name)
+        {
+          existingIndex = i;
+          break;
+        }
+      }
+
+      if (existingIndex >= 0)
+      {
+        listBox.Items[existingIndex] = newEntry;
+      }
+      else
+      {
+        listBox.Items.Add(newEntry);
+      }
 
       nameTextBox.Text = "";
       vaTextBox.Text = "";
       multiplierComboBox.Text = "1";
+      total.Text = "";
 
       nameTextBox.Focus();
 
@@ -854,12 +928,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private void ADD_ENTRY_Click(object sender, EventArgs e)
     {
-      AddEntry(GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_VA, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_LOAD_BOX);
+      AddEntry(GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_VA, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_TOTAL, GENERAL_CUSTOM_LOAD_BOX);
     }
 
     private void ADD_ENTRY_CUSTOM_Click(object sender, EventArgs e)
     {
-      AddEntry(CUSTOM_NAME, CUSTOM_VA, CUSTOM_MULTIPLIER, CUSTOM_LOAD_BOX);
+      AddEntry(CUSTOM_NAME, CUSTOM_VA, CUSTOM_MULTIPLIER, CUSTOM_TOTAL, CUSTOM_LOAD_BOX);
     }
 
     private void RemoveEntry(ListBox listBox)
