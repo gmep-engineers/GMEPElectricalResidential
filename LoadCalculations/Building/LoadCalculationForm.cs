@@ -28,6 +28,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       InitializeComponent();
       _parentForm = parent;
       _toolTip = new ToolTip();
+      _tabID = tabID;
 
       if (buildingInformation != null)
       {

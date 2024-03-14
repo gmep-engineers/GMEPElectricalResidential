@@ -714,54 +714,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         case "General Lighting Subtotal (Floor Area x 3VA/ft²) (CEC 220.42)":
           return unitInfo.GeneralLoads.Lighting.GetLoad().ToString() + "VA";
 
-        case "Small Appliance (3-20ACK by CEC 210.11)":
-          return unitInfo.GeneralLoads.SmallAppliance.GetLoad().ToString() + "VA";
-
-        case "Laundry (1-20ACKT by CEC 210.11)":
-          return unitInfo.GeneralLoads.Laundry.GetLoad().ToString() + "VA";
-
-        case "Lighting And Appliance Load Total":
-          int lightingAndApplianceTotal = unitInfo.GeneralLoads.Lighting.GetLoad() +
-                                          unitInfo.GeneralLoads.SmallAppliance.GetLoad() +
-                                          unitInfo.GeneralLoads.Laundry.GetLoad();
-          return lightingAndApplianceTotal.ToString() + "VA";
-
-        case "Bathroom (1-20ACKT by CEC 210.11)":
-          return unitInfo.GeneralLoads.Bathroom.GetLoad().ToString() + "VA";
-
-        case "Dishwasher":
-          return unitInfo.GeneralLoads.Dishwasher.GetLoad().ToString() + "VA";
-
-        case "Microwave":
-          return unitInfo.GeneralLoads.MicrowaveOven.GetLoad().ToString() + "VA";
-
-        case "Garbage Disposal":
-          return unitInfo.GeneralLoads.GarbageDisposal.GetLoad().ToString() + "VA";
-
-        case "Bathroom Fans":
-          return unitInfo.GeneralLoads.BathroomFans.GetLoad().ToString() + "VA";
-
-        case "Garage Door Opener":
-          return unitInfo.GeneralLoads.GarageDoorOpener.GetLoad().ToString() + "VA";
-
-        case "Dryer":
-          return unitInfo.GeneralLoads.Dryer.GetLoad().ToString() + "VA";
-
-        case "Range":
-          return unitInfo.GeneralLoads.Range.GetLoad().ToString() + "VA";
-
-        case "Refrigerator":
-          return unitInfo.GeneralLoads.Refrigerator.GetLoad().ToString() + "VA";
-
-        case "Oven":
-          return unitInfo.GeneralLoads.Oven.GetLoad().ToString() + "VA";
-
-        case "Cooktop":
-          return unitInfo.GeneralLoads.Cooktop.GetLoad().ToString() + "VA";
-
-        case "Water Heater":
-          return unitInfo.GeneralLoads.WaterHeater.GetLoad().ToString() + "VA";
-
         case "Total General Load":
           return unitInfo.Totals.TotalGeneralLoad.ToString() + "VA";
 

@@ -49,11 +49,35 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       this.Load += new EventHandler(UnitLoadCalculation_Load);
     }
 
+    private List<string> defaultGeneralValues()
+    {
+      return new List<string>()
+      {
+        "Small Appliance, 3000, 1",
+        "Laundry, 1500, 1",
+        "Bathroom, 0, 1",
+        "Dishwasher, 1200, 1",
+        "Microwave, 1500, 1",
+        "Garbage Disposal, 1200, 1",
+        "Bathroom Fans, 200, 1",
+        "Garage Door Opener, 1200, 1",
+        "Dryer, 5000, 1",
+        "Range, 8000, 1"
+      };
+    }
+
     private void UnitLoadCalculation_Load(object sender, EventArgs e)
     {
       if (!_unitNullFlag)
       {
         PopulateUserControlWithUnitInformation(_unitInformation);
+      }
+      else
+      {
+        foreach (var value in defaultGeneralValues())
+        {
+          GENERAL_CUSTOM_LOAD_BOX.Items.Add(value);
+        }
       }
       _isLoaded = true;
       UpdateDataAndLoads();
@@ -87,36 +111,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       // Set area
       AREA.Text = unitInformation.DwellingArea.FloorArea.ToString();
 
-      // Set general loads
-      SMALL_APPLIANCE_VA.Text = unitInformation.GeneralLoads.SmallAppliance.VA.ToString();
-      SMALL_APPLIANCE_MULTIPLIER.Text = unitInformation.GeneralLoads.SmallAppliance.Multiplier.ToString();
-      LAUNDRY_VA.Text = unitInformation.GeneralLoads.Laundry.VA.ToString();
-      LAUNDRY_MULTIPLIER.Text = unitInformation.GeneralLoads.Laundry.Multiplier.ToString();
-      BATHROOM_VA.Text = unitInformation.GeneralLoads.Bathroom.VA.ToString();
-      BATHROOM_MULTIPLIER.Text = unitInformation.GeneralLoads.Bathroom.Multiplier.ToString();
-      DISHWASHER_VA.Text = unitInformation.GeneralLoads.Dishwasher.VA.ToString();
-      DISHWASHER_MULTIPLIER.Text = unitInformation.GeneralLoads.Dishwasher.Multiplier.ToString();
-      MICROWAVE_OVEN_VA.Text = unitInformation.GeneralLoads.MicrowaveOven.VA.ToString();
-      MICROWAVE_OVEN_MULTIPLIER.Text = unitInformation.GeneralLoads.MicrowaveOven.Multiplier.ToString();
-      GARBAGE_DISPOSAL_VA.Text = unitInformation.GeneralLoads.GarbageDisposal.VA.ToString();
-      GARBAGE_DISPOSAL_MULTIPLIER.Text = unitInformation.GeneralLoads.GarbageDisposal.Multiplier.ToString();
-      BATHROOM_FANS_VA.Text = unitInformation.GeneralLoads.BathroomFans.VA.ToString();
-      BATHROOM_FANS_MULTIPLIER.Text = unitInformation.GeneralLoads.BathroomFans.Multiplier.ToString();
-      GARAGE_DOOR_OPENER_VA.Text = unitInformation.GeneralLoads.GarageDoorOpener.VA.ToString();
-      GARAGE_DOOR_OPENER_MULTIPLIER.Text = unitInformation.GeneralLoads.GarageDoorOpener.Multiplier.ToString();
-      DRYER_VA.Text = unitInformation.GeneralLoads.Dryer.VA.ToString();
-      DRYER_MULTIPLIER.Text = unitInformation.GeneralLoads.Dryer.Multiplier.ToString();
-      RANGE_VA.Text = unitInformation.GeneralLoads.Range.VA.ToString();
-      RANGE_MULTIPLIER.Text = unitInformation.GeneralLoads.Range.Multiplier.ToString();
-      REFRIGERATOR_VA.Text = unitInformation.GeneralLoads.Refrigerator.VA.ToString();
-      REFRIGERATOR_MULTIPLIER.Text = unitInformation.GeneralLoads.Refrigerator.Multiplier.ToString();
-      OVEN_VA.Text = unitInformation.GeneralLoads.Oven.VA.ToString();
-      OVEN_MULTIPLIER.Text = unitInformation.GeneralLoads.Oven.Multiplier.ToString();
-      WATER_HEATER_VA.Text = unitInformation.GeneralLoads.WaterHeater.VA.ToString();
-      WATER_HEATER_MULTIPLIER.Text = unitInformation.GeneralLoads.WaterHeater.Multiplier.ToString();
-      COOKTOP_VA.Text = unitInformation.GeneralLoads.Cooktop.VA.ToString();
-      COOKTOP_MULTIPLIER.Text = unitInformation.GeneralLoads.Cooktop.Multiplier.ToString();
-
       foreach (var load in unitInformation.GeneralLoads.Customs)
       {
         var entry = $"{load.Name}, {load.VA}, {load.Multiplier}";
@@ -129,17 +123,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         {
           var entry = $"{load.Name}, {load.VA}, {load.Multiplier}";
           CUSTOM_LOAD_BOX.Items.Add(entry);
-        }
-      }
-
-      foreach (var load in unitInformation.CustomLoads)
-      {
-        if (load.Name == "Water Heater")
-        {
-          WATER_HEATER_CHECK.Checked = false;
-          WATER_HEATER_VA.Text = load.VA.ToString();
-          WATER_HEATER_MULTIPLIER.Text = load.Multiplier.ToString();
-          break;
         }
       }
 
@@ -353,15 +336,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         customs.Add(unitGeneralCustomLoad);
       }
 
-      if (!WATER_HEATER_CHECK.Checked)
-      {
-        var name = "Water Heater";
-        var load = WATER_HEATER_VA.Text;
-        var multiplier = WATER_HEATER_MULTIPLIER.Text;
-        var waterHeater = new UnitLoad(name, load, multiplier);
-        customs.Add(waterHeater);
-      }
-
       _unitInformation.CustomLoads = customs;
     }
 
@@ -409,28 +383,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       }
 
       unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", lightingLoad, "1");
-      unitGeneralLoadContainer.SmallAppliance = new UnitLoad("Small Appliance", SMALL_APPLIANCE_VA.Text, SMALL_APPLIANCE_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Laundry = new UnitLoad("Laundry", LAUNDRY_VA.Text, LAUNDRY_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Bathroom = new UnitLoad("Bathroom", BATHROOM_VA.Text, BATHROOM_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Dishwasher = new UnitLoad("Dishwasher", DISHWASHER_VA.Text, DISHWASHER_MULTIPLIER.Text);
-      unitGeneralLoadContainer.MicrowaveOven = new UnitLoad("Microwave Oven", MICROWAVE_OVEN_VA.Text, MICROWAVE_OVEN_MULTIPLIER.Text);
-      unitGeneralLoadContainer.GarbageDisposal = new UnitLoad("Garbage Disposal", GARBAGE_DISPOSAL_VA.Text, GARBAGE_DISPOSAL_MULTIPLIER.Text);
-      unitGeneralLoadContainer.BathroomFans = new UnitLoad("Bathroom Fans", BATHROOM_FANS_VA.Text, BATHROOM_FANS_MULTIPLIER.Text);
-      unitGeneralLoadContainer.GarageDoorOpener = new UnitLoad("Garage Door Opener", GARAGE_DOOR_OPENER_VA.Text, GARAGE_DOOR_OPENER_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Dryer = new UnitLoad("Dryer", DRYER_VA.Text, DRYER_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Range = new UnitLoad("Range", RANGE_VA.Text, RANGE_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Refrigerator = new UnitLoad("Refrigerator", REFRIGERATOR_VA.Text, REFRIGERATOR_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Oven = new UnitLoad("Oven", OVEN_VA.Text, OVEN_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Cooktop = new UnitLoad("Cooktop", COOKTOP_VA.Text, COOKTOP_MULTIPLIER.Text);
-
-      if (WATER_HEATER_CHECK.Checked)
-      {
-        unitGeneralLoadContainer.WaterHeater = new UnitLoad("Water Heater", WATER_HEATER_VA.Text, WATER_HEATER_MULTIPLIER.Text);
-      }
-      else
-      {
-        unitGeneralLoadContainer.WaterHeater = new UnitLoad("Water Heater", "0", WATER_HEATER_MULTIPLIER.Text);
-      }
 
       List<UnitLoad> customs = new List<UnitLoad>();
 
@@ -472,21 +424,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       var generalLoads = _unitInformation.GeneralLoads;
 
-      int totalLoad = generalLoads.OccupancyLighting()
-                      + generalLoads.SmallAppliance.GetLoad()
-                      + generalLoads.Laundry.GetLoad()
-                      + generalLoads.Bathroom.GetLoad()
-                      + generalLoads.Dishwasher.GetLoad()
-                      + generalLoads.MicrowaveOven.GetLoad()
-                      + generalLoads.GarbageDisposal.GetLoad()
-                      + generalLoads.BathroomFans.GetLoad()
-                      + generalLoads.GarageDoorOpener.GetLoad()
-                      + generalLoads.Dryer.GetLoad()
-                      + generalLoads.Range.GetLoad()
-                      + generalLoads.Refrigerator.GetLoad()
-                      + generalLoads.Oven.GetLoad()
-                      + generalLoads.Cooktop.GetLoad()
-                      + generalLoads.WaterHeater.GetLoad();
+      int totalLoad = generalLoads.OccupancyLighting();
 
       foreach (var customLoad in generalLoads.Customs)
       {
@@ -690,8 +628,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      WATER_HEATER_VA.Text = "5000";
-
       _unitInformation.DwellingArea.Heater = ApplianceType.Electric;
     }
 
@@ -699,8 +635,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
-
-      WATER_HEATER_VA.Text = "180";
 
       _unitInformation.DwellingArea.Heater = ApplianceType.Gas;
     }
@@ -710,8 +644,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      WATER_HEATER_VA.Text = "0";
-
       _unitInformation.DwellingArea.Heater = ApplianceType.NA;
     }
 
@@ -719,8 +651,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
-
-      DRYER_VA.Text = "5000";
 
       _unitInformation.DwellingArea.Dryer = ApplianceType.Electric;
     }
@@ -730,8 +660,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      DRYER_VA.Text = "180";
-
       _unitInformation.DwellingArea.Dryer = ApplianceType.Gas;
     }
 
@@ -739,8 +667,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
-
-      DRYER_VA.Text = "0";
 
       _unitInformation.DwellingArea.Dryer = ApplianceType.NA;
     }
@@ -750,8 +676,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      OVEN_VA.Text = "8000";
-
       _unitInformation.DwellingArea.Oven = ApplianceType.Electric;
     }
 
@@ -759,8 +683,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
-
-      OVEN_VA.Text = "180";
 
       _unitInformation.DwellingArea.Oven = ApplianceType.Gas;
     }
@@ -770,8 +692,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      OVEN_VA.Text = "0";
-
       _unitInformation.DwellingArea.Oven = ApplianceType.NA;
     }
 
@@ -779,8 +699,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
-
-      COOKTOP_VA.Text = "8000";
 
       _unitInformation.DwellingArea.Cooktop = ApplianceType.Electric;
     }
@@ -790,8 +708,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      COOKTOP_VA.Text = "180";
-
       _unitInformation.DwellingArea.Cooktop = ApplianceType.Gas;
     }
 
@@ -799,8 +715,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
-
-      COOKTOP_VA.Text = "0";
 
       _unitInformation.DwellingArea.Cooktop = ApplianceType.NA;
     }
@@ -1172,20 +1086,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
   {
     public static string LightingCode = "220.42";
     public UnitLoad Lighting { get; set; }
-    public UnitLoad SmallAppliance { get; set; }
-    public UnitLoad Laundry { get; set; }
-    public UnitLoad Bathroom { get; set; }
-    public UnitLoad Dishwasher { get; set; }
-    public UnitLoad MicrowaveOven { get; set; }
-    public UnitLoad GarbageDisposal { get; set; }
-    public UnitLoad BathroomFans { get; set; }
-    public UnitLoad GarageDoorOpener { get; set; }
-    public UnitLoad Dryer { get; set; }
-    public UnitLoad Range { get; set; }
-    public UnitLoad Refrigerator { get; set; }
-    public UnitLoad Oven { get; set; }
-    public UnitLoad WaterHeater { get; set; }
-    public UnitLoad Cooktop { get; set; }
     public List<UnitLoad> Customs { get; set; }
     public LightingOccupancyType LightingOccupancyType { get; set; }
 
@@ -1251,6 +1151,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
   {
     public int VA { get; set; }
     public int Multiplier { get; set; }
+    public int Total { get; set; }
     public string Name { get; set; }
 
     public UnitLoad(string name, object va, object multiplier)
