@@ -83,10 +83,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     private void DetectIncorrectInputs()
     {
       HOUSE_LOAD.KeyPress += OnlyDigitInputs;
-      HOUSE_LOAD.KeyPress += UpdateHouseLoad;
+      HOUSE_LOAD.KeyUp += UpdateHouseLoad;
       NUMBER_OF_UNITS.KeyPress += OnlyDigitInputs;
       NUMBER_OF_UNITS.KeyPress += OnlyWhenLoadBoxSelected;
-      NUMBER_OF_UNITS.KeyPress += UpdateUnitCountInformation;
+      NUMBER_OF_UNITS.KeyUp += UpdateUnitCountInformation;
       NUMBER_OF_UNITS_BG.Click += InformUserHowToEnable;
     }
 
@@ -165,47 +165,18 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       _buildingInformation.Voltage = VOLTAGE.Text;
     }
 
-    private void UpdateHouseLoad(object sender, KeyPressEventArgs e)
+    private void UpdateHouseLoad(object sender, KeyEventArgs e)
     {
       string houseLoadText = HOUSE_LOAD.Text;
 
-      if (char.IsDigit(e.KeyChar))
+      if (string.IsNullOrEmpty(houseLoadText))
       {
-        if (HOUSE_LOAD.SelectionLength > 0)
-        {
-          houseLoadText = houseLoadText.Remove(HOUSE_LOAD.SelectionStart, HOUSE_LOAD.SelectionLength);
-        }
-        houseLoadText += e.KeyChar;
-        if (int.TryParse(houseLoadText, out int houseLoad))
-        {
-          _buildingInformation.HouseLoad = houseLoad;
-          HOUSE_LOAD_COPY.Text = _buildingInformation.HouseLoad.ToString();
-        }
+        houseLoadText = "0";
       }
-      else if (e.KeyChar == '\b')
-      {
-        int selectionStart = HOUSE_LOAD.SelectionStart;
-        int selectionLength = HOUSE_LOAD.SelectionLength;
-        if (selectionLength >= 1)
-        {
-          houseLoadText = houseLoadText.Remove(selectionStart, selectionLength);
-        }
-        else if (selectionStart > 0)
-        {
-          houseLoadText = houseLoadText.Remove(selectionStart - 1, 1);
-        }
 
-        if (string.IsNullOrEmpty(houseLoadText))
-        {
-          houseLoadText = "0";
-        }
+      _buildingInformation.HouseLoad = int.Parse(houseLoadText);
+      HOUSE_LOAD_COPY.Text = _buildingInformation.HouseLoad.ToString();
 
-        if (int.TryParse(houseLoadText, out int houseLoad))
-        {
-          _buildingInformation.HouseLoad = houseLoad;
-          HOUSE_LOAD_COPY.Text = _buildingInformation.HouseLoad.ToString();
-        }
-      }
       UpdateBuildingFormInformation();
     }
 
@@ -220,74 +191,31 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       SERVICE_RATING.Text = _buildingInformation.RecommendedServiceSize().ToString();
     }
 
-    private void UpdateUnitCountInformation(object sender, KeyPressEventArgs e)
+    private void UpdateUnitCountInformation(object sender, KeyEventArgs e)
+    {
+      UpdateSubtotalOfUnitLoads();
+      if (e.KeyValue == '\r') SelectNextItem();
+    }
+
+    private void UpdateSubtotalOfUnitLoads()
+    {
+      UnitInformation selectedUnit = GetSelectedUnit();
+      if (selectedUnit == null) return;
+
+      if (int.TryParse(NUMBER_OF_UNITS.Text, out int count))
+      {
+        var subtotalUnitLoads = count * selectedUnit.Totals.SubtotalOfUnitType();
+        _buildingInformation.UpdateCounter(selectedUnit, count, subtotalUnitLoads);
+        SUBTOTAL_UNIT_LOADS.Text = subtotalUnitLoads.ToString();
+      }
+      UpdateBuildingFormInformation();
+    }
+
+    private UnitInformation GetSelectedUnit()
     {
       var allUnitInfo = _parentForm.AllUnitInformation();
       var selectedUnit = allUnitInfo.FirstOrDefault(unit => unit.FormattedName() == UNIT_TYPES.Text);
-      var numberOfUnitsText = NUMBER_OF_UNITS.Text;
-      numberOfUnitsText = HandleNumberOfUnitsKeyPresses(e, numberOfUnitsText);
-
-      if (string.IsNullOrEmpty(HOUSE_LOAD.Text))
-      {
-        HOUSE_LOAD.Text = "0";
-      }
-    }
-
-    private string HandleNumberOfUnitsKeyPresses(KeyPressEventArgs e, string numberOfUnitsText)
-    {
-      if (char.IsDigit(e.KeyChar))
-      {
-        if (NUMBER_OF_UNITS.SelectionLength > 0)
-        {
-          numberOfUnitsText = numberOfUnitsText.Remove(NUMBER_OF_UNITS.SelectionStart, NUMBER_OF_UNITS.SelectionLength);
-        }
-        numberOfUnitsText += e.KeyChar;
-        UpdateSubtotalOfUnitLoads(numberOfUnitsText);
-      }
-      else if (e.KeyChar == '\b')
-      {
-        int selectionStart = NUMBER_OF_UNITS.SelectionStart;
-        int selectionLength = NUMBER_OF_UNITS.SelectionLength;
-        HelperClass.WriteMessageToAutoCADConsole($"Selection Start: {selectionStart}, Selection Length: {selectionLength}");
-        if (selectionLength >= 1)
-        {
-          numberOfUnitsText = numberOfUnitsText.Remove(selectionStart, selectionLength);
-        }
-        else if (selectionStart > 0)
-        {
-          numberOfUnitsText = numberOfUnitsText.Remove(selectionStart - 1, 1);
-        }
-
-        if (string.IsNullOrEmpty(numberOfUnitsText))
-        {
-          numberOfUnitsText = "0";
-        }
-
-        UpdateSubtotalOfUnitLoads(numberOfUnitsText);
-      }
-      else if (e.KeyChar == '\r')
-      {
-        SelectNextItem();
-      }
-
-      return numberOfUnitsText;
-    }
-
-    private void UpdateSubtotalOfUnitLoads(string numberOfUnitsText)
-    {
-      var allUnitInfo = _parentForm.AllUnitInformation();
-      var selectedUnit = allUnitInfo.FirstOrDefault(unit => unit.FormattedName() == UNIT_TYPES.Text);
-      if (selectedUnit != null)
-      {
-        int count;
-        if (int.TryParse(numberOfUnitsText, out count))
-        {
-          var subtotal = count * (selectedUnit.Totals.TotalGeneralLoad + selectedUnit.Totals.CustomLoad + selectedUnit.Totals.TotalACLoad);
-          _buildingInformation.UpdateCounter(selectedUnit, count, subtotal);
-          SUBTOTAL_UNIT_LOADS.Text = subtotal.ToString();
-        }
-        UpdateBuildingFormInformation();
-      }
+      return selectedUnit;
     }
 
     private void UNIT_TYPES_SelectedIndexChanged(object sender, EventArgs e)
@@ -349,7 +277,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       if (counter == null) return;
 
       var existingNumberOfUnits = counter.Count;
-      var newSubtotal = (unitInformation.Totals.TotalGeneralLoad + unitInformation.Totals.CustomLoad + unitInformation.Totals.TotalACLoad) * existingNumberOfUnits;
+      var newSubtotal = unitInformation.Totals.SubtotalOfUnitType() * existingNumberOfUnits;
       _buildingInformation.UpdateCounter(unitInformation, existingNumberOfUnits, newSubtotal);
       UpdateBuildingFormInformation();
     }

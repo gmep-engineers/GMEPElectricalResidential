@@ -1316,6 +1316,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       return serviceRating ?? 0;
     }
+
+    public int SubtotalOfUnitType()
+    {
+      return TotalACLoad + TotalGeneralLoad + CustomLoad;
+    }
   }
 
   public class HeatingUnit

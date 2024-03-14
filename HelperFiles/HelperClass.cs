@@ -29,8 +29,8 @@ namespace GMEPElectricalResidential.HelperFiles
 
       var message = JsonConvert.SerializeObject(thing, Formatting.Indented, settings);
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      doc.Editor.WriteMessage(preMessage);
-      doc.Editor.WriteMessage(message);
+      doc.Editor.WriteMessage(preMessage + " ");
+      doc.Editor.WriteMessage(message + "\n");
     }
 
     public static void SaveDataToJsonFileOnDesktop(object data, string fileName, bool noOverride = false)

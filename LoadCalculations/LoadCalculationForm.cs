@@ -26,6 +26,7 @@ namespace GMEPElectricalResidential.LoadCalculations
   {
     private int _UnitTabID = 0;
     private int _BuildingTabID = 0;
+    private ToolTip _toolTip;
     private List<int> _unitCannotBeIDs;
     private List<int> _buildingCannotBeIDs;
 
@@ -39,6 +40,7 @@ namespace GMEPElectricalResidential.LoadCalculations
 
       _unitCannotBeIDs = new List<int>();
       _buildingCannotBeIDs = new List<int>();
+      _toolTip = new ToolTip();
 
       bool createdUnitTab = LoadSavedUnitLoadCalculations();
       bool createdBuildingTab = LoadSavedBuildingLoadCalculations();
@@ -58,6 +60,25 @@ namespace GMEPElectricalResidential.LoadCalculations
       this.TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
       this.BUILDING_TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
       this.UNIT_TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
+      this.INNER_SHEET_WIDTH.KeyPress += INNER_SHEET_WIDTH_KeyPress;
+      this.INNER_SHEET_WIDTH.KeyUp += INNER_SHEET_WIDTH_KeyUp;
+    }
+
+    private void INNER_SHEET_WIDTH_KeyUp(object sender, KeyEventArgs e)
+    {
+      string text = INNER_SHEET_WIDTH.Text;
+      bool isTextEmpty = string.IsNullOrEmpty(text);
+
+      GROUP_BUILDING_CALCS.Enabled = !isTextEmpty;
+    }
+
+    private void INNER_SHEET_WIDTH_KeyPress(object sender, KeyPressEventArgs e)
+    {
+      if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
+      {
+        e.Handled = true;
+        _toolTip.Show("Please enter only digits.", (Control)sender, 0, -20, 2000);
+      }
     }
 
     private void LoadCheckboxState()
@@ -370,66 +391,6 @@ namespace GMEPElectricalResidential.LoadCalculations
       }
     }
 
-    private void TAB_CONTROL_SelectedIndexChanged(object sender, EventArgs e)
-    {
-      if (TAB_CONTROL.SelectedTab != null && TAB_CONTROL.SelectedTab.Text == "Unit")
-      {
-        DisableNumberOfUnitsForAllTabs();
-      }
-
-      for (int i = 0; i < BUILDING_TAB_CONTROL.TabCount; i++)
-      {
-        var tabPage = BUILDING_TAB_CONTROL.TabPages[i];
-        var buildingLoadCalculationForm = tabPage.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
-        if (buildingLoadCalculationForm != null)
-        {
-          buildingLoadCalculationForm.SetLoadBoxValues();
-        }
-      }
-    }
-
-    private void LOAD_CALCULATION_FORM_FormClosing(object sender, FormClosingEventArgs e)
-    {
-      SaveLoadCalculationForm();
-    }
-
-    private void CREATE_UNIT_BUTTON_Click(object sender, EventArgs e)
-    {
-      if (TAB_CONTROL.SelectedTab == UNIT_TAB)
-      {
-        AddNewUnitTab();
-        UNIT_TAB_CONTROL.SelectedIndex = UNIT_TAB_CONTROL.TabCount - 1;
-      }
-      else if (TAB_CONTROL.SelectedTab == BUILDING_TAB)
-      {
-        AddNewBuildingTab();
-        BUILDING_TAB_CONTROL.SelectedIndex = BUILDING_TAB_CONTROL.TabCount - 1;
-      }
-    }
-
-    private void DELETE_UNIT_BUTTON_Click(object sender, EventArgs e)
-    {
-      if (TAB_CONTROL.SelectedTab == UNIT_TAB)
-      {
-        if (UNIT_TAB_CONTROL.SelectedTab != null)
-        {
-          RemoveCurrentTab();
-        }
-      }
-      else if (TAB_CONTROL.SelectedTab == BUILDING_TAB)
-      {
-        if (BUILDING_TAB_CONTROL.SelectedTab != null)
-        {
-          RemoveCurrentTab();
-        }
-      }
-    }
-
-    private void CREATE_Click(object sender, EventArgs e)
-    {
-      CreateOrUpdateLoadCalculations(true);
-    }
-
     private void CreateOrUpdateLoadCalculations(bool isCreate)
     {
       var allUnitInfo = AllUnitInformation();
@@ -508,6 +469,66 @@ namespace GMEPElectricalResidential.LoadCalculations
       }
 
       return point;
+    }
+
+    private void TAB_CONTROL_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      if (TAB_CONTROL.SelectedTab != null && TAB_CONTROL.SelectedTab.Text == "Unit")
+      {
+        DisableNumberOfUnitsForAllTabs();
+      }
+
+      for (int i = 0; i < BUILDING_TAB_CONTROL.TabCount; i++)
+      {
+        var tabPage = BUILDING_TAB_CONTROL.TabPages[i];
+        var buildingLoadCalculationForm = tabPage.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
+        if (buildingLoadCalculationForm != null)
+        {
+          buildingLoadCalculationForm.SetLoadBoxValues();
+        }
+      }
+    }
+
+    private void LOAD_CALCULATION_FORM_FormClosing(object sender, FormClosingEventArgs e)
+    {
+      SaveLoadCalculationForm();
+    }
+
+    private void CREATE_UNIT_BUTTON_Click(object sender, EventArgs e)
+    {
+      if (TAB_CONTROL.SelectedTab == UNIT_TAB)
+      {
+        AddNewUnitTab();
+        UNIT_TAB_CONTROL.SelectedIndex = UNIT_TAB_CONTROL.TabCount - 1;
+      }
+      else if (TAB_CONTROL.SelectedTab == BUILDING_TAB)
+      {
+        AddNewBuildingTab();
+        BUILDING_TAB_CONTROL.SelectedIndex = BUILDING_TAB_CONTROL.TabCount - 1;
+      }
+    }
+
+    private void DELETE_UNIT_BUTTON_Click(object sender, EventArgs e)
+    {
+      if (TAB_CONTROL.SelectedTab == UNIT_TAB)
+      {
+        if (UNIT_TAB_CONTROL.SelectedTab != null)
+        {
+          RemoveCurrentTab();
+        }
+      }
+      else if (TAB_CONTROL.SelectedTab == BUILDING_TAB)
+      {
+        if (BUILDING_TAB_CONTROL.SelectedTab != null)
+        {
+          RemoveCurrentTab();
+        }
+      }
+    }
+
+    private void CREATE_Click(object sender, EventArgs e)
+    {
+      CreateOrUpdateLoadCalculations(true);
     }
 
     private void SAVE_BUTTON_Click(object sender, EventArgs e)
