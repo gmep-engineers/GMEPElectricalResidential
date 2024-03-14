@@ -378,8 +378,16 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       foreach (var item in CUSTOM_LOAD_BOX.Items)
       {
         var split = item.ToString().Trim().Split(',');
-        var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2]);
-        customs.Add(unitGeneralCustomLoad);
+        if (split.Length > 3)
+        {
+          var unitCustomLoad = new UnitLoad(split[0], split[1], split[2], split[3]);
+          customs.Add(unitCustomLoad);
+        }
+        else
+        {
+          var unitCustomLoad = new UnitLoad(split[0], split[1], split[2], "0");
+          customs.Add(unitCustomLoad);
+        }
       }
 
       _unitInformation.CustomLoads = customs;
@@ -428,15 +436,23 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         lightingLoad = int.Parse(AREA.Text) * 3;
       }
 
-      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", lightingLoad, "1");
+      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", lightingLoad.ToString(), "1", "0");
 
       List<UnitLoad> customs = new List<UnitLoad>();
 
       foreach (var item in GENERAL_CUSTOM_LOAD_BOX.Items)
       {
         var split = item.ToString().Trim().Split(',');
-        var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2]);
-        customs.Add(unitGeneralCustomLoad);
+        if (split.Length > 3)
+        {
+          var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2], split[3]);
+          customs.Add(unitGeneralCustomLoad);
+        }
+        else
+        {
+          var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2], "0");
+          customs.Add(unitGeneralCustomLoad);
+        }
       }
 
       unitGeneralLoadContainer.Customs = customs;
@@ -496,13 +512,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private void DetectEnterPresses()
     {
-      // Subscribe to KeyDown event for GENERAL_CUSTOM controls
       GENERAL_CUSTOM_NAME.KeyDown += TextBox_KeyDown;
       GENERAL_CUSTOM_VA.KeyDown += TextBox_KeyDown;
       GENERAL_CUSTOM_MULTIPLIER.KeyDown += TextBox_KeyDown;
       GENERAL_CUSTOM_TOTAL.KeyDown += TextBox_KeyDown;
 
-      // Subscribe to KeyDown event for CUSTOM controls
       CUSTOM_NAME.KeyDown += TextBox_KeyDown;
       CUSTOM_VA.KeyDown += TextBox_KeyDown;
       CUSTOM_MULTIPLIER.KeyDown += TextBox_KeyDown;
@@ -1228,10 +1242,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     public int Total { get; set; }
     public string Name { get; set; }
 
-    public UnitLoad(string name, object va, object multiplier)
+    public UnitLoad(string name, string va, string multiplier, string total)
     {
-      VA = va is int ? (int)va : int.TryParse(va.ToString(), out int vaResult) ? vaResult : 0;
-      Multiplier = multiplier is int ? (int)multiplier : int.TryParse(multiplier.ToString(), out int multiplierResult) ? multiplierResult : 0;
+      VA = string.IsNullOrEmpty(va) ? 0 : int.TryParse(va, out int vaResult) ? vaResult : 0;
+      Multiplier = string.IsNullOrEmpty(multiplier) ? 0 : int.TryParse(multiplier, out int multiplierResult) ? multiplierResult : 0;
+      Total = string.IsNullOrEmpty(total) ? 0 : int.TryParse(total, out int totalResult) ? totalResult : 0;
       Name = name;
     }
 

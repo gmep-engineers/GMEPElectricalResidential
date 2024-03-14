@@ -300,6 +300,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       int startingRows = 4;
       int totalServiceRating = unitInfo.Totals.ServiceLoad + (unitInfo2?.Totals.ServiceLoad ?? 0);
+      var combinedUnitTotals = new UnitTotalContainer();
+      combinedUnitTotals.ServiceLoad = totalServiceRating;
       var headers = serviceBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
       if (headers != null)
       {
@@ -323,7 +325,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         values.Contents = "";
         string serviceValues = "".NewLine().NewLine().NewLine();
 
-        serviceValues += $"{totalServiceRating}A";
+        serviceValues += $"{combinedUnitTotals.ServiceRating()}A";
 
         values.Contents = serviceValues.SetFont("Arial");
       }
@@ -347,7 +349,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         var combinedCustomLoads = new Dictionary<string, UnitLoad>();
         foreach (var customLoad in unitInfo.CustomLoads)
         {
-          combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, (customLoad.VA * customLoad.Multiplier), customLoad.Multiplier);
+          combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, (customLoad.VA * customLoad.Multiplier).ToString(), customLoad.Multiplier.ToString(), customLoad.Total.ToString());
         }
 
         if (unitInfo2 != null)
@@ -361,7 +363,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
             }
             else
             {
-              combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, (customLoad.VA * customLoad.Multiplier), customLoad.Multiplier);
+              combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, (customLoad.VA * customLoad.Multiplier).ToString(), customLoad.Multiplier.ToString(), customLoad.Total.ToString());
             }
           }
         }

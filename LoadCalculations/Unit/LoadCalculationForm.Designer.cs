@@ -492,7 +492,7 @@
       this.panel13.Name = "panel13";
       this.panel13.Padding = new System.Windows.Forms.Padding(5);
       this.panel13.Size = new System.Drawing.Size(94, 28);
-      this.panel13.TabIndex = 37;
+      this.panel13.TabIndex = 9;
       // 
       // GENERAL_CUSTOM_NAME
       // 
@@ -539,7 +539,7 @@
       this.GENERAL_CUSTOM_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.GENERAL_CUSTOM_MULTIPLIER.Name = "GENERAL_CUSTOM_MULTIPLIER";
       this.GENERAL_CUSTOM_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
-      this.GENERAL_CUSTOM_MULTIPLIER.TabIndex = 39;
+      this.GENERAL_CUSTOM_MULTIPLIER.TabIndex = 11;
       this.GENERAL_CUSTOM_MULTIPLIER.Text = "1";
       // 
       // label23
@@ -549,9 +549,9 @@
       this.label23.Location = new System.Drawing.Point(268, 140);
       this.label23.Margin = new System.Windows.Forms.Padding(0, 0, 0, 12);
       this.label23.Name = "label23";
-      this.label23.Size = new System.Drawing.Size(460, 24);
+      this.label23.Size = new System.Drawing.Size(440, 24);
       this.label23.TabIndex = 64;
-      this.label23.Text = "General Load (VA) - Name, Single VA, Multiplier";
+      this.label23.Text = "General Load (VA) - Name, VA, Amount, Total";
       // 
       // panel19
       // 
@@ -562,7 +562,7 @@
       this.panel19.Name = "panel19";
       this.panel19.Padding = new System.Windows.Forms.Padding(5);
       this.panel19.Size = new System.Drawing.Size(84, 28);
-      this.panel19.TabIndex = 38;
+      this.panel19.TabIndex = 10;
       // 
       // GENERAL_CUSTOM_VA
       // 
@@ -581,9 +581,9 @@
       this.label25.Location = new System.Drawing.Point(779, 10);
       this.label25.Margin = new System.Windows.Forms.Padding(0, 0, 0, 12);
       this.label25.Name = "label25";
-      this.label25.Size = new System.Drawing.Size(456, 24);
+      this.label25.Size = new System.Drawing.Size(436, 24);
       this.label25.TabIndex = 81;
-      this.label25.Text = "Custom Load (VA) - Name, Single VA, Multiplier";
+      this.label25.Text = "Custom Load (VA) - Name, VA, Amount, Total";
       // 
       // label29
       // 
@@ -605,7 +605,7 @@
       this.panel30.Name = "panel30";
       this.panel30.Padding = new System.Windows.Forms.Padding(5);
       this.panel30.Size = new System.Drawing.Size(108, 28);
-      this.panel30.TabIndex = 48;
+      this.panel30.TabIndex = 22;
       // 
       // OUTDOOR_CONDENSER_VA
       // 
@@ -638,7 +638,7 @@
       this.panel31.Name = "panel31";
       this.panel31.Padding = new System.Windows.Forms.Padding(5);
       this.panel31.Size = new System.Drawing.Size(108, 28);
-      this.panel31.TabIndex = 50;
+      this.panel31.TabIndex = 24;
       // 
       // INDOOR_FAN_COIL_VA
       // 
@@ -682,7 +682,7 @@
       this.GENERAL_CUSTOM_LOAD_BOX.Location = new System.Drawing.Point(272, 181);
       this.GENERAL_CUSTOM_LOAD_BOX.Name = "GENERAL_CUSTOM_LOAD_BOX";
       this.GENERAL_CUSTOM_LOAD_BOX.Size = new System.Drawing.Size(434, 342);
-      this.GENERAL_CUSTOM_LOAD_BOX.TabIndex = 36;
+      this.GENERAL_CUSTOM_LOAD_BOX.TabIndex = 8;
       // 
       // ADD_ENTRY
       // 
@@ -690,7 +690,7 @@
       this.ADD_ENTRY.Location = new System.Drawing.Point(271, 582);
       this.ADD_ENTRY.Name = "ADD_ENTRY";
       this.ADD_ENTRY.Size = new System.Drawing.Size(108, 28);
-      this.ADD_ENTRY.TabIndex = 40;
+      this.ADD_ENTRY.TabIndex = 13;
       this.ADD_ENTRY.Text = "Add/Update";
       this.ADD_ENTRY.UseVisualStyleBackColor = true;
       this.ADD_ENTRY.Click += new System.EventHandler(this.ADD_ENTRY_Click);
@@ -701,7 +701,7 @@
       this.REMOVE_ENTRY.Location = new System.Drawing.Point(385, 582);
       this.REMOVE_ENTRY.Name = "REMOVE_ENTRY";
       this.REMOVE_ENTRY.Size = new System.Drawing.Size(88, 28);
-      this.REMOVE_ENTRY.TabIndex = 41;
+      this.REMOVE_ENTRY.TabIndex = 14;
       this.REMOVE_ENTRY.Text = "Remove";
       this.REMOVE_ENTRY.UseVisualStyleBackColor = true;
       this.REMOVE_ENTRY.Click += new System.EventHandler(this.REMOVE_ENTRY_Click);
@@ -712,7 +712,7 @@
       this.REMOVE_ENTRY_CUSTOM.Location = new System.Drawing.Point(897, 582);
       this.REMOVE_ENTRY_CUSTOM.Name = "REMOVE_ENTRY_CUSTOM";
       this.REMOVE_ENTRY_CUSTOM.Size = new System.Drawing.Size(88, 28);
-      this.REMOVE_ENTRY_CUSTOM.TabIndex = 47;
+      this.REMOVE_ENTRY_CUSTOM.TabIndex = 21;
       this.REMOVE_ENTRY_CUSTOM.Text = "Remove";
       this.REMOVE_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
       this.REMOVE_ENTRY_CUSTOM.Click += new System.EventHandler(this.REMOVE_ENTRY_CUSTOM_Click);
@@ -726,7 +726,7 @@
       this.CUSTOM_LOAD_BOX.Location = new System.Drawing.Point(783, 61);
       this.CUSTOM_LOAD_BOX.Name = "CUSTOM_LOAD_BOX";
       this.CUSTOM_LOAD_BOX.Size = new System.Drawing.Size(440, 462);
-      this.CUSTOM_LOAD_BOX.TabIndex = 42;
+      this.CUSTOM_LOAD_BOX.TabIndex = 15;
       // 
       // label16
       // 
@@ -888,7 +888,7 @@
       this.panel20.Name = "panel20";
       this.panel20.Padding = new System.Windows.Forms.Padding(5);
       this.panel20.Size = new System.Drawing.Size(108, 28);
-      this.panel20.TabIndex = 52;
+      this.panel20.TabIndex = 26;
       // 
       // OUTDOOR_HEATER_UNIT
       // 
@@ -947,7 +947,7 @@
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Margin = new System.Windows.Forms.Padding(0);
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Name = "OUTDOOR_HEATER_UNIT_AMOUNT";
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Size = new System.Drawing.Size(56, 28);
-      this.OUTDOOR_HEATER_UNIT_AMOUNT.TabIndex = 53;
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.TabIndex = 27;
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Text = "1";
       // 
       // label64
@@ -977,7 +977,7 @@
       this.ESTIMATE_CONDENSER.Location = new System.Drawing.Point(1429, 74);
       this.ESTIMATE_CONDENSER.Name = "ESTIMATE_CONDENSER";
       this.ESTIMATE_CONDENSER.Size = new System.Drawing.Size(85, 28);
-      this.ESTIMATE_CONDENSER.TabIndex = 49;
+      this.ESTIMATE_CONDENSER.TabIndex = 23;
       this.ESTIMATE_CONDENSER.Text = "Estimate";
       this.ESTIMATE_CONDENSER.UseVisualStyleBackColor = true;
       this.ESTIMATE_CONDENSER.Click += new System.EventHandler(this.ESTIMATE_CONDENSER_Click);
@@ -988,7 +988,7 @@
       this.ESTIMATE_FAN_COIL.Location = new System.Drawing.Point(1429, 141);
       this.ESTIMATE_FAN_COIL.Name = "ESTIMATE_FAN_COIL";
       this.ESTIMATE_FAN_COIL.Size = new System.Drawing.Size(85, 28);
-      this.ESTIMATE_FAN_COIL.TabIndex = 51;
+      this.ESTIMATE_FAN_COIL.TabIndex = 25;
       this.ESTIMATE_FAN_COIL.Text = "Estimate";
       this.ESTIMATE_FAN_COIL.UseVisualStyleBackColor = true;
       this.ESTIMATE_FAN_COIL.Click += new System.EventHandler(this.ESTIMATE_FAN_COIL_Click);
@@ -1256,7 +1256,7 @@
       this.panel5.Name = "panel5";
       this.panel5.Padding = new System.Windows.Forms.Padding(5);
       this.panel5.Size = new System.Drawing.Size(84, 28);
-      this.panel5.TabIndex = 188;
+      this.panel5.TabIndex = 17;
       // 
       // CUSTOM_VA
       // 
@@ -1277,7 +1277,7 @@
       this.panel6.Name = "panel6";
       this.panel6.Padding = new System.Windows.Forms.Padding(5);
       this.panel6.Size = new System.Drawing.Size(94, 28);
-      this.panel6.TabIndex = 187;
+      this.panel6.TabIndex = 16;
       // 
       // CUSTOM_NAME
       // 
@@ -1324,7 +1324,7 @@
       this.CUSTOM_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.CUSTOM_MULTIPLIER.Name = "CUSTOM_MULTIPLIER";
       this.CUSTOM_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
-      this.CUSTOM_MULTIPLIER.TabIndex = 190;
+      this.CUSTOM_MULTIPLIER.TabIndex = 18;
       this.CUSTOM_MULTIPLIER.Text = "1";
       // 
       // label14
@@ -1357,7 +1357,7 @@
       this.panel4.Name = "panel4";
       this.panel4.Padding = new System.Windows.Forms.Padding(5);
       this.panel4.Size = new System.Drawing.Size(86, 28);
-      this.panel4.TabIndex = 189;
+      this.panel4.TabIndex = 19;
       // 
       // label18
       // 
@@ -1400,7 +1400,7 @@
       this.panel3.Name = "panel3";
       this.panel3.Padding = new System.Windows.Forms.Padding(5);
       this.panel3.Size = new System.Drawing.Size(86, 28);
-      this.panel3.TabIndex = 39;
+      this.panel3.TabIndex = 12;
       // 
       // label7
       // 
@@ -1441,7 +1441,7 @@
       this.ADD_ENTRY_CUSTOM.Location = new System.Drawing.Point(783, 582);
       this.ADD_ENTRY_CUSTOM.Name = "ADD_ENTRY_CUSTOM";
       this.ADD_ENTRY_CUSTOM.Size = new System.Drawing.Size(108, 28);
-      this.ADD_ENTRY_CUSTOM.TabIndex = 199;
+      this.ADD_ENTRY_CUSTOM.TabIndex = 20;
       this.ADD_ENTRY_CUSTOM.Text = "Add/Update";
       this.ADD_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
       // 
