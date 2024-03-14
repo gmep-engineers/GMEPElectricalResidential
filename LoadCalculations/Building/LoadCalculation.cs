@@ -117,15 +117,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, generalLoadRowHeaders);
         shiftHeight -= ROW_HEIGHT * generalLoadRowHeaders.Count;
 
-        // Optional Water Heater
-        if (!IsWHCustomLoadForAllUnits(buildingUnitInfo))
-        {
-          // Create Rows
-          List<string> optionalWaterHeaterRowHeaders = new List<string> { RowHeaders.OptionalWaterHeater };
-          CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, optionalWaterHeaterRowHeaders);
-          shiftHeight -= ROW_HEIGHT * optionalWaterHeaterRowHeaders.Count;
-        }
-
         // Custom General Loads
         // Create Rows
         List<string> customGeneralLoadRowHeaders = buildingUnitInfo.SelectMany(unit => unit.GeneralLoads.Customs.Select(customLoad => customLoad.Name)).Distinct().ToList();
@@ -300,7 +291,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       List<ObjectData> rowData = new List<ObjectData>();
 
       var rowHeaderTextObj = rowHeaderData.Texts.FirstOrDefault(text => text.Contents.Contains("Unit"));
-      rowHeaderTextObj.Contents = rowHeaderTextObj.Contents.Replace("Unit", message);
+      UpdateHeaderText(message, rowHeaderTextObj);
       rowData.Add(rowHeaderData);
 
       rowEntryData = ShiftDataHorizontally(rowEntryData, startPoint);
@@ -357,6 +348,23 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       }
 
       return rowData;
+    }
+
+    private static void UpdateHeaderText(string message, TextData rowHeaderTextObj)
+    {
+      if (message == "Laundry")
+      {
+        message = "Laundry (1-20ACKT by CEC 210.11)";
+      }
+      else if (message == "Bathroom")
+      {
+        message = "Bathroom (1-20ACKT by CEC 210.11)";
+      }
+      else if (message == "Small Appliance")
+      {
+        message = "Small Appliance (3-20ACK by CEC 210.11)";
+      }
+      rowHeaderTextObj.Contents = rowHeaderTextObj.Contents.Replace("Unit", message);
     }
 
     private static ObjectData ShiftTextHorizontally(ObjectData copiedRowEntryData, double shiftDistance)
@@ -647,23 +655,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
     public static List<string> GeneralLoad = new List<string> {
       "General Lighting Subtotal (Floor Area x 3VA/ft²) (CEC 220.42)",
-      "Small Appliance (3-20ACK by CEC 210.11)",
-      "Laundry (1-20ACKT by CEC 210.11)",
-      "Lighting And Appliance Load Total",
-      "Bathroom (1-20ACKT by CEC 210.11)",
-      "Dishwasher",
-      "Microwave",
-      "Garbage Disposal",
-      "Bathroom Fans",
-      "Garage Door Opener",
-      "Dryer",
-      "Range",
-      "Refrigerator",
-      "Oven",
-      "Cooktop",
     };
-
-    public static string OptionalWaterHeater = "Water Heater";
 
     public static List<string> GeneralLoadCalculations = new List<string>
     {
