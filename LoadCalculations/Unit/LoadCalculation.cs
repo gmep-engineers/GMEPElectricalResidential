@@ -572,7 +572,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
-          generalValues.Add($"{customLoad.VA}VA");
+          generalValues.Add($"{customLoad.VA * customLoad.Multiplier}VA");
         });
 
         InsertValueLightingBreakdown(1, unitInfo, generalValues, unitInfo2);
