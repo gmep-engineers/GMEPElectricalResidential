@@ -244,11 +244,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       CADObjectCommands.CreateObjectFromData(modifiedSpacerData, point, acBlkTblRec);
     }
 
-    private static bool IsWHCustomLoadForAllUnits(List<UnitInformation> allUnitInformation)
-    {
-      return allUnitInformation.All(unit => unit.CustomLoads.Any(customLoad => customLoad.Name == "Water Heater"));
-    }
-
     private static void CreateSubtitle(ObjectData subtitleData, double shiftHeight, double additionalWidth, Point3d point, BlockTableRecord acBlkTblRec, string subtitle)
     {
       var copiedSubtitleData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(subtitleData));
