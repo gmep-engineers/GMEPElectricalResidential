@@ -118,11 +118,11 @@
       this.CUSTOM_MULTIPLIER = new System.Windows.Forms.ComboBox();
       this.CUSTOM_TOTAL = new System.Windows.Forms.TextBox();
       this.panel4 = new System.Windows.Forms.Panel();
-      this.label18 = new System.Windows.Forms.Label();
+      this.TOTAL_CUSTOM_LABEL = new System.Windows.Forms.Label();
       this.label17 = new System.Windows.Forms.Label();
       this.GENERAL_CUSTOM_TOTAL = new System.Windows.Forms.TextBox();
       this.panel3 = new System.Windows.Forms.Panel();
-      this.label7 = new System.Windows.Forms.Label();
+      this.TOTAL_GENERAL_LABEL = new System.Windows.Forms.Label();
       this.label9 = new System.Windows.Forms.Label();
       this.ADD_ENTRY_CUSTOM = new System.Windows.Forms.Button();
       this.panel1.SuspendLayout();
@@ -479,7 +479,7 @@
       this.panel13.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel13.Name = "panel13";
       this.panel13.Padding = new System.Windows.Forms.Padding(5);
-      this.panel13.Size = new System.Drawing.Size(94, 28);
+      this.panel13.Size = new System.Drawing.Size(236, 28);
       this.panel13.TabIndex = 9;
       // 
       // GENERAL_CUSTOM_NAME
@@ -489,7 +489,7 @@
       this.GENERAL_CUSTOM_NAME.Location = new System.Drawing.Point(5, 5);
       this.GENERAL_CUSTOM_NAME.Margin = new System.Windows.Forms.Padding(0);
       this.GENERAL_CUSTOM_NAME.Name = "GENERAL_CUSTOM_NAME";
-      this.GENERAL_CUSTOM_NAME.Size = new System.Drawing.Size(84, 19);
+      this.GENERAL_CUSTOM_NAME.Size = new System.Drawing.Size(226, 19);
       this.GENERAL_CUSTOM_NAME.TabIndex = 2;
       // 
       // GENERAL_CUSTOM_MULTIPLIER
@@ -523,7 +523,7 @@
             "23",
             "24",
             "25"});
-      this.GENERAL_CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(501, 546);
+      this.GENERAL_CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(644, 546);
       this.GENERAL_CUSTOM_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.GENERAL_CUSTOM_MULTIPLIER.Name = "GENERAL_CUSTOM_MULTIPLIER";
       this.GENERAL_CUSTOM_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -910,7 +910,7 @@
       // 
       this.label64.AutoSize = true;
       this.label64.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label64.Location = new System.Drawing.Point(488, 551);
+      this.label64.Location = new System.Drawing.Point(631, 551);
       this.label64.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label64.Name = "label64";
       this.label64.Size = new System.Drawing.Size(13, 16);
@@ -1119,7 +1119,7 @@
       // 
       this.label10.AutoSize = true;
       this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label10.Location = new System.Drawing.Point(498, 525);
+      this.label10.Location = new System.Drawing.Point(641, 525);
       this.label10.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(52, 16);
@@ -1152,7 +1152,7 @@
       // 
       this.label15.AutoSize = true;
       this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label15.Location = new System.Drawing.Point(1010, 525);
+      this.label15.Location = new System.Drawing.Point(1159, 525);
       this.label15.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label15.Name = "label15";
       this.label15.Size = new System.Drawing.Size(52, 16);
@@ -1163,7 +1163,7 @@
       // 
       this.label20.AutoSize = true;
       this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label20.Location = new System.Drawing.Point(1000, 551);
+      this.label20.Location = new System.Drawing.Point(1149, 551);
       this.label20.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label20.Name = "label20";
       this.label20.Size = new System.Drawing.Size(13, 16);
@@ -1178,7 +1178,7 @@
       this.panel6.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel6.Name = "panel6";
       this.panel6.Padding = new System.Windows.Forms.Padding(5);
-      this.panel6.Size = new System.Drawing.Size(94, 28);
+      this.panel6.Size = new System.Drawing.Size(242, 28);
       this.panel6.TabIndex = 15;
       // 
       // CUSTOM_NAME
@@ -1188,7 +1188,7 @@
       this.CUSTOM_NAME.Location = new System.Drawing.Point(5, 5);
       this.CUSTOM_NAME.Margin = new System.Windows.Forms.Padding(0);
       this.CUSTOM_NAME.Name = "CUSTOM_NAME";
-      this.CUSTOM_NAME.Size = new System.Drawing.Size(84, 19);
+      this.CUSTOM_NAME.Size = new System.Drawing.Size(232, 19);
       this.CUSTOM_NAME.TabIndex = 2;
       // 
       // CUSTOM_MULTIPLIER
@@ -1222,7 +1222,7 @@
             "23",
             "24",
             "25"});
-      this.CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(1013, 546);
+      this.CUSTOM_MULTIPLIER.Location = new System.Drawing.Point(1162, 546);
       this.CUSTOM_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.CUSTOM_MULTIPLIER.Name = "CUSTOM_MULTIPLIER";
       this.CUSTOM_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
@@ -1243,29 +1243,29 @@
       // 
       this.panel4.BackColor = System.Drawing.SystemColors.Window;
       this.panel4.Controls.Add(this.CUSTOM_TOTAL);
-      this.panel4.Location = new System.Drawing.Point(885, 546);
-      this.panel4.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
+      this.panel4.Location = new System.Drawing.Point(1034, 546);
+      this.panel4.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel4.Name = "panel4";
       this.panel4.Padding = new System.Windows.Forms.Padding(5);
       this.panel4.Size = new System.Drawing.Size(86, 28);
       this.panel4.TabIndex = 16;
       // 
-      // label18
+      // TOTAL_CUSTOM_LABEL
       // 
-      this.label18.AutoSize = true;
-      this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label18.Location = new System.Drawing.Point(882, 525);
-      this.label18.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label18.Name = "label18";
-      this.label18.Size = new System.Drawing.Size(38, 16);
-      this.label18.TabIndex = 194;
-      this.label18.Text = "Total";
+      this.TOTAL_CUSTOM_LABEL.AutoSize = true;
+      this.TOTAL_CUSTOM_LABEL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.TOTAL_CUSTOM_LABEL.Location = new System.Drawing.Point(1031, 525);
+      this.TOTAL_CUSTOM_LABEL.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.TOTAL_CUSTOM_LABEL.Name = "TOTAL_CUSTOM_LABEL";
+      this.TOTAL_CUSTOM_LABEL.Size = new System.Drawing.Size(38, 16);
+      this.TOTAL_CUSTOM_LABEL.TabIndex = 194;
+      this.TOTAL_CUSTOM_LABEL.Text = "Total";
       // 
       // label17
       // 
       this.label17.AutoSize = true;
       this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label17.Location = new System.Drawing.Point(974, 553);
+      this.label17.Location = new System.Drawing.Point(1123, 553);
       this.label17.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label17.Name = "label17";
       this.label17.Size = new System.Drawing.Size(25, 16);
@@ -1286,29 +1286,29 @@
       // 
       this.panel3.BackColor = System.Drawing.SystemColors.Window;
       this.panel3.Controls.Add(this.GENERAL_CUSTOM_TOTAL);
-      this.panel3.Location = new System.Drawing.Point(373, 546);
-      this.panel3.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
+      this.panel3.Location = new System.Drawing.Point(516, 546);
+      this.panel3.Margin = new System.Windows.Forms.Padding(6, 0, 3, 12);
       this.panel3.Name = "panel3";
       this.panel3.Padding = new System.Windows.Forms.Padding(5);
       this.panel3.Size = new System.Drawing.Size(86, 28);
       this.panel3.TabIndex = 10;
       // 
-      // label7
+      // TOTAL_GENERAL_LABEL
       // 
-      this.label7.AutoSize = true;
-      this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label7.Location = new System.Drawing.Point(370, 525);
-      this.label7.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label7.Name = "label7";
-      this.label7.Size = new System.Drawing.Size(38, 16);
-      this.label7.TabIndex = 180;
-      this.label7.Text = "Total";
+      this.TOTAL_GENERAL_LABEL.AutoSize = true;
+      this.TOTAL_GENERAL_LABEL.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.TOTAL_GENERAL_LABEL.Location = new System.Drawing.Point(513, 525);
+      this.TOTAL_GENERAL_LABEL.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
+      this.TOTAL_GENERAL_LABEL.Name = "TOTAL_GENERAL_LABEL";
+      this.TOTAL_GENERAL_LABEL.Size = new System.Drawing.Size(38, 16);
+      this.TOTAL_GENERAL_LABEL.TabIndex = 180;
+      this.TOTAL_GENERAL_LABEL.Text = "Total";
       // 
       // label9
       // 
       this.label9.AutoSize = true;
       this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label9.Location = new System.Drawing.Point(462, 553);
+      this.label9.Location = new System.Drawing.Point(605, 553);
       this.label9.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label9.Name = "label9";
       this.label9.Size = new System.Drawing.Size(25, 16);
@@ -1334,7 +1334,7 @@
       this.Controls.Add(this.label13);
       this.Controls.Add(this.label15);
       this.Controls.Add(this.label17);
-      this.Controls.Add(this.label18);
+      this.Controls.Add(this.TOTAL_CUSTOM_LABEL);
       this.Controls.Add(this.panel4);
       this.Controls.Add(this.label20);
       this.Controls.Add(this.panel6);
@@ -1342,7 +1342,7 @@
       this.Controls.Add(this.label12);
       this.Controls.Add(this.label10);
       this.Controls.Add(this.label9);
-      this.Controls.Add(this.label7);
+      this.Controls.Add(this.TOTAL_GENERAL_LABEL);
       this.Controls.Add(this.panel3);
       this.Controls.Add(this.label80);
       this.Controls.Add(this.label78);
@@ -1531,11 +1531,11 @@
     private System.Windows.Forms.ComboBox CUSTOM_MULTIPLIER;
     private System.Windows.Forms.TextBox CUSTOM_TOTAL;
     private System.Windows.Forms.Panel panel4;
-    private System.Windows.Forms.Label label18;
+    private System.Windows.Forms.Label TOTAL_CUSTOM_LABEL;
     private System.Windows.Forms.Label label17;
     private System.Windows.Forms.TextBox GENERAL_CUSTOM_TOTAL;
     private System.Windows.Forms.Panel panel3;
-    private System.Windows.Forms.Label label7;
+    private System.Windows.Forms.Label TOTAL_GENERAL_LABEL;
     private System.Windows.Forms.Label label9;
     private System.Windows.Forms.Button ADD_ENTRY_CUSTOM;
   }

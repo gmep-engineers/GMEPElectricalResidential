@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using GMEPElectricalResidential.HelperFiles;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,6 +23,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     private LOAD_CALCULATION_FORM _parent;
     private bool _isLoaded = false;
     private bool _unitNullFlag = false;
+    private int _dragIndex = -1;
 
     public LoadCalculationForm(LOAD_CALCULATION_FORM parent, int tabId, UnitInformation unitInformation = null)
     {
@@ -32,11 +34,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       DetectEnterPresses();
       SubscribeTextBoxesToTextChangedEvent(this.Controls);
       SubscribeComboBoxesToTextChangedEvent(this.Controls);
-      SubscribeTextBoxesToTextEnterEvent(this.Controls);
-      SubscribeLoadBoxToSelectionChangedEvent(this.Controls);
 
       _parent = parent;
-      _toolTip = new ToolTip();
 
       if (unitInformation != null)
       {
@@ -51,32 +50,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       this.Load += new EventHandler(UnitLoadCalculation_Load);
     }
 
-    private void SubscribeLoadBoxToSelectionChangedEvent(ControlCollection controls)
-    {
-      foreach (Control control in controls)
-      {
-        if (control is ListBox listBox)
-        {
-          listBox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
-        }
-      }
-    }
-
-    private void ListBox_SelectedIndexChanged(object sender, EventArgs e)
-    {
-      if (sender == GENERAL_CUSTOM_LOAD_BOX)
-      {
-        PopulateBoxFormItems(GENERAL_CUSTOM_LOAD_BOX, GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_TOTAL);
-      }
-      else if (sender == CUSTOM_LOAD_BOX)
-      {
-        PopulateBoxFormItems(CUSTOM_LOAD_BOX, CUSTOM_NAME, CUSTOM_MULTIPLIER, CUSTOM_TOTAL);
-      }
-    }
-
     private void PopulateBoxFormItems(ListBox box, TextBox name, ComboBox multiplier, TextBox total)
     {
-      if (GENERAL_CUSTOM_LOAD_BOX.SelectedIndex != -1)
+      if (box.SelectedIndex != -1)
       {
         var selectedItem = box.SelectedItem.ToString().Split(',');
         name.Text = selectedItem[0].Trim();
@@ -87,10 +63,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         total.ForeColor = Color.Black;
         multiplier.ForeColor = Color.Black;
         name.Focus();
+        name.SelectAll();
       }
     }
 
-    private List<string> defaultGeneralValues()
+    private List<string> DefaultGeneralValues()
     {
       return new List<string>()
       {
@@ -117,7 +94,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       }
       else
       {
-        foreach (var value in defaultGeneralValues())
+        foreach (var value in DefaultGeneralValues())
         {
           GENERAL_CUSTOM_LOAD_BOX.Items.Add(value);
         }
@@ -203,29 +180,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     public UnitInformation RetrieveUnitInformation()
     {
       return _unitInformation;
-    }
-
-    private void SubscribeTextBoxesToTextEnterEvent(Control.ControlCollection controls)
-    {
-      foreach (Control control in controls)
-      {
-        if (control is TextBox)
-        {
-          ((TextBox)control).MouseUp += TextBox_MouseUp;
-        }
-        else
-        {
-          SubscribeTextBoxesToTextEnterEvent(control.Controls);
-        }
-      }
-    }
-
-    private void TextBox_MouseUp(object sender, MouseEventArgs e)
-    {
-      if (sender is TextBox textBox && !textBox.ReadOnly)
-      {
-        textBox.SelectAll();
-      }
     }
 
     protected override void OnVisibleChanged(EventArgs e)
@@ -533,11 +487,13 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       string total = totalBox.Text;
       string multiplier = multiplierComboBox.Text;
 
-      HandleAddEntryToolTips(nameTextBox, totalBox, multiplierComboBox);
+      bool proceed = HandleAddEntryToolTips(nameTextBox, totalBox, multiplierComboBox);
+
+      if (!proceed) return;
 
       string newEntry = $"{name}, {total}, {multiplier}";
 
-      AddOrUpdateEntryToListBox(listBox, name, newEntry);
+      bool added = AddOrUpdateEntryToListBox(listBox, name, newEntry);
 
       if (isEnterPressed)
       {
@@ -548,9 +504,23 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         SelectPreviousItem(listBox);
       }
 
-      nameTextBox.SelectAll();
+      if (!added)
+      {
+        nameTextBox.SelectAll();
+      }
+      else
+      {
+        ResetFields(nameTextBox, multiplierComboBox, totalBox);
+      }
 
       if (_isLoaded) UpdateDataAndLoads();
+    }
+
+    private void ResetFields(TextBox nameTextBox, ComboBox multiplierComboBox, TextBox totalBox)
+    {
+      nameTextBox.Text = "";
+      multiplierComboBox.Text = "1";
+      totalBox.Text = "";
     }
 
     private void PerformMultiplication(TextBox totalBox, ComboBox multiplierBox)
@@ -601,7 +571,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       }
     }
 
-    private static void AddOrUpdateEntryToListBox(ListBox listBox, string name, string newEntry)
+    private static bool AddOrUpdateEntryToListBox(ListBox listBox, string name, string newEntry)
     {
       int existingIndex = -1;
       for (int i = 0; i < listBox.Items.Count; i++)
@@ -615,6 +585,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         }
       }
 
+      bool added = false;
       if (existingIndex >= 0)
       {
         listBox.Items[existingIndex] = newEntry;
@@ -622,7 +593,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       else
       {
         listBox.Items.Add(newEntry);
+        added = true;
       }
+
+      return added;
     }
 
     private void DetectIncorrectInputs()
@@ -726,7 +700,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         if (string.IsNullOrEmpty(textBox.Text))
         {
-          textBox.Text = textBox == GENERAL_CUSTOM_NAME ? _NameWatermark : _VAWatermark;
+          if (textBox == GENERAL_CUSTOM_NAME || textBox == CUSTOM_NAME)
+          {
+            textBox.Text = _NameWatermark;
+          }
+          else if (textBox == GENERAL_CUSTOM_TOTAL || textBox == CUSTOM_TOTAL)
+          {
+            textBox.Text = _VAWatermark;
+          }
           textBox.ForeColor = Color.LightGray;
         }
       }
@@ -734,11 +715,79 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private void SetDefaultValues()
     {
+      string multiplierMessage = "To update the total and the amount at the same time, use the format: (amount in VA for 1 item) * (number of items) then press enter";
+
+      _toolTip = new ToolTip();
+      _toolTip.SetToolTip(TOTAL_GENERAL_LABEL, multiplierMessage);
+      _toolTip.SetToolTip(TOTAL_CUSTOM_LABEL, multiplierMessage);
+
       VOLTAGE.SelectedIndex = 0;
+
+      GENERAL_CUSTOM_LOAD_BOX.AllowDrop = true;
+      CUSTOM_LOAD_BOX.AllowDrop = true;
+
+      GENERAL_CUSTOM_LOAD_BOX.MouseDown += ListBox_MouseDown;
+      CUSTOM_LOAD_BOX.MouseDown += ListBox_MouseDown;
+
+      GENERAL_CUSTOM_LOAD_BOX.DragDrop += ListBox_DragDrop;
+      CUSTOM_LOAD_BOX.DragDrop += ListBox_DragDrop;
+
+      GENERAL_CUSTOM_LOAD_BOX.DragOver += ListBox_DragOver;
+      CUSTOM_LOAD_BOX.DragOver += ListBox_DragOver;
+
+      GENERAL_CUSTOM_LOAD_BOX.SelectedIndexChanged += ListBox_SelectedIndexChanged;
+      CUSTOM_LOAD_BOX.SelectedIndexChanged += ListBox_SelectedIndexChanged;
+
       var parentTab = this.Parent as TabPage;
       if (parentTab != null)
       {
         parentTab.Text = _unitInformation.FormattedName();
+      }
+    }
+
+    private void ListBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      if (sender == GENERAL_CUSTOM_LOAD_BOX)
+      {
+        PopulateBoxFormItems(GENERAL_CUSTOM_LOAD_BOX, GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_TOTAL);
+      }
+      else if (sender == CUSTOM_LOAD_BOX)
+      {
+        PopulateBoxFormItems(CUSTOM_LOAD_BOX, CUSTOM_NAME, CUSTOM_MULTIPLIER, CUSTOM_TOTAL);
+      }
+    }
+
+    private void ListBox_DragOver(object sender, DragEventArgs e)
+    {
+      e.Effect = DragDropEffects.Move;
+    }
+
+    private void ListBox_DragDrop(object sender, DragEventArgs e)
+    {
+      ListBox listBox = (ListBox)sender;
+      int dropIndex = listBox.IndexFromPoint(listBox.PointToClient(new Point(e.X, e.Y)));
+      if (dropIndex >= 0 && dropIndex != _dragIndex)
+      {
+        object dragItem = listBox.Items[_dragIndex];
+        listBox.Items.RemoveAt(_dragIndex);
+        listBox.Items.Insert(dropIndex, dragItem);
+        listBox.SelectedIndex = dropIndex;
+      }
+    }
+
+    private void ListBox_MouseDown(object sender, MouseEventArgs e)
+    {
+      ListBox listBox = (ListBox)sender;
+      if (e.Button == MouseButtons.Left && listBox.SelectedItem != null)
+      {
+        _dragIndex = listBox.IndexFromPoint(e.X, e.Y);
+        if (_dragIndex >= 0)
+        {
+          var index = listBox.SelectedIndex;
+          listBox.SelectedIndex = -1;
+          listBox.SelectedIndex = index;
+          listBox.DoDragDrop(listBox.Items[_dragIndex], DragDropEffects.Move);
+        }
       }
     }
 
@@ -949,7 +998,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return calculatedLoads;
     }
 
-    private void HandleAddEntryToolTips(TextBox nameTextBox, TextBox totalBox, ComboBox multiplierComboBox)
+    private bool HandleAddEntryToolTips(TextBox nameTextBox, TextBox totalBox, ComboBox multiplierComboBox)
     {
       string name = nameTextBox.Text;
       string total = totalBox.Text;
@@ -958,7 +1007,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       if (string.IsNullOrEmpty(name) || name == _NameWatermark)
       {
         _toolTip.Show("You must enter a name.", nameTextBox, 0, -20, 2000);
-        return;
+        return false;
       }
       else
       {
@@ -968,7 +1017,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       if (string.IsNullOrEmpty(total) || total == _VAWatermark)
       {
         _toolTip.Show("You must enter a VA.", totalBox, 0, -20, 2000);
-        return;
+        return false;
       }
       else
       {
@@ -978,12 +1027,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       if (string.IsNullOrEmpty(multiplier) || !isGreaterThanZero(multiplier))
       {
         _toolTip.Show("You must enter a multiplier that is greater than 0.", multiplierComboBox, 0, -20, 2000);
-        return;
+        return false;
       }
       else
       {
         _toolTip.Hide(multiplierComboBox);
       }
+
+      return true;
     }
 
     private void ADD_ENTRY_Click(object sender, EventArgs e)
