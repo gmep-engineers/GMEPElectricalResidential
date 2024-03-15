@@ -639,7 +639,31 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         if (serviceSizingBuildingRowHeaders[i].Contains("120/208"))
         {
-          serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("208", buildingInfo.Voltage.ToString());
+          if (serviceSizingBuildingRowHeaders[i].Contains("V"))
+          {
+            serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("208V", buildingInfo.Voltage.ToString());
+          }
+          else
+          {
+            serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("208", buildingInfo.Voltage.ToString());
+          }
+          break;
+        }
+        else if (serviceSizingBuildingRowHeaders[i].Contains("120/240"))
+        {
+          if (serviceSizingBuildingRowHeaders[i].Contains("V"))
+          {
+            serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("240V", buildingInfo.Voltage.ToString());
+          }
+          else
+          {
+            serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("240", buildingInfo.Voltage.ToString());
+          }
+          break;
+        }
+        if (serviceSizingBuildingRowHeaders[i].Contains("1PH"))
+        {
+          serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("1PH", buildingInfo.Phase.ToString());
           break;
         }
       }

@@ -62,8 +62,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         name.ForeColor = Color.Black;
         total.ForeColor = Color.Black;
         multiplier.ForeColor = Color.Black;
-        name.Focus();
-        name.SelectAll();
       }
     }
 
@@ -504,13 +502,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         SelectPreviousItem(listBox);
       }
 
-      if (!added)
+      if (added)
       {
-        nameTextBox.SelectAll();
+        ResetFields(nameTextBox, multiplierComboBox, totalBox);
       }
       else
       {
-        ResetFields(nameTextBox, multiplierComboBox, totalBox);
+        totalBox.Focus();
+        totalBox.SelectAll();
       }
 
       if (_isLoaded) UpdateDataAndLoads();
@@ -738,10 +737,27 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       GENERAL_CUSTOM_LOAD_BOX.SelectedIndexChanged += ListBox_SelectedIndexChanged;
       CUSTOM_LOAD_BOX.SelectedIndexChanged += ListBox_SelectedIndexChanged;
 
+      GENERAL_CUSTOM_LOAD_BOX.KeyDown += ListBox_KeyDown;
+      CUSTOM_LOAD_BOX.KeyDown += ListBox_KeyDown;
+
       var parentTab = this.Parent as TabPage;
       if (parentTab != null)
       {
         parentTab.Text = _unitInformation.FormattedName();
+      }
+    }
+
+    private void ListBox_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.KeyCode == Keys.Delete)
+      {
+        ListBox listBox = (ListBox)sender;
+        if (listBox.SelectedIndex != -1)
+        {
+          listBox.Items.RemoveAt(listBox.SelectedIndex);
+          ClearListBoxInputs(listBox);
+          if (_isLoaded) UpdateDataAndLoads();
+        }
       }
     }
 
@@ -1059,9 +1075,27 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         {
           listBox.Items.RemoveAt(listBox.Items.Count - 1);
         }
+
+        ClearListBoxInputs(listBox);
       }
 
       if (_isLoaded) UpdateDataAndLoads();
+    }
+
+    private void ClearListBoxInputs(ListBox listBox)
+    {
+      if (listBox == GENERAL_CUSTOM_LOAD_BOX)
+      {
+        GENERAL_CUSTOM_NAME.Text = "";
+        GENERAL_CUSTOM_MULTIPLIER.Text = "1";
+        GENERAL_CUSTOM_TOTAL.Text = "";
+      }
+      else if (listBox == CUSTOM_LOAD_BOX)
+      {
+        CUSTOM_NAME.Text = "";
+        CUSTOM_MULTIPLIER.Text = "1";
+        CUSTOM_TOTAL.Text = "";
+      }
     }
 
     private void REMOVE_ENTRY_Click(object sender, EventArgs e)

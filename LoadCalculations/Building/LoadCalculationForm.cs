@@ -61,6 +61,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
       BUILDING_NAME.Text = buildingInformation.Name;
       VOLTAGE.Text = buildingInformation.Voltage;
+      PHASE_COMBO.Text = buildingInformation.Phase;
       HOUSE_LOAD.Text = buildingInformation.HouseLoad.ToString();
       HOUSE_LOAD_COPY.Text = buildingInformation.HouseLoad.ToString();
       TOTAL_NUMBER_OF_UNITS.Text = buildingInformation.TotalNumberOfUnits().ToString();
@@ -126,6 +127,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     private void SetDefaultValues()
     {
       VOLTAGE.SelectedIndex = 0;
+      PHASE_COMBO.SelectedIndex = 0;
+      _buildingInformation.Phase = PHASE_COMBO.Text;
       _buildingInformation.Voltage = VOLTAGE.Text;
       SetLoadBoxValues();
     }
@@ -282,6 +285,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       _buildingInformation.UpdateCounter(unitInformation, existingNumberOfUnits, newSubtotal);
       UpdateBuildingFormInformation();
     }
+
+    private void PHASE_COMBO_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      _buildingInformation.Phase = PHASE_COMBO.Text;
+    }
   }
 
   public static class IntExtensions
@@ -296,6 +304,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
   {
     public string Name { get; set; }
     public string Voltage { get; set; }
+    public string Phase { get; set; }
     public int ID { get; set; }
     public int? HouseLoad { get; set; }
     public List<UnitCounter> Counters { get; set; }
@@ -369,7 +378,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
     public int TotalBuildingLoadWithDemandFactor()
     {
-      return (int)Math.Ceiling(TotalBuildingLoad() * DemandFactor());
+      return (int)Math.Round(TotalBuildingLoad() * DemandFactor());
     }
 
     public double DemandFactor()
@@ -434,7 +443,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       int voltage = int.Parse(Voltage.TrimEnd('V'));
       double totalDemandHouseLoad = TotalBuildingLoadWithDemandFactorAndHouseLoad();
-      return (int)Math.Ceiling(totalDemandHouseLoad / voltage);
+      if (Phase == "1P")
+      {
+        return (int)Math.Round(totalDemandHouseLoad / voltage);
+      }
+      else
+      {
+        return (int)Math.Round(totalDemandHouseLoad / 360);
+      }
     }
 
     public int RecommendedServiceSize()
