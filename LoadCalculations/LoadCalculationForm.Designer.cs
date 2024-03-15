@@ -38,15 +38,10 @@
       this.SAVE_BUTTON = new System.Windows.Forms.Button();
       this.CREATE = new System.Windows.Forms.Button();
       this.UPDATE = new System.Windows.Forms.Button();
-      this.GROUP_BUILDING_CALCS = new System.Windows.Forms.CheckBox();
       this.DUPLICATE = new System.Windows.Forms.Button();
-      this.label5 = new System.Windows.Forms.Label();
-      this.panel2 = new System.Windows.Forms.Panel();
-      this.INNER_SHEET_WIDTH = new System.Windows.Forms.TextBox();
       this.TAB_CONTROL.SuspendLayout();
       this.UNIT_TAB.SuspendLayout();
       this.BUILDING_TAB.SuspendLayout();
-      this.panel2.SuspendLayout();
       this.SuspendLayout();
       // 
       // TAB_CONTROL
@@ -156,20 +151,6 @@
       this.UPDATE.UseVisualStyleBackColor = true;
       this.UPDATE.Click += new System.EventHandler(this.UPDATE_Click);
       // 
-      // GROUP_BUILDING_CALCS
-      // 
-      this.GROUP_BUILDING_CALCS.AutoSize = true;
-      this.GROUP_BUILDING_CALCS.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-      this.GROUP_BUILDING_CALCS.Enabled = false;
-      this.GROUP_BUILDING_CALCS.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.GROUP_BUILDING_CALCS.Location = new System.Drawing.Point(11, 302);
-      this.GROUP_BUILDING_CALCS.Name = "GROUP_BUILDING_CALCS";
-      this.GROUP_BUILDING_CALCS.Size = new System.Drawing.Size(84, 64);
-      this.GROUP_BUILDING_CALCS.TabIndex = 205;
-      this.GROUP_BUILDING_CALCS.Text = "Group\r\nBuilding\r\nCalcs";
-      this.GROUP_BUILDING_CALCS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-      this.GROUP_BUILDING_CALCS.UseVisualStyleBackColor = true;
-      // 
       // DUPLICATE
       // 
       this.DUPLICATE.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -181,49 +162,13 @@
       this.DUPLICATE.UseVisualStyleBackColor = true;
       this.DUPLICATE.Click += new System.EventHandler(this.DUPLICATE_Click);
       // 
-      // label5
-      // 
-      this.label5.AutoSize = true;
-      this.label5.BackColor = System.Drawing.Color.Transparent;
-      this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label5.Location = new System.Drawing.Point(8, 222);
-      this.label5.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(93, 40);
-      this.label5.TabIndex = 208;
-      this.label5.Text = "Inner Sheet\r\nWidth";
-      // 
-      // panel2
-      // 
-      this.panel2.BackColor = System.Drawing.SystemColors.Window;
-      this.panel2.Controls.Add(this.INNER_SHEET_WIDTH);
-      this.panel2.Location = new System.Drawing.Point(12, 265);
-      this.panel2.Margin = new System.Windows.Forms.Padding(6, 0, 0, 6);
-      this.panel2.Name = "panel2";
-      this.panel2.Padding = new System.Windows.Forms.Padding(5);
-      this.panel2.Size = new System.Drawing.Size(83, 28);
-      this.panel2.TabIndex = 207;
-      // 
-      // INNER_SHEET_WIDTH
-      // 
-      this.INNER_SHEET_WIDTH.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.INNER_SHEET_WIDTH.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.INNER_SHEET_WIDTH.Location = new System.Drawing.Point(5, 5);
-      this.INNER_SHEET_WIDTH.Margin = new System.Windows.Forms.Padding(0);
-      this.INNER_SHEET_WIDTH.Name = "INNER_SHEET_WIDTH";
-      this.INNER_SHEET_WIDTH.Size = new System.Drawing.Size(73, 19);
-      this.INNER_SHEET_WIDTH.TabIndex = 0;
-      // 
       // LOAD_CALCULATION_FORM
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Control;
-      this.ClientSize = new System.Drawing.Size(1671, 727);
-      this.Controls.Add(this.label5);
-      this.Controls.Add(this.panel2);
+      this.ClientSize = new System.Drawing.Size(1671, 710);
       this.Controls.Add(this.DUPLICATE);
-      this.Controls.Add(this.GROUP_BUILDING_CALCS);
       this.Controls.Add(this.UPDATE);
       this.Controls.Add(this.CREATE);
       this.Controls.Add(this.SAVE_BUTTON);
@@ -235,10 +180,7 @@
       this.TAB_CONTROL.ResumeLayout(false);
       this.UNIT_TAB.ResumeLayout(false);
       this.BUILDING_TAB.ResumeLayout(false);
-      this.panel2.ResumeLayout(false);
-      this.panel2.PerformLayout();
       this.ResumeLayout(false);
-      this.PerformLayout();
 
     }
 
@@ -254,10 +196,6 @@
     private System.Windows.Forms.TabControl UNIT_TAB_CONTROL;
     private System.Windows.Forms.TabControl BUILDING_TAB_CONTROL;
     private System.Windows.Forms.Button UPDATE;
-    private System.Windows.Forms.CheckBox GROUP_BUILDING_CALCS;
     private System.Windows.Forms.Button DUPLICATE;
-    private System.Windows.Forms.Label label5;
-    private System.Windows.Forms.Panel panel2;
-    private System.Windows.Forms.TextBox INNER_SHEET_WIDTH;
   }
 }

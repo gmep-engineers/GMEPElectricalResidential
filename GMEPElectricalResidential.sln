@@ -5,6 +5,10 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMEPElectricalResidential", "GMEPElectricalResidential.csproj", "{EA3C289A-F58F-4A96-B269-80E97689B907}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMEPSetup", "..\GMEPSetup\GMEPSetup.csproj", "{739F4FA9-AAE7-4613-AF5F-B5098EBB2FE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMEPUnsetup", "..\GMEPUnsetup\GMEPUnsetup.csproj", "{67016EB1-F586-410F-9806-71020706FEFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{EA3C289A-F58F-4A96-B269-80E97689B907}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA3C289A-F58F-4A96-B269-80E97689B907}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA3C289A-F58F-4A96-B269-80E97689B907}.Release|Any CPU.Build.0 = Release|Any CPU
+		{739F4FA9-AAE7-4613-AF5F-B5098EBB2FE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{739F4FA9-AAE7-4613-AF5F-B5098EBB2FE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{739F4FA9-AAE7-4613-AF5F-B5098EBB2FE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{739F4FA9-AAE7-4613-AF5F-B5098EBB2FE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67016EB1-F586-410F-9806-71020706FEFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67016EB1-F586-410F-9806-71020706FEFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67016EB1-F586-410F-9806-71020706FEFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67016EB1-F586-410F-9806-71020706FEFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

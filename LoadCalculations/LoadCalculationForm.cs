@@ -44,7 +44,6 @@ namespace GMEPElectricalResidential.LoadCalculations
 
       bool createdUnitTab = LoadSavedUnitLoadCalculations();
       bool createdBuildingTab = LoadSavedBuildingLoadCalculations();
-      LoadCheckboxState();
 
       if (!createdUnitTab)
       {
@@ -60,40 +59,6 @@ namespace GMEPElectricalResidential.LoadCalculations
       this.TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
       this.BUILDING_TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
       this.UNIT_TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
-      this.INNER_SHEET_WIDTH.KeyPress += INNER_SHEET_WIDTH_KeyPress;
-      this.INNER_SHEET_WIDTH.KeyUp += INNER_SHEET_WIDTH_KeyUp;
-    }
-
-    private void INNER_SHEET_WIDTH_KeyUp(object sender, KeyEventArgs e)
-    {
-      string text = INNER_SHEET_WIDTH.Text;
-      bool isTextEmpty = string.IsNullOrEmpty(text);
-
-      GROUP_BUILDING_CALCS.Enabled = !isTextEmpty;
-    }
-
-    private void INNER_SHEET_WIDTH_KeyPress(object sender, KeyPressEventArgs e)
-    {
-      if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
-      {
-        e.Handled = true;
-        _toolTip.Show("Please enter only digits.", (Control)sender, 0, -20, 2000);
-      }
-    }
-
-    private void LoadCheckboxState()
-    {
-      // Load the checkbox state from the JSON file
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
-      string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculations");
-      string checkboxStatePath = Path.Combine(baseSaveDirectory, "CheckboxState.json");
-      if (File.Exists(checkboxStatePath))
-      {
-        string checkboxStateJson = File.ReadAllText(checkboxStatePath);
-        var checkboxState = JsonConvert.DeserializeAnonymousType(checkboxStateJson, new { FormatCheckboxChecked = false });
-        GROUP_BUILDING_CALCS.Checked = checkboxState.FormatCheckboxChecked;
-      }
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -340,10 +305,6 @@ namespace GMEPElectricalResidential.LoadCalculations
 
       List<Building.BuildingInformation> allBuildingInformation = AllBuildingInformation();
       HandleBuildingDataSaving(buildingDirectory, allBuildingInformation);
-
-      string checkboxStatePath = Path.Combine(baseSaveDirectory, "CheckboxState.json");
-      string checkboxStateJson = JsonConvert.SerializeObject(new { FormatCheckboxChecked = GROUP_BUILDING_CALCS.Checked });
-      File.WriteAllText(checkboxStatePath, checkboxStateJson);
     }
 
     private static void HandleUnitDataSaving(string unitDirectory, List<Unit.UnitInformation> allUnitInformation)
@@ -414,7 +375,6 @@ namespace GMEPElectricalResidential.LoadCalculations
         }
 
         int numberOfBuildingsWithThreeOrMoreUnits = allBuildingInfo.Count(building => building.TotalNumberOfUnits() >= 3);
-        bool combinedBuildingCalculation = GROUP_BUILDING_CALCS.Checked;
 
         foreach (var buildingInfo in allBuildingInfo)
         {
