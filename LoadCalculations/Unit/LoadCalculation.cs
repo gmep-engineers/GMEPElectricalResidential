@@ -349,7 +349,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         var combinedCustomLoads = new Dictionary<string, UnitLoad>();
         foreach (var customLoad in unitInfo.CustomLoads)
         {
-          combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, (customLoad.VA * customLoad.Multiplier).ToString(), customLoad.Multiplier.ToString(), customLoad.Total.ToString());
+          combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, customLoad.Total.ToString(), customLoad.Multiplier.ToString());
         }
 
         if (unitInfo2 != null)
@@ -358,12 +358,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
           {
             if (combinedCustomLoads.ContainsKey(customLoad.Name))
             {
-              combinedCustomLoads[customLoad.Name].VA += (customLoad.VA * customLoad.Multiplier);
+              combinedCustomLoads[customLoad.Name].Total += customLoad.Total;
               combinedCustomLoads[customLoad.Name].Multiplier += customLoad.Multiplier;
             }
             else
             {
-              combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, (customLoad.VA * customLoad.Multiplier).ToString(), customLoad.Multiplier.ToString(), customLoad.Total.ToString());
+              combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, customLoad.Total.ToString(), customLoad.Multiplier.ToString());
             }
           }
         }
@@ -395,7 +395,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
           foreach (var customLoad in combinedCustomLoads.Values)
           {
-            customValues += $"{customLoad.VA}VA".NewLine();
+            customValues += $"{customLoad.Total}VA".NewLine();
           }
 
           values.Contents = customValues.SetFont("Arial");
@@ -528,12 +528,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         List<string> generalValues = new List<string>
         {
-            $"{unitInfo.GeneralLoads.Lighting.VA * unitInfo.GeneralLoads.Lighting.Multiplier + (unitInfo2?.GeneralLoads.Lighting.VA * unitInfo2?.GeneralLoads.Lighting.Multiplier ?? 0)}VA",
+            $"{unitInfo.GeneralLoads.Lighting.Total + (unitInfo2?.GeneralLoads.Lighting.Total ?? 0)}VA",
         };
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
-          generalValues.Add($"{customLoad.VA * customLoad.Multiplier}VA");
+          generalValues.Add($"{customLoad.Total}VA");
         });
 
         InsertValueLightingBreakdown(1, unitInfo, generalValues, unitInfo2);
@@ -550,8 +550,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private static void InsertValueLightingBreakdown(int index, UnitInformation unitInfo, List<string> generalValues, UnitInformation unitInfo2 = null)
     {
-      int lightingVA = unitInfo.GeneralLoads.Lighting.VA * unitInfo.GeneralLoads.Lighting.Multiplier;
-      int lightingVA2 = unitInfo2?.GeneralLoads.Lighting.VA * unitInfo2?.GeneralLoads.Lighting.Multiplier ?? 0;
+      int lightingVA = unitInfo.GeneralLoads.Lighting.Total;
+      int lightingVA2 = unitInfo2?.GeneralLoads.Lighting.Total ?? 0;
 
       lightingVA += lightingVA2;
 

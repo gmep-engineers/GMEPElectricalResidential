@@ -59,8 +59,6 @@
       this.GENERAL_CUSTOM_NAME = new System.Windows.Forms.TextBox();
       this.GENERAL_CUSTOM_MULTIPLIER = new System.Windows.Forms.ComboBox();
       this.label23 = new System.Windows.Forms.Label();
-      this.panel19 = new System.Windows.Forms.Panel();
-      this.GENERAL_CUSTOM_VA = new System.Windows.Forms.TextBox();
       this.label25 = new System.Windows.Forms.Label();
       this.label29 = new System.Windows.Forms.Label();
       this.panel30 = new System.Windows.Forms.Panel();
@@ -85,7 +83,6 @@
       this.label28 = new System.Windows.Forms.Label();
       this.label34 = new System.Windows.Forms.Label();
       this.label62 = new System.Windows.Forms.Label();
-      this.label65 = new System.Windows.Forms.Label();
       this.label68 = new System.Windows.Forms.Label();
       this.label69 = new System.Windows.Forms.Label();
       this.label72 = new System.Windows.Forms.Label();
@@ -111,20 +108,14 @@
       this.label77 = new System.Windows.Forms.Label();
       this.label78 = new System.Windows.Forms.Label();
       this.label80 = new System.Windows.Forms.Label();
-      this.label6 = new System.Windows.Forms.Label();
       this.label10 = new System.Windows.Forms.Label();
       this.label12 = new System.Windows.Forms.Label();
       this.label13 = new System.Windows.Forms.Label();
       this.label15 = new System.Windows.Forms.Label();
-      this.label19 = new System.Windows.Forms.Label();
       this.label20 = new System.Windows.Forms.Label();
-      this.label21 = new System.Windows.Forms.Label();
-      this.panel5 = new System.Windows.Forms.Panel();
-      this.CUSTOM_VA = new System.Windows.Forms.TextBox();
       this.panel6 = new System.Windows.Forms.Panel();
       this.CUSTOM_NAME = new System.Windows.Forms.TextBox();
       this.CUSTOM_MULTIPLIER = new System.Windows.Forms.ComboBox();
-      this.label14 = new System.Windows.Forms.Label();
       this.CUSTOM_TOTAL = new System.Windows.Forms.TextBox();
       this.panel4 = new System.Windows.Forms.Panel();
       this.label18 = new System.Windows.Forms.Label();
@@ -133,7 +124,6 @@
       this.panel3 = new System.Windows.Forms.Panel();
       this.label7 = new System.Windows.Forms.Label();
       this.label9 = new System.Windows.Forms.Label();
-      this.label11 = new System.Windows.Forms.Label();
       this.ADD_ENTRY_CUSTOM = new System.Windows.Forms.Button();
       this.panel1.SuspendLayout();
       this.groupBox1.SuspendLayout();
@@ -142,12 +132,10 @@
       this.groupBox4.SuspendLayout();
       this.panel2.SuspendLayout();
       this.panel13.SuspendLayout();
-      this.panel19.SuspendLayout();
       this.panel30.SuspendLayout();
       this.panel31.SuspendLayout();
       this.panel20.SuspendLayout();
       this.groupBox5.SuspendLayout();
-      this.panel5.SuspendLayout();
       this.panel6.SuspendLayout();
       this.panel4.SuspendLayout();
       this.panel3.SuspendLayout();
@@ -553,27 +541,6 @@
       this.label23.TabIndex = 64;
       this.label23.Text = "General Load (VA) - Name, VA, Amount, Total";
       // 
-      // panel19
-      // 
-      this.panel19.BackColor = System.Drawing.SystemColors.Window;
-      this.panel19.Controls.Add(this.GENERAL_CUSTOM_VA);
-      this.panel19.Location = new System.Drawing.Point(372, 546);
-      this.panel19.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
-      this.panel19.Name = "panel19";
-      this.panel19.Padding = new System.Windows.Forms.Padding(5);
-      this.panel19.Size = new System.Drawing.Size(84, 28);
-      this.panel19.TabIndex = 10;
-      // 
-      // GENERAL_CUSTOM_VA
-      // 
-      this.GENERAL_CUSTOM_VA.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.GENERAL_CUSTOM_VA.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.GENERAL_CUSTOM_VA.Location = new System.Drawing.Point(5, 5);
-      this.GENERAL_CUSTOM_VA.Margin = new System.Windows.Forms.Padding(0);
-      this.GENERAL_CUSTOM_VA.Name = "GENERAL_CUSTOM_VA";
-      this.GENERAL_CUSTOM_VA.Size = new System.Drawing.Size(74, 19);
-      this.GENERAL_CUSTOM_VA.TabIndex = 2;
-      // 
       // label25
       // 
       this.label25.AutoSize = true;
@@ -605,7 +572,7 @@
       this.panel30.Name = "panel30";
       this.panel30.Padding = new System.Windows.Forms.Padding(5);
       this.panel30.Size = new System.Drawing.Size(108, 28);
-      this.panel30.TabIndex = 22;
+      this.panel30.TabIndex = 20;
       // 
       // OUTDOOR_CONDENSER_VA
       // 
@@ -638,7 +605,7 @@
       this.panel31.Name = "panel31";
       this.panel31.Padding = new System.Windows.Forms.Padding(5);
       this.panel31.Size = new System.Drawing.Size(108, 28);
-      this.panel31.TabIndex = 24;
+      this.panel31.TabIndex = 22;
       // 
       // INDOOR_FAN_COIL_VA
       // 
@@ -690,7 +657,7 @@
       this.ADD_ENTRY.Location = new System.Drawing.Point(271, 582);
       this.ADD_ENTRY.Name = "ADD_ENTRY";
       this.ADD_ENTRY.Size = new System.Drawing.Size(108, 28);
-      this.ADD_ENTRY.TabIndex = 13;
+      this.ADD_ENTRY.TabIndex = 12;
       this.ADD_ENTRY.Text = "Add/Update";
       this.ADD_ENTRY.UseVisualStyleBackColor = true;
       this.ADD_ENTRY.Click += new System.EventHandler(this.ADD_ENTRY_Click);
@@ -701,7 +668,7 @@
       this.REMOVE_ENTRY.Location = new System.Drawing.Point(385, 582);
       this.REMOVE_ENTRY.Name = "REMOVE_ENTRY";
       this.REMOVE_ENTRY.Size = new System.Drawing.Size(88, 28);
-      this.REMOVE_ENTRY.TabIndex = 14;
+      this.REMOVE_ENTRY.TabIndex = 13;
       this.REMOVE_ENTRY.Text = "Remove";
       this.REMOVE_ENTRY.UseVisualStyleBackColor = true;
       this.REMOVE_ENTRY.Click += new System.EventHandler(this.REMOVE_ENTRY_Click);
@@ -712,7 +679,7 @@
       this.REMOVE_ENTRY_CUSTOM.Location = new System.Drawing.Point(897, 582);
       this.REMOVE_ENTRY_CUSTOM.Name = "REMOVE_ENTRY_CUSTOM";
       this.REMOVE_ENTRY_CUSTOM.Size = new System.Drawing.Size(88, 28);
-      this.REMOVE_ENTRY_CUSTOM.TabIndex = 21;
+      this.REMOVE_ENTRY_CUSTOM.TabIndex = 19;
       this.REMOVE_ENTRY_CUSTOM.Text = "Remove";
       this.REMOVE_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
       this.REMOVE_ENTRY_CUSTOM.Click += new System.EventHandler(this.REMOVE_ENTRY_CUSTOM_Click);
@@ -726,7 +693,7 @@
       this.CUSTOM_LOAD_BOX.Location = new System.Drawing.Point(783, 61);
       this.CUSTOM_LOAD_BOX.Name = "CUSTOM_LOAD_BOX";
       this.CUSTOM_LOAD_BOX.Size = new System.Drawing.Size(440, 462);
-      this.CUSTOM_LOAD_BOX.TabIndex = 15;
+      this.CUSTOM_LOAD_BOX.TabIndex = 14;
       // 
       // label16
       // 
@@ -835,17 +802,6 @@
       this.label62.TabIndex = 143;
       this.label62.Text = "SQFT";
       // 
-      // label65
-      // 
-      this.label65.AutoSize = true;
-      this.label65.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label65.Location = new System.Drawing.Point(459, 552);
-      this.label65.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label65.Name = "label65";
-      this.label65.Size = new System.Drawing.Size(25, 16);
-      this.label65.TabIndex = 145;
-      this.label65.Text = "VA";
-      // 
       // label68
       // 
       this.label68.AutoSize = true;
@@ -888,7 +844,7 @@
       this.panel20.Name = "panel20";
       this.panel20.Padding = new System.Windows.Forms.Padding(5);
       this.panel20.Size = new System.Drawing.Size(108, 28);
-      this.panel20.TabIndex = 26;
+      this.panel20.TabIndex = 24;
       // 
       // OUTDOOR_HEATER_UNIT
       // 
@@ -947,7 +903,7 @@
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Margin = new System.Windows.Forms.Padding(0);
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Name = "OUTDOOR_HEATER_UNIT_AMOUNT";
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Size = new System.Drawing.Size(56, 28);
-      this.OUTDOOR_HEATER_UNIT_AMOUNT.TabIndex = 27;
+      this.OUTDOOR_HEATER_UNIT_AMOUNT.TabIndex = 25;
       this.OUTDOOR_HEATER_UNIT_AMOUNT.Text = "1";
       // 
       // label64
@@ -977,7 +933,7 @@
       this.ESTIMATE_CONDENSER.Location = new System.Drawing.Point(1429, 74);
       this.ESTIMATE_CONDENSER.Name = "ESTIMATE_CONDENSER";
       this.ESTIMATE_CONDENSER.Size = new System.Drawing.Size(85, 28);
-      this.ESTIMATE_CONDENSER.TabIndex = 23;
+      this.ESTIMATE_CONDENSER.TabIndex = 21;
       this.ESTIMATE_CONDENSER.Text = "Estimate";
       this.ESTIMATE_CONDENSER.UseVisualStyleBackColor = true;
       this.ESTIMATE_CONDENSER.Click += new System.EventHandler(this.ESTIMATE_CONDENSER_Click);
@@ -988,7 +944,7 @@
       this.ESTIMATE_FAN_COIL.Location = new System.Drawing.Point(1429, 141);
       this.ESTIMATE_FAN_COIL.Name = "ESTIMATE_FAN_COIL";
       this.ESTIMATE_FAN_COIL.Size = new System.Drawing.Size(85, 28);
-      this.ESTIMATE_FAN_COIL.TabIndex = 25;
+      this.ESTIMATE_FAN_COIL.TabIndex = 23;
       this.ESTIMATE_FAN_COIL.Text = "Estimate";
       this.ESTIMATE_FAN_COIL.UseVisualStyleBackColor = true;
       this.ESTIMATE_FAN_COIL.Click += new System.EventHandler(this.ESTIMATE_FAN_COIL_Click);
@@ -1159,17 +1115,6 @@
       this.label80.TabIndex = 178;
       this.label80.Text = "A";
       // 
-      // label6
-      // 
-      this.label6.AutoSize = true;
-      this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label6.Location = new System.Drawing.Point(374, 525);
-      this.label6.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label6.Name = "label6";
-      this.label6.Size = new System.Drawing.Size(64, 16);
-      this.label6.TabIndex = 179;
-      this.label6.Text = "Individual";
-      // 
       // label10
       // 
       this.label10.AutoSize = true;
@@ -1214,17 +1159,6 @@
       this.label15.TabIndex = 196;
       this.label15.Text = "Amount";
       // 
-      // label19
-      // 
-      this.label19.AutoSize = true;
-      this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label19.Location = new System.Drawing.Point(886, 525);
-      this.label19.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label19.Name = "label19";
-      this.label19.Size = new System.Drawing.Size(64, 16);
-      this.label19.TabIndex = 193;
-      this.label19.Text = "Individual";
-      // 
       // label20
       // 
       this.label20.AutoSize = true;
@@ -1236,38 +1170,6 @@
       this.label20.TabIndex = 192;
       this.label20.Text = "x";
       // 
-      // label21
-      // 
-      this.label21.AutoSize = true;
-      this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label21.Location = new System.Drawing.Point(971, 552);
-      this.label21.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label21.Name = "label21";
-      this.label21.Size = new System.Drawing.Size(25, 16);
-      this.label21.TabIndex = 191;
-      this.label21.Text = "VA";
-      // 
-      // panel5
-      // 
-      this.panel5.BackColor = System.Drawing.SystemColors.Window;
-      this.panel5.Controls.Add(this.CUSTOM_VA);
-      this.panel5.Location = new System.Drawing.Point(884, 546);
-      this.panel5.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
-      this.panel5.Name = "panel5";
-      this.panel5.Padding = new System.Windows.Forms.Padding(5);
-      this.panel5.Size = new System.Drawing.Size(84, 28);
-      this.panel5.TabIndex = 17;
-      // 
-      // CUSTOM_VA
-      // 
-      this.CUSTOM_VA.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.CUSTOM_VA.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.CUSTOM_VA.Location = new System.Drawing.Point(5, 5);
-      this.CUSTOM_VA.Margin = new System.Windows.Forms.Padding(0);
-      this.CUSTOM_VA.Name = "CUSTOM_VA";
-      this.CUSTOM_VA.Size = new System.Drawing.Size(74, 19);
-      this.CUSTOM_VA.TabIndex = 2;
-      // 
       // panel6
       // 
       this.panel6.BackColor = System.Drawing.SystemColors.Window;
@@ -1277,7 +1179,7 @@
       this.panel6.Name = "panel6";
       this.panel6.Padding = new System.Windows.Forms.Padding(5);
       this.panel6.Size = new System.Drawing.Size(94, 28);
-      this.panel6.TabIndex = 16;
+      this.panel6.TabIndex = 15;
       // 
       // CUSTOM_NAME
       // 
@@ -1324,19 +1226,8 @@
       this.CUSTOM_MULTIPLIER.Margin = new System.Windows.Forms.Padding(0);
       this.CUSTOM_MULTIPLIER.Name = "CUSTOM_MULTIPLIER";
       this.CUSTOM_MULTIPLIER.Size = new System.Drawing.Size(56, 28);
-      this.CUSTOM_MULTIPLIER.TabIndex = 18;
+      this.CUSTOM_MULTIPLIER.TabIndex = 17;
       this.CUSTOM_MULTIPLIER.Text = "1";
-      // 
-      // label14
-      // 
-      this.label14.AutoSize = true;
-      this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label14.Location = new System.Drawing.Point(1079, 552);
-      this.label14.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label14.Name = "label14";
-      this.label14.Size = new System.Drawing.Size(19, 16);
-      this.label14.TabIndex = 197;
-      this.label14.Text = "or";
       // 
       // CUSTOM_TOTAL
       // 
@@ -1352,18 +1243,18 @@
       // 
       this.panel4.BackColor = System.Drawing.SystemColors.Window;
       this.panel4.Controls.Add(this.CUSTOM_TOTAL);
-      this.panel4.Location = new System.Drawing.Point(1109, 546);
+      this.panel4.Location = new System.Drawing.Point(885, 546);
       this.panel4.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel4.Name = "panel4";
       this.panel4.Padding = new System.Windows.Forms.Padding(5);
       this.panel4.Size = new System.Drawing.Size(86, 28);
-      this.panel4.TabIndex = 19;
+      this.panel4.TabIndex = 16;
       // 
       // label18
       // 
       this.label18.AutoSize = true;
       this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label18.Location = new System.Drawing.Point(1106, 525);
+      this.label18.Location = new System.Drawing.Point(882, 525);
       this.label18.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label18.Name = "label18";
       this.label18.Size = new System.Drawing.Size(38, 16);
@@ -1374,7 +1265,7 @@
       // 
       this.label17.AutoSize = true;
       this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label17.Location = new System.Drawing.Point(1198, 553);
+      this.label17.Location = new System.Drawing.Point(974, 553);
       this.label17.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label17.Name = "label17";
       this.label17.Size = new System.Drawing.Size(25, 16);
@@ -1395,18 +1286,18 @@
       // 
       this.panel3.BackColor = System.Drawing.SystemColors.Window;
       this.panel3.Controls.Add(this.GENERAL_CUSTOM_TOTAL);
-      this.panel3.Location = new System.Drawing.Point(597, 546);
+      this.panel3.Location = new System.Drawing.Point(373, 546);
       this.panel3.Margin = new System.Windows.Forms.Padding(48, 0, 3, 12);
       this.panel3.Name = "panel3";
       this.panel3.Padding = new System.Windows.Forms.Padding(5);
       this.panel3.Size = new System.Drawing.Size(86, 28);
-      this.panel3.TabIndex = 12;
+      this.panel3.TabIndex = 10;
       // 
       // label7
       // 
       this.label7.AutoSize = true;
       this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label7.Location = new System.Drawing.Point(594, 525);
+      this.label7.Location = new System.Drawing.Point(370, 525);
       this.label7.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label7.Name = "label7";
       this.label7.Size = new System.Drawing.Size(38, 16);
@@ -1417,23 +1308,12 @@
       // 
       this.label9.AutoSize = true;
       this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label9.Location = new System.Drawing.Point(686, 553);
+      this.label9.Location = new System.Drawing.Point(462, 553);
       this.label9.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label9.Name = "label9";
       this.label9.Size = new System.Drawing.Size(25, 16);
       this.label9.TabIndex = 181;
       this.label9.Text = "VA";
-      // 
-      // label11
-      // 
-      this.label11.AutoSize = true;
-      this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label11.Location = new System.Drawing.Point(567, 552);
-      this.label11.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-      this.label11.Name = "label11";
-      this.label11.Size = new System.Drawing.Size(19, 16);
-      this.label11.TabIndex = 183;
-      this.label11.Text = "or";
       // 
       // ADD_ENTRY_CUSTOM
       // 
@@ -1441,9 +1321,10 @@
       this.ADD_ENTRY_CUSTOM.Location = new System.Drawing.Point(783, 582);
       this.ADD_ENTRY_CUSTOM.Name = "ADD_ENTRY_CUSTOM";
       this.ADD_ENTRY_CUSTOM.Size = new System.Drawing.Size(108, 28);
-      this.ADD_ENTRY_CUSTOM.TabIndex = 20;
+      this.ADD_ENTRY_CUSTOM.TabIndex = 18;
       this.ADD_ENTRY_CUSTOM.Text = "Add/Update";
       this.ADD_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
+      this.ADD_ENTRY_CUSTOM.Click += new System.EventHandler(this.ADD_ENTRY_CUSTOM_Click);
       // 
       // LoadCalculationForm
       // 
@@ -1451,23 +1332,17 @@
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
       this.Controls.Add(this.ADD_ENTRY_CUSTOM);
       this.Controls.Add(this.label13);
-      this.Controls.Add(this.label14);
       this.Controls.Add(this.label15);
       this.Controls.Add(this.label17);
       this.Controls.Add(this.label18);
-      this.Controls.Add(this.label19);
       this.Controls.Add(this.panel4);
       this.Controls.Add(this.label20);
-      this.Controls.Add(this.label21);
-      this.Controls.Add(this.panel5);
       this.Controls.Add(this.panel6);
       this.Controls.Add(this.CUSTOM_MULTIPLIER);
       this.Controls.Add(this.label12);
-      this.Controls.Add(this.label11);
       this.Controls.Add(this.label10);
       this.Controls.Add(this.label9);
       this.Controls.Add(this.label7);
-      this.Controls.Add(this.label6);
       this.Controls.Add(this.panel3);
       this.Controls.Add(this.label80);
       this.Controls.Add(this.label78);
@@ -1489,7 +1364,6 @@
       this.Controls.Add(this.label69);
       this.Controls.Add(this.label68);
       this.Controls.Add(this.label64);
-      this.Controls.Add(this.label65);
       this.Controls.Add(this.label62);
       this.Controls.Add(this.label34);
       this.Controls.Add(this.CALCULATED_LOAD_FOR_SERVICE);
@@ -1512,7 +1386,6 @@
       this.Controls.Add(this.label30);
       this.Controls.Add(this.label29);
       this.Controls.Add(this.label25);
-      this.Controls.Add(this.panel19);
       this.Controls.Add(this.label23);
       this.Controls.Add(this.panel13);
       this.Controls.Add(this.GENERAL_CUSTOM_MULTIPLIER);
@@ -1547,8 +1420,6 @@
       this.panel2.PerformLayout();
       this.panel13.ResumeLayout(false);
       this.panel13.PerformLayout();
-      this.panel19.ResumeLayout(false);
-      this.panel19.PerformLayout();
       this.panel30.ResumeLayout(false);
       this.panel30.PerformLayout();
       this.panel31.ResumeLayout(false);
@@ -1557,8 +1428,6 @@
       this.panel20.PerformLayout();
       this.groupBox5.ResumeLayout(false);
       this.groupBox5.PerformLayout();
-      this.panel5.ResumeLayout(false);
-      this.panel5.PerformLayout();
       this.panel6.ResumeLayout(false);
       this.panel6.PerformLayout();
       this.panel4.ResumeLayout(false);
@@ -1599,8 +1468,6 @@
     private System.Windows.Forms.TextBox GENERAL_CUSTOM_NAME;
     private System.Windows.Forms.ComboBox GENERAL_CUSTOM_MULTIPLIER;
     private System.Windows.Forms.Label label23;
-    private System.Windows.Forms.Panel panel19;
-    private System.Windows.Forms.TextBox GENERAL_CUSTOM_VA;
     private System.Windows.Forms.Label label25;
     private System.Windows.Forms.Label label29;
     private System.Windows.Forms.Panel panel30;
@@ -1625,7 +1492,6 @@
     private System.Windows.Forms.Label label28;
     private System.Windows.Forms.Label label34;
     private System.Windows.Forms.Label label62;
-    private System.Windows.Forms.Label label65;
     private System.Windows.Forms.Label label68;
     private System.Windows.Forms.Label label69;
     private System.Windows.Forms.Label label72;
@@ -1655,20 +1521,14 @@
     private System.Windows.Forms.RadioButton NA_DRYER;
     private System.Windows.Forms.RadioButton NA_OVEN;
     private System.Windows.Forms.RadioButton NA_COOKTOP;
-    private System.Windows.Forms.Label label6;
     private System.Windows.Forms.Label label10;
     private System.Windows.Forms.Label label12;
     private System.Windows.Forms.Label label13;
     private System.Windows.Forms.Label label15;
-    private System.Windows.Forms.Label label19;
     private System.Windows.Forms.Label label20;
-    private System.Windows.Forms.Label label21;
-    private System.Windows.Forms.Panel panel5;
-    private System.Windows.Forms.TextBox CUSTOM_VA;
     private System.Windows.Forms.Panel panel6;
     private System.Windows.Forms.TextBox CUSTOM_NAME;
     private System.Windows.Forms.ComboBox CUSTOM_MULTIPLIER;
-    private System.Windows.Forms.Label label14;
     private System.Windows.Forms.TextBox CUSTOM_TOTAL;
     private System.Windows.Forms.Panel panel4;
     private System.Windows.Forms.Label label18;
@@ -1677,7 +1537,6 @@
     private System.Windows.Forms.Panel panel3;
     private System.Windows.Forms.Label label7;
     private System.Windows.Forms.Label label9;
-    private System.Windows.Forms.Label label11;
     private System.Windows.Forms.Button ADD_ENTRY_CUSTOM;
   }
 }
