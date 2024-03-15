@@ -117,15 +117,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, generalLoadRowHeaders);
         shiftHeight -= ROW_HEIGHT * generalLoadRowHeaders.Count;
 
-        // Optional Water Heater
-        if (!IsWHCustomLoadForAllUnits(buildingUnitInfo))
-        {
-          // Create Rows
-          List<string> optionalWaterHeaterRowHeaders = new List<string> { RowHeaders.OptionalWaterHeater };
-          CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, optionalWaterHeaterRowHeaders);
-          shiftHeight -= ROW_HEIGHT * optionalWaterHeaterRowHeaders.Count;
-        }
-
         // Custom General Loads
         // Create Rows
         List<string> customGeneralLoadRowHeaders = buildingUnitInfo.SelectMany(unit => unit.GeneralLoads.Customs.Select(customLoad => customLoad.Name)).Distinct().ToList();
@@ -253,11 +244,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       CADObjectCommands.CreateObjectFromData(modifiedSpacerData, point, acBlkTblRec);
     }
 
-    private static bool IsWHCustomLoadForAllUnits(List<UnitInformation> allUnitInformation)
-    {
-      return allUnitInformation.All(unit => unit.CustomLoads.Any(customLoad => customLoad.Name == "Water Heater"));
-    }
-
     private static void CreateSubtitle(ObjectData subtitleData, double shiftHeight, double additionalWidth, Point3d point, BlockTableRecord acBlkTblRec, string subtitle)
     {
       var copiedSubtitleData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(subtitleData));
@@ -300,7 +286,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       List<ObjectData> rowData = new List<ObjectData>();
 
       var rowHeaderTextObj = rowHeaderData.Texts.FirstOrDefault(text => text.Contents.Contains("Unit"));
-      rowHeaderTextObj.Contents = rowHeaderTextObj.Contents.Replace("Unit", message);
+      UpdateHeaderText(message, rowHeaderTextObj);
       rowData.Add(rowHeaderData);
 
       rowEntryData = ShiftDataHorizontally(rowEntryData, startPoint);
@@ -357,6 +343,23 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       }
 
       return rowData;
+    }
+
+    private static void UpdateHeaderText(string message, TextData rowHeaderTextObj)
+    {
+      if (message == "Laundry")
+      {
+        message = "Laundry (1-20ACKT by CEC 210.11)";
+      }
+      else if (message == "Bathroom")
+      {
+        message = "Bathroom (1-20ACKT by CEC 210.11)";
+      }
+      else if (message == "Small Appliance")
+      {
+        message = "Small Appliance (3-20ACK by CEC 210.11)";
+      }
+      rowHeaderTextObj.Contents = rowHeaderTextObj.Contents.Replace("Unit", message);
     }
 
     private static ObjectData ShiftTextHorizontally(ObjectData copiedRowEntryData, double shiftDistance)
@@ -631,7 +634,31 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         if (serviceSizingBuildingRowHeaders[i].Contains("120/208"))
         {
-          serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("208", buildingInfo.Voltage.ToString());
+          if (serviceSizingBuildingRowHeaders[i].Contains("V"))
+          {
+            serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("208V", buildingInfo.Voltage.ToString());
+          }
+          else
+          {
+            serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("208", buildingInfo.Voltage.ToString());
+          }
+          break;
+        }
+        else if (serviceSizingBuildingRowHeaders[i].Contains("120/240"))
+        {
+          if (serviceSizingBuildingRowHeaders[i].Contains("V"))
+          {
+            serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("240V", buildingInfo.Voltage.ToString());
+          }
+          else
+          {
+            serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("240", buildingInfo.Voltage.ToString());
+          }
+          break;
+        }
+        if (serviceSizingBuildingRowHeaders[i].Contains("1PH"))
+        {
+          serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("1PH", buildingInfo.Phase.ToString());
           break;
         }
       }
@@ -647,23 +674,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
     public static List<string> GeneralLoad = new List<string> {
       "General Lighting Subtotal (Floor Area x 3VA/ft²) (CEC 220.42)",
-      "Small Appliance (3-20ACK by CEC 210.11)",
-      "Laundry (1-20ACKT by CEC 210.11)",
-      "Lighting And Appliance Load Total",
-      "Bathroom (1-20ACKT by CEC 210.11)",
-      "Dishwasher",
-      "Microwave",
-      "Garbage Disposal",
-      "Bathroom Fans",
-      "Garage Door Opener",
-      "Dryer",
-      "Range",
-      "Refrigerator",
-      "Oven",
-      "Cooktop",
     };
-
-    public static string OptionalWaterHeater = "Water Heater";
 
     public static List<string> GeneralLoadCalculations = new List<string>
     {
@@ -712,55 +723,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           return unitInfo.DwellingArea.FloorArea + "ft²";
 
         case "General Lighting Subtotal (Floor Area x 3VA/ft²) (CEC 220.42)":
-          return unitInfo.GeneralLoads.Lighting.GetLoad().ToString() + "VA";
-
-        case "Small Appliance (3-20ACK by CEC 210.11)":
-          return unitInfo.GeneralLoads.SmallAppliance.GetLoad().ToString() + "VA";
-
-        case "Laundry (1-20ACKT by CEC 210.11)":
-          return unitInfo.GeneralLoads.Laundry.GetLoad().ToString() + "VA";
-
-        case "Lighting And Appliance Load Total":
-          int lightingAndApplianceTotal = unitInfo.GeneralLoads.Lighting.GetLoad() +
-                                          unitInfo.GeneralLoads.SmallAppliance.GetLoad() +
-                                          unitInfo.GeneralLoads.Laundry.GetLoad();
-          return lightingAndApplianceTotal.ToString() + "VA";
-
-        case "Bathroom (1-20ACKT by CEC 210.11)":
-          return unitInfo.GeneralLoads.Bathroom.GetLoad().ToString() + "VA";
-
-        case "Dishwasher":
-          return unitInfo.GeneralLoads.Dishwasher.GetLoad().ToString() + "VA";
-
-        case "Microwave":
-          return unitInfo.GeneralLoads.MicrowaveOven.GetLoad().ToString() + "VA";
-
-        case "Garbage Disposal":
-          return unitInfo.GeneralLoads.GarbageDisposal.GetLoad().ToString() + "VA";
-
-        case "Bathroom Fans":
-          return unitInfo.GeneralLoads.BathroomFans.GetLoad().ToString() + "VA";
-
-        case "Garage Door Opener":
-          return unitInfo.GeneralLoads.GarageDoorOpener.GetLoad().ToString() + "VA";
-
-        case "Dryer":
-          return unitInfo.GeneralLoads.Dryer.GetLoad().ToString() + "VA";
-
-        case "Range":
-          return unitInfo.GeneralLoads.Range.GetLoad().ToString() + "VA";
-
-        case "Refrigerator":
-          return unitInfo.GeneralLoads.Refrigerator.GetLoad().ToString() + "VA";
-
-        case "Oven":
-          return unitInfo.GeneralLoads.Oven.GetLoad().ToString() + "VA";
-
-        case "Cooktop":
-          return unitInfo.GeneralLoads.Cooktop.GetLoad().ToString() + "VA";
-
-        case "Water Heater":
-          return unitInfo.GeneralLoads.WaterHeater.GetLoad().ToString() + "VA";
+          return unitInfo.GeneralLoads.Lighting.Total.ToString() + "VA";
 
         case "Total General Load":
           return unitInfo.Totals.TotalGeneralLoad.ToString() + "VA";
@@ -843,7 +806,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         if (customLoad.Name == message)
         {
-          return customLoad.GetLoad().ToString() + "VA";
+          return customLoad.Total.ToString() + "VA";
         }
       }
 
@@ -856,7 +819,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         if (generalCustomLoad.Name == message)
         {
-          return generalCustomLoad.GetLoad().ToString() + "VA";
+          return generalCustomLoad.Total.ToString() + "VA";
         }
       }
 

@@ -299,7 +299,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     private static ObjectData UpdateServiceData(ObjectData serviceBodyData, UnitInformation unitInfo, UnitInformation unitInfo2 = null)
     {
       int startingRows = 4;
-      int totalServiceRating = unitInfo.Totals.ServiceRating() + (unitInfo2?.Totals.ServiceRating() ?? 0);
+      int totalServiceRating = unitInfo.Totals.ServiceLoad + (unitInfo2?.Totals.ServiceLoad ?? 0);
+      var combinedUnitTotals = new UnitTotalContainer();
+      combinedUnitTotals.ServiceLoad = totalServiceRating;
       var headers = serviceBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
       if (headers != null)
       {
@@ -323,7 +325,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         values.Contents = "";
         string serviceValues = "".NewLine().NewLine().NewLine();
 
-        serviceValues += $"{totalServiceRating}A";
+        serviceValues += $"{combinedUnitTotals.ServiceRating()}A";
 
         values.Contents = serviceValues.SetFont("Arial");
       }
@@ -347,7 +349,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         var combinedCustomLoads = new Dictionary<string, UnitLoad>();
         foreach (var customLoad in unitInfo.CustomLoads)
         {
-          combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, (customLoad.VA * customLoad.Multiplier), customLoad.Multiplier);
+          combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, customLoad.Total.ToString(), customLoad.Multiplier.ToString());
         }
 
         if (unitInfo2 != null)
@@ -356,12 +358,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
           {
             if (combinedCustomLoads.ContainsKey(customLoad.Name))
             {
-              combinedCustomLoads[customLoad.Name].VA += (customLoad.VA * customLoad.Multiplier);
+              combinedCustomLoads[customLoad.Name].Total += customLoad.Total;
               combinedCustomLoads[customLoad.Name].Multiplier += customLoad.Multiplier;
             }
             else
             {
-              combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, (customLoad.VA * customLoad.Multiplier), customLoad.Multiplier);
+              combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, customLoad.Total.ToString(), customLoad.Multiplier.ToString());
             }
           }
         }
@@ -393,7 +395,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
           foreach (var customLoad in combinedCustomLoads.Values)
           {
-            customValues += $"{customLoad.VA}VA".NewLine();
+            customValues += $"{customLoad.Total}VA".NewLine();
           }
 
           values.Contents = customValues.SetFont("Arial");
@@ -498,7 +500,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private static ObjectData UpdateGeneralData(ObjectData generalBodyData, UnitInformation unitInfo, UnitInformation unitInfo2 = null)
     {
-      int startingRows = 15;
+      int startingRows = 2;
       List<string> contents;
       var headers = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
       if (headers != null)
@@ -506,28 +508,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         contents = new List<string>
         {
             $"General Lighting (Floor Area x 3VA/ft²) (CEC {UnitGeneralLoadContainer.LightingCode}):",
-            $"Small Appliance (3-20ACK by CEC 210.11){((unitInfo.GeneralLoads.SmallAppliance.Multiplier + (unitInfo2?.GeneralLoads.SmallAppliance.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.SmallAppliance.Multiplier + (unitInfo2?.GeneralLoads.SmallAppliance.Multiplier ?? 0)}):")}",
-            $"Laundry (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Laundry.Multiplier + (unitInfo2?.GeneralLoads.Laundry.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Laundry.Multiplier + (unitInfo2?.GeneralLoads.Laundry.Multiplier ?? 0)}):")}",
-            $"Bathroom (1-20ACKT by CEC 210.11){((unitInfo.GeneralLoads.Bathroom.Multiplier + (unitInfo2?.GeneralLoads.Bathroom.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Bathroom.Multiplier + (unitInfo2?.GeneralLoads.Bathroom.Multiplier ?? 0)}):")}",
-            $"Dishwasher{((unitInfo.GeneralLoads.Dishwasher.Multiplier + (unitInfo2?.GeneralLoads.Dishwasher.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Dishwasher.Multiplier + (unitInfo2?.GeneralLoads.Dishwasher.Multiplier ?? 0)}):")}",
-            $"Microwave{((unitInfo.GeneralLoads.MicrowaveOven.Multiplier + (unitInfo2?.GeneralLoads.MicrowaveOven.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.MicrowaveOven.Multiplier + (unitInfo2?.GeneralLoads.MicrowaveOven.Multiplier ?? 0)}):")}",
-            $"Garbage Disposal{((unitInfo.GeneralLoads.GarbageDisposal.Multiplier + (unitInfo2?.GeneralLoads.GarbageDisposal.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.GarbageDisposal.Multiplier + (unitInfo2?.GeneralLoads.GarbageDisposal.Multiplier ?? 0)}):")}",
-            $"Bathroom Fans{((unitInfo.GeneralLoads.BathroomFans.Multiplier + (unitInfo2?.GeneralLoads.BathroomFans.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.BathroomFans.Multiplier + (unitInfo2?.GeneralLoads.BathroomFans.Multiplier ?? 0)}):")}",
-            $"Garage Door Opener{((unitInfo.GeneralLoads.GarageDoorOpener.Multiplier + (unitInfo2?.GeneralLoads.GarageDoorOpener.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.GarageDoorOpener.Multiplier + (unitInfo2?.GeneralLoads.GarageDoorOpener.Multiplier ?? 0)}):")}",
-            $"Dryer{((unitInfo.GeneralLoads.Dryer.Multiplier + (unitInfo2?.GeneralLoads.Dryer.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Dryer.Multiplier + (unitInfo2?.GeneralLoads.Dryer.Multiplier ?? 0)}):")}",
-            $"Range{((unitInfo.GeneralLoads.Range.Multiplier + (unitInfo2?.GeneralLoads.Range.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Range.Multiplier + (unitInfo2?.GeneralLoads.Range.Multiplier ?? 0)}):")}",
-            $"Refrigerator{((unitInfo.GeneralLoads.Refrigerator.Multiplier + (unitInfo2?.GeneralLoads.Refrigerator.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Refrigerator.Multiplier + (unitInfo2?.GeneralLoads.Refrigerator.Multiplier ?? 0)}):")}",
-            $"Oven{((unitInfo.GeneralLoads.Oven.Multiplier + (unitInfo2?.GeneralLoads.Oven.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Oven.Multiplier + (unitInfo2?.GeneralLoads.Oven.Multiplier ?? 0)}):")}",
-            $"Cooktop{((unitInfo.GeneralLoads.Cooktop.Multiplier + (unitInfo2?.GeneralLoads.Cooktop.Multiplier ?? 0) <= 1) ? ":" : $" ({unitInfo.GeneralLoads.Cooktop.Multiplier + (unitInfo2?.GeneralLoads.Cooktop.Multiplier ?? 0)}):")}"
         };
-
-        var waterHeaterExtraRow = $"Water Heater{((unitInfo.GeneralLoads.WaterHeater.Multiplier <= 1) ? ":" : $" ({unitInfo.GeneralLoads.WaterHeater.Multiplier}):")}";
-
-        if (!unitInfo.CustomLoads.Any(load => load.Name == "Water Heater"))
-        {
-          contents.Add(waterHeaterExtraRow);
-          startingRows++;
-        }
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
@@ -547,32 +528,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         List<string> generalValues = new List<string>
         {
-            $"{unitInfo.GeneralLoads.Lighting.VA * unitInfo.GeneralLoads.Lighting.Multiplier + (unitInfo2?.GeneralLoads.Lighting.VA * unitInfo2?.GeneralLoads.Lighting.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.SmallAppliance.VA * unitInfo.GeneralLoads.SmallAppliance.Multiplier + (unitInfo2?.GeneralLoads.SmallAppliance.VA * unitInfo2?.GeneralLoads.SmallAppliance.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.Laundry.VA * unitInfo.GeneralLoads.Laundry.Multiplier + (unitInfo2?.GeneralLoads.Laundry.VA * unitInfo2?.GeneralLoads.Laundry.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.Bathroom.VA * unitInfo.GeneralLoads.Bathroom.Multiplier + (unitInfo2?.GeneralLoads.Bathroom.VA * unitInfo2?.GeneralLoads.Bathroom.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.Dishwasher.VA * unitInfo.GeneralLoads.Dishwasher.Multiplier + (unitInfo2?.GeneralLoads.Dishwasher.VA * unitInfo2?.GeneralLoads.Dishwasher.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.MicrowaveOven.VA * unitInfo.GeneralLoads.MicrowaveOven.Multiplier + (unitInfo2?.GeneralLoads.MicrowaveOven.VA * unitInfo2?.GeneralLoads.MicrowaveOven.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.GarbageDisposal.VA * unitInfo.GeneralLoads.GarbageDisposal.Multiplier + (unitInfo2?.GeneralLoads.GarbageDisposal.VA * unitInfo2?.GeneralLoads.GarbageDisposal.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.BathroomFans.VA * unitInfo.GeneralLoads.BathroomFans.Multiplier + (unitInfo2?.GeneralLoads.BathroomFans.VA * unitInfo2?.GeneralLoads.BathroomFans.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.GarageDoorOpener.VA * unitInfo.GeneralLoads.GarageDoorOpener.Multiplier + (unitInfo2?.GeneralLoads.GarageDoorOpener.VA * unitInfo2?.GeneralLoads.GarageDoorOpener.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.Dryer.VA * unitInfo.GeneralLoads.Dryer.Multiplier + (unitInfo2?.GeneralLoads.Dryer.VA * unitInfo2?.GeneralLoads.Dryer.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.Range.VA * unitInfo.GeneralLoads.Range.Multiplier + (unitInfo2?.GeneralLoads.Range.VA * unitInfo2?.GeneralLoads.Range.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.Refrigerator.VA * unitInfo.GeneralLoads.Refrigerator.Multiplier + (unitInfo2?.GeneralLoads.Refrigerator.VA * unitInfo2?.GeneralLoads.Refrigerator.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.Oven.VA * unitInfo.GeneralLoads.Oven.Multiplier + (unitInfo2?.GeneralLoads.Oven.VA * unitInfo2?.GeneralLoads.Oven.Multiplier ?? 0)}VA",
-            $"{unitInfo.GeneralLoads.Cooktop.VA * unitInfo.GeneralLoads.Cooktop.Multiplier + (unitInfo2?.GeneralLoads.Cooktop.VA * unitInfo2?.GeneralLoads.Cooktop.Multiplier ?? 0)}VA"
+            $"{unitInfo.GeneralLoads.Lighting.Total + (unitInfo2?.GeneralLoads.Lighting.Total ?? 0)}VA",
         };
-
-        var waterHeaterExtraValue = $"{unitInfo.GeneralLoads.WaterHeater.VA * unitInfo.GeneralLoads.WaterHeater.Multiplier}VA";
-
-        if (!unitInfo.CustomLoads.Any(load => load.Name == "Water Heater"))
-        {
-          generalValues.Add(waterHeaterExtraValue);
-        }
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
-          generalValues.Add($"{customLoad.VA * customLoad.Multiplier}VA");
+          generalValues.Add($"{customLoad.Total}VA");
         });
 
         InsertValueLightingBreakdown(1, unitInfo, generalValues, unitInfo2);
@@ -589,8 +550,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private static void InsertValueLightingBreakdown(int index, UnitInformation unitInfo, List<string> generalValues, UnitInformation unitInfo2 = null)
     {
-      int lightingVA = unitInfo.GeneralLoads.Lighting.VA * unitInfo.GeneralLoads.Lighting.Multiplier;
-      int lightingVA2 = unitInfo2?.GeneralLoads.Lighting.VA * unitInfo2?.GeneralLoads.Lighting.Multiplier ?? 0;
+      int lightingVA = unitInfo.GeneralLoads.Lighting.Total;
+      int lightingVA2 = unitInfo2?.GeneralLoads.Lighting.Total ?? 0;
 
       lightingVA += lightingVA2;
 

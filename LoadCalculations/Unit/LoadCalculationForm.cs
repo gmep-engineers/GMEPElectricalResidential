@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using GMEPElectricalResidential.HelperFiles;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace GMEPElectricalResidential.LoadCalculations.Unit
 {
@@ -21,6 +23,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     private LOAD_CALCULATION_FORM _parent;
     private bool _isLoaded = false;
     private bool _unitNullFlag = false;
+    private int _dragIndex = -1;
 
     public LoadCalculationForm(LOAD_CALCULATION_FORM parent, int tabId, UnitInformation unitInformation = null)
     {
@@ -31,10 +34,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       DetectEnterPresses();
       SubscribeTextBoxesToTextChangedEvent(this.Controls);
       SubscribeComboBoxesToTextChangedEvent(this.Controls);
-      SubscribeTextBoxesToTextEnterEvent(this.Controls);
 
       _parent = parent;
-      _toolTip = new ToolTip();
 
       if (unitInformation != null)
       {
@@ -49,11 +50,52 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       this.Load += new EventHandler(UnitLoadCalculation_Load);
     }
 
+    private void PopulateBoxFormItems(ListBox box, TextBox name, ComboBox multiplier, TextBox total)
+    {
+      if (box.SelectedIndex != -1)
+      {
+        var selectedItem = box.SelectedItem.ToString().Split(',');
+        name.Text = selectedItem[0].Trim();
+        total.Text = selectedItem[1].Trim();
+        multiplier.Text = selectedItem[2].Trim();
+
+        name.ForeColor = Color.Black;
+        total.ForeColor = Color.Black;
+        multiplier.ForeColor = Color.Black;
+      }
+    }
+
+    private List<string> DefaultGeneralValues()
+    {
+      return new List<string>()
+      {
+        "Small Appliance, 3000, 1",
+        "Laundry, 1500, 1",
+        "Bathroom, 0, 1",
+        "Dishwasher, 1200, 1",
+        "Microwave, 1500, 1",
+        "Garbage Disposal, 1200, 1",
+        "Bathroom Fans, 200, 1",
+        "Garage Door Opener, 1200, 1",
+        "Dryer, 5000, 1",
+        "Oven, 8000, 1",
+        "Refrigerator, 1000, 1",
+        "Water Heater, 5000, 1"
+      };
+    }
+
     private void UnitLoadCalculation_Load(object sender, EventArgs e)
     {
       if (!_unitNullFlag)
       {
         PopulateUserControlWithUnitInformation(_unitInformation);
+      }
+      else
+      {
+        foreach (var value in DefaultGeneralValues())
+        {
+          GENERAL_CUSTOM_LOAD_BOX.Items.Add(value);
+        }
       }
       _isLoaded = true;
       UpdateDataAndLoads();
@@ -87,39 +129,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       // Set area
       AREA.Text = unitInformation.DwellingArea.FloorArea.ToString();
 
-      // Set general loads
-      SMALL_APPLIANCE_VA.Text = unitInformation.GeneralLoads.SmallAppliance.VA.ToString();
-      SMALL_APPLIANCE_MULTIPLIER.Text = unitInformation.GeneralLoads.SmallAppliance.Multiplier.ToString();
-      LAUNDRY_VA.Text = unitInformation.GeneralLoads.Laundry.VA.ToString();
-      LAUNDRY_MULTIPLIER.Text = unitInformation.GeneralLoads.Laundry.Multiplier.ToString();
-      BATHROOM_VA.Text = unitInformation.GeneralLoads.Bathroom.VA.ToString();
-      BATHROOM_MULTIPLIER.Text = unitInformation.GeneralLoads.Bathroom.Multiplier.ToString();
-      DISHWASHER_VA.Text = unitInformation.GeneralLoads.Dishwasher.VA.ToString();
-      DISHWASHER_MULTIPLIER.Text = unitInformation.GeneralLoads.Dishwasher.Multiplier.ToString();
-      MICROWAVE_OVEN_VA.Text = unitInformation.GeneralLoads.MicrowaveOven.VA.ToString();
-      MICROWAVE_OVEN_MULTIPLIER.Text = unitInformation.GeneralLoads.MicrowaveOven.Multiplier.ToString();
-      GARBAGE_DISPOSAL_VA.Text = unitInformation.GeneralLoads.GarbageDisposal.VA.ToString();
-      GARBAGE_DISPOSAL_MULTIPLIER.Text = unitInformation.GeneralLoads.GarbageDisposal.Multiplier.ToString();
-      BATHROOM_FANS_VA.Text = unitInformation.GeneralLoads.BathroomFans.VA.ToString();
-      BATHROOM_FANS_MULTIPLIER.Text = unitInformation.GeneralLoads.BathroomFans.Multiplier.ToString();
-      GARAGE_DOOR_OPENER_VA.Text = unitInformation.GeneralLoads.GarageDoorOpener.VA.ToString();
-      GARAGE_DOOR_OPENER_MULTIPLIER.Text = unitInformation.GeneralLoads.GarageDoorOpener.Multiplier.ToString();
-      DRYER_VA.Text = unitInformation.GeneralLoads.Dryer.VA.ToString();
-      DRYER_MULTIPLIER.Text = unitInformation.GeneralLoads.Dryer.Multiplier.ToString();
-      RANGE_VA.Text = unitInformation.GeneralLoads.Range.VA.ToString();
-      RANGE_MULTIPLIER.Text = unitInformation.GeneralLoads.Range.Multiplier.ToString();
-      REFRIGERATOR_VA.Text = unitInformation.GeneralLoads.Refrigerator.VA.ToString();
-      REFRIGERATOR_MULTIPLIER.Text = unitInformation.GeneralLoads.Refrigerator.Multiplier.ToString();
-      OVEN_VA.Text = unitInformation.GeneralLoads.Oven.VA.ToString();
-      OVEN_MULTIPLIER.Text = unitInformation.GeneralLoads.Oven.Multiplier.ToString();
-      WATER_HEATER_VA.Text = unitInformation.GeneralLoads.WaterHeater.VA.ToString();
-      WATER_HEATER_MULTIPLIER.Text = unitInformation.GeneralLoads.WaterHeater.Multiplier.ToString();
-      COOKTOP_VA.Text = unitInformation.GeneralLoads.Cooktop.VA.ToString();
-      COOKTOP_MULTIPLIER.Text = unitInformation.GeneralLoads.Cooktop.Multiplier.ToString();
-
       foreach (var load in unitInformation.GeneralLoads.Customs)
       {
-        var entry = $"{load.Name}, {load.VA}, {load.Multiplier}";
+        var entry = $"{load.Name}, {load.Total}, {load.Multiplier}";
         GENERAL_CUSTOM_LOAD_BOX.Items.Add(entry);
       }
 
@@ -127,19 +139,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         if (load.Name != "Water Heater")
         {
-          var entry = $"{load.Name}, {load.VA}, {load.Multiplier}";
+          var entry = $"{load.Name}, {load.Total}, {load.Multiplier}";
           CUSTOM_LOAD_BOX.Items.Add(entry);
-        }
-      }
-
-      foreach (var load in unitInformation.CustomLoads)
-      {
-        if (load.Name == "Water Heater")
-        {
-          WATER_HEATER_CHECK.Checked = false;
-          WATER_HEATER_VA.Text = load.VA.ToString();
-          WATER_HEATER_MULTIPLIER.Text = load.Multiplier.ToString();
-          break;
         }
       }
 
@@ -177,29 +178,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     public UnitInformation RetrieveUnitInformation()
     {
       return _unitInformation;
-    }
-
-    private void SubscribeTextBoxesToTextEnterEvent(Control.ControlCollection controls)
-    {
-      foreach (Control control in controls)
-      {
-        if (control is TextBox)
-        {
-          ((TextBox)control).MouseUp += TextBox_MouseUp;
-        }
-        else
-        {
-          SubscribeTextBoxesToTextEnterEvent(control.Controls);
-        }
-      }
-    }
-
-    private void TextBox_MouseUp(object sender, MouseEventArgs e)
-    {
-      if (sender is TextBox textBox && !textBox.ReadOnly)
-      {
-        textBox.SelectAll();
-      }
     }
 
     protected override void OnVisibleChanged(EventArgs e)
@@ -336,7 +314,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var totalLoad = 0;
       foreach (var customLoad in _unitInformation.CustomLoads)
       {
-        totalLoad += customLoad.GetLoad();
+        totalLoad += customLoad.Total;
       }
       _unitInformation.Totals.CustomLoad = totalLoad;
       TOTAL_CUSTOM_LOAD_CALCULATION.Text = totalLoad.ToString();
@@ -349,17 +327,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       foreach (var item in CUSTOM_LOAD_BOX.Items)
       {
         var split = item.ToString().Trim().Split(',');
-        var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2]);
-        customs.Add(unitGeneralCustomLoad);
-      }
 
-      if (!WATER_HEATER_CHECK.Checked)
-      {
-        var name = "Water Heater";
-        var load = WATER_HEATER_VA.Text;
-        var multiplier = WATER_HEATER_MULTIPLIER.Text;
-        var waterHeater = new UnitLoad(name, load, multiplier);
-        customs.Add(waterHeater);
+        var unitCustomLoad = new UnitLoad(split[0], split[1], split[2]);
+        customs.Add(unitCustomLoad);
       }
 
       _unitInformation.CustomLoads = customs;
@@ -408,35 +378,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         lightingLoad = int.Parse(AREA.Text) * 3;
       }
 
-      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", lightingLoad, "1");
-      unitGeneralLoadContainer.SmallAppliance = new UnitLoad("Small Appliance", SMALL_APPLIANCE_VA.Text, SMALL_APPLIANCE_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Laundry = new UnitLoad("Laundry", LAUNDRY_VA.Text, LAUNDRY_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Bathroom = new UnitLoad("Bathroom", BATHROOM_VA.Text, BATHROOM_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Dishwasher = new UnitLoad("Dishwasher", DISHWASHER_VA.Text, DISHWASHER_MULTIPLIER.Text);
-      unitGeneralLoadContainer.MicrowaveOven = new UnitLoad("Microwave Oven", MICROWAVE_OVEN_VA.Text, MICROWAVE_OVEN_MULTIPLIER.Text);
-      unitGeneralLoadContainer.GarbageDisposal = new UnitLoad("Garbage Disposal", GARBAGE_DISPOSAL_VA.Text, GARBAGE_DISPOSAL_MULTIPLIER.Text);
-      unitGeneralLoadContainer.BathroomFans = new UnitLoad("Bathroom Fans", BATHROOM_FANS_VA.Text, BATHROOM_FANS_MULTIPLIER.Text);
-      unitGeneralLoadContainer.GarageDoorOpener = new UnitLoad("Garage Door Opener", GARAGE_DOOR_OPENER_VA.Text, GARAGE_DOOR_OPENER_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Dryer = new UnitLoad("Dryer", DRYER_VA.Text, DRYER_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Range = new UnitLoad("Range", RANGE_VA.Text, RANGE_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Refrigerator = new UnitLoad("Refrigerator", REFRIGERATOR_VA.Text, REFRIGERATOR_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Oven = new UnitLoad("Oven", OVEN_VA.Text, OVEN_MULTIPLIER.Text);
-      unitGeneralLoadContainer.Cooktop = new UnitLoad("Cooktop", COOKTOP_VA.Text, COOKTOP_MULTIPLIER.Text);
-
-      if (WATER_HEATER_CHECK.Checked)
-      {
-        unitGeneralLoadContainer.WaterHeater = new UnitLoad("Water Heater", WATER_HEATER_VA.Text, WATER_HEATER_MULTIPLIER.Text);
-      }
-      else
-      {
-        unitGeneralLoadContainer.WaterHeater = new UnitLoad("Water Heater", "0", WATER_HEATER_MULTIPLIER.Text);
-      }
+      unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", lightingLoad.ToString(), "1");
 
       List<UnitLoad> customs = new List<UnitLoad>();
 
       foreach (var item in GENERAL_CUSTOM_LOAD_BOX.Items)
       {
         var split = item.ToString().Trim().Split(',');
+
         var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2]);
         customs.Add(unitGeneralCustomLoad);
       }
@@ -472,25 +421,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       var generalLoads = _unitInformation.GeneralLoads;
 
-      int totalLoad = generalLoads.OccupancyLighting()
-                      + generalLoads.SmallAppliance.GetLoad()
-                      + generalLoads.Laundry.GetLoad()
-                      + generalLoads.Bathroom.GetLoad()
-                      + generalLoads.Dishwasher.GetLoad()
-                      + generalLoads.MicrowaveOven.GetLoad()
-                      + generalLoads.GarbageDisposal.GetLoad()
-                      + generalLoads.BathroomFans.GetLoad()
-                      + generalLoads.GarageDoorOpener.GetLoad()
-                      + generalLoads.Dryer.GetLoad()
-                      + generalLoads.Range.GetLoad()
-                      + generalLoads.Refrigerator.GetLoad()
-                      + generalLoads.Oven.GetLoad()
-                      + generalLoads.Cooktop.GetLoad()
-                      + generalLoads.WaterHeater.GetLoad();
+      int totalLoad = generalLoads.OccupancyLighting();
 
       foreach (var customLoad in generalLoads.Customs)
       {
-        totalLoad += customLoad.GetLoad();
+        totalLoad += customLoad.Total;
       }
 
       _unitInformation.Totals.TotalGeneralLoad = totalLoad;
@@ -512,31 +447,155 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private void DetectEnterPresses()
     {
-      // Subscribe to KeyDown event for GENERAL_CUSTOM controls
       GENERAL_CUSTOM_NAME.KeyDown += TextBox_KeyDown;
-      GENERAL_CUSTOM_VA.KeyDown += TextBox_KeyDown;
       GENERAL_CUSTOM_MULTIPLIER.KeyDown += TextBox_KeyDown;
+      GENERAL_CUSTOM_TOTAL.KeyDown += TextBox_KeyDown;
 
-      // Subscribe to KeyDown event for CUSTOM controls
       CUSTOM_NAME.KeyDown += TextBox_KeyDown;
-      CUSTOM_VA.KeyDown += TextBox_KeyDown;
       CUSTOM_MULTIPLIER.KeyDown += TextBox_KeyDown;
+      CUSTOM_TOTAL.KeyDown += TextBox_KeyDown;
     }
 
     private void TextBox_KeyDown(object sender, KeyEventArgs e)
     {
       if (e.KeyCode == Keys.Enter)
       {
-        if (sender == GENERAL_CUSTOM_NAME || sender == GENERAL_CUSTOM_VA || sender == GENERAL_CUSTOM_MULTIPLIER)
+        bool isEnterPressed = !e.Shift;
+
+        if (sender == GENERAL_CUSTOM_TOTAL || sender == CUSTOM_TOTAL)
         {
-          AddEntry(GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_VA, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_LOAD_BOX);
+          PerformMultiplication(GENERAL_CUSTOM_TOTAL, GENERAL_CUSTOM_MULTIPLIER);
+          PerformMultiplication(CUSTOM_TOTAL, CUSTOM_MULTIPLIER);
         }
-        else if (sender == CUSTOM_NAME || sender == CUSTOM_VA || sender == CUSTOM_MULTIPLIER)
+        if (sender == GENERAL_CUSTOM_NAME || sender == GENERAL_CUSTOM_MULTIPLIER || sender == GENERAL_CUSTOM_TOTAL)
         {
-          AddEntry(CUSTOM_NAME, CUSTOM_VA, CUSTOM_MULTIPLIER, CUSTOM_LOAD_BOX);
+          AddEntry(GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_TOTAL, GENERAL_CUSTOM_LOAD_BOX, isEnterPressed);
+        }
+        else if (sender == CUSTOM_NAME || sender == CUSTOM_MULTIPLIER || sender == CUSTOM_TOTAL)
+        {
+          AddEntry(CUSTOM_NAME, CUSTOM_MULTIPLIER, CUSTOM_TOTAL, CUSTOM_LOAD_BOX, isEnterPressed);
         }
         e.SuppressKeyPress = true;
       }
+    }
+
+    private void AddEntry(TextBox nameTextBox, ComboBox multiplierComboBox, TextBox totalBox, ListBox listBox, bool isEnterPressed = true)
+    {
+      string name = nameTextBox.Text;
+      string total = totalBox.Text;
+      string multiplier = multiplierComboBox.Text;
+
+      bool proceed = HandleAddEntryToolTips(nameTextBox, totalBox, multiplierComboBox);
+
+      if (!proceed) return;
+
+      string newEntry = $"{name}, {total}, {multiplier}";
+
+      bool added = AddOrUpdateEntryToListBox(listBox, name, newEntry);
+
+      if (isEnterPressed)
+      {
+        SelectNextItem(listBox);
+      }
+      else
+      {
+        SelectPreviousItem(listBox);
+      }
+
+      if (added)
+      {
+        ResetFields(nameTextBox, multiplierComboBox, totalBox);
+      }
+      else
+      {
+        totalBox.Focus();
+        totalBox.SelectAll();
+      }
+
+      if (_isLoaded) UpdateDataAndLoads();
+    }
+
+    private void ResetFields(TextBox nameTextBox, ComboBox multiplierComboBox, TextBox totalBox)
+    {
+      nameTextBox.Text = "";
+      multiplierComboBox.Text = "1";
+      totalBox.Text = "";
+    }
+
+    private void PerformMultiplication(TextBox totalBox, ComboBox multiplierBox)
+    {
+      if (totalBox.Text.Contains("*"))
+      {
+        var split = totalBox.Text.Split('*');
+        if (split.Length == 2)
+        {
+          if (decimal.TryParse(split[0], out decimal total) && decimal.TryParse(split[1], out decimal multiplier))
+          {
+            totalBox.Text = (total * multiplier).ToString();
+            multiplierBox.Text = multiplier.ToString();
+          }
+        }
+      }
+    }
+
+    private static void SelectPreviousItem(ListBox listBox)
+    {
+      if (listBox.Items.Count > 0)
+      {
+        var selectedIndex = listBox.SelectedIndex;
+        if (selectedIndex == 0)
+        {
+          listBox.SelectedIndex = listBox.Items.Count - 1;
+        }
+        else
+        {
+          listBox.SelectedIndex = selectedIndex - 1;
+        }
+      }
+    }
+
+    private static void SelectNextItem(ListBox listBox)
+    {
+      if (listBox.Items.Count > 0)
+      {
+        var selectedIndex = listBox.SelectedIndex;
+        if (selectedIndex == listBox.Items.Count - 1)
+        {
+          listBox.SelectedIndex = 0;
+        }
+        else
+        {
+          listBox.SelectedIndex = selectedIndex + 1;
+        }
+      }
+    }
+
+    private static bool AddOrUpdateEntryToListBox(ListBox listBox, string name, string newEntry)
+    {
+      int existingIndex = -1;
+      for (int i = 0; i < listBox.Items.Count; i++)
+      {
+        string item = listBox.Items[i].ToString();
+        string[] parts = item.Split(new[] { ", " }, StringSplitOptions.None);
+        if (parts.Length > 0 && parts[0] == name)
+        {
+          existingIndex = i;
+          break;
+        }
+      }
+
+      bool added = false;
+      if (existingIndex >= 0)
+      {
+        listBox.Items[existingIndex] = newEntry;
+      }
+      else
+      {
+        listBox.Items.Add(newEntry);
+        added = true;
+      }
+
+      return added;
     }
 
     private void DetectIncorrectInputs()
@@ -604,20 +663,20 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       GENERAL_CUSTOM_NAME.Enter += RemoveWatermark;
       GENERAL_CUSTOM_NAME.Leave += AddWatermark;
 
-      GENERAL_CUSTOM_VA.Text = _VAWatermark;
-      GENERAL_CUSTOM_VA.ForeColor = Color.LightGray;
-      GENERAL_CUSTOM_VA.Enter += RemoveWatermark;
-      GENERAL_CUSTOM_VA.Leave += AddWatermark;
+      GENERAL_CUSTOM_TOTAL.Text = _VAWatermark;
+      GENERAL_CUSTOM_TOTAL.ForeColor = Color.LightGray;
+      GENERAL_CUSTOM_TOTAL.Enter += RemoveWatermark;
+      GENERAL_CUSTOM_TOTAL.Leave += AddWatermark;
 
       CUSTOM_NAME.Text = _NameWatermark;
       CUSTOM_NAME.ForeColor = Color.LightGray;
       CUSTOM_NAME.Enter += RemoveWatermark;
       CUSTOM_NAME.Leave += AddWatermark;
 
-      CUSTOM_VA.Text += _VAWatermark;
-      CUSTOM_VA.ForeColor = Color.LightGray;
-      CUSTOM_VA.Enter += RemoveWatermark;
-      CUSTOM_VA.Leave += AddWatermark;
+      CUSTOM_TOTAL.Text += _VAWatermark;
+      CUSTOM_TOTAL.ForeColor = Color.LightGray;
+      CUSTOM_TOTAL.Enter += RemoveWatermark;
+      CUSTOM_TOTAL.Leave += AddWatermark;
     }
 
     private void RemoveWatermark(object sender, EventArgs e)
@@ -640,7 +699,14 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         if (string.IsNullOrEmpty(textBox.Text))
         {
-          textBox.Text = textBox == GENERAL_CUSTOM_NAME ? _NameWatermark : _VAWatermark;
+          if (textBox == GENERAL_CUSTOM_NAME || textBox == CUSTOM_NAME)
+          {
+            textBox.Text = _NameWatermark;
+          }
+          else if (textBox == GENERAL_CUSTOM_TOTAL || textBox == CUSTOM_TOTAL)
+          {
+            textBox.Text = _VAWatermark;
+          }
           textBox.ForeColor = Color.LightGray;
         }
       }
@@ -648,11 +714,96 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private void SetDefaultValues()
     {
+      string multiplierMessage = "To update the total and the amount at the same time, use the format: (amount in VA for 1 item) * (number of items) then press enter";
+
+      _toolTip = new ToolTip();
+      _toolTip.SetToolTip(TOTAL_GENERAL_LABEL, multiplierMessage);
+      _toolTip.SetToolTip(TOTAL_CUSTOM_LABEL, multiplierMessage);
+
       VOLTAGE.SelectedIndex = 0;
+
+      GENERAL_CUSTOM_LOAD_BOX.AllowDrop = true;
+      CUSTOM_LOAD_BOX.AllowDrop = true;
+
+      GENERAL_CUSTOM_LOAD_BOX.MouseDown += ListBox_MouseDown;
+      CUSTOM_LOAD_BOX.MouseDown += ListBox_MouseDown;
+
+      GENERAL_CUSTOM_LOAD_BOX.DragDrop += ListBox_DragDrop;
+      CUSTOM_LOAD_BOX.DragDrop += ListBox_DragDrop;
+
+      GENERAL_CUSTOM_LOAD_BOX.DragOver += ListBox_DragOver;
+      CUSTOM_LOAD_BOX.DragOver += ListBox_DragOver;
+
+      GENERAL_CUSTOM_LOAD_BOX.SelectedIndexChanged += ListBox_SelectedIndexChanged;
+      CUSTOM_LOAD_BOX.SelectedIndexChanged += ListBox_SelectedIndexChanged;
+
+      GENERAL_CUSTOM_LOAD_BOX.KeyDown += ListBox_KeyDown;
+      CUSTOM_LOAD_BOX.KeyDown += ListBox_KeyDown;
+
       var parentTab = this.Parent as TabPage;
       if (parentTab != null)
       {
         parentTab.Text = _unitInformation.FormattedName();
+      }
+    }
+
+    private void ListBox_KeyDown(object sender, KeyEventArgs e)
+    {
+      if (e.KeyCode == Keys.Delete)
+      {
+        ListBox listBox = (ListBox)sender;
+        if (listBox.SelectedIndex != -1)
+        {
+          listBox.Items.RemoveAt(listBox.SelectedIndex);
+          ClearListBoxInputs(listBox);
+          if (_isLoaded) UpdateDataAndLoads();
+        }
+      }
+    }
+
+    private void ListBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      if (sender == GENERAL_CUSTOM_LOAD_BOX)
+      {
+        PopulateBoxFormItems(GENERAL_CUSTOM_LOAD_BOX, GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_TOTAL);
+      }
+      else if (sender == CUSTOM_LOAD_BOX)
+      {
+        PopulateBoxFormItems(CUSTOM_LOAD_BOX, CUSTOM_NAME, CUSTOM_MULTIPLIER, CUSTOM_TOTAL);
+      }
+    }
+
+    private void ListBox_DragOver(object sender, DragEventArgs e)
+    {
+      e.Effect = DragDropEffects.Move;
+    }
+
+    private void ListBox_DragDrop(object sender, DragEventArgs e)
+    {
+      ListBox listBox = (ListBox)sender;
+      int dropIndex = listBox.IndexFromPoint(listBox.PointToClient(new Point(e.X, e.Y)));
+      if (dropIndex >= 0 && dropIndex != _dragIndex)
+      {
+        object dragItem = listBox.Items[_dragIndex];
+        listBox.Items.RemoveAt(_dragIndex);
+        listBox.Items.Insert(dropIndex, dragItem);
+        listBox.SelectedIndex = dropIndex;
+      }
+    }
+
+    private void ListBox_MouseDown(object sender, MouseEventArgs e)
+    {
+      ListBox listBox = (ListBox)sender;
+      if (e.Button == MouseButtons.Left && listBox.SelectedItem != null)
+      {
+        _dragIndex = listBox.IndexFromPoint(e.X, e.Y);
+        if (_dragIndex >= 0)
+        {
+          var index = listBox.SelectedIndex;
+          listBox.SelectedIndex = -1;
+          listBox.SelectedIndex = index;
+          listBox.DoDragDrop(listBox.Items[_dragIndex], DragDropEffects.Move);
+        }
       }
     }
 
@@ -690,8 +841,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      WATER_HEATER_VA.Text = "5000";
-
       _unitInformation.DwellingArea.Heater = ApplianceType.Electric;
     }
 
@@ -699,8 +848,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
-
-      WATER_HEATER_VA.Text = "180";
 
       _unitInformation.DwellingArea.Heater = ApplianceType.Gas;
     }
@@ -710,8 +857,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      WATER_HEATER_VA.Text = "0";
-
       _unitInformation.DwellingArea.Heater = ApplianceType.NA;
     }
 
@@ -719,8 +864,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
-
-      DRYER_VA.Text = "5000";
 
       _unitInformation.DwellingArea.Dryer = ApplianceType.Electric;
     }
@@ -730,8 +873,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      DRYER_VA.Text = "180";
-
       _unitInformation.DwellingArea.Dryer = ApplianceType.Gas;
     }
 
@@ -739,8 +880,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
-
-      DRYER_VA.Text = "0";
 
       _unitInformation.DwellingArea.Dryer = ApplianceType.NA;
     }
@@ -750,8 +889,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      OVEN_VA.Text = "8000";
-
       _unitInformation.DwellingArea.Oven = ApplianceType.Electric;
     }
 
@@ -759,8 +896,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
-
-      OVEN_VA.Text = "180";
 
       _unitInformation.DwellingArea.Oven = ApplianceType.Gas;
     }
@@ -770,8 +905,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      OVEN_VA.Text = "0";
-
       _unitInformation.DwellingArea.Oven = ApplianceType.NA;
     }
 
@@ -779,8 +912,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
-
-      COOKTOP_VA.Text = "8000";
 
       _unitInformation.DwellingArea.Cooktop = ApplianceType.Electric;
     }
@@ -790,8 +921,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
 
-      COOKTOP_VA.Text = "180";
-
       _unitInformation.DwellingArea.Cooktop = ApplianceType.Gas;
     }
 
@@ -799,8 +928,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       var radioButton = sender as RadioButton;
       if (!radioButton.Checked) return;
-
-      COOKTOP_VA.Text = "0";
 
       _unitInformation.DwellingArea.Cooktop = ApplianceType.NA;
     }
@@ -887,65 +1014,53 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return calculatedLoads;
     }
 
-    private void AddEntry(TextBox nameTextBox, TextBox vaTextBox, ComboBox multiplierComboBox, ListBox listBox)
+    private bool HandleAddEntryToolTips(TextBox nameTextBox, TextBox totalBox, ComboBox multiplierComboBox)
     {
       string name = nameTextBox.Text;
-      string va = vaTextBox.Text;
+      string total = totalBox.Text;
       string multiplier = multiplierComboBox.Text;
 
       if (string.IsNullOrEmpty(name) || name == _NameWatermark)
       {
         _toolTip.Show("You must enter a name.", nameTextBox, 0, -20, 2000);
-        return;
+        return false;
       }
       else
       {
         _toolTip.Hide(nameTextBox);
       }
 
-      if (string.IsNullOrEmpty(va) || va == _VAWatermark)
+      if (string.IsNullOrEmpty(total) || total == _VAWatermark)
       {
-        _toolTip.Show("You must enter a VA.", vaTextBox, 0, -20, 2000);
-        return;
+        _toolTip.Show("You must enter a VA.", totalBox, 0, -20, 2000);
+        return false;
       }
       else
       {
-        _toolTip.Hide(vaTextBox);
+        _toolTip.Hide(totalBox);
       }
 
-      bool isMultiplierGreaterThanZero = isGreaterThanZero(multiplier);
-
-      if (string.IsNullOrEmpty(multiplier) || !isMultiplierGreaterThanZero)
+      if (string.IsNullOrEmpty(multiplier) || !isGreaterThanZero(multiplier))
       {
         _toolTip.Show("You must enter a multiplier that is greater than 0.", multiplierComboBox, 0, -20, 2000);
-        return;
+        return false;
       }
       else
       {
         _toolTip.Hide(multiplierComboBox);
       }
 
-      string newEntry = $"{name}, {va}, {multiplier}";
-
-      listBox.Items.Add(newEntry);
-
-      nameTextBox.Text = "";
-      vaTextBox.Text = "";
-      multiplierComboBox.Text = "1";
-
-      nameTextBox.Focus();
-
-      if (_isLoaded) UpdateDataAndLoads();
+      return true;
     }
 
     private void ADD_ENTRY_Click(object sender, EventArgs e)
     {
-      AddEntry(GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_VA, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_LOAD_BOX);
+      AddEntry(GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_TOTAL, GENERAL_CUSTOM_LOAD_BOX);
     }
 
     private void ADD_ENTRY_CUSTOM_Click(object sender, EventArgs e)
     {
-      AddEntry(CUSTOM_NAME, CUSTOM_VA, CUSTOM_MULTIPLIER, CUSTOM_LOAD_BOX);
+      AddEntry(CUSTOM_NAME, CUSTOM_MULTIPLIER, CUSTOM_TOTAL, CUSTOM_LOAD_BOX);
     }
 
     private void RemoveEntry(ListBox listBox)
@@ -960,9 +1075,27 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         {
           listBox.Items.RemoveAt(listBox.Items.Count - 1);
         }
+
+        ClearListBoxInputs(listBox);
       }
 
       if (_isLoaded) UpdateDataAndLoads();
+    }
+
+    private void ClearListBoxInputs(ListBox listBox)
+    {
+      if (listBox == GENERAL_CUSTOM_LOAD_BOX)
+      {
+        GENERAL_CUSTOM_NAME.Text = "";
+        GENERAL_CUSTOM_MULTIPLIER.Text = "1";
+        GENERAL_CUSTOM_TOTAL.Text = "";
+      }
+      else if (listBox == CUSTOM_LOAD_BOX)
+      {
+        CUSTOM_NAME.Text = "";
+        CUSTOM_MULTIPLIER.Text = "1";
+        CUSTOM_TOTAL.Text = "";
+      }
     }
 
     private void REMOVE_ENTRY_Click(object sender, EventArgs e)
@@ -1049,7 +1182,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       Dictionary<int, int> map = new Dictionary<int, int>
     {
         { 18, 648 },
-        { 24, 848 },
+        { 24, 648 },
         { 30, 840 },
         { 36, 816 },
         { 42, 984 },
@@ -1172,20 +1305,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
   {
     public static string LightingCode = "220.42";
     public UnitLoad Lighting { get; set; }
-    public UnitLoad SmallAppliance { get; set; }
-    public UnitLoad Laundry { get; set; }
-    public UnitLoad Bathroom { get; set; }
-    public UnitLoad Dishwasher { get; set; }
-    public UnitLoad MicrowaveOven { get; set; }
-    public UnitLoad GarbageDisposal { get; set; }
-    public UnitLoad BathroomFans { get; set; }
-    public UnitLoad GarageDoorOpener { get; set; }
-    public UnitLoad Dryer { get; set; }
-    public UnitLoad Range { get; set; }
-    public UnitLoad Refrigerator { get; set; }
-    public UnitLoad Oven { get; set; }
-    public UnitLoad WaterHeater { get; set; }
-    public UnitLoad Cooktop { get; set; }
     public List<UnitLoad> Customs { get; set; }
     public LightingOccupancyType LightingOccupancyType { get; set; }
 
@@ -1212,30 +1331,30 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private int DwellingLoad()
     {
-      var firstValue = Math.Min(Lighting.VA, 3000);
-      var secondValue = Math.Min(Math.Max(Lighting.VA - 3000, 0), 117000) * 0.35;
-      var thirdValue = Math.Max(Lighting.VA - 120000, 0) * 0.25;
+      var firstValue = Math.Min(Lighting.Total, 3000);
+      var secondValue = Math.Min(Math.Max(Lighting.Total - 3000, 0), 117000) * 0.35;
+      var thirdValue = Math.Max(Lighting.Total - 120000, 0) * 0.25;
       return (int)Math.Ceiling(firstValue + secondValue + thirdValue);
     }
 
     private int HotelAndMotelLoad()
     {
-      var firstValue = Math.Min(Lighting.VA, 20000) * 0.6;
-      var secondValue = Math.Min(Math.Max(Lighting.VA - 20000, 0), 80000) * 0.5;
-      var thirdValue = Math.Max(Lighting.VA - 100000, 0) * 0.35;
+      var firstValue = Math.Min(Lighting.Total, 20000) * 0.6;
+      var secondValue = Math.Min(Math.Max(Lighting.Total - 20000, 0), 80000) * 0.5;
+      var thirdValue = Math.Max(Lighting.Total - 100000, 0) * 0.35;
       return (int)Math.Ceiling(firstValue + secondValue + thirdValue);
     }
 
     private int WarehouseLoad()
     {
-      var firstValue = Math.Min(Lighting.VA, 12500);
-      var secondValue = Math.Max(Lighting.VA - 12500, 0) * 0.5;
+      var firstValue = Math.Min(Lighting.Total, 12500);
+      var secondValue = Math.Max(Lighting.Total - 12500, 0) * 0.5;
       return (int)Math.Ceiling(firstValue + secondValue);
     }
 
     private int OtherLoad()
     {
-      return Lighting.VA;
+      return Lighting.Total;
     }
   }
 
@@ -1249,21 +1368,15 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
   public class UnitLoad
   {
-    public int VA { get; set; }
     public int Multiplier { get; set; }
+    public int Total { get; set; }
     public string Name { get; set; }
 
-    public UnitLoad(string name, object va, object multiplier)
+    public UnitLoad(string name, string total, string multiplier)
     {
-      VA = va is int ? (int)va : int.TryParse(va.ToString(), out int vaResult) ? vaResult : 0;
-      Multiplier = multiplier is int ? (int)multiplier : int.TryParse(multiplier.ToString(), out int multiplierResult) ? multiplierResult : 0;
+      Multiplier = string.IsNullOrEmpty(multiplier) ? 0 : int.TryParse(multiplier, out int multiplierResult) ? multiplierResult : 0;
+      Total = string.IsNullOrEmpty(total) ? 0 : int.TryParse(total, out int totalResult) ? totalResult : 0;
       Name = name;
-    }
-
-    public int GetLoad()
-    {
-      int load = VA * Multiplier;
-      return (load != 0) ? load : 0;
     }
   }
 
