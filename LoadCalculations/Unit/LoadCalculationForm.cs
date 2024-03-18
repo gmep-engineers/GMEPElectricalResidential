@@ -361,13 +361,16 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", lightingLoad.ToString(), "1");
 
+      var previousCustoms = _unitInformation.GeneralLoads.Customs;
       List<UnitLoad> customs = new List<UnitLoad>();
 
       foreach (var item in GENERAL_CUSTOM_LOAD_BOX.Items)
       {
+        var index = GENERAL_CUSTOM_LOAD_BOX.Items.IndexOf(item);
+        var isCookingAppliance = previousCustoms[index].IsCookingAppliance;
         var split = item.ToString().Trim().Split(',');
 
-        var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2]);
+        var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2], isCookingAppliance);
         customs.Add(unitGeneralCustomLoad);
       }
 
@@ -1252,16 +1255,32 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private void COOKING_APPLIANCE_Click(object sender, EventArgs e)
     {
+      var selectedItem = GENERAL_CUSTOM_LOAD_BOX.Text;
+      var unitLoad = _unitInformation.GeneralLoads.Customs.FirstOrDefault(load => load.FormattedName() == selectedItem);
+
+      if (unitLoad != null)
+      {
+        unitLoad.IsCookingAppliance = !unitLoad.IsCookingAppliance;
+      }
+
+      if (_isLoaded) UpdateDataAndLoads();
+
+      GENERAL_CUSTOM_LOAD_BOX.Invalidate();
     }
 
     private void GENERAL_CUSTOM_LOAD_BOX_DrawItem(object sender, DrawItemEventArgs e)
     {
-      var listOfCookingAppliances = _unitInformation.CookingAppliances.GetApplianceNames();
+      ColorTheCookingAppliances(e);
+    }
+
+    private void ColorTheCookingAppliances(DrawItemEventArgs e)
+    {
+      var listOfCookingAppliances = _unitInformation.GeneralLoads.GetCookingAppliances();
       if (e.Index >= 0 && e.Index < GENERAL_CUSTOM_LOAD_BOX.Items.Count)
       {
         string item = GENERAL_CUSTOM_LOAD_BOX.Items[e.Index].ToString();
 
-        bool isCookingAppliance = listOfCookingAppliances.Any(appliance => item.Contains(appliance));
+        bool isCookingAppliance = listOfCookingAppliances.Any(appliance => item.Contains(appliance.FormattedName()));
 
         if (isCookingAppliance)
         {
@@ -1311,83 +1330,135 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     }
   }
 
-  public class CookingApplianceContainer
+  public class UnitInformation
   {
-    public List<UnitLoad> cookingAppliances { get; set; }
-    private int[] applianceCounts = new int[4];
-    public List<string> keyWords = new List<string> { "Oven", "Cooktop", "Range" };
+    public string Name { get; set; }
+    public string Voltage { get; set; }
+    public int ID { get; set; }
+    public UnitDwellingArea DwellingArea { get; set; }
+    public UnitGeneralLoadContainer GeneralLoads { get; set; }
+    public List<UnitLoad> CustomLoads { get; set; }
+    public UnitACLoadContainer ACLoads { get; set; }
+    public UnitTotalContainer Totals { get; set; }
 
-    public CookingApplianceContainer()
+    public UnitInformation(int id)
     {
-      cookingAppliances = new List<UnitLoad>();
+      ID = id;
+      DwellingArea = new UnitDwellingArea();
+      GeneralLoads = new UnitGeneralLoadContainer();
+      CustomLoads = new List<UnitLoad>();
+      ACLoads = new UnitACLoadContainer();
+      Totals = new UnitTotalContainer();
     }
 
-    public void AddAppliance(UnitLoad unitLoad)
+    public string FormattedName()
     {
-      cookingAppliances.Add(unitLoad);
-
-      int total = unitLoad.Total;
-
-      if (total >= 1750 && total <= 3500)
-        applianceCounts[0]++;
-      else if (total > 3500 && total <= 8750)
-        applianceCounts[1]++;
-      else if (total > 8750 && total <= 12000)
-        applianceCounts[2]++;
-      else if (total > 12000 && total <= 27000)
-        applianceCounts[3]++;
+      return $"Unit {Name} - ID{ID}";
     }
+  }
 
-    public void RemoveAppliance(UnitLoad unitLoad)
+  public enum ApplianceType
+  {
+    Electric,
+    Gas,
+    NA
+  }
+
+  public class UnitDwellingArea
+  {
+    public string FloorArea { get; set; }
+    public ApplianceType Heater { get; set; }
+    public ApplianceType Dryer { get; set; }
+    public ApplianceType Oven { get; set; }
+    public ApplianceType Cooktop { get; set; }
+  }
+
+  public class UnitGeneralLoadContainer
+  {
+    public static string LightingCode = "220.42";
+    private int[] cookingApplianceBuckets = new int[4]; // 1750-3500, 3501-8750, 8751-12000, 12001-27000 VA
+    public UnitLoad Lighting { get; set; }
+    public List<UnitLoad> Customs { get; set; }
+    public LightingOccupancyType LightingOccupancyType { get; set; }
+
+    public int OccupancyLighting()
     {
-      string name = unitLoad.Name;
-      int total = unitLoad.Total;
-      int multiplier = unitLoad.Multiplier;
-
-      var appliance = cookingAppliances.FirstOrDefault(x => x.Name == name && x.Total == total && x.Multiplier == multiplier);
-      if (appliance != null)
+      switch (LightingOccupancyType)
       {
-        cookingAppliances.Remove(appliance);
+        case LightingOccupancyType.Dwelling:
+          return DwellingLoad();
+
+        case LightingOccupancyType.HotelAndMotel:
+          return HotelAndMotelLoad();
+
+        case LightingOccupancyType.Warehouse:
+          return WarehouseLoad();
+
+        case LightingOccupancyType.Other:
+          return OtherLoad();
+
+        default:
+          return 0;
       }
     }
 
-    public int NumberOfAppliances()
+    private int DwellingLoad()
     {
-      return cookingAppliances.Count;
+      var firstValue = Math.Min(Lighting.GetTotal(), 3000);
+      var secondValue = Math.Min(Math.Max(Lighting.GetTotal() - 3000, 0), 117000) * 0.35;
+      var thirdValue = Math.Max(Lighting.GetTotal() - 120000, 0) * 0.25;
+      return (int)Math.Ceiling(firstValue + secondValue + thirdValue);
     }
 
-    public List<string> GetApplianceNames()
+    private int HotelAndMotelLoad()
     {
-      List<string> applianceNames = new List<string>();
-      foreach (var appliance in cookingAppliances)
-      {
-        applianceNames.Add(appliance.Name);
-      }
-      return applianceNames;
+      var firstValue = Math.Min(Lighting.GetTotal(), 20000) * 0.6;
+      var secondValue = Math.Min(Math.Max(Lighting.GetTotal() - 20000, 0), 80000) * 0.5;
+      var thirdValue = Math.Max(Lighting.GetTotal() - 100000, 0) * 0.35;
+      return (int)Math.Ceiling(firstValue + secondValue + thirdValue);
+    }
+
+    private int WarehouseLoad()
+    {
+      var firstValue = Math.Min(Lighting.GetTotal(), 12500);
+      var secondValue = Math.Max(Lighting.GetTotal() - 12500, 0) * 0.5;
+      return (int)Math.Ceiling(firstValue + secondValue);
+    }
+
+    private int OtherLoad()
+    {
+      return Lighting.GetTotal();
+    }
+
+    public List<UnitLoad> GetCookingAppliances()
+    {
+      return Customs.Where(custom => custom.IsCookingAppliance).ToList();
     }
 
     public double GetTotalDemand()
     {
       double totalDemand = 0;
 
-      foreach (var appliance in cookingAppliances)
+      UpdateCookingApplianceBuckets();
+
+      foreach (var appliance in GetCookingAppliances())
       {
         int total = appliance.Total;
         double demand = 0;
 
         if (total >= 1750 && total <= 3500)
         {
-          int count = applianceCounts[0];
+          int count = cookingApplianceBuckets[0];
           demand = total * GetDemandFactor(count, "Column A") / 100;
         }
         else if (total > 3500 && total <= 8750)
         {
-          int count = applianceCounts[1];
+          int count = cookingApplianceBuckets[1];
           demand = total * GetDemandFactor(count, "Column B") / 100;
         }
         else if (total > 8750 && total <= 12000)
         {
-          int count = applianceCounts[2];
+          int count = cookingApplianceBuckets[2];
           demand = GetMaximumDemand(count);
         }
         else if (total > 12000 && total <= 27000)
@@ -1399,6 +1470,31 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       }
 
       return totalDemand;
+    }
+
+    private void UpdateCookingApplianceBuckets()
+    {
+      cookingApplianceBuckets = new int[4];
+      foreach (var appliance in GetCookingAppliances())
+      {
+        int total = appliance.Total;
+        if (total >= 1750 && total <= 3500)
+        {
+          cookingApplianceBuckets[0]++;
+        }
+        else if (total > 3500 && total <= 8750)
+        {
+          cookingApplianceBuckets[1]++;
+        }
+        else if (total > 8750 && total <= 12000)
+        {
+          cookingApplianceBuckets[2]++;
+        }
+        else if (total > 12000 && total <= 27000)
+        {
+          cookingApplianceBuckets[3]++;
+        }
+      }
     }
 
     private double GetDemandFactor(int count, string column)
@@ -1510,108 +1606,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     }
   }
 
-  public class UnitInformation
-  {
-    public string Name { get; set; }
-    public string Voltage { get; set; }
-    public int ID { get; set; }
-    public UnitDwellingArea DwellingArea { get; set; }
-    public UnitGeneralLoadContainer GeneralLoads { get; set; }
-    public List<UnitLoad> CustomLoads { get; set; }
-    public UnitACLoadContainer ACLoads { get; set; }
-    public UnitTotalContainer Totals { get; set; }
-    public CookingApplianceContainer CookingAppliances { get; set; }
-
-    public UnitInformation(int id)
-    {
-      ID = id;
-      DwellingArea = new UnitDwellingArea();
-      GeneralLoads = new UnitGeneralLoadContainer();
-      CustomLoads = new List<UnitLoad>();
-      ACLoads = new UnitACLoadContainer();
-      Totals = new UnitTotalContainer();
-      CookingAppliances = new CookingApplianceContainer();
-    }
-
-    public string FormattedName()
-    {
-      return $"Unit {Name} - ID{ID}";
-    }
-  }
-
-  public enum ApplianceType
-  {
-    Electric,
-    Gas,
-    NA
-  }
-
-  public class UnitDwellingArea
-  {
-    public string FloorArea { get; set; }
-    public ApplianceType Heater { get; set; }
-    public ApplianceType Dryer { get; set; }
-    public ApplianceType Oven { get; set; }
-    public ApplianceType Cooktop { get; set; }
-  }
-
-  public class UnitGeneralLoadContainer
-  {
-    public static string LightingCode = "220.42";
-    public UnitLoad Lighting { get; set; }
-    public List<UnitLoad> Customs { get; set; }
-    public LightingOccupancyType LightingOccupancyType { get; set; }
-
-    public int OccupancyLighting()
-    {
-      switch (LightingOccupancyType)
-      {
-        case LightingOccupancyType.Dwelling:
-          return DwellingLoad();
-
-        case LightingOccupancyType.HotelAndMotel:
-          return HotelAndMotelLoad();
-
-        case LightingOccupancyType.Warehouse:
-          return WarehouseLoad();
-
-        case LightingOccupancyType.Other:
-          return OtherLoad();
-
-        default:
-          return 0;
-      }
-    }
-
-    private int DwellingLoad()
-    {
-      var firstValue = Math.Min(Lighting.GetTotal(), 3000);
-      var secondValue = Math.Min(Math.Max(Lighting.GetTotal() - 3000, 0), 117000) * 0.35;
-      var thirdValue = Math.Max(Lighting.GetTotal() - 120000, 0) * 0.25;
-      return (int)Math.Ceiling(firstValue + secondValue + thirdValue);
-    }
-
-    private int HotelAndMotelLoad()
-    {
-      var firstValue = Math.Min(Lighting.GetTotal(), 20000) * 0.6;
-      var secondValue = Math.Min(Math.Max(Lighting.GetTotal() - 20000, 0), 80000) * 0.5;
-      var thirdValue = Math.Max(Lighting.GetTotal() - 100000, 0) * 0.35;
-      return (int)Math.Ceiling(firstValue + secondValue + thirdValue);
-    }
-
-    private int WarehouseLoad()
-    {
-      var firstValue = Math.Min(Lighting.GetTotal(), 12500);
-      var secondValue = Math.Max(Lighting.GetTotal() - 12500, 0) * 0.5;
-      return (int)Math.Ceiling(firstValue + secondValue);
-    }
-
-    private int OtherLoad()
-    {
-      return Lighting.GetTotal();
-    }
-  }
-
   public enum LightingOccupancyType
   {
     Dwelling,
@@ -1625,17 +1619,24 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     public int Multiplier { get; set; }
     public int Total { get; set; }
     public string Name { get; set; }
+    public bool IsCookingAppliance { get; set; }
 
-    public UnitLoad(string name, string total, string multiplier)
+    public UnitLoad(string name, string total, string multiplier, bool isCookingAppliance = false)
     {
       Multiplier = string.IsNullOrEmpty(multiplier) ? 0 : int.TryParse(multiplier, out int multiplierResult) ? multiplierResult : 0;
       Total = string.IsNullOrEmpty(total) ? 0 : int.TryParse(total, out int totalResult) ? totalResult : 0;
       Name = name;
+      IsCookingAppliance = isCookingAppliance;
     }
 
     public int GetTotal()
     {
       return Multiplier == 0 ? 0 : Total;
+    }
+
+    public string FormattedName()
+    {
+      return $"{Name}, {Total}, {Multiplier}";
     }
   }
 

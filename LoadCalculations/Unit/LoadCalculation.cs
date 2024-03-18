@@ -349,7 +349,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         var combinedCustomLoads = new Dictionary<string, UnitLoad>();
         foreach (var customLoad in unitInfo.CustomLoads)
         {
-          combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, customLoad.Total.ToString(), customLoad.Multiplier.ToString());
+          combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, customLoad.Total.ToString(), customLoad.Multiplier.ToString(), customLoad.IsCookingAppliance);
         }
 
         if (unitInfo2 != null)
@@ -363,7 +363,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
             }
             else
             {
-              combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, customLoad.Total.ToString(), customLoad.Multiplier.ToString());
+              var otherCustomLoadWithSameName = unitInfo.CustomLoads.FirstOrDefault(cl => cl.Name == customLoad.Name);
+              var isOneOfTheCustomLoadsACookingAppliance = (otherCustomLoadWithSameName.IsCookingAppliance || customLoad.IsCookingAppliance);
+              combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, customLoad.Total.ToString(), customLoad.Multiplier.ToString(), isOneOfTheCustomLoadsACookingAppliance);
             }
           }
         }
