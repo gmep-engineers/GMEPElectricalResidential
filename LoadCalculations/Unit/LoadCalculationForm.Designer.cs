@@ -974,7 +974,7 @@
       // 
       this.label79.AutoSize = true;
       this.label79.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label79.Location = new System.Drawing.Point(613, 76);
+      this.label79.Location = new System.Drawing.Point(674, 85);
       this.label79.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label79.Name = "label79";
       this.label79.Size = new System.Drawing.Size(59, 16);
@@ -985,7 +985,7 @@
       // 
       this.GENERAL_LIGHTING_TOTAL.AutoSize = true;
       this.GENERAL_LIGHTING_TOTAL.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.GENERAL_LIGHTING_TOTAL.Location = new System.Drawing.Point(612, 97);
+      this.GENERAL_LIGHTING_TOTAL.Location = new System.Drawing.Point(673, 106);
       this.GENERAL_LIGHTING_TOTAL.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.GENERAL_LIGHTING_TOTAL.Name = "GENERAL_LIGHTING_TOTAL";
       this.GENERAL_LIGHTING_TOTAL.Size = new System.Drawing.Size(20, 24);
@@ -1001,7 +1001,7 @@
       this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.groupBox5.Location = new System.Drawing.Point(274, 76);
       this.groupBox5.Name = "groupBox5";
-      this.groupBox5.Size = new System.Drawing.Size(328, 54);
+      this.groupBox5.Size = new System.Drawing.Size(394, 54);
       this.groupBox5.TabIndex = 7;
       this.groupBox5.TabStop = false;
       this.groupBox5.Text = "Occupancy Type";
@@ -1010,12 +1010,12 @@
       // 
       this.LIGHTING_OTHER.AutoSize = true;
       this.LIGHTING_OTHER.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.LIGHTING_OTHER.Location = new System.Drawing.Point(271, 23);
+      this.LIGHTING_OTHER.Location = new System.Drawing.Point(271, 15);
       this.LIGHTING_OTHER.Margin = new System.Windows.Forms.Padding(0);
       this.LIGHTING_OTHER.Name = "LIGHTING_OTHER";
-      this.LIGHTING_OTHER.Size = new System.Drawing.Size(57, 20);
+      this.LIGHTING_OTHER.Size = new System.Drawing.Size(118, 36);
       this.LIGHTING_OTHER.TabIndex = 11;
-      this.LIGHTING_OTHER.Text = "Other";
+      this.LIGHTING_OTHER.Text = "No Lighting \r\nDemand Factor";
       this.LIGHTING_OTHER.UseVisualStyleBackColor = true;
       this.LIGHTING_OTHER.CheckedChanged += new System.EventHandler(this.LIGHTING_OTHER_CheckedChanged);
       // 

@@ -395,7 +395,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
           foreach (var customLoad in combinedCustomLoads.Values)
           {
-            customValues += $"{customLoad.Total}VA".NewLine();
+            customValues += $"{customLoad.GetTotal()}VA".NewLine();
           }
 
           values.Contents = customValues.SetFont("Arial");
@@ -528,12 +528,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         List<string> generalValues = new List<string>
         {
-            $"{unitInfo.GeneralLoads.Lighting.Total + (unitInfo2?.GeneralLoads.Lighting.Total ?? 0)}VA",
+            $"{unitInfo.GeneralLoads.Lighting.GetTotal() + (unitInfo2?.GeneralLoads.Lighting.GetTotal() ?? 0)}VA",
         };
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
-          generalValues.Add($"{customLoad.Total}VA");
+          generalValues.Add($"{customLoad.GetTotal()}VA");
         });
 
         InsertValueLightingBreakdown(1, unitInfo, generalValues, unitInfo2);
@@ -550,8 +550,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private static void InsertValueLightingBreakdown(int index, UnitInformation unitInfo, List<string> generalValues, UnitInformation unitInfo2 = null)
     {
-      int lightingVA = unitInfo.GeneralLoads.Lighting.Total;
-      int lightingVA2 = unitInfo2?.GeneralLoads.Lighting.Total ?? 0;
+      int lightingVA = unitInfo.GeneralLoads.Lighting.GetTotal();
+      int lightingVA2 = unitInfo2?.GeneralLoads.Lighting.GetTotal() ?? 0;
 
       lightingVA += lightingVA2;
 

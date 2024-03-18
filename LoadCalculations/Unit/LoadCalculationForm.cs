@@ -137,11 +137,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       foreach (var load in unitInformation.CustomLoads)
       {
-        if (load.Name != "Water Heater")
-        {
-          var entry = $"{load.Name}, {load.Total}, {load.Multiplier}";
-          CUSTOM_LOAD_BOX.Items.Add(entry);
-        }
+        var entry = $"{load.Name}, {load.Total}, {load.Multiplier}";
+        CUSTOM_LOAD_BOX.Items.Add(entry);
       }
 
       if (unitInformation.GeneralLoads.LightingOccupancyType == LightingOccupancyType.Dwelling)
@@ -314,7 +311,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var totalLoad = 0;
       foreach (var customLoad in _unitInformation.CustomLoads)
       {
-        totalLoad += customLoad.Total;
+        totalLoad += customLoad.GetTotal();
       }
       _unitInformation.Totals.CustomLoad = totalLoad;
       TOTAL_CUSTOM_LOAD_CALCULATION.Text = totalLoad.ToString();
@@ -425,7 +422,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       foreach (var customLoad in generalLoads.Customs)
       {
-        totalLoad += customLoad.Total;
+        totalLoad += customLoad.GetTotal();
       }
 
       _unitInformation.Totals.TotalGeneralLoad = totalLoad;
@@ -819,7 +816,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       }
     }
 
-    private bool isGreaterThanZero(string multiplier)
+    private bool isNonNegative(string multiplier)
     {
       if (string.IsNullOrEmpty(multiplier))
       {
@@ -828,7 +825,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       if (decimal.TryParse(multiplier, out decimal result))
       {
-        return result > 0;
+        return result >= 0;
       }
 
       return false;
@@ -1052,9 +1049,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         _toolTip.Hide(totalBox);
       }
 
-      if (string.IsNullOrEmpty(multiplier) || !isGreaterThanZero(multiplier))
+      if (string.IsNullOrEmpty(multiplier) || !isNonNegative(multiplier))
       {
-        _toolTip.Show("You must enter a multiplier that is greater than 0.", multiplierComboBox, 0, -20, 2000);
+        _toolTip.Show("You must enter a multiplier that is a positive integer or 0.", multiplierComboBox, 0, -20, 2000);
         return false;
       }
       else
@@ -1343,30 +1340,30 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private int DwellingLoad()
     {
-      var firstValue = Math.Min(Lighting.Total, 3000);
-      var secondValue = Math.Min(Math.Max(Lighting.Total - 3000, 0), 117000) * 0.35;
-      var thirdValue = Math.Max(Lighting.Total - 120000, 0) * 0.25;
+      var firstValue = Math.Min(Lighting.GetTotal(), 3000);
+      var secondValue = Math.Min(Math.Max(Lighting.GetTotal() - 3000, 0), 117000) * 0.35;
+      var thirdValue = Math.Max(Lighting.GetTotal() - 120000, 0) * 0.25;
       return (int)Math.Ceiling(firstValue + secondValue + thirdValue);
     }
 
     private int HotelAndMotelLoad()
     {
-      var firstValue = Math.Min(Lighting.Total, 20000) * 0.6;
-      var secondValue = Math.Min(Math.Max(Lighting.Total - 20000, 0), 80000) * 0.5;
-      var thirdValue = Math.Max(Lighting.Total - 100000, 0) * 0.35;
+      var firstValue = Math.Min(Lighting.GetTotal(), 20000) * 0.6;
+      var secondValue = Math.Min(Math.Max(Lighting.GetTotal() - 20000, 0), 80000) * 0.5;
+      var thirdValue = Math.Max(Lighting.GetTotal() - 100000, 0) * 0.35;
       return (int)Math.Ceiling(firstValue + secondValue + thirdValue);
     }
 
     private int WarehouseLoad()
     {
-      var firstValue = Math.Min(Lighting.Total, 12500);
-      var secondValue = Math.Max(Lighting.Total - 12500, 0) * 0.5;
+      var firstValue = Math.Min(Lighting.GetTotal(), 12500);
+      var secondValue = Math.Max(Lighting.GetTotal() - 12500, 0) * 0.5;
       return (int)Math.Ceiling(firstValue + secondValue);
     }
 
     private int OtherLoad()
     {
-      return Lighting.Total;
+      return Lighting.GetTotal();
     }
   }
 
@@ -1389,6 +1386,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       Multiplier = string.IsNullOrEmpty(multiplier) ? 0 : int.TryParse(multiplier, out int multiplierResult) ? multiplierResult : 0;
       Total = string.IsNullOrEmpty(total) ? 0 : int.TryParse(total, out int totalResult) ? totalResult : 0;
       Name = name;
+    }
+
+    public int GetTotal()
+    {
+      return Multiplier == 0 ? 0 : Total;
     }
   }
 

@@ -700,7 +700,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           return unitInfo.DwellingArea.FloorArea + "ft²";
 
         case "General Lighting Subtotal (Floor Area x 3VA/ft²) (CEC 220.42)":
-          return unitInfo.GeneralLoads.Lighting.Total.ToString() + "VA";
+          return unitInfo.GeneralLoads.Lighting.GetTotal().ToString() + "VA";
 
         case "Total General Load":
           return unitInfo.Totals.TotalGeneralLoad.ToString() + "VA";
@@ -789,7 +789,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         if (customLoad.Name == message)
         {
-          return customLoad.Total.ToString() + "VA";
+          return customLoad.GetTotal().ToString() + "VA";
         }
       }
 
@@ -802,7 +802,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         if (generalCustomLoad.Name == message)
         {
-          return generalCustomLoad.Total.ToString() + "VA";
+          return generalCustomLoad.GetTotal().ToString() + "VA";
         }
       }
 
