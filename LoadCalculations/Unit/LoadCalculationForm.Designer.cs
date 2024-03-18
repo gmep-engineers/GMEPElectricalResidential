@@ -125,6 +125,7 @@
       this.TOTAL_GENERAL_LABEL = new System.Windows.Forms.Label();
       this.label9 = new System.Windows.Forms.Label();
       this.ADD_ENTRY_CUSTOM = new System.Windows.Forms.Button();
+      this.COOKING_APPLIANCE = new System.Windows.Forms.Button();
       this.panel1.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
@@ -1326,10 +1327,23 @@
       this.ADD_ENTRY_CUSTOM.UseVisualStyleBackColor = true;
       this.ADD_ENTRY_CUSTOM.Click += new System.EventHandler(this.ADD_ENTRY_CUSTOM_Click);
       // 
+      // COOKING_APPLIANCE
+      // 
+      this.COOKING_APPLIANCE.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+      this.COOKING_APPLIANCE.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.COOKING_APPLIANCE.Location = new System.Drawing.Point(537, 582);
+      this.COOKING_APPLIANCE.Name = "COOKING_APPLIANCE";
+      this.COOKING_APPLIANCE.Size = new System.Drawing.Size(161, 28);
+      this.COOKING_APPLIANCE.TabIndex = 199;
+      this.COOKING_APPLIANCE.Text = "Cooking Appliance";
+      this.COOKING_APPLIANCE.UseVisualStyleBackColor = false;
+      this.COOKING_APPLIANCE.Click += new System.EventHandler(this.COOKING_APPLIANCE_Click);
+      // 
       // LoadCalculationForm
       // 
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+      this.Controls.Add(this.COOKING_APPLIANCE);
       this.Controls.Add(this.ADD_ENTRY_CUSTOM);
       this.Controls.Add(this.label13);
       this.Controls.Add(this.label15);
@@ -1538,5 +1552,6 @@
     private System.Windows.Forms.Label TOTAL_GENERAL_LABEL;
     private System.Windows.Forms.Label label9;
     private System.Windows.Forms.Button ADD_ENTRY_CUSTOM;
+    private System.Windows.Forms.Button COOKING_APPLIANCE;
   }
 }
