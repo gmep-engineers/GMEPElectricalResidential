@@ -172,7 +172,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
         // Create Rows
         List<string> serviceSizingBuildingRowHeaders = RowHeaders.ServiceSizingBuilding;
+        HelperClass.SaveDataToJsonFileOnDesktop(serviceSizingBuildingRowHeaders, "serviceSizingBuildingRowHeaders.json");
         UpdateBuildingCalculationVoltage(serviceSizingBuildingRowHeaders, buildingInfo);
+        HelperClass.SaveDataToJsonFileOnDesktop(serviceSizingBuildingRowHeaders, "serviceSizingBuildingRowHeadersAfter.json");
         CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, serviceSizingBuildingRowHeaders, false, buildingInfo, true);
         shiftHeight -= ROW_HEIGHT * serviceSizingBuildingRowHeaders.Count;
 
@@ -632,34 +634,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       for (int i = 0; i < serviceSizingBuildingRowHeaders.Count; i++)
       {
-        if (serviceSizingBuildingRowHeaders[i].Contains("120/208"))
+        if (serviceSizingBuildingRowHeaders[i].Contains("Total Amperage"))
         {
-          if (serviceSizingBuildingRowHeaders[i].Contains("V"))
-          {
-            serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("208V", buildingInfo.Voltage.ToString());
-          }
-          else
-          {
-            serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("208", buildingInfo.Voltage.ToString());
-          }
-          break;
-        }
-        else if (serviceSizingBuildingRowHeaders[i].Contains("120/240"))
-        {
-          if (serviceSizingBuildingRowHeaders[i].Contains("V"))
-          {
-            serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("240V", buildingInfo.Voltage.ToString());
-          }
-          else
-          {
-            serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("240", buildingInfo.Voltage.ToString());
-          }
-          break;
-        }
-        if (serviceSizingBuildingRowHeaders[i].Contains("1PH"))
-        {
-          serviceSizingBuildingRowHeaders[i] = serviceSizingBuildingRowHeaders[i].Replace("1PH", buildingInfo.Phase.ToString());
-          break;
+          serviceSizingBuildingRowHeaders[i] = $"Total Amperage @120/{buildingInfo.Voltage} {buildingInfo.Phase}";
         }
       }
     }
@@ -790,6 +767,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
           return buildingInfo.TotalAmperage().ToString() + "A";
 
         case "Total Amperage @120/240V 1 PH":
+          return buildingInfo.TotalAmperage().ToString() + "A";
+
+        case "Total Amperage @120/208V 3 PH":
+          return buildingInfo.TotalAmperage().ToString() + "A";
+
+        case "Total Amperage @120/240V 3 PH":
           return buildingInfo.TotalAmperage().ToString() + "A";
 
         case "Recommended Service Size":

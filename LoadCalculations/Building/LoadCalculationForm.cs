@@ -443,7 +443,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       int voltage = int.Parse(Voltage.TrimEnd('V'));
       double totalDemandHouseLoad = TotalBuildingLoadWithDemandFactorAndHouseLoad();
-      if (Phase == "1P")
+      if (Phase == "1 PH")
       {
         return (int)Math.Round(totalDemandHouseLoad / voltage);
       }

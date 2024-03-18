@@ -577,8 +577,8 @@
       this.PHASE_COMBO.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.PHASE_COMBO.FormattingEnabled = true;
       this.PHASE_COMBO.Items.AddRange(new object[] {
-            "1PH",
-            "3PH"});
+            "1 PH",
+            "3 PH"});
       this.PHASE_COMBO.Location = new System.Drawing.Point(103, 146);
       this.PHASE_COMBO.Margin = new System.Windows.Forms.Padding(6, 0, 48, 24);
       this.PHASE_COMBO.Name = "PHASE_COMBO";
