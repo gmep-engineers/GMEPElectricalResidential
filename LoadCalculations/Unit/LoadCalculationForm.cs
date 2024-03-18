@@ -1267,6 +1267,191 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     }
   }
 
+  public class CookingAppliance
+  {
+    public string Name { get; set; }
+    public int VA { get; set; }
+
+    public CookingAppliance(string name, int va)
+    {
+      Name = name;
+      VA = va;
+    }
+  }
+
+  public class CookingApplianceContainer
+  {
+    public List<CookingAppliance> cookingAppliances { get; set; }
+    private int[] applianceCounts = new int[4];
+
+    public CookingApplianceContainer()
+    {
+      cookingAppliances = new List<CookingAppliance>();
+    }
+
+    public void AddAppliance(string name, int va)
+    {
+      cookingAppliances.Add(new CookingAppliance(name, va));
+
+      if (va >= 1750 && va <= 3500)
+        applianceCounts[0]++;
+      else if (va > 3500 && va <= 8750)
+        applianceCounts[1]++;
+      else if (va > 8750 && va <= 12000)
+        applianceCounts[2]++;
+      else if (va > 12000 && va <= 27000)
+        applianceCounts[3]++;
+    }
+
+    public int NumberOfAppliances()
+    {
+      return cookingAppliances.Count;
+    }
+
+    public double GetTotalDemand()
+    {
+      double totalDemand = 0;
+
+      foreach (var appliance in cookingAppliances)
+      {
+        int va = appliance.VA;
+        double demand = 0;
+
+        if (va >= 1750 && va <= 3500)
+        {
+          int count = applianceCounts[0];
+          demand = va * GetDemandFactor(count, "Column A") / 100;
+        }
+        else if (va > 3500 && va <= 8750)
+        {
+          int count = applianceCounts[1];
+          demand = va * GetDemandFactor(count, "Column B") / 100;
+        }
+        else if (va > 8750 && va <= 12000)
+        {
+          int count = applianceCounts[2];
+          demand = GetMaximumDemand(count);
+        }
+        else if (va > 12000 && va <= 27000)
+        {
+          demand = va;
+        }
+
+        totalDemand += demand;
+      }
+
+      return totalDemand;
+    }
+
+    private double GetDemandFactor(int count, string column)
+    {
+      double[,] demandFactors = {
+        {80, 80},
+        {75, 65},
+        {70, 55},
+        {66, 50},
+        {62, 45},
+        {59, 43},
+        {56, 40},
+        {53, 36},
+        {51, 35},
+        {49, 34},
+        {47, 32},
+        {45, 32},
+        {43, 32},
+        {41, 32},
+        {40, 32},
+        {39, 28},
+        {38, 28},
+        {37, 28},
+        {36, 28},
+        {35, 28},
+        {34, 28},
+        {33, 26},
+        {32, 26},
+        {31, 26},
+        {30, 26},
+        {30, 24},
+        {30, 24},
+        {30, 24},
+        {30, 24},
+        {30, 24},
+        {30, 22},
+        {30, 22},
+        {30, 22},
+        {30, 22},
+        {30, 22},
+        {30, 22},
+        {30, 22},
+        {30, 22},
+        {30, 22},
+        {30, 22},
+        {30, 20},
+        {30, 20},
+        {30, 20},
+        {30, 20},
+        {30, 20},
+        {30, 20},
+        {30, 20},
+        {30, 20},
+        {30, 20},
+        {30, 20},
+        {30, 18},
+        {30, 18},
+        {30, 18},
+        {30, 18},
+        {30, 18},
+        {30, 18},
+        {30, 18},
+        {30, 18},
+        {30, 18},
+        {30, 18},
+        {30, 16}
+    };
+
+      int rowIndex = count - 1;
+
+      if (rowIndex > demandFactors.GetLength(0))
+      {
+        rowIndex = demandFactors.GetLength(0) - 1;
+      }
+
+      int columnIndex = column == "Column A" ? 0 : 1;
+
+      if (rowIndex >= 0 && rowIndex < demandFactors.GetLength(0))
+      {
+        return demandFactors[rowIndex, columnIndex];
+      }
+      else
+      {
+        return 100;
+      }
+    }
+
+    private double GetMaximumDemand(int count)
+    {
+      double[] maximumDemands = { 8, 11, 14, 17, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40 };
+
+      if (count > maximumDemands.GetLength(0) && count < 41)
+      {
+        return 15 + count;
+      }
+      else if (count > 40)
+      {
+        return 25 + 3 * count / 4;
+      }
+
+      if (count >= 1 && count <= maximumDemands.Length)
+      {
+        return maximumDemands[count - 1];
+      }
+      else
+      {
+        return 0;
+      }
+    }
+  }
+
   public class UnitInformation
   {
     public string Name { get; set; }
