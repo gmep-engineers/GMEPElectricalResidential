@@ -537,9 +537,9 @@
       this.label23.Location = new System.Drawing.Point(268, 140);
       this.label23.Margin = new System.Windows.Forms.Padding(0, 0, 0, 12);
       this.label23.Name = "label23";
-      this.label23.Size = new System.Drawing.Size(440, 24);
+      this.label23.Size = new System.Drawing.Size(400, 24);
       this.label23.TabIndex = 64;
-      this.label23.Text = "General Load (VA) - Name, VA, Amount, Total";
+      this.label23.Text = "General Load (VA) - Name, Total, Amount";
       // 
       // label25
       // 
@@ -548,9 +548,9 @@
       this.label25.Location = new System.Drawing.Point(779, 10);
       this.label25.Margin = new System.Windows.Forms.Padding(0, 0, 0, 12);
       this.label25.Name = "label25";
-      this.label25.Size = new System.Drawing.Size(436, 24);
+      this.label25.Size = new System.Drawing.Size(396, 24);
       this.label25.TabIndex = 81;
-      this.label25.Text = "Custom Load (VA) - Name, VA, Amount, Total";
+      this.label25.Text = "Custom Load (VA) - Name, Total, Amount";
       // 
       // label29
       // 

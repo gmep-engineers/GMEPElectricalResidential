@@ -88,7 +88,7 @@
       this.panel1.Name = "panel1";
       this.panel1.Padding = new System.Windows.Forms.Padding(5);
       this.panel1.Size = new System.Drawing.Size(97, 28);
-      this.panel1.TabIndex = 2;
+      this.panel1.TabIndex = 0;
       // 
       // BUILDING_NAME
       // 
@@ -121,7 +121,7 @@
       this.panel2.Name = "panel2";
       this.panel2.Padding = new System.Windows.Forms.Padding(5);
       this.panel2.Size = new System.Drawing.Size(97, 28);
-      this.panel2.TabIndex = 4;
+      this.panel2.TabIndex = 3;
       // 
       // HOUSE_LOAD
       // 
@@ -153,7 +153,7 @@
       this.UNIT_TYPES.Location = new System.Drawing.Point(17, 246);
       this.UNIT_TYPES.Name = "UNIT_TYPES";
       this.UNIT_TYPES.Size = new System.Drawing.Size(253, 242);
-      this.UNIT_TYPES.TabIndex = 56;
+      this.UNIT_TYPES.TabIndex = 4;
       this.UNIT_TYPES.SelectedIndexChanged += new System.EventHandler(this.UNIT_TYPES_SelectedIndexChanged);
       // 
       // label17
@@ -176,7 +176,7 @@
       this.NUMBER_OF_UNITS_BG.Name = "NUMBER_OF_UNITS_BG";
       this.NUMBER_OF_UNITS_BG.Padding = new System.Windows.Forms.Padding(5);
       this.NUMBER_OF_UNITS_BG.Size = new System.Drawing.Size(143, 28);
-      this.NUMBER_OF_UNITS_BG.TabIndex = 58;
+      this.NUMBER_OF_UNITS_BG.TabIndex = 5;
       // 
       // NUMBER_OF_UNITS
       // 
@@ -217,7 +217,7 @@
       this.NEXT.Location = new System.Drawing.Point(168, 526);
       this.NEXT.Name = "NEXT";
       this.NEXT.Size = new System.Drawing.Size(103, 28);
-      this.NEXT.TabIndex = 131;
+      this.NEXT.TabIndex = 6;
       this.NEXT.Text = "Next";
       this.NEXT.UseVisualStyleBackColor = true;
       this.NEXT.Click += new System.EventHandler(this.NEXT_Click);
@@ -545,7 +545,7 @@
       this.VOLTAGE.Margin = new System.Windows.Forms.Padding(6, 0, 48, 24);
       this.VOLTAGE.Name = "VOLTAGE";
       this.VOLTAGE.Size = new System.Drawing.Size(72, 28);
-      this.VOLTAGE.TabIndex = 202;
+      this.VOLTAGE.TabIndex = 1;
       this.VOLTAGE.SelectedIndexChanged += new System.EventHandler(this.VOLTAGE_SelectedIndexChanged);
       // 
       // label7
@@ -583,7 +583,7 @@
       this.PHASE_COMBO.Margin = new System.Windows.Forms.Padding(6, 0, 48, 24);
       this.PHASE_COMBO.Name = "PHASE_COMBO";
       this.PHASE_COMBO.Size = new System.Drawing.Size(72, 28);
-      this.PHASE_COMBO.TabIndex = 205;
+      this.PHASE_COMBO.TabIndex = 2;
       this.PHASE_COMBO.SelectedIndexChanged += new System.EventHandler(this.PHASE_COMBO_SelectedIndexChanged);
       // 
       // LoadCalculationForm

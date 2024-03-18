@@ -90,6 +90,18 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       NUMBER_OF_UNITS.KeyPress += OnlyWhenLoadBoxSelected;
       NUMBER_OF_UNITS.KeyUp += UpdateUnitCountInformation;
       NUMBER_OF_UNITS_BG.Click += InformUserHowToEnable;
+      BUILDING_NAME.KeyPress += OnlyAcceptableNames;
+    }
+
+    private void OnlyAcceptableNames(object sender, KeyPressEventArgs e)
+    {
+      string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-";
+
+      if (!allowedChars.Contains(e.KeyChar) && !char.IsControl(e.KeyChar))
+      {
+        _toolTip.Show("Input must be a valid character", (Control)sender, 0, -20, 2000);
+        e.Handled = true;
+      }
     }
 
     private void InformUserHowToEnable(object sender, EventArgs e)
