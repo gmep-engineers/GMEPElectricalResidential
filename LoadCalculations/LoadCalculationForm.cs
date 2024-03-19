@@ -197,12 +197,7 @@ namespace GMEPElectricalResidential.LoadCalculations
           {
             var id = (int)UNIT_TAB_CONTROL.SelectedTab.Tag;
             UNIT_TAB_CONTROL.TabPages.Remove(UNIT_TAB_CONTROL.SelectedTab);
-            var allBuildingInformation = AllBuildingInformation();
-            foreach (var buildingInformation in allBuildingInformation)
-            {
-              var counterToRemove = buildingInformation.Counters.FirstOrDefault(counter => counter.UnitID == id);
-              buildingInformation.Counters.Remove(counterToRemove);
-            }
+            RemoveUnitTypeFromBuildings(id);
           }
         }
       }
@@ -215,6 +210,22 @@ namespace GMEPElectricalResidential.LoadCalculations
           {
             BUILDING_TAB_CONTROL.TabPages.Remove(BUILDING_TAB_CONTROL.SelectedTab);
           }
+        }
+      }
+    }
+
+    private void RemoveUnitTypeFromBuildings(int id)
+    {
+      var allBuildingInformation = AllBuildingInformation();
+
+      foreach (var buildingInformation in allBuildingInformation)
+      {
+        var counterToRemove = buildingInformation.Counters.FirstOrDefault(counter => counter.UnitID == id);
+        if (counterToRemove != null)
+        {
+          buildingInformation.Counters = buildingInformation.Counters
+              .Where(counter => counter.UnitID != id)
+              .ToList();
         }
       }
     }

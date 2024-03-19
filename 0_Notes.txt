@@ -1,27 +1,3 @@
-﻿The building load calculation table is a data/calculation table that represents a single residential rental building.
-Inside a rental building there are units, and each unit has a different layout based on the type of unit it is.
-
-I have electrical data for all the unit types.
-I know the amount of units of each unit type in the residential buildings.
-
-The row headers of the table will be the different electrical items shared by all the unit types such as;
-- Lighting
-- Washer
-- Dryer
-- Oven
-- Refrigerator
-- Etc.
-
-The column headers will be the unit types.
-
-I would like to make a grid of data represented by a List<List<double>>.
-
-This grid should have all the data for a single unit type displayed in a single column.
-
-Can you help me create this grid of data with all the unit types and their associated attributes/data in a single 2D data object?
-
+﻿Issues
 ------
-
-I changed the way I want to make the building load calcs.
-
-Make a function called "GetListOfBuildingUnitTypes" which goes through the Counters List and retrieves the unitInformation based on the ID of the unit as long as the count of that unit type is greater than 0.
+-> Removing the last unit type does not remove the last counter from the building information
