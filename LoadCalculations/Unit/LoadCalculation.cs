@@ -522,6 +522,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         });
 
         startingRows += InsertTitleLightingBreakdown(1, unitInfo, contents);
+        startingRows += InsertTitleCookingApplianceBreakdown(unitInfo, contents);
 
         AddTextObjectsToObjectData(generalBodyData, contents, mTextObj, 0.25, 0.16);
 
@@ -554,6 +555,71 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       generalBodyData.NumberOfRows = startingRows;
 
       return generalBodyData;
+    }
+
+    private static int InsertTitleCookingApplianceBreakdown(UnitInformation unitInfo, List<string> contents)
+    {
+      var appliances = unitInfo.GeneralLoads.GetCookingAppliances();
+      if (appliances.Count == 0) return 0;
+      if (appliances.Count == 1)
+      {
+        var customLoad = appliances[0];
+        contents.Add($"{customLoad.Name}{((customLoad.Multiplier <= 1) ? ":" : $" ({customLoad.Multiplier}):")}");
+        return 1;
+      }
+
+      var cookingAppInfo = unitInfo.GeneralLoads.GetCookingApplianceInfo();
+
+      var appliancesUnder8750 = cookingAppInfo.CookingAppliancesUnder8750;
+      var appliancesOver8750 = cookingAppInfo.CookingAppliancesOver8750;
+      var header1 = $"Number of Appliances (1750VA-8750VA) ({cookingAppInfo.NumberOfCookingAppliancesUnder8750})";
+      var header2 = $"Number of Appliances (8750VA-27000VA) ({cookingAppInfo.NumberOfCookingAppliancesOver8750})";
+      var demandFactorsUnder8750 = new double[2];
+      demandFactorsUnder8750[0] = cookingAppInfo.DemandFactor1750to3500;
+      demandFactorsUnder8750[1] = cookingAppInfo.DemandFactor3500to8750;
+
+      int additionalRows = 1;
+      string title = "Cooking Appliances (CEC 220.55):";
+      contents.Add(title);
+
+      if (appliancesUnder8750.Count >= 1 && appliancesOver8750.Count >= 1)
+      {
+        additionalRows = UpdateContentsWithAppliances(contents, appliancesUnder8750, additionalRows, header1, demandFactorsUnder8750);
+        additionalRows = UpdateContentsWithAppliances(contents, appliancesOver8750, additionalRows, header2);
+      }
+      else if (appliancesUnder8750.Count >= 1)
+      {
+        additionalRows = UpdateContentsWithAppliances(contents, appliancesUnder8750, additionalRows, header1, demandFactorsUnder8750);
+      }
+      else if (appliancesOver8750.Count >= 1)
+      {
+        additionalRows = UpdateContentsWithAppliances(contents, appliancesOver8750, additionalRows, header2);
+      }
+
+      return additionalRows;
+    }
+
+    private static int UpdateContentsWithAppliances(List<string> contents, List<UnitLoad> appliances, int additionalRows, string title, double[] demandFactors = null)
+    {
+      appliances.ForEach(customLoad =>
+      {
+        customLoad.GetIndividual();
+        if (demandFactors != null)
+        {
+          int load = customLoad.GetIndividual();
+          double demandFactor = (load > 3500) ? demandFactors[1] : demandFactors[0];
+          contents.Add($"{customLoad.Name} {load}VA @ {demandFactor}% ({customLoad.Multiplier})");
+        }
+        else
+        {
+          int load = customLoad.GetIndividual();
+          contents.Add($"{customLoad.Name} {load}VA ({customLoad.Multiplier})");
+        }
+        additionalRows++;
+      });
+      contents.Add(title);
+      additionalRows++;
+      return additionalRows;
     }
 
     private static void InsertValueLightingBreakdown(int index, UnitInformation unitInfo, List<string> generalValues, UnitInformation unitInfo2 = null)

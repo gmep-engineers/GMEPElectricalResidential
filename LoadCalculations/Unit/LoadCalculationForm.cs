@@ -1437,28 +1437,45 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return Lighting.GetTotal();
     }
 
-    public List<UnitLoad> GetCookingAppliances(bool onlyOver8750 = false)
+    public List<UnitLoad> GetCookingAppliances()
     {
-      var list = new List<UnitLoad>();
-      if (onlyOver8750)
-      {
-        list = Customs.Where(custom => custom.IsCookingAppliance && custom.GetIndividual() > 8750).ToList();
-      }
-      else
-      {
-        list = Customs.Where(custom => custom.IsCookingAppliance).ToList();
-      }
-      return list;
+      return Customs.Where(custom => custom.IsCookingAppliance && custom.GetIndividual() >= 1750 && custom.GetIndividual() <= 27000).ToList();
     }
 
-    public int GetVAForCookingAppliances()
+    public List<UnitLoad> GetCookingAppliancesOver8750()
+    {
+      return Customs.Where(custom => custom.IsCookingAppliance && custom.GetIndividual() > 8750 && custom.GetIndividual() <= 27000).ToList();
+    }
+
+    public List<UnitLoad> GetCookingAppliancesUnder8750()
+    {
+      return Customs.Where(custom => custom.IsCookingAppliance && custom.GetIndividual() <= 8750 && custom.GetIndividual() >= 1750).ToList();
+    }
+
+    public CookingApplianceInfo GetCookingApplianceInfo()
     {
       var cookingApps = GetCookingAppliances();
       var cookingAppBuckets = GetCookingApplianceBuckets(cookingApps); // index 0, number of appliances from 1750VA - 8750VA | index 1, number of appliances from 8750VA - 27000VA
       var demandFactorBuckets = GetDemandFactorBuckets(cookingAppBuckets); // index 0, demand factor for appliances from 1750VA - 3500VA | index1, demand factor for appliances from 3500VA - 8750VA
-      var totalVA = GetMaximumDemand(cookingAppBuckets[1], GetAverageLoadFor8750to27000());
-      totalVA += GetDemand(demandFactorBuckets[0], demandFactorBuckets[1], cookingApps);
-      return totalVA;
+      var maximumDemandOver8750 = GetMaximumDemand(cookingAppBuckets[1], GetAverageLoadFor8750to27000());
+      var maximumDemandUnder8750 = GetDemand(demandFactorBuckets[0], demandFactorBuckets[1], cookingApps);
+      var maximumDemand = maximumDemandUnder8750 + maximumDemandOver8750;
+
+      var cookingApplianceInfo = new CookingApplianceInfo()
+      {
+        CookingAppliances = cookingApps,
+        CookingAppliancesUnder8750 = GetCookingAppliancesUnder8750(),
+        CookingAppliancesOver8750 = GetCookingAppliancesOver8750(),
+        NumberOfCookingAppliancesUnder8750 = cookingAppBuckets[0],
+        NumberOfCookingAppliancesOver8750 = cookingAppBuckets[1],
+        DemandFactor1750to3500 = demandFactorBuckets[0],
+        DemandFactor3500to8750 = demandFactorBuckets[1],
+        TotalDemandOver8750 = maximumDemandOver8750,
+        TotalDemandUnder8750 = maximumDemandUnder8750,
+        TotalDemand = maximumDemand,
+      };
+
+      return cookingApplianceInfo;
     }
 
     private int GetDemand(double demandFactor1750to3500, double demandFactor3500to8750, List<UnitLoad> cookingApps)
@@ -1495,7 +1512,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private int GetAverageLoadFor8750to27000()
     {
-      var cookingApps8750to27000 = GetCookingAppliances(true);
+      var cookingApps8750to27000 = GetCookingAppliancesOver8750();
       int totalLoad = 0;
       int count = 0;
 
@@ -1523,11 +1540,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         int total = appliance.GetIndividual();
         if (total >= 1750 && total <= 8750)
         {
-          cookingApplianceBuckets[0]++;
+          cookingApplianceBuckets[0] += appliance.Multiplier;
         }
         else if (total > 8750 && total <= 27000)
         {
-          cookingApplianceBuckets[1]++;
+          cookingApplianceBuckets[1] += appliance.Multiplier;
         }
       }
       return cookingApplianceBuckets;
@@ -1649,6 +1666,23 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         return 0;
       }
     }
+  }
+
+  public class CookingApplianceInfo
+  {
+    public List<UnitLoad> CookingAppliances { get; set; }
+    public List<UnitLoad> CookingAppliancesUnder8750 { get; set; }
+    public List<UnitLoad> CookingAppliancesOver8750 { get; set; }
+
+    public int NumberOfCookingAppliancesOver8750 { get; set; }
+    public int NumberOfCookingAppliancesUnder8750 { get; set; }
+
+    public double DemandFactor1750to3500 { get; set; }
+    public double DemandFactor3500to8750 { get; set; }
+
+    public double TotalDemandOver8750 { get; set; }
+    public double TotalDemandUnder8750 { get; set; }
+    public double TotalDemand { get; set; }
   }
 
   public enum LightingOccupancyType
