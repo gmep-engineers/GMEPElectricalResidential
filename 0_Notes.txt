@@ -1,3 +1,8 @@
 ﻿Issues
 ------
--> Removing the last unit type does not remove the last counter from the building information
+-> Cooking appliances need to be removed from the general load creation list and given special treatment
+a. Do not add a customLoad to contents or increase the row count if the customLoad.isCookingAppliance is true
+b. Do not add to generalValues for the same reason as in step a
+c. Use the number of cooking appliances over 1750 VA and less than 8750VA to determine the demand factor from column A and column B (separating the demand factor at 3500VA).
+d. Use the number of appliances over 8750VA and less than 27000VA to determine the maximum demand.
+e. GetVAForCookingAppliances() should be created within the GeneralLoads class.

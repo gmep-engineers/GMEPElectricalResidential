@@ -504,8 +504,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       int startingRows = 2;
       List<string> contents;
-      var headers = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
-      if (headers != null)
+      var mTextObj = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
+      if (mTextObj != null)
       {
         contents = new List<string>
         {
@@ -514,15 +514,18 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
-          contents.Add($"{customLoad.Name}{((customLoad.Multiplier <= 1) ? ":" : $" ({customLoad.Multiplier}):")}");
-          startingRows++;
+          if (!customLoad.IsCookingAppliance)
+          {
+            contents.Add($"{customLoad.Name}{((customLoad.Multiplier <= 1) ? ":" : $" ({customLoad.Multiplier}):")}");
+            startingRows++;
+          }
         });
 
         startingRows += InsertTitleLightingBreakdown(1, unitInfo, contents);
 
-        AddTextObjectsToObjectData(generalBodyData, contents, headers, 0.25, 0.16);
+        AddTextObjectsToObjectData(generalBodyData, contents, mTextObj, 0.25, 0.16);
 
-        headers.Contents = "General Load:".Underline().BoldItalic();
+        mTextObj.Contents = "General Load:".Underline().BoldItalic();
       }
 
       var values = generalBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
@@ -535,7 +538,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
         {
-          generalValues.Add($"{customLoad.GetTotal()}VA");
+          if (!customLoad.IsCookingAppliance)
+          {
+            generalValues.Add($"{customLoad.GetTotal()}VA");
+          }
         });
 
         InsertValueLightingBreakdown(1, unitInfo, generalValues, unitInfo2);

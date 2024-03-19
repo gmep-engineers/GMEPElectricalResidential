@@ -1384,7 +1384,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
   public class UnitGeneralLoadContainer
   {
     public static string LightingCode = "220.42";
-    private int[] cookingApplianceBuckets = new int[4]; // 1750-3500, 3501-8750, 8751-12000, 12001-27000 VA
     public UnitLoad Lighting { get; set; }
     public List<UnitLoad> Customs { get; set; }
     public LightingOccupancyType LightingOccupancyType { get; set; }
@@ -1438,71 +1437,100 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return Lighting.GetTotal();
     }
 
-    public List<UnitLoad> GetCookingAppliances()
+    public List<UnitLoad> GetCookingAppliances(bool onlyOver8750 = false)
     {
-      return Customs.Where(custom => custom.IsCookingAppliance).ToList();
+      var list = new List<UnitLoad>();
+      if (onlyOver8750)
+      {
+        list = Customs.Where(custom => custom.IsCookingAppliance && custom.GetIndividual() > 8750).ToList();
+      }
+      else
+      {
+        list = Customs.Where(custom => custom.IsCookingAppliance).ToList();
+      }
+      return list;
     }
 
-    public double GetTotalDemand()
+    public int GetVAForCookingAppliances()
     {
-      double totalDemand = 0;
+      var cookingApps = GetCookingAppliances();
+      var cookingAppBuckets = GetCookingApplianceBuckets(cookingApps); // index 0, number of appliances from 1750VA - 8750VA | index 1, number of appliances from 8750VA - 27000VA
+      var demandFactorBuckets = GetDemandFactorBuckets(cookingAppBuckets); // index 0, demand factor for appliances from 1750VA - 3500VA | index1, demand factor for appliances from 3500VA - 8750VA
+      var totalVA = GetMaximumDemand(cookingAppBuckets[1], GetAverageLoadFor8750to27000());
+      totalVA += GetDemand(demandFactorBuckets[0], demandFactorBuckets[1], cookingApps);
+      return totalVA;
+    }
 
-      UpdateCookingApplianceBuckets();
+    private int GetDemand(double demandFactor1750to3500, double demandFactor3500to8750, List<UnitLoad> cookingApps)
+    {
+      var totalVA = 0;
 
-      foreach (var appliance in GetCookingAppliances())
+      // Calculate totalVA for cookingApps with GetIndividual() value of 1750-3500
+      var cookingApps1750to3500 = cookingApps.Where(app => app.GetIndividual() >= 1750 && app.GetIndividual() <= 3500);
+      foreach (var app in cookingApps1750to3500)
       {
-        int total = appliance.Total;
-        double demand = 0;
-
-        if (total >= 1750 && total <= 3500)
-        {
-          int count = cookingApplianceBuckets[0];
-          demand = total * GetDemandFactor(count, "Column A") / 100;
-        }
-        else if (total > 3500 && total <= 8750)
-        {
-          int count = cookingApplianceBuckets[1];
-          demand = total * GetDemandFactor(count, "Column B") / 100;
-        }
-        else if (total > 8750 && total <= 12000)
-        {
-          int count = cookingApplianceBuckets[2];
-          demand = GetMaximumDemand(count);
-        }
-        else if (total > 12000 && total <= 27000)
-        {
-          demand = total;
-        }
-
-        totalDemand += demand;
+        totalVA += (int)Math.Round(app.GetTotal() * demandFactor1750to3500);
       }
 
-      return totalDemand;
+      // Calculate totalVA for cookingApps with GetIndividual() value of 3500-8750
+      var cookingApps3500to8750 = cookingApps.Where(app => app.GetIndividual() > 3500 && app.GetIndividual() <= 8750);
+      foreach (var app in cookingApps3500to8750)
+      {
+        totalVA += (int)Math.Round(app.GetTotal() * demandFactor3500to8750);
+      }
+
+      return totalVA;
     }
 
-    private void UpdateCookingApplianceBuckets()
+    private double[] GetDemandFactorBuckets(int[] cookingAppBuckets)
     {
-      cookingApplianceBuckets = new int[4];
-      foreach (var appliance in GetCookingAppliances())
+      var numOfApps1750to8750 = cookingAppBuckets[0];
+
+      var demandFactorBuckets = new double[3];
+      demandFactorBuckets[0] = GetDemandFactor(numOfApps1750to8750, "Column A");
+      demandFactorBuckets[1] = GetDemandFactor(numOfApps1750to8750, "Column B");
+
+      return demandFactorBuckets;
+    }
+
+    private int GetAverageLoadFor8750to27000()
+    {
+      var cookingApps8750to27000 = GetCookingAppliances(true);
+      int totalLoad = 0;
+      int count = 0;
+
+      foreach (var appliance in cookingApps8750to27000)
       {
-        int total = appliance.Total;
-        if (total >= 1750 && total <= 3500)
+        totalLoad += appliance.GetTotal();
+        count += appliance.Multiplier;
+      }
+
+      if (count > 0)
+      {
+        return totalLoad / count;
+      }
+      else
+      {
+        return 0;
+      }
+    }
+
+    private int[] GetCookingApplianceBuckets(List<UnitLoad> cookingApps)
+    {
+      var cookingApplianceBuckets = new int[2];
+      foreach (var appliance in cookingApps)
+      {
+        int total = appliance.GetIndividual();
+        if (total >= 1750 && total <= 8750)
         {
           cookingApplianceBuckets[0]++;
         }
-        else if (total > 3500 && total <= 8750)
+        else if (total > 8750 && total <= 27000)
         {
           cookingApplianceBuckets[1]++;
         }
-        else if (total > 8750 && total <= 12000)
-        {
-          cookingApplianceBuckets[2]++;
-        }
-        else if (total > 12000 && total <= 27000)
-        {
-          cookingApplianceBuckets[3]++;
-        }
       }
+      return cookingApplianceBuckets;
     }
 
     private double GetDemandFactor(int count, string column)
@@ -1590,9 +1618,18 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       }
     }
 
-    private double GetMaximumDemand(int count)
+    private int GetMaximumDemand(int count, int averageVA)
     {
+      int averageKVA = (int)Math.Ceiling((double)averageVA / 1000);
       double[] maximumDemands = { 8, 11, 14, 17, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40 };
+
+      int KVAover12 = averageKVA - 12;
+      if (KVAover12 < 0)
+      {
+        KVAover12 = 0;
+      }
+
+      int percentIncrease = KVAover12 * 5;
 
       if (count > maximumDemands.GetLength(0) && count < 41)
       {
@@ -1605,7 +1642,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       if (count >= 1 && count <= maximumDemands.Length)
       {
-        return maximumDemands[count - 1];
+        return (int)Math.Round(maximumDemands[count - 1] * (1.0 + percentIncrease / 100) * 1000);
       }
       else
       {
@@ -1640,6 +1677,15 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     public int GetTotal()
     {
       return Multiplier == 0 ? 0 : Total;
+    }
+
+    public int GetIndividual()
+    {
+      if (Multiplier == 0)
+      {
+        return 0;
+      }
+      return Total / Multiplier;
     }
 
     public string FormattedName()
