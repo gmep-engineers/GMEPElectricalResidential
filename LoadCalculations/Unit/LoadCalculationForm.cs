@@ -362,7 +362,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         lightingLoad = int.Parse(AREA.Text) * 3;
       }
-
       unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", lightingLoad.ToString(), "1");
 
       var previousCustoms = _unitInformation.GeneralLoads?.Customs;
@@ -382,8 +381,24 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         customs.Add(unitGeneralCustomLoad);
       }
 
-      unitGeneralLoadContainer.Customs = customs;
+      // Find the removed item and update the isCookingAppliance flag for subsequent items
+      if (previousCustoms != null && previousCustoms.Count > customs.Count)
+      {
+        for (int i = 0; i < previousCustoms.Count; i++)
+        {
+          if (i >= customs.Count || previousCustoms[i].Name != customs[i].Name)
+          {
+            // Found the removed item
+            for (int j = i; j < customs.Count; j++)
+            {
+              customs[j].IsCookingAppliance = previousCustoms[j + 1].IsCookingAppliance;
+            }
+            break;
+          }
+        }
+      }
 
+      unitGeneralLoadContainer.Customs = customs;
       _unitInformation.GeneralLoads = unitGeneralLoadContainer;
 
       if (LIGHTING_DWELLING.Checked)
@@ -1283,12 +1298,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private void ColorTheCookingAppliances(DrawItemEventArgs e)
     {
-      var listOfCookingAppliances = _unitInformation.GeneralLoads.GetCookingAppliances();
       if (e.Index >= 0 && e.Index < GENERAL_CUSTOM_LOAD_BOX.Items.Count)
       {
         string item = GENERAL_CUSTOM_LOAD_BOX.Items[e.Index].ToString();
 
-        bool isCookingAppliance = listOfCookingAppliances.Any(appliance => item.Contains(appliance.FormattedName()));
+        bool isCookingAppliance = _unitInformation.GeneralLoads.Customs[e.Index].IsCookingAppliance;
 
         if (isCookingAppliance)
         {
