@@ -84,40 +84,45 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         ObjectData headerData = GetCopyPasteData("UnitLoadCalculationHeader");
         ObjectData bodyData = GetCopyPasteData("UnitLoadCalculationBody");
 
-        headerData = UpdateHeaderData(headerData, unitInfo, unitInfo2);
+        if (unitInfo2 != null)
+        {
+          unitInfo = CombinedUnitInformation.CreateCombinedCopyOfUnitInfo(unitInfo, unitInfo2);
+        }
+
+        headerData = UpdateHeaderData(headerData, unitInfo);
 
         ObjectData dwellingBodyData = ShiftData(bodyData, -currentHeight);
-        dwellingBodyData = UpdateDwellingData(dwellingBodyData, unitInfo, unitInfo2);
+        dwellingBodyData = UpdateDwellingData(dwellingBodyData, unitInfo);
         double dwellingSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, dwellingBodyData.NumberOfRows, acBlkTblRec);
 
         currentHeight += dwellingSectionHeight;
 
         ObjectData generalBodyData = ShiftData(bodyData, -currentHeight);
-        generalBodyData = UpdateGeneralData(generalBodyData, unitInfo, unitInfo2);
+        generalBodyData = UpdateGeneralData(generalBodyData, unitInfo);
         double generalSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, generalBodyData.NumberOfRows, acBlkTblRec);
 
         currentHeight += generalSectionHeight;
 
         ObjectData generalBodyCalcData = ShiftData(bodyData, -currentHeight);
-        generalBodyCalcData = UpdateGeneralCalculationData(generalBodyCalcData, unitInfo, unitInfo2);
+        generalBodyCalcData = UpdateGeneralCalculationData(generalBodyCalcData, unitInfo);
         double generalCalcSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, generalBodyCalcData.NumberOfRows, acBlkTblRec);
 
         currentHeight += generalCalcSectionHeight;
 
         ObjectData airConditioningBodyData = ShiftData(bodyData, -currentHeight);
-        airConditioningBodyData = UpdateAirConditioningData(airConditioningBodyData, unitInfo, unitInfo2);
+        airConditioningBodyData = UpdateAirConditioningData(airConditioningBodyData, unitInfo);
         double airConditioningSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, airConditioningBodyData.NumberOfRows, acBlkTblRec);
 
         currentHeight += airConditioningSectionHeight;
 
         ObjectData customBodyData = ShiftData(bodyData, -currentHeight);
-        customBodyData = UpdateCustomData(customBodyData, unitInfo, unitInfo2);
+        customBodyData = UpdateCustomData(customBodyData, unitInfo);
         double customSectionHeight = CreateUnitLoadCalculationRectangle(point, -currentHeight, customBodyData.NumberOfRows, acBlkTblRec);
 
         currentHeight += customSectionHeight;
 
         ObjectData serviceBodyData = ShiftData(bodyData, -currentHeight);
-        serviceBodyData = UpdateServiceData(serviceBodyData, unitInfo, unitInfo2);
+        serviceBodyData = UpdateServiceData(serviceBodyData, unitInfo);
         double _ = CreateUnitLoadCalculationRectangle(point, -currentHeight, serviceBodyData.NumberOfRows, acBlkTblRec);
 
         string modifiedHeaderData = JsonConvert.SerializeObject(headerData);
@@ -522,7 +527,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         });
 
         startingRows += InsertTitleLightingBreakdown(1, unitInfo, contents);
-        startingRows += InsertTitleCookingApplianceBreakdown(unitInfo, contents);
+        startingRows += InsertTitleCookingApplianceBreakdown(unitInfo, contents, unitInfo2);
 
         AddTextObjectsToObjectData(generalBodyData, contents, mTextObj, 0.25, 0.16);
 
@@ -546,6 +551,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         });
 
         InsertValueLightingBreakdown(1, unitInfo, generalValues, unitInfo2);
+        InsertValueCookingApplianceBreakdown(unitInfo, generalValues, unitInfo2);
 
         AddTextObjectsToObjectData(generalBodyData, generalValues, values, 0.25, 0.16);
 
@@ -557,49 +563,54 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return generalBodyData;
     }
 
-    private static int InsertTitleCookingApplianceBreakdown(UnitInformation unitInfo, List<string> contents)
+    private static void InsertValueCookingApplianceBreakdown(UnitInformation unitInfo, List<string> generalValues, UnitInformation unitInfo2 = null)
     {
-      var appliances = unitInfo.GeneralLoads.GetCookingAppliances();
-      if (appliances.Count == 0) return 0;
-      if (appliances.Count == 1)
+    }
+
+    private static int InsertTitleCookingApplianceBreakdown(UnitInformation unitInfo, List<string> contents, UnitInformation unitInfo2 = null)
+    {
+      var cookingAppInfo = unitInfo.GeneralLoads.GetCookingApplianceInfo();
+      var numberOfApps = cookingAppInfo.NumberOfCookingAppliancesUnder8750 + cookingAppInfo.NumberOfCookingAppliancesOver8750;
+      if (numberOfApps == 0) return 0;
+      if (numberOfApps == 1)
       {
+        var appliances = cookingAppInfo.CookingAppliances;
         var customLoad = appliances[0];
         contents.Add($"{customLoad.Name}{((customLoad.Multiplier <= 1) ? ":" : $" ({customLoad.Multiplier}):")}");
         return 1;
       }
 
-      var cookingAppInfo = unitInfo.GeneralLoads.GetCookingApplianceInfo();
-
       var appliancesUnder8750 = cookingAppInfo.CookingAppliancesUnder8750;
       var appliancesOver8750 = cookingAppInfo.CookingAppliancesOver8750;
-      var header1 = $"Number of Appliances (1750VA-8750VA) ({cookingAppInfo.NumberOfCookingAppliancesUnder8750})";
-      var header2 = $"Number of Appliances (8750VA-27000VA) ({cookingAppInfo.NumberOfCookingAppliancesOver8750})";
       var demandFactorsUnder8750 = new double[2];
       demandFactorsUnder8750[0] = cookingAppInfo.DemandFactor1750to3500;
       demandFactorsUnder8750[1] = cookingAppInfo.DemandFactor3500to8750;
 
       int additionalRows = 1;
-      string title = "Cooking Appliances (CEC 220.55):";
+      string title = "Cooking Appliances (CEC Table 220.55)";
       contents.Add(title);
 
-      if (appliancesUnder8750.Count >= 1 && appliancesOver8750.Count >= 1)
+      if (cookingAppInfo.NumberOfCookingAppliancesUnder8750 >= 1 && cookingAppInfo.NumberOfCookingAppliancesOver8750 >= 1)
       {
-        additionalRows = UpdateContentsWithAppliances(contents, appliancesUnder8750, additionalRows, header1, demandFactorsUnder8750);
-        additionalRows = UpdateContentsWithAppliances(contents, appliancesOver8750, additionalRows, header2);
+        additionalRows = UpdateContentsWithAppliances(contents, appliancesUnder8750, additionalRows, demandFactorsUnder8750);
+        additionalRows = UpdateContentsWithAppliances(contents, appliancesOver8750, additionalRows);
       }
-      else if (appliancesUnder8750.Count >= 1)
+      else if (cookingAppInfo.NumberOfCookingAppliancesUnder8750 >= 1)
       {
-        additionalRows = UpdateContentsWithAppliances(contents, appliancesUnder8750, additionalRows, header1, demandFactorsUnder8750);
+        additionalRows = UpdateContentsWithAppliances(contents, appliancesUnder8750, additionalRows, demandFactorsUnder8750);
       }
-      else if (appliancesOver8750.Count >= 1)
+      else if (cookingAppInfo.NumberOfCookingAppliancesOver8750 >= 1)
       {
-        additionalRows = UpdateContentsWithAppliances(contents, appliancesOver8750, additionalRows, header2);
+        additionalRows = UpdateContentsWithAppliances(contents, appliancesOver8750, additionalRows);
       }
+
+      contents.Add("   Cooking Appliance Subtotal:");
+      additionalRows++;
 
       return additionalRows;
     }
 
-    private static int UpdateContentsWithAppliances(List<string> contents, List<UnitLoad> appliances, int additionalRows, string title, double[] demandFactors = null)
+    private static int UpdateContentsWithAppliances(List<string> contents, List<UnitLoad> appliances, int additionalRows, double[] demandFactors = null)
     {
       appliances.ForEach(customLoad =>
       {
@@ -608,17 +619,15 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         {
           int load = customLoad.GetIndividual();
           double demandFactor = (load > 3500) ? demandFactors[1] : demandFactors[0];
-          contents.Add($"{customLoad.Name} {load}VA @ {demandFactor}% ({customLoad.Multiplier})");
+          contents.Add($"   {customLoad.Name} {load}VA @ {demandFactor}% with Demand Applied ({customLoad.Multiplier})");
         }
         else
         {
           int load = customLoad.GetIndividual();
-          contents.Add($"{customLoad.Name} {load}VA ({customLoad.Multiplier})");
+          contents.Add($"   {customLoad.Name} {load}VA with Demand Applied ({customLoad.Multiplier})");
         }
         additionalRows++;
       });
-      contents.Add(title);
-      additionalRows++;
       return additionalRows;
     }
 
@@ -704,7 +713,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       contents.Insert(index, "   0-3KVA @ 100%:");
       contents.Insert(index + 1, "   3-120KVA @ 35%:");
       contents.Insert(index + 2, "   120+KVA @ 25%:");
-      contents.Insert(index + 3, "   Lighting Subtotal:");
+      contents.Insert(index + 3, "   General Lighting Subtotal:");
 
       return 4;
     }

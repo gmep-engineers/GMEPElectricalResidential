@@ -93,6 +93,7 @@
     <Compile Include="LoadCalculations\Building\LoadCalculationForm.Designer.cs">
       <DependentUpon>LoadCalculationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoadCalculations\Unit\CombinedUnitInformation.cs" />
     <Compile Include="LoadCalculations\Unit\LoadCalculation.cs" />
     <Compile Include="LoadCalculations\LoadCalculationForm.cs">
       <SubType>Form</SubType>
