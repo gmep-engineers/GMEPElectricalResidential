@@ -432,7 +432,22 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       foreach (var customLoad in generalLoads.Customs)
       {
-        totalLoad += customLoad.GetTotal();
+        if (!customLoad.IsCookingAppliance)
+        {
+          totalLoad += customLoad.GetTotal();
+        }
+      }
+
+      var cookingApplianceInfo = generalLoads.GetCookingApplianceInfo();
+      var numberOfApps = cookingApplianceInfo.NumberOfCookingAppliancesUnder8750 + cookingApplianceInfo.NumberOfCookingAppliancesOver8750;
+
+      if (numberOfApps == 1)
+      {
+        totalLoad += cookingApplianceInfo.CookingAppliances[0].GetTotal();
+      }
+      else if (numberOfApps > 1)
+      {
+        totalLoad += (int)cookingApplianceInfo.TotalDemand;
       }
 
       _unitInformation.Totals.TotalGeneralLoad = totalLoad;
