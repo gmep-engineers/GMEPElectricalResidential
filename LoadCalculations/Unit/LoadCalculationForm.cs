@@ -1487,9 +1487,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var cookingAppBuckets = GetCookingApplianceBuckets(cookingApps); // index 0, number of appliances from 1750VA - 8750VA | index 1, number of appliances from 8750VA - 27000VA
       var demandFactorBuckets = GetDemandFactorBuckets(cookingAppBuckets); // index 0, demand factor for appliances from 1750VA - 3500VA | index1, demand factor for appliances from 3500VA - 8750VA
       var maximumDemandOver8750 = GetMaximumDemand(cookingAppBuckets[1], GetAverageLoadFor8750to27000());
-      HelperClass.WriteMessageToAutoCADConsole(maximumDemandOver8750, "max demand over 8750: ");
       var maximumDemandUnder8750 = GetDemand(demandFactorBuckets[0], demandFactorBuckets[1], cookingApps);
-      HelperClass.WriteMessageToAutoCADConsole(maximumDemandUnder8750, "max demand under 8750: ");
       var maximumDemand = maximumDemandUnder8750 + maximumDemandOver8750;
 
       var cookingApplianceInfo = new CookingApplianceInfo()
