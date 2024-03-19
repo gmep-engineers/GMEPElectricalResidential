@@ -59,6 +59,13 @@ namespace GMEPElectricalResidential.LoadCalculations
       this.TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
       this.BUILDING_TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
       this.UNIT_TAB_CONTROL.SelectedIndexChanged += TAB_CONTROL_SelectedIndexChanged;
+      Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.BeginDocumentClose += Document_BeginDocumentClose;
+    }
+
+    private void Document_BeginDocumentClose(object sender, Autodesk.AutoCAD.ApplicationServices.DocumentBeginCloseEventArgs e)
+    {
+      SaveLoadCalculationForm();
+      Close();
     }
 
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -463,6 +470,8 @@ namespace GMEPElectricalResidential.LoadCalculations
     private void LOAD_CALCULATION_FORM_FormClosing(object sender, FormClosingEventArgs e)
     {
       SaveLoadCalculationForm();
+
+      Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.BeginDocumentClose -= Document_BeginDocumentClose;
     }
 
     private void CREATE_UNIT_BUTTON_Click(object sender, EventArgs e)
