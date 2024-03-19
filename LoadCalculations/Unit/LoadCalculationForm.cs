@@ -113,16 +113,20 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       // Set area
       AREA.Text = unitInformation.DwellingArea.FloorArea.ToString();
 
-      foreach (var load in unitInformation.GeneralLoads.Customs)
+      if (unitInformation.GeneralLoads.Customs != null)
       {
-        var entry = $"{load.Name}, {load.Total}, {load.Multiplier}";
-        GENERAL_CUSTOM_LOAD_BOX.Items.Add(entry);
+        foreach (var load in unitInformation.GeneralLoads.Customs)
+        {
+          GENERAL_CUSTOM_LOAD_BOX.Items.Add(load.FormattedName());
+        }
       }
 
-      foreach (var load in unitInformation.CustomLoads)
+      if (unitInformation.CustomLoads != null)
       {
-        var entry = $"{load.Name}, {load.Total}, {load.Multiplier}";
-        CUSTOM_LOAD_BOX.Items.Add(entry);
+        foreach (var load in unitInformation.CustomLoads)
+        {
+          CUSTOM_LOAD_BOX.Items.Add(load.FormattedName());
+        }
       }
 
       if (unitInformation.GeneralLoads.LightingOccupancyType == LightingOccupancyType.Dwelling)
@@ -145,8 +149,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       // Set AC loads
       OUTDOOR_CONDENSER_VA.Text = unitInformation.ACLoads.Condenser.ToString();
       INDOOR_FAN_COIL_VA.Text = unitInformation.ACLoads.FanCoil.ToString();
-      OUTDOOR_HEATER_UNIT.Text = unitInformation.ACLoads.HeatingUnit.Heating.ToString();
-      OUTDOOR_HEATER_UNIT_AMOUNT.Text = unitInformation.ACLoads.HeatingUnit.NumberOfUnits.ToString();
+      OUTDOOR_HEATER_UNIT.Text = unitInformation.ACLoads.HeatingUnit?.Heating.ToString() ?? "0";
+      OUTDOOR_HEATER_UNIT_AMOUNT.Text = unitInformation.ACLoads.HeatingUnit?.NumberOfUnits.ToString() ?? "1";
 
       // Set totals
       TOTAL_GENERAL_LOAD_CALCULATION.Text = unitInformation.Totals.TotalGeneralLoad.ToString();
@@ -361,13 +365,17 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       unitGeneralLoadContainer.Lighting = new UnitLoad("General Lighting", lightingLoad.ToString(), "1");
 
-      var previousCustoms = _unitInformation.GeneralLoads.Customs;
+      var previousCustoms = _unitInformation.GeneralLoads?.Customs;
       List<UnitLoad> customs = new List<UnitLoad>();
 
       foreach (var item in GENERAL_CUSTOM_LOAD_BOX.Items)
       {
         var index = GENERAL_CUSTOM_LOAD_BOX.Items.IndexOf(item);
-        var isCookingAppliance = previousCustoms[index].IsCookingAppliance;
+        bool isCookingAppliance = false;
+        if (previousCustoms != null && previousCustoms.Count > index)
+        {
+          isCookingAppliance = previousCustoms[index].IsCookingAppliance;
+        }
         var split = item.ToString().Trim().Split(',');
 
         var unitGeneralCustomLoad = new UnitLoad(split[0], split[1], split[2], isCookingAppliance);
