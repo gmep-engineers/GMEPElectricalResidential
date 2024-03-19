@@ -15,16 +15,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 {
   public class LoadCalculation
   {
-    public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d placementPoint, bool placeTheBlocks = true, UnitInformation unitInfo2 = null)
+    public static void CreateUnitLoadCalculationTable(UnitInformation unitInfo, Point3d placementPoint, bool placeTheBlocks = true)
     {
       double HEADER_HEIGHT = 0.75;
       double currentHeight = HEADER_HEIGHT;
       string newBlockName = $"Unit {unitInfo.Name}" + $" ID{unitInfo.ID}";
-
-      if (unitInfo2 != null)
-      {
-        newBlockName += $" & {unitInfo2.Name}" + $" ID{unitInfo2.ID}";
-      }
 
       if (unitInfo == null)
       {
@@ -49,14 +44,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
         var existingBlock = acBlkTbl.Cast<ObjectId>()
             .Select(id => acTrans.GetObject(id, OpenMode.ForRead) as BlockTableRecord)
-            .FirstOrDefault(btr => btr.Name.Contains($"ID{unitInfo.ID}") && btr.Name.Contains("Unit"));
-
-        if (unitInfo2 != null)
-        {
-          existingBlock = acBlkTbl.Cast<ObjectId>()
-              .Select(id => acTrans.GetObject(id, OpenMode.ForRead) as BlockTableRecord)
-              .FirstOrDefault(btr => btr.Name.Contains($"Unit {unitInfo.Name} ID{unitInfo.ID} & {unitInfo2.Name} ID{unitInfo2.ID}"));
-        }
+            .FirstOrDefault(btr => btr.Name == newBlockName);
 
         if (existingBlock != null)
         {
@@ -83,11 +71,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
         ObjectData headerData = GetCopyPasteData("UnitLoadCalculationHeader");
         ObjectData bodyData = GetCopyPasteData("UnitLoadCalculationBody");
-
-        if (unitInfo2 != null)
-        {
-          unitInfo = CombinedUnitInformation.CreateCombinedCopyOfUnitInfo(unitInfo, unitInfo2);
-        }
 
         headerData = UpdateHeaderData(headerData, unitInfo);
 
@@ -217,22 +200,15 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       }
     }
 
-    private static ObjectData UpdateHeaderData(ObjectData headerData, UnitInformation unitInfo, UnitInformation unitInfo2 = null)
+    private static ObjectData UpdateHeaderData(ObjectData headerData, UnitInformation unitInfo)
     {
       var serviceLoadCalculationMText = headerData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
-      if (unitInfo2 == null)
-      {
-        serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - UNIT {unitInfo.Name}");
-      }
-      else
-      {
-        serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - UNIT {unitInfo.Name} & {unitInfo2.Name}");
-      }
+      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - UNIT {unitInfo.Name}");
       serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("\\Farial|c0", "\\fArial Rounded MT Bold|b1|i0|c0|p34");
       return headerData;
     }
 
-    private static ObjectData UpdateDwellingData(ObjectData dwellingBodyData, UnitInformation unitInfo, UnitInformation unitInfo2 = null)
+    private static ObjectData UpdateDwellingData(ObjectData dwellingBodyData, UnitInformation unitInfo)
     {
       var headers = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
 
@@ -252,43 +228,15 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var values = dwellingBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Subtitle VA"));
       if (values != null)
       {
-        int area1 = 0;
-        int area2 = 0;
+        int area1 = int.Parse(unitInfo.DwellingArea.FloorArea);
         string heater = unitInfo.DwellingArea.Heater.ToString();
         string dryer = unitInfo.DwellingArea.Dryer.ToString();
         string oven = unitInfo.DwellingArea.Oven.ToString();
         string cooktop = unitInfo.DwellingArea.Cooktop.ToString();
 
-        if (unitInfo2 != null)
-        {
-          area1 = int.Parse(unitInfo.DwellingArea.FloorArea);
-          area2 = int.Parse(unitInfo2.DwellingArea.FloorArea);
-
-          if (unitInfo.DwellingArea.Heater != unitInfo2.DwellingArea.Heater)
-          {
-            heater += $"/{unitInfo2.DwellingArea.Heater}";
-          }
-          if (unitInfo.DwellingArea.Dryer != unitInfo2.DwellingArea.Dryer)
-          {
-            dryer += $"/{unitInfo2.DwellingArea.Dryer}";
-          }
-          if (unitInfo.DwellingArea.Oven != unitInfo2.DwellingArea.Oven)
-          {
-            oven += $"/{unitInfo2.DwellingArea.Oven}";
-          }
-          if (unitInfo.DwellingArea.Cooktop != unitInfo2.DwellingArea.Cooktop)
-          {
-            cooktop += $"/{unitInfo2.DwellingArea.Cooktop}";
-          }
-        }
-        else
-        {
-          area1 = int.Parse(unitInfo.DwellingArea.FloorArea);
-        }
-
         values.Contents = "";
         string dwellingValues = "".NewLine() +
-                                $"{area1 + area2}ft\u00B2".NewLine() +
+                                $"{area1}ft\u00B2".NewLine() +
                                 $"{heater}".NewLine() +
                                 $"{dryer}".NewLine() +
                                 $"{oven}".NewLine() +
@@ -301,10 +249,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return dwellingBodyData;
     }
 
-    private static ObjectData UpdateServiceData(ObjectData serviceBodyData, UnitInformation unitInfo, UnitInformation unitInfo2 = null)
+    private static ObjectData UpdateServiceData(ObjectData serviceBodyData, UnitInformation unitInfo)
     {
       int startingRows = 4;
-      int totalServiceRating = unitInfo.Totals.ServiceLoad + (unitInfo2?.Totals.ServiceLoad ?? 0);
+      int totalServiceRating = unitInfo.Totals.ServiceLoad;
       var combinedUnitTotals = new UnitTotalContainer();
       combinedUnitTotals.ServiceLoad = totalServiceRating;
       var headers = serviceBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
@@ -313,9 +261,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         headers.Contents = "";
         string serviceSubtitles = "Calculated Load for Service:".Underline().BoldItalic().NewLine();
 
-        int totalSubtotalGeneralLoad = unitInfo.Totals.SubtotalGeneralLoad + (unitInfo2?.Totals.SubtotalGeneralLoad ?? 0);
-        int totalTotalACLoad = unitInfo.Totals.TotalACLoad + (unitInfo2?.Totals.TotalACLoad ?? 0);
-        int totalCustomLoad = unitInfo.Totals.CustomLoad + (unitInfo2?.Totals.CustomLoad ?? 0);
+        int totalSubtotalGeneralLoad = unitInfo.Totals.SubtotalGeneralLoad;
+        int totalTotalACLoad = unitInfo.Totals.TotalACLoad;
+        int totalCustomLoad = unitInfo.Totals.CustomLoad;
 
         serviceSubtitles += $"({totalSubtotalGeneralLoad}VA+{totalTotalACLoad}VA+{totalCustomLoad}VA)/{unitInfo.Voltage}={totalServiceRating}A (Service Rating)".NewLine().NewLine();
 
@@ -340,7 +288,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return serviceBodyData;
     }
 
-    private static ObjectData UpdateCustomData(ObjectData customBodyData, UnitInformation unitInfo, UnitInformation unitInfo2 = null)
+    private static ObjectData UpdateCustomData(ObjectData customBodyData, UnitInformation unitInfo)
     {
       ObjectData customBodyDataCopy = Newtonsoft.Json.JsonConvert.DeserializeObject<ObjectData>(Newtonsoft.Json.JsonConvert.SerializeObject(customBodyData));
 
@@ -355,24 +303,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         foreach (var customLoad in unitInfo.CustomLoads)
         {
           combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, customLoad.Total.ToString(), customLoad.Multiplier.ToString(), customLoad.IsCookingAppliance);
-        }
-
-        if (unitInfo2 != null)
-        {
-          foreach (var customLoad in unitInfo2.CustomLoads)
-          {
-            if (combinedCustomLoads.ContainsKey(customLoad.Name))
-            {
-              combinedCustomLoads[customLoad.Name].Total += customLoad.Total;
-              combinedCustomLoads[customLoad.Name].Multiplier += customLoad.Multiplier;
-            }
-            else
-            {
-              var otherCustomLoadWithSameName = unitInfo.CustomLoads.FirstOrDefault(cl => cl.Name == customLoad.Name);
-              var isOneOfTheCustomLoadsACookingAppliance = (otherCustomLoadWithSameName.IsCookingAppliance || customLoad.IsCookingAppliance);
-              combinedCustomLoads[customLoad.Name] = new UnitLoad(customLoad.Name, customLoad.Total.ToString(), customLoad.Multiplier.ToString(), isOneOfTheCustomLoadsACookingAppliance);
-            }
-          }
         }
 
         if (combinedCustomLoads.Count > 0)
@@ -414,7 +344,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return customBodyDataCopy;
     }
 
-    private static ObjectData UpdateAirConditioningData(ObjectData airConditioningBodyData, UnitInformation unitInfo, UnitInformation unitInfo2 = null)
+    private static ObjectData UpdateAirConditioningData(ObjectData airConditioningBodyData, UnitInformation unitInfo)
     {
       int startingRows = 2;
       var headers = airConditioningBodyData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
@@ -448,20 +378,20 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         values.Contents = "";
         string dwellingValues = "".NewLine();
-        if (unitInfo.ACLoads.Condenser + (unitInfo2?.ACLoads.Condenser ?? 0) > 0)
+        if (unitInfo.ACLoads.Condenser > 0)
         {
-          dwellingValues += $"{unitInfo.ACLoads.Condenser + (unitInfo2?.ACLoads.Condenser ?? 0)}VA".NewLine();
+          dwellingValues += $"{unitInfo.ACLoads.Condenser}VA".NewLine();
         }
-        if (unitInfo.ACLoads.FanCoil + (unitInfo2?.ACLoads.FanCoil ?? 0) > 0)
+        if (unitInfo.ACLoads.FanCoil > 0)
         {
-          dwellingValues += $"{unitInfo.ACLoads.FanCoil + (unitInfo2?.ACLoads.FanCoil ?? 0)}VA".NewLine();
+          dwellingValues += $"{unitInfo.ACLoads.FanCoil}VA".NewLine();
         }
-        if (unitInfo.ACLoads.HeatingUnit.Heating + (unitInfo2?.ACLoads.HeatingUnit.Heating ?? 0) > 0)
+        if (unitInfo.ACLoads.HeatingUnit.Heating > 0)
         {
-          dwellingValues += $"{unitInfo.ACLoads.HeatingUnit.Heating + (unitInfo2?.ACLoads.HeatingUnit.Heating ?? 0)}VA".NewLine();
+          dwellingValues += $"{unitInfo.ACLoads.HeatingUnit.Heating}VA".NewLine();
         }
 
-        dwellingValues += $"{unitInfo.Totals.TotalACLoad + (unitInfo2?.Totals.TotalACLoad ?? 0)}VA".NewLine();
+        dwellingValues += $"{unitInfo.Totals.TotalACLoad}VA".NewLine();
 
         values.Contents = dwellingValues.SetFont("Arial");
       }
@@ -471,7 +401,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return airConditioningBodyData;
     }
 
-    private static ObjectData UpdateGeneralCalculationData(ObjectData generalBodyCalcData, UnitInformation unitInfo, UnitInformation unitInfo2 = null)
+    private static ObjectData UpdateGeneralCalculationData(ObjectData generalBodyCalcData, UnitInformation unitInfo)
     {
       var headers = generalBodyCalcData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
       if (headers != null)
@@ -489,8 +419,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       if (values != null)
       {
         var unitTotal = new UnitTotalContainer();
-        unitTotal.TotalGeneralLoad = unitInfo.Totals.TotalGeneralLoad + (unitInfo2?.Totals.TotalGeneralLoad ?? 0);
-        unitTotal.SubtotalGeneralLoad = unitInfo.Totals.SubtotalGeneralLoad + (unitInfo2?.Totals.SubtotalGeneralLoad ?? 0);
+        unitTotal.TotalGeneralLoad = unitInfo.Totals.TotalGeneralLoad;
+        unitTotal.SubtotalGeneralLoad = unitInfo.Totals.SubtotalGeneralLoad;
         values.Contents = "";
         string dwellingValues = $"{unitTotal.TotalGeneralLoad}VA".NewLine() +
                                 $"{unitTotal.First10KVA()}VA".NewLine() +
@@ -505,7 +435,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return generalBodyCalcData;
     }
 
-    private static ObjectData UpdateGeneralData(ObjectData generalBodyData, UnitInformation unitInfo, UnitInformation unitInfo2 = null)
+    private static ObjectData UpdateGeneralData(ObjectData generalBodyData, UnitInformation unitInfo)
     {
       int startingRows = 2;
       List<string> contents;
@@ -527,7 +457,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         });
 
         startingRows += InsertTitleLightingBreakdown(1, unitInfo, contents);
-        startingRows += InsertTitleCookingApplianceBreakdown(unitInfo, contents, unitInfo2);
+        startingRows += InsertTitleCookingApplianceBreakdown(unitInfo, contents);
 
         AddTextObjectsToObjectData(generalBodyData, contents, mTextObj, 0.25, 0.16);
 
@@ -539,7 +469,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       {
         List<string> generalValues = new List<string>
         {
-            $"{unitInfo.GeneralLoads.Lighting.GetTotal() + (unitInfo2?.GeneralLoads.Lighting.GetTotal() ?? 0)}VA",
+            $"{unitInfo.GeneralLoads.Lighting.GetTotal()}VA",
         };
 
         unitInfo.GeneralLoads.Customs.ForEach(customLoad =>
@@ -550,8 +480,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
           }
         });
 
-        InsertValueLightingBreakdown(1, unitInfo, generalValues, unitInfo2);
-        InsertValueCookingApplianceBreakdown(unitInfo, generalValues, unitInfo2);
+        InsertValueLightingBreakdown(1, unitInfo, generalValues);
+        InsertValueCookingApplianceBreakdown(unitInfo, generalValues);
 
         AddTextObjectsToObjectData(generalBodyData, generalValues, values, 0.25, 0.16);
 
@@ -563,11 +493,54 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return generalBodyData;
     }
 
-    private static void InsertValueCookingApplianceBreakdown(UnitInformation unitInfo, List<string> generalValues, UnitInformation unitInfo2 = null)
+    private static void InsertValueCookingApplianceBreakdown(UnitInformation unitInfo, List<string> generalValues)
     {
+      var cookingAppInfo = unitInfo.GeneralLoads.GetCookingApplianceInfo();
+      var numberOfApps = cookingAppInfo.NumberOfCookingAppliancesUnder8750 + cookingAppInfo.NumberOfCookingAppliancesOver8750;
+      if (numberOfApps == 0) return;
+
+      if (numberOfApps == 1)
+      {
+        generalValues.Add($"{cookingAppInfo.CookingAppliances[0].GetTotal()}VA");
+      }
+      else
+      {
+        var appliancesUnder8750 = cookingAppInfo.CookingAppliancesUnder8750;
+        var appliancesOver8750 = cookingAppInfo.CookingAppliancesOver8750;
+
+        generalValues.Add("");
+
+        if (cookingAppInfo.NumberOfCookingAppliancesUnder8750 >= 1 && cookingAppInfo.NumberOfCookingAppliancesOver8750 >= 1)
+        {
+          for (int i = 0; i < appliancesUnder8750.Count; i++)
+          {
+            generalValues.Add("");
+          }
+          for (int i = 0; i < appliancesOver8750.Count; i++)
+          {
+            generalValues.Add("");
+          }
+        }
+        else if (cookingAppInfo.NumberOfCookingAppliancesUnder8750 >= 1)
+        {
+          for (int i = 0; i < appliancesUnder8750.Count; i++)
+          {
+            generalValues.Add("");
+          }
+        }
+        else if (cookingAppInfo.NumberOfCookingAppliancesOver8750 >= 1)
+        {
+          for (int i = 0; i < appliancesOver8750.Count; i++)
+          {
+            generalValues.Add("");
+          }
+        }
+
+        generalValues.Add($"{cookingAppInfo.TotalDemand}VA");
+      }
     }
 
-    private static int InsertTitleCookingApplianceBreakdown(UnitInformation unitInfo, List<string> contents, UnitInformation unitInfo2 = null)
+    private static int InsertTitleCookingApplianceBreakdown(UnitInformation unitInfo, List<string> contents)
     {
       var cookingAppInfo = unitInfo.GeneralLoads.GetCookingApplianceInfo();
       var numberOfApps = cookingAppInfo.NumberOfCookingAppliancesUnder8750 + cookingAppInfo.NumberOfCookingAppliancesOver8750;
@@ -631,12 +604,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       return additionalRows;
     }
 
-    private static void InsertValueLightingBreakdown(int index, UnitInformation unitInfo, List<string> generalValues, UnitInformation unitInfo2 = null)
+    private static void InsertValueLightingBreakdown(int index, UnitInformation unitInfo, List<string> generalValues)
     {
       int lightingVA = unitInfo.GeneralLoads.Lighting.GetTotal();
-      int lightingVA2 = unitInfo2?.GeneralLoads.Lighting.GetTotal() ?? 0;
-
-      lightingVA += lightingVA2;
 
       if (unitInfo.GeneralLoads.LightingOccupancyType == LightingOccupancyType.Dwelling)
       {

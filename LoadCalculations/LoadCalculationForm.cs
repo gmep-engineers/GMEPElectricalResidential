@@ -422,7 +422,8 @@ namespace GMEPElectricalResidential.LoadCalculations
       if (unitInfo1 != null)
       {
         var unitInfo2 = unitInfo1;
-        Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, isCreate, unitInfo2);
+        unitInfo1 = CombinedUnitInformation.CreateCombinedCopyOfUnitInfo(unitInfo1, unitInfo2);
+        Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, isCreate);
         point = new Point3d(point.X - 7, point.Y, point.Z);
       }
       else
@@ -441,7 +442,8 @@ namespace GMEPElectricalResidential.LoadCalculations
             unitInfo2 = temp;
           }
 
-          Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, isCreate, unitInfo2);
+          unitInfo1 = CombinedUnitInformation.CreateCombinedCopyOfUnitInfo(unitInfo1, unitInfo2);
+          Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo1, point, isCreate);
           point = new Point3d(point.X - 7, point.Y, point.Z);
         }
       }
