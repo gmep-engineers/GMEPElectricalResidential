@@ -1313,10 +1313,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private void ColorTheCookingAppliances(DrawItemEventArgs e)
     {
-      if (e.Index >= 0 && e.Index < GENERAL_CUSTOM_LOAD_BOX.Items.Count)
+      if (e.Index >= 0 && e.Index < GENERAL_CUSTOM_LOAD_BOX.Items.Count &&
+          e.Index < _unitInformation.GeneralLoads.Customs.Count)
       {
         string item = GENERAL_CUSTOM_LOAD_BOX.Items[e.Index].ToString();
-
         bool isCookingAppliance = _unitInformation.GeneralLoads.Customs[e.Index].IsCookingAppliance;
 
         if (isCookingAppliance)

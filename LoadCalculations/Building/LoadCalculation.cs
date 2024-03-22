@@ -172,9 +172,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
         // Create Rows
         List<string> serviceSizingBuildingRowHeaders = RowHeaders.ServiceSizingBuilding;
-        HelperClass.SaveDataToJsonFileOnDesktop(serviceSizingBuildingRowHeaders, "serviceSizingBuildingRowHeaders.json");
         UpdateBuildingCalculationVoltage(serviceSizingBuildingRowHeaders, buildingInfo);
-        HelperClass.SaveDataToJsonFileOnDesktop(serviceSizingBuildingRowHeaders, "serviceSizingBuildingRowHeadersAfter.json");
         CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, serviceSizingBuildingRowHeaders, false, buildingInfo, true);
         shiftHeight -= ROW_HEIGHT * serviceSizingBuildingRowHeaders.Count;
 
