@@ -167,6 +167,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     private void VOLTAGE_SelectedIndexChanged(object sender, EventArgs e)
     {
       _buildingInformation.Voltage = VOLTAGE.Text;
+      UpdateBuildingFormInformation();
     }
 
     private void UpdateHouseLoad(object sender, KeyEventArgs e)
@@ -289,6 +290,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     private void PHASE_COMBO_SelectedIndexChanged(object sender, EventArgs e)
     {
       _buildingInformation.Phase = PHASE_COMBO.Text;
+      UpdateBuildingFormInformation();
     }
   }
 
