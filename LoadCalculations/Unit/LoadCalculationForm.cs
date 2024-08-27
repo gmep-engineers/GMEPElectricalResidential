@@ -1424,6 +1424,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     public string FilteredFormattedName()
     {
+      if (string.IsNullOrEmpty(Name))
+      {
+        return $"Unit - ID{ID}";
+      }
+
       string filteredName = new string(Name.Where(c => char.IsLetterOrDigit(c)).ToArray());
       return $"Unit {filteredName} - ID{ID}";
     }

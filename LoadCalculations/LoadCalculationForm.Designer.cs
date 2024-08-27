@@ -39,6 +39,7 @@
       this.CREATE = new System.Windows.Forms.Button();
       this.UPDATE = new System.Windows.Forms.Button();
       this.DUPLICATE = new System.Windows.Forms.Button();
+      this.LOAD_BUTTON = new System.Windows.Forms.Button();
       this.TAB_CONTROL.SuspendLayout();
       this.UNIT_TAB.SuspendLayout();
       this.BUILDING_TAB.SuspendLayout();
@@ -162,12 +163,24 @@
       this.DUPLICATE.UseVisualStyleBackColor = true;
       this.DUPLICATE.Click += new System.EventHandler(this.DUPLICATE_Click);
       // 
+      // LOAD_BUTTON
+      // 
+      this.LOAD_BUTTON.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.LOAD_BUTTON.Location = new System.Drawing.Point(12, 212);
+      this.LOAD_BUTTON.Name = "LOAD_BUTTON";
+      this.LOAD_BUTTON.Size = new System.Drawing.Size(83, 34);
+      this.LOAD_BUTTON.TabIndex = 207;
+      this.LOAD_BUTTON.Text = "Load";
+      this.LOAD_BUTTON.UseVisualStyleBackColor = true;
+      this.LOAD_BUTTON.Click += new System.EventHandler(this.LOAD_BUTTON_Click);
+      // 
       // LOAD_CALCULATION_FORM
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Control;
       this.ClientSize = new System.Drawing.Size(1671, 710);
+      this.Controls.Add(this.LOAD_BUTTON);
       this.Controls.Add(this.DUPLICATE);
       this.Controls.Add(this.UPDATE);
       this.Controls.Add(this.CREATE);
@@ -197,5 +210,6 @@
     private System.Windows.Forms.TabControl BUILDING_TAB_CONTROL;
     private System.Windows.Forms.Button UPDATE;
     private System.Windows.Forms.Button DUPLICATE;
+    private System.Windows.Forms.Button LOAD_BUTTON;
   }
 }

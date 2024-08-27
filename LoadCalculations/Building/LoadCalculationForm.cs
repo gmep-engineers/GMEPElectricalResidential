@@ -378,6 +378,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
     public string FilteredFormattedName()
     {
+      if (string.IsNullOrEmpty(Name))
+      {
+        return $"Building - ID{ID}";
+      }
+
       string filteredName = new string(Name.Where(c => char.IsLetterOrDigit(c)).ToArray());
       return $"Building {filteredName} - ID{ID}";
     }

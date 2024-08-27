@@ -207,9 +207,16 @@ namespace GMEPElectricalResidential.LoadCalculations
           DialogResult result = MessageBox.Show("Are you sure you want to remove this unit tab?", "Confirmation", MessageBoxButtons.YesNo);
           if (result == DialogResult.Yes)
           {
-            var id = (int)UNIT_TAB_CONTROL.SelectedTab.Tag;
-            UNIT_TAB_CONTROL.TabPages.Remove(UNIT_TAB_CONTROL.SelectedTab);
-            RemoveUnitTypeFromBuildings(id);
+            var selectedTab = UNIT_TAB_CONTROL.SelectedTab;
+            var unitLoadCalculation = selectedTab.Controls.OfType<Unit.LoadCalculationForm>().FirstOrDefault();
+            if (unitLoadCalculation != null)
+            {
+              var unitInformation = unitLoadCalculation.RetrieveUnitInformation();
+              var id = unitInformation.ID;
+              UNIT_TAB_CONTROL.TabPages.Remove(selectedTab);
+              RemoveUnitTypeFromBuildings(id);
+              DeleteUnitDirectory(unitInformation);
+            }
           }
         }
       }
@@ -220,7 +227,60 @@ namespace GMEPElectricalResidential.LoadCalculations
           DialogResult result = MessageBox.Show("Are you sure you want to remove this building tab?", "Confirmation", MessageBoxButtons.YesNo);
           if (result == DialogResult.Yes)
           {
-            BUILDING_TAB_CONTROL.TabPages.Remove(BUILDING_TAB_CONTROL.SelectedTab);
+            var selectedTab = BUILDING_TAB_CONTROL.SelectedTab;
+            var buildingLoadCalculation = selectedTab.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
+            if (buildingLoadCalculation != null)
+            {
+              var buildingInformation = buildingLoadCalculation.RetrieveBuildingInformation();
+              BUILDING_TAB_CONTROL.TabPages.Remove(selectedTab);
+              DeleteBuildingDirectory(buildingInformation);
+            }
+          }
+        }
+      }
+    }
+
+    private void DeleteUnitDirectory(Unit.UnitInformation unitInfo)
+    {
+      if (unitInfo != null)
+      {
+        string dwgDirectory = Path.GetDirectoryName(_initialDocumentPath);
+        string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculations");
+        string unitDirectory = Path.Combine(baseSaveDirectory, "Unit");
+
+        string directoryToDelete = Path.Combine(unitDirectory, unitInfo.FilteredFormattedName());
+        if (Directory.Exists(directoryToDelete))
+        {
+          try
+          {
+            Directory.Delete(directoryToDelete, true);
+          }
+          catch (Autodesk.AutoCAD.Runtime.Exception ex)
+          {
+            MessageBox.Show($"Error deleting unit directory: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          }
+        }
+      }
+    }
+
+    private void DeleteBuildingDirectory(Building.BuildingInformation buildingInfo)
+    {
+      if (buildingInfo != null)
+      {
+        string dwgDirectory = Path.GetDirectoryName(_initialDocumentPath);
+        string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculations");
+        string buildingDirectory = Path.Combine(baseSaveDirectory, "Building");
+
+        string directoryToDelete = Path.Combine(buildingDirectory, buildingInfo.FilteredFormattedName());
+        if (Directory.Exists(directoryToDelete))
+        {
+          try
+          {
+            Directory.Delete(directoryToDelete, true);
+          }
+          catch (Autodesk.AutoCAD.Runtime.Exception ex)
+          {
+            MessageBox.Show($"Error deleting building directory: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
           }
         }
       }
@@ -228,16 +288,18 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private void RemoveUnitTypeFromBuildings(int id)
     {
-      var allBuildingInformation = AllBuildingInformation();
-
-      foreach (var buildingInformation in allBuildingInformation)
+      for (int i = 0; i < BUILDING_TAB_CONTROL.TabCount; i++)
       {
-        var counterToRemove = buildingInformation.Counters.FirstOrDefault(counter => counter.UnitID == id);
-        if (counterToRemove != null)
+        var tabPage = BUILDING_TAB_CONTROL.TabPages[i];
+        var buildingLoadCalculation = tabPage.Controls.OfType<Building.LoadCalculationForm>().FirstOrDefault();
+        if (buildingLoadCalculation != null)
         {
-          buildingInformation.Counters = buildingInformation.Counters
-              .Where(counter => counter.UnitID != id)
-              .ToList();
+          var buildingInformation = buildingLoadCalculation.RetrieveBuildingInformation();
+          var counterToRemove = buildingInformation.Counters.FirstOrDefault(counter => counter.UnitID == id);
+          if (counterToRemove != null)
+          {
+            buildingInformation.Counters.Remove(counterToRemove);
+          }
         }
       }
     }
@@ -324,6 +386,7 @@ namespace GMEPElectricalResidential.LoadCalculations
     {
       foreach (var unitInformation in allUnitInformation)
       {
+        if (unitInformation.Name == null) continue;
         string saveDirectory = Path.Combine(unitDirectory, unitInformation.FilteredFormattedName());
         Directory.CreateDirectory(saveDirectory);
 
@@ -338,6 +401,7 @@ namespace GMEPElectricalResidential.LoadCalculations
     {
       foreach (var buildingInformation in allBuildingInformation)
       {
+        if (buildingInformation.Name == null) continue;
         string saveDirectory = Path.Combine(buildingDirectory, buildingInformation.FilteredFormattedName());
         Directory.CreateDirectory(saveDirectory);
 
@@ -590,6 +654,153 @@ namespace GMEPElectricalResidential.LoadCalculations
           }
         }
       }
+    }
+
+    private void LOAD_BUTTON_Click(object sender, EventArgs e)
+    {
+      // Close the form (this will trigger a save)
+      this.Close();
+
+      // Use OpenFileDialog instead of FolderBrowserDialog
+      using (var openFileDialog = new OpenFileDialog())
+      {
+        openFileDialog.Title = "Select the Load Calculations file";
+        openFileDialog.Filter = "All Files (*.*)|*.*";
+        openFileDialog.CheckFileExists = false;
+        openFileDialog.CheckPathExists = true;
+        openFileDialog.FileName = "Load Calculations";
+
+        if (openFileDialog.ShowDialog() == DialogResult.OK)
+        {
+          string selectedPath = Path.GetDirectoryName(openFileDialog.FileName);
+          string selectedFileName = Path.GetFileName(openFileDialog.FileName);
+
+          if (selectedFileName == "Load Calculations")
+          {
+            CopyLoadCalculationData(selectedPath);
+          }
+          else
+          {
+            MessageBox.Show("Please select a file or directory named 'Load Calculations'.", "Invalid Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+          }
+        }
+      }
+    }
+
+    private void CopyLoadCalculationData(string sourcePath)
+    {
+      string targetPath = Path.Combine(Path.GetDirectoryName(_initialDocumentPath), "Saves", "Load Calculations");
+
+      // Dictionary to store old and new Unit IDs
+      Dictionary<int, int> unitIdMap = new Dictionary<int, int>();
+
+      // Copy unit data
+      CopyDirectoryData(Path.Combine(sourcePath, "Unit"), Path.Combine(targetPath, "Unit"),
+          (sourceFile, targetDir) => CopyUnitData(sourceFile, targetDir, unitIdMap));
+
+      // Copy building data
+      CopyDirectoryData(Path.Combine(sourcePath, "Building"), Path.Combine(targetPath, "Building"),
+          (sourceFile, targetDir) => CopyBuildingData(sourceFile, targetDir, unitIdMap));
+    }
+
+    private void CopyDirectoryData(string sourceDir, string targetDir, Action<string, string> copyAction)
+    {
+      if (Directory.Exists(sourceDir))
+      {
+        Directory.CreateDirectory(targetDir);
+
+        foreach (var subDir in Directory.GetDirectories(sourceDir))
+        {
+          string dirName = Path.GetFileName(subDir);
+          string newTargetSubDir = Path.Combine(targetDir, dirName);
+          Directory.CreateDirectory(newTargetSubDir);
+
+          var latestFile = Directory.GetFiles(subDir, "*.json")
+                                    .OrderByDescending(f => f)
+                                    .FirstOrDefault();
+
+          if (latestFile != null)
+          {
+            copyAction(latestFile, newTargetSubDir);
+          }
+        }
+      }
+    }
+
+    private void CopyUnitData(string sourceFile, string targetDir, Dictionary<int, int> unitIdMap)
+    {
+      string json = File.ReadAllText(sourceFile);
+      var unitInfo = JsonConvert.DeserializeObject<Unit.UnitInformation>(json);
+
+      int oldId = unitInfo.ID;
+      // Generate a new ID
+      unitInfo.ID = GenerateNewUnitId();
+
+      // Store the old and new ID mapping
+      unitIdMap[oldId] = unitInfo.ID;
+
+      // Save with new ID
+      string newJson = JsonConvert.SerializeObject(unitInfo, Formatting.Indented);
+      string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+      string savePath = Path.Combine(targetDir, $"{timestamp}.json");
+      File.WriteAllText(savePath, newJson);
+
+      // Add the new ID to the list of taken IDs
+      _unitCannotBeIDs.Add(unitInfo.ID);
+    }
+
+    private void CopyBuildingData(string sourceFile, string targetDir, Dictionary<int, int> unitIdMap)
+    {
+      string json = File.ReadAllText(sourceFile);
+      var buildingInfo = JsonConvert.DeserializeObject<Building.BuildingInformation>(json);
+
+      // Generate a new ID
+      buildingInfo.ID = GenerateNewBuildingId();
+
+      // Update the Counters with new Unit IDs
+      if (buildingInfo.Counters != null)
+      {
+        foreach (var counter in buildingInfo.Counters)
+        {
+          if (unitIdMap.TryGetValue(counter.UnitID, out int newUnitId))
+          {
+            counter.UnitID = newUnitId;
+          }
+          else
+          {
+            Console.WriteLine($"Warning: Unit ID {counter.UnitID} not found in the new mapping.");
+          }
+        }
+      }
+
+      // Save with new ID and updated Counters
+      string newJson = JsonConvert.SerializeObject(buildingInfo, Formatting.Indented);
+      string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+      string savePath = Path.Combine(targetDir, $"{timestamp}.json");
+      File.WriteAllText(savePath, newJson);
+
+      // Add the new ID to the list of taken IDs
+      _buildingCannotBeIDs.Add(buildingInfo.ID);
+    }
+
+    private int GenerateNewUnitId()
+    {
+      int newId = _unitCannotBeIDs.Any() ? _unitCannotBeIDs.Max() + 1 : 1;
+      while (_unitCannotBeIDs.Contains(newId))
+      {
+        newId++;
+      }
+      return newId;
+    }
+
+    private int GenerateNewBuildingId()
+    {
+      int newId = _buildingCannotBeIDs.Any() ? _buildingCannotBeIDs.Max() + 1 : 1;
+      while (_buildingCannotBeIDs.Contains(newId))
+      {
+        newId++;
+      }
+      return newId;
     }
   }
 }
