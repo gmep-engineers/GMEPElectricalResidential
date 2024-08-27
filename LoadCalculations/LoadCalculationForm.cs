@@ -33,6 +33,8 @@ namespace GMEPElectricalResidential.LoadCalculations
     public Commands Commands { get; }
     public bool FormatCheckboxChecked { get; set; }
 
+    private string _initialDocumentPath;
+
     public LOAD_CALCULATION_FORM(Commands commands)
     {
       Commands = commands;
@@ -41,6 +43,9 @@ namespace GMEPElectricalResidential.LoadCalculations
       _unitCannotBeIDs = new List<int>();
       _buildingCannotBeIDs = new List<int>();
       _toolTip = new ToolTip();
+
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      _initialDocumentPath = doc.Database.Filename;
 
       bool createdUnitTab = LoadSavedUnitLoadCalculations();
       bool createdBuildingTab = LoadSavedBuildingLoadCalculations();
@@ -290,31 +295,21 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private void SaveLoadCalculationForm()
     {
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
+      string dwgDirectory = Path.GetDirectoryName(_initialDocumentPath);
       string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculations");
-
-      // Delete the current Load Calculations directory if it exists
-      if (Directory.Exists(baseSaveDirectory))
-      {
-        Directory.Delete(baseSaveDirectory, true);
-      }
 
       // Create the Saves directory if it doesn't exist
       string savesDirectory = Path.Combine(dwgDirectory, "Saves");
-      if (!Directory.Exists(savesDirectory))
-      {
-        Directory.CreateDirectory(savesDirectory);
-      }
+      Directory.CreateDirectory(savesDirectory);
 
-      // Create the Load Calculations directory inside the Saves directory
+      // Create the Load Calculations directory if it doesn't exist
       Directory.CreateDirectory(baseSaveDirectory);
 
-      // Create the Unit directory inside the Load Calculations directory
+      // Create the Unit directory if it doesn't exist
       string unitDirectory = Path.Combine(baseSaveDirectory, "Unit");
       Directory.CreateDirectory(unitDirectory);
 
-      // Create the Building directory inside the Load Calculations directory
+      // Create the Building directory if it doesn't exist
       string buildingDirectory = Path.Combine(baseSaveDirectory, "Building");
       Directory.CreateDirectory(buildingDirectory);
 
@@ -327,10 +322,8 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private static void HandleUnitDataSaving(string unitDirectory, List<Unit.UnitInformation> allUnitInformation)
     {
-      for (int i = 0; i < allUnitInformation.Count; i++)
+      foreach (var unitInformation in allUnitInformation)
       {
-        var unitInformation = allUnitInformation[i];
-
         string saveDirectory = Path.Combine(unitDirectory, unitInformation.FilteredFormattedName());
         Directory.CreateDirectory(saveDirectory);
 
@@ -343,10 +336,8 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private static void HandleBuildingDataSaving(string buildingDirectory, List<Building.BuildingInformation> allBuildingInformation)
     {
-      for (int i = 0; i < allBuildingInformation.Count; i++)
+      foreach (var buildingInformation in allBuildingInformation)
       {
-        var buildingInformation = allBuildingInformation[i];
-
         string saveDirectory = Path.Combine(buildingDirectory, buildingInformation.FilteredFormattedName());
         Directory.CreateDirectory(saveDirectory);
 
