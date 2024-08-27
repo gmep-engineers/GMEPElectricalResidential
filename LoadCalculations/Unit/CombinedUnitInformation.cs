@@ -14,6 +14,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       combinedUnitInfo.Name = $"{unitInfo1.Name} & {unitInfo2.Name}";
       combinedUnitInfo.Voltage = unitInfo1.Voltage;
+      combinedUnitInfo.Demand40Percent = unitInfo1.Demand40Percent;
       combinedUnitInfo.DwellingArea = CreateCombinedDwellingArea(unitInfo1.DwellingArea, unitInfo2.DwellingArea);
       combinedUnitInfo.GeneralLoads = CreateCombinedGeneralLoads(unitInfo1.GeneralLoads, unitInfo2.GeneralLoads);
       combinedUnitInfo.CustomLoads = CreateCombinedCustomLoads(unitInfo1.CustomLoads, unitInfo2.CustomLoads);

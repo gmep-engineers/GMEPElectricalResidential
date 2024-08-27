@@ -158,6 +158,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = unitInformation.Totals.SubtotalGeneralLoad.ToString();
       TOTAL_CUSTOM_LOAD_CALCULATION.Text = unitInformation.Totals.CustomLoad.ToString();
       CALCULATED_LOAD_FOR_SERVICE.Text = unitInformation.Totals.ServiceLoad.ToString();
+
+      // Set Checkbox
+      DEMAND_40PC.Checked = unitInformation.Demand40Percent;
     }
 
     public UnitInformation RetrieveUnitInformation()
@@ -292,6 +295,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       _unitInformation.Name = UNIT_NAME.Text;
       _unitInformation.Voltage = VOLTAGE.Text;
+      _unitInformation.Demand40Percent = DEMAND_40PC.Checked;
     }
 
     private void UpdateTotalCustomLoadCalculation()
@@ -426,8 +430,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         return;
       }
 
+      var isUsing40Percent = _unitInformation.Demand40Percent;
       var generalLoads = _unitInformation.GeneralLoads;
-
       int totalLoad = generalLoads.OccupancyLighting();
 
       foreach (var customLoad in generalLoads.Customs)
@@ -453,18 +457,19 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       _unitInformation.Totals.TotalGeneralLoad = totalLoad;
       TOTAL_GENERAL_LOAD_CALCULATION.Text = totalLoad.ToString();
 
-      if (totalLoad <= 10000)
+      int subtotalLoad;
+      if (isUsing40Percent && totalLoad > 10000)
       {
-        SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = totalLoad.ToString();
-        _unitInformation.Totals.SubtotalGeneralLoad = totalLoad;
+        double subtotal = 10000 + 0.4 * (totalLoad - 10000);
+        subtotalLoad = (int)Math.Ceiling(subtotal);
       }
       else
       {
-        double subtotal = 10000 + 0.4 * (totalLoad - 10000);
-        int roundedSubtotal = (int)Math.Ceiling(subtotal);
-        SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = roundedSubtotal.ToString();
-        _unitInformation.Totals.SubtotalGeneralLoad = roundedSubtotal;
+        subtotalLoad = totalLoad;
       }
+
+      SUBTOTAL_GENERAL_LOAD_CALCULATION.Text = subtotalLoad.ToString();
+      _unitInformation.Totals.SubtotalGeneralLoad = subtotalLoad;
     }
 
     private void DetectEnterPresses()
@@ -1352,6 +1357,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         GENERAL_LIGHTING_TOTAL.Visible = true;
         GENERAL_LIGHTING_TOTAL_VA_LABEL.Visible = true;
         COOKING_APPLIANCE.Visible = true;
+
+        UpdateDataAndLoads();
       }
     }
 
@@ -1393,6 +1400,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     public string Name { get; set; }
     public string Voltage { get; set; }
     public int ID { get; set; }
+    public bool Demand40Percent { get; set; } = true;
     public UnitDwellingArea DwellingArea { get; set; }
     public UnitGeneralLoadContainer GeneralLoads { get; set; }
     public List<UnitLoad> CustomLoads { get; set; }

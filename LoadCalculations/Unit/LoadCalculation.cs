@@ -404,14 +404,17 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     private static ObjectData UpdateGeneralCalculationData(ObjectData generalBodyCalcData, UnitInformation unitInfo)
     {
       var headers = generalBodyCalcData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Title"));
+      var isUsing40Percent = unitInfo.Demand40Percent;
       if (headers != null)
       {
         headers.Contents = "";
-        string dwellingSubtitles = "Total General Load:".NewLine() +
-                                   "First 10 KVA @ 100% (CEC  220.82(B)):".NewLine() +
-                                   $"Remainder @ 40% ({unitInfo.Totals.AmountOver10KVA()}VA x 0.4) (CEC 220.82(B)):".NewLine() +
-                                   "General Calculated Load (CEC  220.82(B)):".NewLine();
-
+        string dwellingSubtitles = "Total General Load:".NewLine();
+        if (isUsing40Percent)
+        {
+          dwellingSubtitles += "First 10 KVA @ 100% (CEC  220.82(B)):".NewLine() +
+                               $"Remainder @ 40% ({unitInfo.Totals.AmountOver10KVA()}VA x 0.4) (CEC 220.82(B)):".NewLine() +
+                               "General Calculated Load (CEC  220.82(B)):".NewLine();
+        }
         headers.Contents = dwellingSubtitles.SetFont("Arial");
       }
 
@@ -422,16 +425,17 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         unitTotal.TotalGeneralLoad = unitInfo.Totals.TotalGeneralLoad;
         unitTotal.SubtotalGeneralLoad = unitInfo.Totals.SubtotalGeneralLoad;
         values.Contents = "";
-        string dwellingValues = $"{unitTotal.TotalGeneralLoad}VA".NewLine() +
-                                $"{unitTotal.First10KVA()}VA".NewLine() +
-                                $"{unitTotal.RemainderAt40Percent()}VA".NewLine() +
-                                $"{unitTotal.SubtotalGeneralLoad}VA".NewLine();
-
+        string dwellingValues = $"{unitTotal.TotalGeneralLoad}VA".NewLine();
+        if (isUsing40Percent)
+        {
+          dwellingValues += $"{unitTotal.First10KVA()}VA".NewLine() +
+                            $"{unitTotal.RemainderAt40Percent()}VA".NewLine() +
+                            $"{unitTotal.SubtotalGeneralLoad}VA".NewLine();
+        }
         values.Contents = dwellingValues.SetFont("Arial");
       }
 
-      generalBodyCalcData.NumberOfRows = 4;
-
+      generalBodyCalcData.NumberOfRows = isUsing40Percent ? 4 : 1;
       return generalBodyCalcData;
     }
 
