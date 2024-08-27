@@ -1331,6 +1331,39 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       e.DrawFocusRectangle();
     }
+
+    private void DEMAND_40PC_CheckedChanged(object sender, EventArgs e)
+    {
+      if (DEMAND_40PC.Checked)
+      {
+        GENERAL_LIGHTING_TITLE.Visible = false;
+        GENERAL_LIGHTING_GROUP_BOX.Visible = false;
+        GENERAL_LIGHTING_TOTAL.Visible = false;
+        GENERAL_LIGHTING_TOTAL_VA_LABEL.Visible = false;
+        COOKING_APPLIANCE.Visible = false;
+        LIGHTING_OTHER.Checked = true;
+
+        SetAllGeneralLoadsAsNonCookingAppliances();
+      }
+      else
+      {
+        GENERAL_LIGHTING_TITLE.Visible = true;
+        GENERAL_LIGHTING_GROUP_BOX.Visible = true;
+        GENERAL_LIGHTING_TOTAL.Visible = true;
+        GENERAL_LIGHTING_TOTAL_VA_LABEL.Visible = true;
+        COOKING_APPLIANCE.Visible = true;
+      }
+    }
+
+    private void SetAllGeneralLoadsAsNonCookingAppliances()
+    {
+      foreach (var unitLoad in _unitInformation.GeneralLoads.Customs)
+      {
+        unitLoad.IsCookingAppliance = false;
+      }
+      if (_isLoaded) UpdateDataAndLoads();
+      GENERAL_CUSTOM_LOAD_BOX.Invalidate();
+    }
   }
 
   public static class DefaultGeneralValuesProvider
