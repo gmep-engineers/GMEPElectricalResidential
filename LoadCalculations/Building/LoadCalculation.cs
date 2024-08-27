@@ -30,7 +30,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       double INITIAL_WIDTH = 8.2033907256843577;
       double shiftHeight = 0;
       double currentHeight = HEADER_HEIGHT;
-      string newBlockName = $"Building {buildingInfo.Name}" + $" ID{buildingInfo.ID}";
+      string newBlockName = buildingInfo.FilteredFormattedName();
       var buildingUnitInfo = buildingInfo.GetListOfBuildingUnitTypes(allUnitInformation);
       var columnCount = buildingUnitInfo.Count;
       double additionalWidth = CalculateAdditionalWidth(buildingUnitInfo, COLUMN_WIDTH);

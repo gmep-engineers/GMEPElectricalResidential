@@ -624,18 +624,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       SubscribeVAsToOnlyDigits(this.Controls);
       SubscribeMultipliersToOnlyDigitInputs(this.Controls);
-      UNIT_NAME.KeyPress += OnlyAcceptableNames;
-    }
-
-    private void OnlyAcceptableNames(object sender, KeyPressEventArgs e)
-    {
-      string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-";
-
-      if (!allowedChars.Contains(e.KeyChar) && !char.IsControl(e.KeyChar))
-      {
-        _toolTip.Show("Input must be a valid character", (Control)sender, 0, -20, 2000);
-        e.Handled = true;
-      }
     }
 
     private void SubscribeMultipliersToOnlyDigitInputs(Control.ControlCollection controls)
@@ -1391,6 +1379,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     public string FormattedName()
     {
       return $"Unit {Name} - ID{ID}";
+    }
+
+    public string FilteredFormattedName()
+    {
+      string filteredName = new string(Name.Where(c => char.IsLetterOrDigit(c)).ToArray());
+      return $"Unit {filteredName} - ID{ID}";
     }
   }
 

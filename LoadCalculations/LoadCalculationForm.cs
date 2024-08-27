@@ -331,7 +331,7 @@ namespace GMEPElectricalResidential.LoadCalculations
       {
         var unitInformation = allUnitInformation[i];
 
-        string saveDirectory = Path.Combine(unitDirectory, unitInformation.FormattedName());
+        string saveDirectory = Path.Combine(unitDirectory, unitInformation.FilteredFormattedName());
         Directory.CreateDirectory(saveDirectory);
 
         string json = JsonConvert.SerializeObject(unitInformation, Formatting.Indented);
@@ -347,7 +347,7 @@ namespace GMEPElectricalResidential.LoadCalculations
       {
         var buildingInformation = allBuildingInformation[i];
 
-        string saveDirectory = Path.Combine(buildingDirectory, buildingInformation.FormattedName());
+        string saveDirectory = Path.Combine(buildingDirectory, buildingInformation.FilteredFormattedName());
         Directory.CreateDirectory(saveDirectory);
 
         string json = JsonConvert.SerializeObject(buildingInformation, Formatting.Indented);
