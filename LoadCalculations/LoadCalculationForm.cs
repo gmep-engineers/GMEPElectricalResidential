@@ -399,12 +399,20 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private static void HandleBuildingDataSaving(string buildingDirectory, List<Building.BuildingInformation> allBuildingInformation)
     {
+      // Remove old directories with the format "Building {Name} - ID{Id}"
+      foreach (var oldDir in Directory.GetDirectories(buildingDirectory, "Building *"))
+      {
+        if (Directory.Exists(oldDir))
+        {
+          Directory.Delete(oldDir, true);
+        }
+      }
+
       foreach (var buildingInformation in allBuildingInformation)
       {
         if (buildingInformation.Name == null) continue;
         string saveDirectory = Path.Combine(buildingDirectory, buildingInformation.FilteredFormattedName());
         Directory.CreateDirectory(saveDirectory);
-
         string json = JsonConvert.SerializeObject(buildingInformation, Formatting.Indented);
         string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         string savePath = Path.Combine(saveDirectory, $"{timestamp}.json");
