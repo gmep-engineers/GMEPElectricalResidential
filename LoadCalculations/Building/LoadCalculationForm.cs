@@ -43,19 +43,19 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
       DetectIncorrectInputs();
 
-      this.Load += new EventHandler(UnitLoadCalculation_Load);
+      this.Load += new EventHandler(BuildingLoadCalculation_Load);
     }
 
-    private void UnitLoadCalculation_Load(object sender, EventArgs e)
+    private void BuildingLoadCalculation_Load(object sender, EventArgs e)
     {
       if (!_buildingNullFlag)
       {
-        PopulateUserControlWithUnitInformation(_buildingInformation);
+        PopulateUserControlWithBuildingInformation(_buildingInformation);
       }
       _isLoaded = true;
     }
 
-    private void PopulateUserControlWithUnitInformation(BuildingInformation buildingInformation)
+    private void PopulateUserControlWithBuildingInformation(BuildingInformation buildingInformation)
     {
       if (buildingInformation == null) return;
 
@@ -162,7 +162,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         if (parentTab != null)
         {
           _buildingInformation.Name = textBox.Text;
-          parentTab.Text = _buildingInformation.FormattedName();
+          parentTab.Text = _buildingInformation.Name;
         }
       }
     }

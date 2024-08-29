@@ -45,10 +45,6 @@ namespace GMEPElectricalResidential
       }
     }
 
-    private void NEW_Click(object sender, EventArgs e)
-    {
-    }
-
     private void NAME_Enter(object sender, EventArgs e)
     {
       if (NAME.Text == waterMark)

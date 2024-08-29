@@ -19,7 +19,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     {
       double HEADER_HEIGHT = 0.75;
       double currentHeight = HEADER_HEIGHT;
-      string newBlockName = unitInfo.FilteredFormattedName();
+      string newBlockName = $"UNIT {unitInfo.ID}";
 
       if (unitInfo == null)
       {

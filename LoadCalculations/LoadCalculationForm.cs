@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -24,11 +25,9 @@ namespace GMEPElectricalResidential.LoadCalculations
 {
   public partial class LOAD_CALCULATION_FORM : Form
   {
-    private int _UnitTabID = 0;
-    private int _BuildingTabID = 0;
+    private int _maxUnitID = 0;
+    private int _maxBuildingID = 0;
     private ToolTip _toolTip;
-    private List<int> _unitCannotBeIDs;
-    private List<int> _buildingCannotBeIDs;
 
     public Commands Commands { get; }
     public bool FormatCheckboxChecked { get; set; }
@@ -40,8 +39,6 @@ namespace GMEPElectricalResidential.LoadCalculations
       Commands = commands;
       InitializeComponent();
 
-      _unitCannotBeIDs = new List<int>();
-      _buildingCannotBeIDs = new List<int>();
       _toolTip = new ToolTip();
 
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
@@ -90,21 +87,16 @@ namespace GMEPElectricalResidential.LoadCalculations
       if (buildingInformation != null)
       {
         tabPage = new TabPage(buildingInformation.Name);
+        _maxBuildingID = Math.Max(_maxBuildingID, buildingInformation.ID);
       }
       else
       {
         tabPage = new TabPage("");
+        _maxBuildingID++;
       }
 
-      while (_buildingCannotBeIDs.Contains(_BuildingTabID))
-      {
-        _BuildingTabID++;
-      }
-
-      _buildingCannotBeIDs.Add(_BuildingTabID);
-
-      Building.LoadCalculationForm buildingLoadCalculation = new Building.LoadCalculationForm(this, _BuildingTabID, buildingInformation);
-      tabPage.Tag = _BuildingTabID;
+      Building.LoadCalculationForm buildingLoadCalculation = new Building.LoadCalculationForm(this, _maxBuildingID, buildingInformation);
+      tabPage.Tag = _maxBuildingID;
       tabPage.Controls.Add(buildingLoadCalculation);
 
       BUILDING_TAB_CONTROL.TabPages.Add(tabPage);
@@ -115,24 +107,18 @@ namespace GMEPElectricalResidential.LoadCalculations
       TabPage tabPage;
       if (unitInformation != null)
       {
-        tabPage = new TabPage(unitInformation.FormattedName());
+        tabPage = new TabPage(unitInformation.Name);
+        _maxUnitID = Math.Max(_maxUnitID, unitInformation.ID);
       }
       else
       {
-        tabPage = new TabPage($"Unit");
+        tabPage = new TabPage("");
+        _maxUnitID++;
       }
 
-      while (_unitCannotBeIDs.Contains(_UnitTabID))
-      {
-        _UnitTabID++;
-      }
-
-      _unitCannotBeIDs.Add(_UnitTabID);
-
-      Unit.LoadCalculationForm unitLoadCalculation = new Unit.LoadCalculationForm(this, _UnitTabID, unitInformation);
-      tabPage.Tag = _UnitTabID;
+      Unit.LoadCalculationForm unitLoadCalculation = new Unit.LoadCalculationForm(this, _maxUnitID, unitInformation);
+      tabPage.Tag = _maxUnitID;
       tabPage.Controls.Add(unitLoadCalculation);
-
       UNIT_TAB_CONTROL.TabPages.Add(tabPage);
     }
 
@@ -142,10 +128,9 @@ namespace GMEPElectricalResidential.LoadCalculations
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
       string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
       string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculations", "Unit");
-
       if (Directory.Exists(baseSaveDirectory))
       {
-        var unitDirectories = Directory.GetDirectories(baseSaveDirectory);
+        var unitDirectories = Directory.GetDirectories(baseSaveDirectory).OrderBy(d => Path.GetFileName(d));
         foreach (var unitDirectory in unitDirectories)
         {
           var jsonFiles = Directory.GetFiles(unitDirectory, "*.json");
@@ -154,11 +139,10 @@ namespace GMEPElectricalResidential.LoadCalculations
             var latestJsonFile = jsonFiles.OrderByDescending(f => File.GetCreationTime(f)).First();
             var json = File.ReadAllText(latestJsonFile);
             var unitInformation = JsonConvert.DeserializeObject<Unit.UnitInformation>(json);
-
             if (unitInformation.Voltage != null)
             {
               AddNewUnitTab(unitInformation);
-              _unitCannotBeIDs.Add(unitInformation.ID);
+              _maxUnitID = Math.Max(_maxUnitID, unitInformation.ID);
             }
             createdTabFlag = true;
           }
@@ -173,10 +157,9 @@ namespace GMEPElectricalResidential.LoadCalculations
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
       string dwgDirectory = Path.GetDirectoryName(doc.Database.Filename);
       string baseSaveDirectory = Path.Combine(dwgDirectory, "Saves", "Load Calculations", "Building");
-
       if (Directory.Exists(baseSaveDirectory))
       {
-        var buildingDirectories = Directory.GetDirectories(baseSaveDirectory);
+        var buildingDirectories = Directory.GetDirectories(baseSaveDirectory).OrderBy(d => Path.GetFileName(d));
         foreach (var buildingDirectory in buildingDirectories)
         {
           var jsonFiles = Directory.GetFiles(buildingDirectory, "*.json");
@@ -185,11 +168,10 @@ namespace GMEPElectricalResidential.LoadCalculations
             var latestJsonFile = jsonFiles.OrderByDescending(f => File.GetCreationTime(f)).First();
             var json = File.ReadAllText(latestJsonFile);
             var buildingInformation = JsonConvert.DeserializeObject<Building.BuildingInformation>(json);
-
             if (buildingInformation.Name != null)
             {
               AddNewBuildingTab(buildingInformation);
-              _buildingCannotBeIDs.Add(buildingInformation.ID);
+              _maxBuildingID = Math.Max(_maxBuildingID, buildingInformation.ID);
             }
             createdTabFlag = true;
           }
@@ -384,22 +366,60 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private static void HandleUnitDataSaving(string unitDirectory, List<Unit.UnitInformation> allUnitInformation)
     {
+      var duplicateIds = allUnitInformation
+          .GroupBy(u => u.ID)
+          .Where(g => g.Count() > 1)
+          .Select(g => g.Key)
+          .ToHashSet();
+
+      int maximumUnitId = allUnitInformation.Max(u => u.ID);
+
       foreach (var unitInformation in allUnitInformation)
       {
         if (unitInformation.Name == null) continue;
+
+        if (duplicateIds.Contains(unitInformation.ID))
+        {
+          unitInformation.ID = ++maximumUnitId;
+        }
+
         string saveDirectory = Path.Combine(unitDirectory, unitInformation.FilteredFormattedName());
         Directory.CreateDirectory(saveDirectory);
-
         string json = JsonConvert.SerializeObject(unitInformation, Formatting.Indented);
         string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         string savePath = Path.Combine(saveDirectory, $"{timestamp}.json");
         File.WriteAllText(savePath, json);
       }
+
+      RemoveOldDirectories(unitDirectory, duplicateIds);
+    }
+
+    private static void RemoveOldDirectories(string unitDirectory, HashSet<int> duplicateIds)
+    {
+      var regex = new Regex(@"Unit .+ - ID(\d+)$");
+
+      foreach (var subdirectory in Directory.GetDirectories(unitDirectory))
+      {
+        string dirName = Path.GetFileName(subdirectory);
+        var match = regex.Match(dirName);
+
+        if (match.Success && int.TryParse(match.Groups[1].Value, out int id) && duplicateIds.Contains(id))
+        {
+          try
+          {
+            Directory.Delete(subdirectory, true);
+            Console.WriteLine($"Removed directory: {subdirectory}");
+          }
+          catch (Autodesk.AutoCAD.Runtime.Exception ex)
+          {
+            Console.WriteLine($"Error removing directory {subdirectory}: {ex.Message}");
+          }
+        }
+      }
     }
 
     private static void HandleBuildingDataSaving(string buildingDirectory, List<Building.BuildingInformation> allBuildingInformation)
     {
-      // Remove old directories with the format "Building {Name} - ID{Id}"
       foreach (var oldDir in Directory.GetDirectories(buildingDirectory, "Building *"))
       {
         if (Directory.Exists(oldDir))
@@ -598,26 +618,16 @@ namespace GMEPElectricalResidential.LoadCalculations
           {
             var unitInformation = selectedLoadCalculationForm.RetrieveUnitInformation();
 
-            // Generate a new unit ID
-            int newUnitID = _UnitTabID + 1;
-            while (_unitCannotBeIDs.Contains(newUnitID))
-            {
-              newUnitID++;
-            }
+            _maxUnitID++;
 
             var serializedUnitInformation = JsonConvert.SerializeObject(unitInformation);
             var newUnitInformation = JsonConvert.DeserializeObject<Unit.UnitInformation>(serializedUnitInformation);
 
-            // Update the unit information with the new ID
-            newUnitInformation.ID = newUnitID;
+            newUnitInformation.ID = _maxUnitID;
 
-            // Add the new ID to the list of taken IDs
-            _unitCannotBeIDs.Add(newUnitID);
-
-            // Create a new tab with the updated unit information
             TabPage newTabPage = new TabPage(newUnitInformation.FormattedName());
-            newTabPage.Tag = newUnitID;
-            Unit.LoadCalculationForm unitLoadCalculation = new Unit.LoadCalculationForm(this, newUnitID, newUnitInformation);
+            newTabPage.Tag = _maxUnitID;
+            Unit.LoadCalculationForm unitLoadCalculation = new Unit.LoadCalculationForm(this, _maxUnitID, newUnitInformation);
             newTabPage.Controls.Add(unitLoadCalculation);
             UNIT_TAB_CONTROL.TabPages.Add(newTabPage);
 
@@ -636,25 +646,18 @@ namespace GMEPElectricalResidential.LoadCalculations
             var buildingInformation = selectedLoadCalculationForm.RetrieveBuildingInformation();
 
             // Generate a new building ID
-            int newBuildingID = _BuildingTabID + 1;
-            while (_buildingCannotBeIDs.Contains(newBuildingID))
-            {
-              newBuildingID++;
-            }
+            _maxBuildingID++;
 
             var serializedBuildingInformation = JsonConvert.SerializeObject(buildingInformation);
             var newBuildingInformation = JsonConvert.DeserializeObject<Building.BuildingInformation>(serializedBuildingInformation);
 
             // Update the building information with the new ID
-            newBuildingInformation.ID = newBuildingID;
-
-            // Add the new ID to the list of taken IDs
-            _buildingCannotBeIDs.Add(newBuildingID);
+            newBuildingInformation.ID = _maxBuildingID;
 
             // Create a new tab with the updated building information
             TabPage newTabPage = new TabPage(newBuildingInformation.Name);
-            newTabPage.Tag = newBuildingID;
-            Building.LoadCalculationForm buildingLoadCalculation = new Building.LoadCalculationForm(this, newBuildingID, newBuildingInformation);
+            newTabPage.Tag = _maxBuildingID;
+            Building.LoadCalculationForm buildingLoadCalculation = new Building.LoadCalculationForm(this, _maxBuildingID, newBuildingInformation);
             newTabPage.Controls.Add(buildingLoadCalculation);
             BUILDING_TAB_CONTROL.TabPages.Add(newTabPage);
 
@@ -740,21 +743,13 @@ namespace GMEPElectricalResidential.LoadCalculations
       string json = File.ReadAllText(sourceFile);
       var unitInfo = JsonConvert.DeserializeObject<Unit.UnitInformation>(json);
 
-      int oldId = unitInfo.ID;
-      // Generate a new ID
-      unitInfo.ID = GenerateNewUnitId();
+      _maxUnitID++;
+      unitInfo.ID = _maxUnitID;
 
-      // Store the old and new ID mapping
-      unitIdMap[oldId] = unitInfo.ID;
-
-      // Save with new ID
       string newJson = JsonConvert.SerializeObject(unitInfo, Formatting.Indented);
       string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
       string savePath = Path.Combine(targetDir, $"{timestamp}.json");
       File.WriteAllText(savePath, newJson);
-
-      // Add the new ID to the list of taken IDs
-      _unitCannotBeIDs.Add(unitInfo.ID);
     }
 
     private void CopyBuildingData(string sourceFile, string targetDir, Dictionary<int, int> unitIdMap)
@@ -762,8 +757,8 @@ namespace GMEPElectricalResidential.LoadCalculations
       string json = File.ReadAllText(sourceFile);
       var buildingInfo = JsonConvert.DeserializeObject<Building.BuildingInformation>(json);
 
-      // Generate a new ID
-      buildingInfo.ID = GenerateNewBuildingId();
+      _maxBuildingID++;
+      buildingInfo.ID = _maxBuildingID;
 
       // Update the Counters with new Unit IDs
       if (buildingInfo.Counters != null)
@@ -781,34 +776,45 @@ namespace GMEPElectricalResidential.LoadCalculations
         }
       }
 
-      // Save with new ID and updated Counters
       string newJson = JsonConvert.SerializeObject(buildingInfo, Formatting.Indented);
       string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
       string savePath = Path.Combine(targetDir, $"{timestamp}.json");
       File.WriteAllText(savePath, newJson);
+    }
+  }
 
-      // Add the new ID to the list of taken IDs
-      _buildingCannotBeIDs.Add(buildingInfo.ID);
+  public class IdComparer
+  {
+    public static void CompareAndUpdateIds(List<Unit.UnitInformation> units, List<Building.BuildingInformation> buildings)
+    {
+      var usedUnitIds = new HashSet<int>();
+      var usedBuildingIds = new HashSet<int>();
+
+      // Update Unit IDs
+      foreach (var unit in units)
+      {
+        while (usedUnitIds.Contains(unit.ID))
+        {
+          unit.ID++;
+        }
+        usedUnitIds.Add(unit.ID);
+      }
+
+      // Update Building IDs
+      foreach (var building in buildings)
+      {
+        while (usedBuildingIds.Contains(building.ID))
+        {
+          building.ID++;
+        }
+        usedBuildingIds.Add(building.ID);
+      }
     }
 
-    private int GenerateNewUnitId()
+    public static void UpdateMaxIds(ref int maxUnitId, ref int maxBuildingId, List<Unit.UnitInformation> units, List<Building.BuildingInformation> buildings)
     {
-      int newId = _unitCannotBeIDs.Any() ? _unitCannotBeIDs.Max() + 1 : 1;
-      while (_unitCannotBeIDs.Contains(newId))
-      {
-        newId++;
-      }
-      return newId;
-    }
-
-    private int GenerateNewBuildingId()
-    {
-      int newId = _buildingCannotBeIDs.Any() ? _buildingCannotBeIDs.Max() + 1 : 1;
-      while (_buildingCannotBeIDs.Contains(newId))
-      {
-        newId++;
-      }
-      return newId;
+      maxUnitId = units.Any() ? units.Max(u => u.ID) : maxUnitId;
+      maxBuildingId = buildings.Any() ? buildings.Max(b => b.ID) : maxBuildingId;
     }
   }
 }

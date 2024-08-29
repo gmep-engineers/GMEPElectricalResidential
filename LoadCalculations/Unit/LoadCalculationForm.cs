@@ -770,7 +770,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       var parentTab = this.Parent as TabPage;
       if (parentTab != null)
       {
-        parentTab.Text = _unitInformation.FormattedName();
+        parentTab.Text = _unitInformation.Name;
       }
     }
 
@@ -858,7 +858,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         if (parentTab != null)
         {
           _unitInformation.Name = textBox.Text;
-          parentTab.Text = _unitInformation.FormattedName();
+          parentTab.Text = _unitInformation.Name;
         }
       }
     }
