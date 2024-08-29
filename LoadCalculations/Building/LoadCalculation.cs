@@ -12,6 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Media3D;
 using Application = Autodesk.AutoCAD.ApplicationServices.Application;
@@ -26,8 +27,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       double SUBTITLE_HEIGHT = 0.5;
       double ROW_HEIGHT = 0.25;
       double COLUMN_WIDTH = 1.5;
-      double WIDTH_NO_COLS = 6.7034;
-      double INITIAL_WIDTH = 8.2033907256843577;
+      double width = CalculateDynamicWidth(buildingInfo);
       double shiftHeight = 0;
       double currentHeight = HEADER_HEIGHT;
       string newBlockName = buildingInfo.FilteredFormattedName();
@@ -35,7 +35,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       var columnCount = buildingUnitInfo.Count;
       double additionalWidth = CalculateAdditionalWidth(buildingUnitInfo, COLUMN_WIDTH);
 
-      placementPoint = GetStartingPoint(buildingInfo, placementPoint, COLUMN_WIDTH, WIDTH_NO_COLS);
+      placementPoint = GetStartingPoint(buildingInfo, placementPoint, COLUMN_WIDTH, width);
 
       if (buildingInfo == null)
       {
@@ -91,89 +91,92 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         ObjectData subtitleData = GetCopyPasteData("Subtitle");
         ObjectData spacerData = GetCopyPasteData("Spacer");
 
+        UpdateObjectDataBasedOnDynamicWidth(width, COLUMN_WIDTH,
+    ref titleData, ref rowHeaderData, ref rowEntryData, ref subtitleData, ref spacerData);
+
         // Title
-        titleData = UpdateBuildingTitleData(titleData, buildingInfo, additionalWidth);
+        titleData = UpdateBuildingTitleData(titleData, buildingInfo, width, additionalWidth);
         string modifiedTitleData = JsonConvert.SerializeObject(titleData);
         CADObjectCommands.CreateObjectFromData(modifiedTitleData, point, acBlkTblRec);
         shiftHeight -= HEADER_HEIGHT;
 
         // Dwelling Area
         // Create Subtitle
-        CreateSubtitle(subtitleData, shiftHeight, additionalWidth, point, acBlkTblRec, "Dwelling Information");
+        CreateSubtitle(subtitleData, shiftHeight, width, additionalWidth, point, acBlkTblRec, "Dwelling Information");
         shiftHeight -= SUBTITLE_HEIGHT;
 
         // Create Rows
         List<string> dwellingRowHeaders = RowHeaders.Dwelling;
-        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, dwellingRowHeaders);
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, dwellingRowHeaders, width, COLUMN_WIDTH);
         shiftHeight -= ROW_HEIGHT * dwellingRowHeaders.Count;
 
         // General Load Area
         // Create Subtitle
-        CreateSubtitle(subtitleData, shiftHeight, additionalWidth, point, acBlkTblRec, "General Load");
+        CreateSubtitle(subtitleData, shiftHeight, width, additionalWidth, point, acBlkTblRec, "General Load");
         shiftHeight -= SUBTITLE_HEIGHT;
 
         // Create Rows
         List<string> generalLoadRowHeaders = RowHeaders.GeneralLoad;
-        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, generalLoadRowHeaders);
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, generalLoadRowHeaders, width, COLUMN_WIDTH);
         shiftHeight -= ROW_HEIGHT * generalLoadRowHeaders.Count;
 
         // Custom General Loads
         // Create Rows
         List<string> customGeneralLoadRowHeaders = buildingUnitInfo.SelectMany(unit => unit.GeneralLoads.Customs.Select(customLoad => customLoad.Name)).Distinct().ToList();
-        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, customGeneralLoadRowHeaders);
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, customGeneralLoadRowHeaders, width, COLUMN_WIDTH);
         shiftHeight -= ROW_HEIGHT * customGeneralLoadRowHeaders.Count;
 
         // General Load Calculations
         // Create Spacer
-        CreateSpacer(spacerData, shiftHeight, additionalWidth, point, acBlkTblRec);
+        CreateSpacer(spacerData, shiftHeight, additionalWidth, point, acBlkTblRec, width);
         shiftHeight -= ROW_HEIGHT;
 
         // Create Rows
         List<string> generalLoadCalculationsRowHeaders = RowHeaders.GeneralLoadCalculations;
-        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, generalLoadCalculationsRowHeaders);
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, generalLoadCalculationsRowHeaders, width, COLUMN_WIDTH);
         shiftHeight -= ROW_HEIGHT * generalLoadCalculationsRowHeaders.Count;
 
         // AC Load Area
         // Create Subtitle
-        CreateSubtitle(subtitleData, shiftHeight, additionalWidth, point, acBlkTblRec, "AC Load");
+        CreateSubtitle(subtitleData, shiftHeight, width, additionalWidth, point, acBlkTblRec, "AC Load");
         shiftHeight -= SUBTITLE_HEIGHT;
 
         // Create Rows
         List<string> acLoadRowHeaders = RowHeaders.ACLoad;
-        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, acLoadRowHeaders);
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, acLoadRowHeaders, width, COLUMN_WIDTH);
         shiftHeight -= ROW_HEIGHT * acLoadRowHeaders.Count;
 
         // Custom Loads if they exist
         if (buildingUnitInfo.Any(unit => unit.CustomLoads.Count > 0))
         {
           // Create Subtitle
-          CreateSubtitle(subtitleData, shiftHeight, additionalWidth, point, acBlkTblRec, "Additional Load");
+          CreateSubtitle(subtitleData, shiftHeight, width, additionalWidth, point, acBlkTblRec, "Additional Load");
           shiftHeight -= SUBTITLE_HEIGHT;
 
           // Create Rows
           List<string> customLoadRowHeaders = buildingUnitInfo.SelectMany(unit => unit.CustomLoads.Select(customLoad => customLoad.Name)).Distinct().ToList();
-          CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, customLoadRowHeaders, true);
+          CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, customLoadRowHeaders, width, COLUMN_WIDTH, true);
           shiftHeight -= ROW_HEIGHT * customLoadRowHeaders.Count;
         }
 
         // Service Sizing Area
         // Create Subtitle
-        CreateSubtitle(subtitleData, shiftHeight, additionalWidth, point, acBlkTblRec, "Calculated Load for Service");
+        CreateSubtitle(subtitleData, shiftHeight, width, additionalWidth, point, acBlkTblRec, "Calculated Load for Service");
         shiftHeight -= SUBTITLE_HEIGHT;
 
         // Create Rows
         List<string> serviceSizingRowHeaders = RowHeaders.ServiceSizingUnits;
-        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, serviceSizingRowHeaders, false, buildingInfo);
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, serviceSizingRowHeaders, width, COLUMN_WIDTH, false, buildingInfo);
         shiftHeight -= ROW_HEIGHT * serviceSizingRowHeaders.Count;
 
         // Create Spacer
-        CreateSpacer(spacerData, shiftHeight, additionalWidth, point, acBlkTblRec);
+        CreateSpacer(spacerData, shiftHeight, additionalWidth, point, acBlkTblRec, width);
         shiftHeight -= ROW_HEIGHT;
 
         // Create Rows
         List<string> serviceSizingBuildingRowHeaders = RowHeaders.ServiceSizingBuilding;
         UpdateBuildingCalculationVoltage(serviceSizingBuildingRowHeaders, buildingInfo);
-        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, serviceSizingBuildingRowHeaders, false, buildingInfo, true);
+        CreateRow(rowHeaderData, rowEntryData, shiftHeight, buildingUnitInfo, columnCount, point, acBlkTblRec, serviceSizingBuildingRowHeaders, width, COLUMN_WIDTH, false, buildingInfo, true);
         shiftHeight -= ROW_HEIGHT * serviceSizingBuildingRowHeaders.Count;
 
         UpdateAllBlockReferences(newBlockName);
@@ -213,18 +216,69 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
       if (columnCount == 1)
       {
-        return INITIAL_WIDTH;
+        return width + COLUMN_WIDTH;
       }
       else
       {
-        return INITIAL_WIDTH + additionalWidth;
+        return width + COLUMN_WIDTH + additionalWidth;
       }
     }
 
-    private static void CreateSpacer(ObjectData spacerData, double shiftHeight, double additionalWidth, Point3d point, BlockTableRecord acBlkTblRec)
+    public static void UpdateObjectDataBasedOnDynamicWidth(double width, double COLUMN_WIDTH,
+    ref ObjectData titleData, ref ObjectData rowHeaderData, ref ObjectData rowEntryData,
+    ref ObjectData subtitleData, ref ObjectData spacerData)
     {
-      double INITIAL_WIDTH = 8.2033907256843577;
+      UpdateSingleObjectData(width, COLUMN_WIDTH, ref titleData);
+      UpdateSingleObjectData(width, COLUMN_WIDTH, ref rowHeaderData, true);
+      UpdateSingleObjectData(width, COLUMN_WIDTH, ref rowEntryData);
+      UpdateSingleObjectData(width, COLUMN_WIDTH, ref subtitleData);
+      UpdateSingleObjectData(width, COLUMN_WIDTH, ref spacerData);
+    }
 
+    private static void UpdateSingleObjectData(double width, double COLUMN_WIDTH, ref ObjectData objectData, bool isRowHeader = false)
+    {
+      const double ORIGINAL_FULL_WIDTH = 8.2033907256843577;
+      const double ORIGINAL_ROW_HEADER_WIDTH = 6.7033907256843577;
+      const double EPSILON = 0.0001;
+
+      double originalWidth = isRowHeader ? ORIGINAL_ROW_HEADER_WIDTH : ORIGINAL_FULL_WIDTH;
+      double newWidth = isRowHeader ? width : (width + COLUMN_WIDTH);
+
+      foreach (var polyline in objectData.Polylines)
+      {
+        for (int i = 0; i < polyline.Vectors.Count; i++)
+        {
+          if (Math.Abs(polyline.Vectors[i].X - originalWidth) < EPSILON)
+          {
+            polyline.Vectors[i] = new SimpleVector3d(newWidth, polyline.Vectors[i].Y, polyline.Vectors[i].Z);
+          }
+        }
+      }
+
+      foreach (var mtext in objectData.MTexts)
+      {
+        if (Math.Abs(mtext.Location.X - originalWidth / 2) < EPSILON)
+        {
+          mtext.Location = new SimpleVector3d(newWidth / 2, mtext.Location.Y, mtext.Location.Z);
+        }
+      }
+    }
+
+    public static double CalculateDynamicWidth(BuildingInformation buildingInfo)
+    {
+      const double BASE_WIDTH = 6.7;
+      const double EXTRA_WIDTH_PER_CHAR = 0.18;
+      const int BASE_CHAR_COUNT = 46;
+
+      string titleString = $"{buildingInfo.Title} - {buildingInfo.Name}";
+      int extraChars = Math.Max(0, titleString.Length - BASE_CHAR_COUNT);
+      double extraWidth = extraChars * EXTRA_WIDTH_PER_CHAR;
+
+      return BASE_WIDTH + extraWidth;
+    }
+
+    private static void CreateSpacer(ObjectData spacerData, double shiftHeight, double additionalWidth, Point3d point, BlockTableRecord acBlkTblRec, double width)
+    {
       var copiedSpacerData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(spacerData));
 
       copiedSpacerData = ShiftDataVertically(copiedSpacerData, shiftHeight);
@@ -233,9 +287,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         for (int i = 0; i < polyline.Vectors.Count; i++)
         {
-          if (Math.Abs(polyline.Vectors[i].X - INITIAL_WIDTH) < 0.001)
+          if (Math.Abs(polyline.Vectors[i].X - width) < 0.001)
           {
-            polyline.Vectors[i].X = INITIAL_WIDTH + additionalWidth;
+            polyline.Vectors[i].X = width + additionalWidth;
           }
         }
       }
@@ -244,18 +298,18 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       CADObjectCommands.CreateObjectFromData(modifiedSpacerData, point, acBlkTblRec);
     }
 
-    private static void CreateSubtitle(ObjectData subtitleData, double shiftHeight, double additionalWidth, Point3d point, BlockTableRecord acBlkTblRec, string subtitle)
+    private static void CreateSubtitle(ObjectData subtitleData, double shiftHeight, double width, double additionalWidth, Point3d point, BlockTableRecord acBlkTblRec, string subtitle)
     {
       var copiedSubtitleData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(subtitleData));
 
       copiedSubtitleData = ShiftDataVertically(copiedSubtitleData, shiftHeight);
-      copiedSubtitleData = UpdateBuildingSubtitleData(copiedSubtitleData, additionalWidth, subtitle);
+      copiedSubtitleData = UpdateBuildingSubtitleData(copiedSubtitleData, width, additionalWidth, subtitle);
 
       string modifiedSubtitleData = JsonConvert.SerializeObject(copiedSubtitleData);
       CADObjectCommands.CreateObjectFromData(modifiedSubtitleData, point, acBlkTblRec);
     }
 
-    private static void CreateRow(ObjectData rowHeaderData, ObjectData rowEntryData, double shiftHeight, List<UnitInformation> buildingUnitInfo, int columnCount, Point3d point, BlockTableRecord acBlkTblRec, List<string> rowHeaders, bool isCustom = false, BuildingInformation buildingInfo = null, bool isBuildingData = false)
+    private static void CreateRow(ObjectData rowHeaderData, ObjectData rowEntryData, double shiftHeight, List<UnitInformation> buildingUnitInfo, int columnCount, Point3d point, BlockTableRecord acBlkTblRec, List<string> rowHeaders, double width, double colWidth, bool isCustom = false, BuildingInformation buildingInfo = null, bool isBuildingData = false)
     {
       double ROW_HEIGHT = 0.25;
       foreach (var header in rowHeaders)
@@ -266,7 +320,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         copiedRowHeaderData = ShiftDataVertically(copiedRowHeaderData, shiftHeight);
         copiedRowEntryData = ShiftDataVertically(copiedRowEntryData, shiftHeight);
 
-        var allRowData = UpdateRowData(copiedRowHeaderData, copiedRowEntryData, buildingUnitInfo, columnCount, header, isCustom, buildingInfo, isBuildingData);
+        var allRowData = UpdateRowData(copiedRowHeaderData, copiedRowEntryData, buildingUnitInfo, columnCount, header, width, colWidth, isCustom, buildingInfo, isBuildingData);
 
         foreach (var rowData in allRowData)
         {
@@ -278,18 +332,15 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       }
     }
 
-    private static List<ObjectData> UpdateRowData(ObjectData rowHeaderData, ObjectData rowEntryData, List<UnitInformation> unitInfo, int colCount, string message, bool isCustom = false, BuildingInformation buildingInfo = null, bool isBuildingData = false)
+    private static List<ObjectData> UpdateRowData(ObjectData rowHeaderData, ObjectData rowEntryData, List<UnitInformation> unitInfo, int colCount, string message, double width, double colWidth, bool isCustom = false, BuildingInformation buildingInfo = null, bool isBuildingData = false)
     {
-      var startPoint = 6.7033907256843577;
-      var COLUMN_WIDTH = 1.5;
-
       List<ObjectData> rowData = new List<ObjectData>();
 
       var rowHeaderTextObj = rowHeaderData.Texts.FirstOrDefault(text => text.Contents.Contains("Unit"));
       UpdateHeaderText(message, rowHeaderTextObj);
       rowData.Add(rowHeaderData);
 
-      rowEntryData = ShiftDataHorizontally(rowEntryData, startPoint);
+      rowEntryData = ShiftDataHorizontally(rowEntryData, width);
 
       unitInfo = unitInfo.OrderBy(u => u.ID).ToList();
 
@@ -297,8 +348,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         var copiedRowEntryData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowEntryData));
 
-        copiedRowEntryData = ExtendRectangleHorizontally(copiedRowEntryData, COLUMN_WIDTH * (colCount - 1));
-        copiedRowEntryData = ShiftTextHorizontally(copiedRowEntryData, COLUMN_WIDTH * (colCount - 1));
+        copiedRowEntryData = ExtendRectangleHorizontally(copiedRowEntryData, colWidth * (colCount - 1), width);
+        copiedRowEntryData = ShiftTextHorizontally(copiedRowEntryData, colWidth * (colCount - 1));
 
         if (buildingInfo != null)
         {
@@ -318,7 +369,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         {
           var copiedRowEntryData = JsonConvert.DeserializeObject<ObjectData>(JsonConvert.SerializeObject(rowEntryData));
 
-          copiedRowEntryData = ShiftDataHorizontally(copiedRowEntryData, COLUMN_WIDTH * i);
+          copiedRowEntryData = ShiftDataHorizontally(copiedRowEntryData, colWidth * i);
 
           if (i < unitInfo.Count)
           {
@@ -373,13 +424,13 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       return copiedRowEntryData;
     }
 
-    private static ObjectData ExtendRectangleHorizontally(ObjectData copiedRowEntryData, double extendDistance)
+    private static ObjectData ExtendRectangleHorizontally(ObjectData copiedRowEntryData, double extendDistance, double initialWidth)
     {
       foreach (var polyline in copiedRowEntryData.Polylines)
       {
         for (int i = 0; i < polyline.Vectors.Count; i++)
         {
-          if (polyline.Vectors[i].X == 8.2033907256843577)
+          if (Math.Abs(polyline.Vectors[i].X - initialWidth) < 0.001)
           {
             polyline.Vectors[i].X += extendDistance;
           }
@@ -389,22 +440,22 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       return copiedRowEntryData;
     }
 
-    private static ObjectData UpdateBuildingSubtitleData(ObjectData subtitleData, double additionalWidth, string message)
+    private static ObjectData UpdateBuildingSubtitleData(ObjectData subtitleData, double width, double additionalWidth, string message)
     {
       var textObj = subtitleData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("Dwelling Information"));
       textObj.Contents = textObj.Contents.Replace("Dwelling Information", message);
       textObj.Contents = textObj.Contents.Replace("\\Farial|c0", "\\fArial Rounded MT Bold|b1|i1|c0|p34");
-      UpdateTitleOrSubtitleText(subtitleData, additionalWidth, true);
+      UpdateTitleOrSubtitleText(subtitleData, width, additionalWidth, true);
 
       return subtitleData;
     }
 
-    private static ObjectData UpdateBuildingTitleData(ObjectData titleData, BuildingInformation buildingInfo, double additionalWidth)
+    private static ObjectData UpdateBuildingTitleData(ObjectData titleData, BuildingInformation buildingInfo, double width, double additionalWidth)
     {
       var serviceLoadCalculationMText = titleData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
-      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"ELECTRICAL RESIDENTIAL LOAD CALCULATIONS - {buildingInfo.Name}");
+      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"{buildingInfo.Title} - {buildingInfo.Name}");
       serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("\\Farial|c0", "\\fArial Rounded MT Bold|b1|i0|c0|p34");
-      UpdateTitleOrSubtitleText(titleData, additionalWidth);
+      UpdateTitleOrSubtitleText(titleData, width, additionalWidth);
 
       return titleData;
     }
@@ -587,15 +638,13 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       }
     }
 
-    private static void UpdateTitleOrSubtitleText(ObjectData titleData, double additionalWidth, bool isSubtitle = false)
+    private static void UpdateTitleOrSubtitleText(ObjectData titleData, double width, double additionalWidth, bool isSubtitle = false)
     {
-      var INITIAL_WIDTH = 8.2033907256843577;
-
       foreach (var polyline in titleData.Polylines)
       {
         for (int i = 0; i < polyline.Vectors.Count; i++)
         {
-          if (polyline.Vectors[i].X == INITIAL_WIDTH)
+          if (polyline.Vectors[i].X == width)
           {
             polyline.Vectors[i].X += additionalWidth;
           }

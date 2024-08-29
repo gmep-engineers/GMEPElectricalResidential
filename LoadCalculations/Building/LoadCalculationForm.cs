@@ -60,6 +60,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       if (buildingInformation == null) return;
 
       BUILDING_NAME.Text = buildingInformation.Name;
+      BUILDING_TITLE.Text = buildingInformation.Title;
       VOLTAGE.Text = buildingInformation.Voltage;
       PHASE_COMBO.Text = buildingInformation.Phase;
       HOUSE_LOAD.Text = buildingInformation.HouseLoad.ToString();
@@ -128,8 +129,10 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       VOLTAGE.SelectedIndex = 0;
       PHASE_COMBO.SelectedIndex = 0;
+      BUILDING_TITLE.Text = "ELECTRICAL RESIDENTIAL LOAD CALCULATIONS";
       _buildingInformation.Phase = PHASE_COMBO.Text;
       _buildingInformation.Voltage = VOLTAGE.Text;
+      _buildingInformation.Title = BUILDING_TITLE.Text;
       SetLoadBoxValues();
     }
 
@@ -292,6 +295,11 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       _buildingInformation.Phase = PHASE_COMBO.Text;
       UpdateBuildingFormInformation();
     }
+
+    private void BUILDING_TITLE_TextChanged(object sender, EventArgs e)
+    {
+      _buildingInformation.Title = BUILDING_TITLE.Text;
+    }
   }
 
   public static class IntExtensions
@@ -305,6 +313,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
   public class BuildingInformation
   {
     public string Name { get; set; }
+    public string Title { get; set; } = "ELECTRICAL RESIDENTIAL LOAD CALCULATIONS";
     public string Voltage { get; set; }
     public string Phase { get; set; }
     public int ID { get; set; }
