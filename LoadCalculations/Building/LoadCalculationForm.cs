@@ -375,18 +375,18 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
     public string FormattedName()
     {
-      return $"Building {Name} - ID{ID}";
+      return $"{Name} - ID{ID}";
     }
 
     public string FilteredFormattedName()
     {
       if (string.IsNullOrEmpty(Name))
       {
-        return $"Building - ID{ID}";
+        return $" - ID{ID}";
       }
 
       string filteredName = new string(Name.Where(c => char.IsLetterOrDigit(c)).ToArray());
-      return $"Building {filteredName} - ID{ID}";
+      return $"{filteredName} - ID{ID}";
     }
 
     public int TotalBuildingLoadWithDemandFactor()

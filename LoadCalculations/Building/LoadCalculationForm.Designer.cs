@@ -87,7 +87,7 @@
       this.panel1.Margin = new System.Windows.Forms.Padding(6, 0, 48, 12);
       this.panel1.Name = "panel1";
       this.panel1.Padding = new System.Windows.Forms.Padding(5);
-      this.panel1.Size = new System.Drawing.Size(97, 28);
+      this.panel1.Size = new System.Drawing.Size(291, 28);
       this.panel1.TabIndex = 0;
       // 
       // BUILDING_NAME
@@ -97,7 +97,7 @@
       this.BUILDING_NAME.Location = new System.Drawing.Point(5, 5);
       this.BUILDING_NAME.Margin = new System.Windows.Forms.Padding(0);
       this.BUILDING_NAME.Name = "BUILDING_NAME";
-      this.BUILDING_NAME.Size = new System.Drawing.Size(86, 19);
+      this.BUILDING_NAME.Size = new System.Drawing.Size(281, 19);
       this.BUILDING_NAME.TabIndex = 0;
       this.BUILDING_NAME.TextChanged += new System.EventHandler(this.BUILDING_NAME_TextChanged);
       // 

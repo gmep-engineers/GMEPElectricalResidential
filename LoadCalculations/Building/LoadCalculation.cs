@@ -59,8 +59,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
         BlockTableRecord acBlkTblRec;
 
         var existingBlock = acBlkTbl.Cast<ObjectId>()
-            .Select(id => acTrans.GetObject(id, OpenMode.ForRead) as BlockTableRecord)
-            .FirstOrDefault(btr => btr.Name.Contains($"ID{buildingInfo.ID}") && btr.Name.Contains("Building"));
+        .Select(id => acTrans.GetObject(id, OpenMode.ForRead) as BlockTableRecord)
+        .FirstOrDefault(btr => btr.Name == newBlockName);
 
         if (existingBlock != null)
         {
@@ -402,7 +402,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     private static ObjectData UpdateBuildingTitleData(ObjectData titleData, BuildingInformation buildingInfo, double additionalWidth)
     {
       var serviceLoadCalculationMText = titleData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
-      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - BUILDING {buildingInfo.Name}");
+      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"ELECTRICAL RESIDENTIAL LOAD CALCULATIONS - {buildingInfo.Name}");
       serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("\\Farial|c0", "\\fArial Rounded MT Bold|b1|i0|c0|p34");
       UpdateTitleOrSubtitleText(titleData, additionalWidth);
 

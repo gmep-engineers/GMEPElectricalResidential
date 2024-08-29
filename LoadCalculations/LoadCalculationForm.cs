@@ -89,11 +89,11 @@ namespace GMEPElectricalResidential.LoadCalculations
       TabPage tabPage;
       if (buildingInformation != null)
       {
-        tabPage = new TabPage("Building " + buildingInformation.Name);
+        tabPage = new TabPage(buildingInformation.Name);
       }
       else
       {
-        tabPage = new TabPage("Building");
+        tabPage = new TabPage("");
       }
 
       while (_buildingCannotBeIDs.Contains(_BuildingTabID))
@@ -644,7 +644,7 @@ namespace GMEPElectricalResidential.LoadCalculations
             _buildingCannotBeIDs.Add(newBuildingID);
 
             // Create a new tab with the updated building information
-            TabPage newTabPage = new TabPage("Building " + newBuildingInformation.Name);
+            TabPage newTabPage = new TabPage(newBuildingInformation.Name);
             newTabPage.Tag = newBuildingID;
             Building.LoadCalculationForm buildingLoadCalculation = new Building.LoadCalculationForm(this, newBuildingID, newBuildingInformation);
             newTabPage.Controls.Add(buildingLoadCalculation);
