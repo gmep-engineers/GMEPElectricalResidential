@@ -126,6 +126,8 @@
       this.ADD_ENTRY_CUSTOM = new System.Windows.Forms.Button();
       this.COOKING_APPLIANCE = new System.Windows.Forms.Button();
       this.DEMAND_40PC = new System.Windows.Forms.CheckBox();
+      this.CREATE_BUTTON = new System.Windows.Forms.Button();
+      this.UPDATE_BUTTON = new System.Windows.Forms.Button();
       this.panel1.SuspendLayout();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
@@ -689,7 +691,7 @@
       // label16
       // 
       this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label16.Location = new System.Drawing.Point(1264, 390);
+      this.label16.Location = new System.Drawing.Point(1264, 366);
       this.label16.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label16.Name = "label16";
       this.label16.Size = new System.Drawing.Size(245, 21);
@@ -700,7 +702,7 @@
       // 
       this.TOTAL_GENERAL_LOAD_CALCULATION.AutoSize = true;
       this.TOTAL_GENERAL_LOAD_CALCULATION.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.TOTAL_GENERAL_LOAD_CALCULATION.Location = new System.Drawing.Point(1264, 411);
+      this.TOTAL_GENERAL_LOAD_CALCULATION.Location = new System.Drawing.Point(1264, 387);
       this.TOTAL_GENERAL_LOAD_CALCULATION.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.TOTAL_GENERAL_LOAD_CALCULATION.Name = "TOTAL_GENERAL_LOAD_CALCULATION";
       this.TOTAL_GENERAL_LOAD_CALCULATION.Size = new System.Drawing.Size(19, 20);
@@ -711,7 +713,7 @@
       // 
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.AutoSize = true;
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Location = new System.Drawing.Point(1264, 498);
+      this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Location = new System.Drawing.Point(1264, 474);
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Name = "SUBTOTAL_GENERAL_LOAD_CALCULATION";
       this.SUBTOTAL_GENERAL_LOAD_CALCULATION.Size = new System.Drawing.Size(19, 20);
@@ -721,7 +723,7 @@
       // label27
       // 
       this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label27.Location = new System.Drawing.Point(1264, 478);
+      this.label27.Location = new System.Drawing.Point(1264, 454);
       this.label27.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label27.Name = "label27";
       this.label27.Size = new System.Drawing.Size(269, 22);
@@ -732,7 +734,7 @@
       // 
       this.TOTAL_AC_LOAD_CALCULATION.AutoSize = true;
       this.TOTAL_AC_LOAD_CALCULATION.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.TOTAL_AC_LOAD_CALCULATION.Location = new System.Drawing.Point(1264, 455);
+      this.TOTAL_AC_LOAD_CALCULATION.Location = new System.Drawing.Point(1264, 431);
       this.TOTAL_AC_LOAD_CALCULATION.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.TOTAL_AC_LOAD_CALCULATION.Name = "TOTAL_AC_LOAD_CALCULATION";
       this.TOTAL_AC_LOAD_CALCULATION.Size = new System.Drawing.Size(19, 20);
@@ -743,7 +745,7 @@
       // 
       this.label26.AutoSize = true;
       this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label26.Location = new System.Drawing.Point(1264, 434);
+      this.label26.Location = new System.Drawing.Point(1264, 410);
       this.label26.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label26.Name = "label26";
       this.label26.Size = new System.Drawing.Size(192, 20);
@@ -754,7 +756,7 @@
       // 
       this.CALCULATED_LOAD_FOR_SERVICE.AutoSize = true;
       this.CALCULATED_LOAD_FOR_SERVICE.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.CALCULATED_LOAD_FOR_SERVICE.Location = new System.Drawing.Point(1264, 585);
+      this.CALCULATED_LOAD_FOR_SERVICE.Location = new System.Drawing.Point(1264, 561);
       this.CALCULATED_LOAD_FOR_SERVICE.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.CALCULATED_LOAD_FOR_SERVICE.Name = "CALCULATED_LOAD_FOR_SERVICE";
       this.CALCULATED_LOAD_FOR_SERVICE.Size = new System.Drawing.Size(19, 20);
@@ -764,7 +766,7 @@
       // label28
       // 
       this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label28.Location = new System.Drawing.Point(1264, 564);
+      this.label28.Location = new System.Drawing.Point(1264, 540);
       this.label28.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label28.Name = "label28";
       this.label28.Size = new System.Drawing.Size(220, 21);
@@ -775,7 +777,7 @@
       // 
       this.label34.AutoSize = true;
       this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label34.Location = new System.Drawing.Point(1263, 353);
+      this.label34.Location = new System.Drawing.Point(1263, 329);
       this.label34.Margin = new System.Windows.Forms.Padding(0, 0, 0, 12);
       this.label34.Name = "label34";
       this.label34.Size = new System.Drawing.Size(202, 25);
@@ -944,7 +946,7 @@
       // 
       this.TOTAL_CUSTOM_LOAD_CALCULATION.AutoSize = true;
       this.TOTAL_CUSTOM_LOAD_CALCULATION.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.TOTAL_CUSTOM_LOAD_CALCULATION.Location = new System.Drawing.Point(1264, 541);
+      this.TOTAL_CUSTOM_LOAD_CALCULATION.Location = new System.Drawing.Point(1264, 517);
       this.TOTAL_CUSTOM_LOAD_CALCULATION.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.TOTAL_CUSTOM_LOAD_CALCULATION.Name = "TOTAL_CUSTOM_LOAD_CALCULATION";
       this.TOTAL_CUSTOM_LOAD_CALCULATION.Size = new System.Drawing.Size(19, 20);
@@ -954,7 +956,7 @@
       // label76
       // 
       this.label76.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label76.Location = new System.Drawing.Point(1264, 521);
+      this.label76.Location = new System.Drawing.Point(1264, 497);
       this.label76.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label76.Name = "label76";
       this.label76.Size = new System.Drawing.Size(269, 22);
@@ -1058,7 +1060,7 @@
       // 
       this.label63.AutoSize = true;
       this.label63.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label63.Location = new System.Drawing.Point(1431, 414);
+      this.label63.Location = new System.Drawing.Point(1431, 390);
       this.label63.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label63.Name = "label63";
       this.label63.Size = new System.Drawing.Size(25, 16);
@@ -1069,7 +1071,7 @@
       // 
       this.label74.AutoSize = true;
       this.label74.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label74.Location = new System.Drawing.Point(1430, 459);
+      this.label74.Location = new System.Drawing.Point(1430, 435);
       this.label74.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label74.Name = "label74";
       this.label74.Size = new System.Drawing.Size(25, 16);
@@ -1080,7 +1082,7 @@
       // 
       this.label77.AutoSize = true;
       this.label77.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label77.Location = new System.Drawing.Point(1430, 503);
+      this.label77.Location = new System.Drawing.Point(1430, 479);
       this.label77.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label77.Name = "label77";
       this.label77.Size = new System.Drawing.Size(25, 16);
@@ -1091,7 +1093,7 @@
       // 
       this.label78.AutoSize = true;
       this.label78.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label78.Location = new System.Drawing.Point(1430, 546);
+      this.label78.Location = new System.Drawing.Point(1430, 522);
       this.label78.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label78.Name = "label78";
       this.label78.Size = new System.Drawing.Size(25, 16);
@@ -1102,7 +1104,7 @@
       // 
       this.label80.AutoSize = true;
       this.label80.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label80.Location = new System.Drawing.Point(1430, 588);
+      this.label80.Location = new System.Drawing.Point(1430, 564);
       this.label80.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
       this.label80.Name = "label80";
       this.label80.Size = new System.Drawing.Size(16, 16);
@@ -1347,10 +1349,34 @@
       this.DEMAND_40PC.UseVisualStyleBackColor = true;
       this.DEMAND_40PC.CheckedChanged += new System.EventHandler(this.DEMAND_40PC_CheckedChanged);
       // 
+      // CREATE_BUTTON
+      // 
+      this.CREATE_BUTTON.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.CREATE_BUTTON.Location = new System.Drawing.Point(1263, 586);
+      this.CREATE_BUTTON.Name = "CREATE_BUTTON";
+      this.CREATE_BUTTON.Size = new System.Drawing.Size(92, 28);
+      this.CREATE_BUTTON.TabIndex = 201;
+      this.CREATE_BUTTON.Text = "Create";
+      this.CREATE_BUTTON.UseVisualStyleBackColor = true;
+      this.CREATE_BUTTON.Click += new System.EventHandler(this.CREATE_BUTTON_Click);
+      // 
+      // UPDATE_BUTTON
+      // 
+      this.UPDATE_BUTTON.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.UPDATE_BUTTON.Location = new System.Drawing.Point(1361, 586);
+      this.UPDATE_BUTTON.Name = "UPDATE_BUTTON";
+      this.UPDATE_BUTTON.Size = new System.Drawing.Size(88, 28);
+      this.UPDATE_BUTTON.TabIndex = 202;
+      this.UPDATE_BUTTON.Text = "Update";
+      this.UPDATE_BUTTON.UseVisualStyleBackColor = true;
+      this.UPDATE_BUTTON.Click += new System.EventHandler(this.UPDATE_BUTTON_Click);
+      // 
       // LoadCalculationForm
       // 
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
       this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+      this.Controls.Add(this.CREATE_BUTTON);
+      this.Controls.Add(this.UPDATE_BUTTON);
       this.Controls.Add(this.DEMAND_40PC);
       this.Controls.Add(this.COOKING_APPLIANCE);
       this.Controls.Add(this.ADD_ENTRY_CUSTOM);
@@ -1561,5 +1587,7 @@
     private System.Windows.Forms.Button ADD_ENTRY_CUSTOM;
     private System.Windows.Forms.Button COOKING_APPLIANCE;
     private System.Windows.Forms.CheckBox DEMAND_40PC;
+    private System.Windows.Forms.Button CREATE_BUTTON;
+    private System.Windows.Forms.Button UPDATE_BUTTON;
   }
 }

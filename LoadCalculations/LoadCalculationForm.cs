@@ -537,6 +537,42 @@ namespace GMEPElectricalResidential.LoadCalculations
       }
     }
 
+    public void CreateOrUpdateLoadCalculationSingle(bool isCreate, bool isUnit = false, int id = 0)
+    {
+      var allUnitInfo = AllUnitInformation();
+      var allBuildingInfo = AllBuildingInformation();
+
+      Autodesk.AutoCAD.ApplicationServices.Application.MainWindow.Focus();
+
+      using (DocumentLock docLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument())
+      {
+        Point3d point = new Point3d(0, 0, 0);
+
+        if (isCreate)
+        {
+          point = HelperClass.UserClick();
+        }
+
+        if (isUnit)
+        {
+          // Only create/update the specified unit load calculation
+          var unitInfo = allUnitInfo.FirstOrDefault(u => u.ID == id);
+          if (unitInfo != null)
+          {
+            Unit.LoadCalculation.CreateUnitLoadCalculationTable(unitInfo, point, isCreate);
+          }
+        }
+        else
+        {
+          // Create/update all building load calculations
+          var buildingInfo = allBuildingInfo.FirstOrDefault(b => b.ID == id);
+
+          double width = Building.LoadCalculation.CreateBuildingLoadCalculationTable(buildingInfo, allUnitInfo, point, isCreate);
+          point = new Point3d(point.X - width, point.Y, point.Z);
+        }
+      }
+    }
+
     private static Point3d CreateComboUnitLoadCalculationTable(bool isCreate, List<UnitInformation> allUnitInfo, Point3d point, BuildingInformation buildingInfo)
     {
       var unitInfo1 = allUnitInfo.FirstOrDefault(unit => buildingInfo.Counters.Any(counter => counter.Count == 2));

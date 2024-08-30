@@ -300,6 +300,16 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       _buildingInformation.Title = BUILDING_TITLE.Text;
     }
+
+    private void CREATE_BUTTON_Click(object sender, EventArgs e)
+    {
+      _parentForm.CreateOrUpdateLoadCalculationSingle(true, false, _tabID);
+    }
+
+    private void UPDATE_BUTTON_Click(object sender, EventArgs e)
+    {
+      _parentForm.CreateOrUpdateLoadCalculationSingle(false, false, _tabID);
+    }
   }
 
   public static class IntExtensions

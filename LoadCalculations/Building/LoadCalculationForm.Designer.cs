@@ -77,6 +77,8 @@
       this.panel3 = new System.Windows.Forms.Panel();
       this.BUILDING_TITLE = new System.Windows.Forms.TextBox();
       this.label13 = new System.Windows.Forms.Label();
+      this.CREATE_BUTTON = new System.Windows.Forms.Button();
+      this.UPDATE_BUTTON = new System.Windows.Forms.Button();
       this.panel1.SuspendLayout();
       this.panel2.SuspendLayout();
       this.NUMBER_OF_UNITS_BG.SuspendLayout();
@@ -623,9 +625,33 @@
       this.label13.TabIndex = 5;
       this.label13.Text = "Title";
       // 
+      // CREATE_BUTTON
+      // 
+      this.CREATE_BUTTON.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.CREATE_BUTTON.Location = new System.Drawing.Point(574, 16);
+      this.CREATE_BUTTON.Name = "CREATE_BUTTON";
+      this.CREATE_BUTTON.Size = new System.Drawing.Size(103, 28);
+      this.CREATE_BUTTON.TabIndex = 205;
+      this.CREATE_BUTTON.Text = "Create";
+      this.CREATE_BUTTON.UseVisualStyleBackColor = true;
+      this.CREATE_BUTTON.Click += new System.EventHandler(this.CREATE_BUTTON_Click);
+      // 
+      // UPDATE_BUTTON
+      // 
+      this.UPDATE_BUTTON.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.UPDATE_BUTTON.Location = new System.Drawing.Point(683, 16);
+      this.UPDATE_BUTTON.Name = "UPDATE_BUTTON";
+      this.UPDATE_BUTTON.Size = new System.Drawing.Size(103, 28);
+      this.UPDATE_BUTTON.TabIndex = 206;
+      this.UPDATE_BUTTON.Text = "Update";
+      this.UPDATE_BUTTON.UseVisualStyleBackColor = true;
+      this.UPDATE_BUTTON.Click += new System.EventHandler(this.UPDATE_BUTTON_Click);
+      // 
       // LoadCalculationForm
       // 
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+      this.Controls.Add(this.UPDATE_BUTTON);
+      this.Controls.Add(this.CREATE_BUTTON);
       this.Controls.Add(this.panel3);
       this.Controls.Add(this.PHASE_COMBO);
       this.Controls.Add(this.label13);
@@ -737,5 +763,7 @@
     private System.Windows.Forms.Panel panel3;
     private System.Windows.Forms.TextBox BUILDING_TITLE;
     private System.Windows.Forms.Label label13;
+    private System.Windows.Forms.Button CREATE_BUTTON;
+    private System.Windows.Forms.Button UPDATE_BUTTON;
   }
 }
