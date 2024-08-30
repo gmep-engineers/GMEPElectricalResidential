@@ -35,6 +35,8 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       var columnCount = buildingUnitInfo.Count;
       double additionalWidth = CalculateAdditionalWidth(buildingUnitInfo, COLUMN_WIDTH);
 
+      Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage($"\nAdditional width: {additionalWidth}");
+
       placementPoint = GetStartingPoint(buildingInfo, placementPoint, COLUMN_WIDTH, width);
 
       if (buildingInfo == null)
@@ -287,9 +289,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         for (int i = 0; i < polyline.Vectors.Count; i++)
         {
-          if (Math.Abs(polyline.Vectors[i].X - width) < 0.001)
+          if (Math.Abs(polyline.Vectors[i].X - (width + 1.5)) < 0.001)
           {
-            polyline.Vectors[i].X = width + additionalWidth;
+            polyline.Vectors[i].X = width + additionalWidth + 1.5;
           }
         }
       }
@@ -430,7 +432,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       {
         for (int i = 0; i < polyline.Vectors.Count; i++)
         {
-          if (Math.Abs(polyline.Vectors[i].X - initialWidth) < 0.001)
+          if (Math.Abs(polyline.Vectors[i].X - (initialWidth + 1.5)) < 0.001)
           {
             polyline.Vectors[i].X += extendDistance;
           }
@@ -640,13 +642,29 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
     private static void UpdateTitleOrSubtitleText(ObjectData titleData, double width, double additionalWidth, bool isSubtitle = false)
     {
+      // Get the active document and editor
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      var ed = doc.Editor;
+
+      // Write the width to the command line
+      ed.WriteMessage($"\nWidth: {width}");
+
       foreach (var polyline in titleData.Polylines)
       {
         for (int i = 0; i < polyline.Vectors.Count; i++)
         {
-          if (polyline.Vectors[i].X == width)
+          // Write the original X value to the command line
+          ed.WriteMessage($"\nOriginal Polyline Vector X: {polyline.Vectors[i].X}");
+          if (polyline.Vectors[i].X == width + 1.5)
           {
             polyline.Vectors[i].X += additionalWidth;
+
+            // Write the updated X value to the command line
+            ed.WriteMessage($"\nUpdated Polyline Vector X: {polyline.Vectors[i].X}");
+
+            // Send a command to draw a line representing the change
+            doc.SendStringToExecute(
+                $"._line {width},0 {polyline.Vectors[i].X},0 ", true, false, false);
           }
         }
       }
