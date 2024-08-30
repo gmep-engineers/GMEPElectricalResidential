@@ -428,15 +428,54 @@ namespace GMEPElectricalResidential.LoadCalculations
         }
       }
 
+      var duplicateIds = allBuildingInformation
+        .GroupBy(b => b.ID)
+        .Where(g => g.Count() > 1)
+        .Select(g => g.Key)
+        .ToHashSet();
+
+      int maximumBuildingId = allBuildingInformation.Max(b => b.ID);
+
       foreach (var buildingInformation in allBuildingInformation)
       {
         if (buildingInformation.Name == null) continue;
+
+        if (duplicateIds.Contains(buildingInformation.ID))
+        {
+          buildingInformation.ID = ++maximumBuildingId;
+        }
+
         string saveDirectory = Path.Combine(buildingDirectory, buildingInformation.FilteredFormattedName());
         Directory.CreateDirectory(saveDirectory);
+
         string json = JsonConvert.SerializeObject(buildingInformation, Formatting.Indented);
         string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         string savePath = Path.Combine(saveDirectory, $"{timestamp}.json");
         File.WriteAllText(savePath, json);
+      }
+
+      RemoveOldBuildingDirectories(buildingDirectory, duplicateIds);
+    }
+
+    private static void RemoveOldBuildingDirectories(string buildingDirectory, HashSet<int> duplicateIds)
+    {
+      var regex = new Regex(@"^.+ - ID(\d+)$");
+      foreach (var subdirectory in Directory.GetDirectories(buildingDirectory))
+      {
+        string dirName = Path.GetFileName(subdirectory);
+        var match = regex.Match(dirName);
+        if (match.Success && int.TryParse(match.Groups[1].Value, out int id) && duplicateIds.Contains(id))
+        {
+          try
+          {
+            Directory.Delete(subdirectory, true);
+            Console.WriteLine($"Removed directory: {subdirectory}");
+          }
+          catch (Autodesk.AutoCAD.Runtime.Exception ex)
+          {
+            Console.WriteLine($"Error removing directory {subdirectory}: {ex.Message}");
+          }
+        }
       }
     }
 
