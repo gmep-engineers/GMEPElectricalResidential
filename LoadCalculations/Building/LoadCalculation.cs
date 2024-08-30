@@ -32,10 +32,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
       double currentHeight = HEADER_HEIGHT;
       string newBlockName = $"BUILDING {buildingInfo.ID}";
       var buildingUnitInfo = buildingInfo.GetListOfBuildingUnitTypes(allUnitInformation);
+      buildingUnitInfo = buildingUnitInfo.OrderBy(unit => unit.Name).ToList(); // Sort units alphabetically
       var columnCount = buildingUnitInfo.Count;
       double additionalWidth = CalculateAdditionalWidth(buildingUnitInfo, COLUMN_WIDTH);
-
-      Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage($"\nAdditional width: {additionalWidth}");
 
       placementPoint = GetStartingPoint(buildingInfo, placementPoint, COLUMN_WIDTH, width);
 
@@ -344,7 +343,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
       rowEntryData = ShiftDataHorizontally(rowEntryData, width);
 
-      unitInfo = unitInfo.OrderBy(u => u.ID).ToList();
+      unitInfo = unitInfo.OrderBy(u => u.Name).ToList();
 
       if (isBuildingData && buildingInfo.Counters.Count != 0)
       {
@@ -642,29 +641,13 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
 
     private static void UpdateTitleOrSubtitleText(ObjectData titleData, double width, double additionalWidth, bool isSubtitle = false)
     {
-      // Get the active document and editor
-      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
-      var ed = doc.Editor;
-
-      // Write the width to the command line
-      ed.WriteMessage($"\nWidth: {width}");
-
       foreach (var polyline in titleData.Polylines)
       {
         for (int i = 0; i < polyline.Vectors.Count; i++)
         {
-          // Write the original X value to the command line
-          ed.WriteMessage($"\nOriginal Polyline Vector X: {polyline.Vectors[i].X}");
           if (polyline.Vectors[i].X == width + 1.5)
           {
             polyline.Vectors[i].X += additionalWidth;
-
-            // Write the updated X value to the command line
-            ed.WriteMessage($"\nUpdated Polyline Vector X: {polyline.Vectors[i].X}");
-
-            // Send a command to draw a line representing the change
-            doc.SendStringToExecute(
-                $"._line {width},0 {polyline.Vectors[i].X},0 ", true, false, false);
           }
         }
       }
