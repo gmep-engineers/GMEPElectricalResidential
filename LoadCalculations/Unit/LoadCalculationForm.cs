@@ -1,4 +1,9 @@
-﻿using GMEPElectricalResidential.HelperFiles;
+﻿using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.EditorInput;
+using Autodesk.AutoCAD.Geometry;
+using Autodesk.AutoCAD.Runtime;
+using GMEPElectricalResidential.HelperFiles;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Application = Autodesk.AutoCAD.ApplicationServices.Application;
 
 namespace GMEPElectricalResidential.LoadCalculations.Unit
 {
@@ -1170,7 +1176,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       if (int.TryParse(AREA.Text, out int area))
       {
         int kBTU = (int)Math.Ceiling((area / 500.0) * 12);
-
         if (kBTU < 18)
         {
           kBTU = 18;
@@ -1179,17 +1184,30 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         {
           kBTU = ((int)(kBTU / 6) + 1) * 6;
         }
-
         units = BreakUpkBTU(kBTU);
       }
       else
       {
         units = new List<int> { 0 };
       }
-
       int condenserVA = GetCondenserVATotalFromUnits(units);
-
       OUTDOOR_CONDENSER_VA.Text = condenserVA.ToString();
+
+      // Format and output units to AutoCAD command line
+      string formattedUnits = FormatUnits(units);
+      OutputToCommandLine(formattedUnits);
+    }
+
+    private string FormatUnits(List<int> units)
+    {
+      return string.Join(", ", units.Select(u => $"HP-{u}"));
+    }
+
+    private void OutputToCommandLine(string message)
+    {
+      Document doc = Application.DocumentManager.MdiActiveDocument;
+      Editor ed = doc.Editor;
+      ed.WriteMessage("\nCondenser Units: " + message);
     }
 
     private int GetCondenserVATotalFromUnits(List<int> units)
@@ -1266,7 +1284,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       if (int.TryParse(AREA.Text, out int area))
       {
         int kBTU = (int)Math.Ceiling((area / 500.0) * 12);
-
         if (kBTU < 18)
         {
           kBTU = 18;
@@ -1275,17 +1292,29 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         {
           kBTU = ((int)(kBTU / 6) + 1) * 6;
         }
-
         units = BreakUpkBTU(kBTU);
       }
       else
       {
         units = new List<int> { 0 };
       }
-
       int fanCoilVA = GetFanCoilVATotalFromUnits(units);
-
       INDOOR_FAN_COIL_VA.Text = fanCoilVA.ToString();
+
+      string formattedUnits = FormatFanCoilUnits(units);
+      OutputToCommandLineFC(formattedUnits);
+    }
+
+    private string FormatFanCoilUnits(List<int> units)
+    {
+      return string.Join(", ", units.Select(u => $"FC-{u}"));
+    }
+
+    private void OutputToCommandLineFC(string message)
+    {
+      Document doc = Application.DocumentManager.MdiActiveDocument;
+      Editor ed = doc.Editor;
+      ed.WriteMessage("\nFan Coil Units: " + message);
     }
 
     private void COOKING_APPLIANCE_Click(object sender, EventArgs e)
