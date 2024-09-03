@@ -1368,12 +1368,45 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private void SetAllGeneralLoadsAsNonCookingAppliances()
     {
+      // Check if _unitInformation is null
+      if (_unitInformation == null)
+      {
+        Console.WriteLine("_unitInformation is null");
+        return;
+      }
+
+      // Check if GeneralLoads is null
+      if (_unitInformation.GeneralLoads == null)
+      {
+        Console.WriteLine("GeneralLoads is null");
+        return;
+      }
+
+      // Check if Customs is null
+      if (_unitInformation.GeneralLoads.Customs == null)
+      {
+        Console.WriteLine("Customs is null");
+        return;
+      }
+
       foreach (var unitLoad in _unitInformation.GeneralLoads.Customs)
       {
-        unitLoad.IsCookingAppliance = false;
+        if (unitLoad != null)
+        {
+          unitLoad.IsCookingAppliance = false;
+        }
       }
+
       if (_isLoaded) UpdateDataAndLoads();
-      GENERAL_CUSTOM_LOAD_BOX.Invalidate();
+
+      if (GENERAL_CUSTOM_LOAD_BOX != null)
+      {
+        GENERAL_CUSTOM_LOAD_BOX.Invalidate();
+      }
+      else
+      {
+        Console.WriteLine("GENERAL_CUSTOM_LOAD_BOX is null");
+      }
     }
 
     private void CREATE_BUTTON_Click(object sender, EventArgs e)
