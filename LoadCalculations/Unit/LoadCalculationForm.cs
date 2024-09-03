@@ -750,6 +750,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       _toolTip.SetToolTip(TOTAL_GENERAL_LABEL, multiplierMessage);
       _toolTip.SetToolTip(TOTAL_CUSTOM_LABEL, multiplierMessage);
 
+      NAME.Text = "UNIT ";
       VOLTAGE.SelectedIndex = 0;
 
       GENERAL_CUSTOM_LOAD_BOX.AllowDrop = true;

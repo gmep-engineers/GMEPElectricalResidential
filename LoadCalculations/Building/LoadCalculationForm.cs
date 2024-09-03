@@ -129,6 +129,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Building
     {
       VOLTAGE.SelectedIndex = 0;
       PHASE_COMBO.SelectedIndex = 0;
+      BUILDING_NAME.Text = "BUILDING ";
       BUILDING_TITLE.Text = "ELECTRICAL RESIDENTIAL LOAD CALCULATIONS";
       _buildingInformation.Phase = PHASE_COMBO.Text;
       _buildingInformation.Voltage = VOLTAGE.Text;
