@@ -53,7 +53,7 @@
       this.TAB_CONTROL.Location = new System.Drawing.Point(101, 12);
       this.TAB_CONTROL.Name = "TAB_CONTROL";
       this.TAB_CONTROL.SelectedIndex = 0;
-      this.TAB_CONTROL.Size = new System.Drawing.Size(1558, 688);
+      this.TAB_CONTROL.Size = new System.Drawing.Size(1558, 761);
       this.TAB_CONTROL.TabIndex = 0;
       // 
       // UNIT_TAB
@@ -62,7 +62,7 @@
       this.UNIT_TAB.Location = new System.Drawing.Point(4, 29);
       this.UNIT_TAB.Name = "UNIT_TAB";
       this.UNIT_TAB.Padding = new System.Windows.Forms.Padding(3);
-      this.UNIT_TAB.Size = new System.Drawing.Size(1550, 655);
+      this.UNIT_TAB.Size = new System.Drawing.Size(1550, 728);
       this.UNIT_TAB.TabIndex = 0;
       this.UNIT_TAB.Text = "Unit";
       this.UNIT_TAB.UseVisualStyleBackColor = true;
@@ -73,7 +73,7 @@
       this.UNIT_TAB_CONTROL.Location = new System.Drawing.Point(3, 3);
       this.UNIT_TAB_CONTROL.Name = "UNIT_TAB_CONTROL";
       this.UNIT_TAB_CONTROL.SelectedIndex = 0;
-      this.UNIT_TAB_CONTROL.Size = new System.Drawing.Size(1547, 652);
+      this.UNIT_TAB_CONTROL.Size = new System.Drawing.Size(1547, 723);
       this.UNIT_TAB_CONTROL.TabIndex = 1;
       // 
       // BUILDING_TAB
@@ -111,7 +111,7 @@
       // 
       this.DELETE_UNIT_BUTTON.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.DELETE_UNIT_BUTTON.ForeColor = System.Drawing.Color.Red;
-      this.DELETE_UNIT_BUTTON.Location = new System.Drawing.Point(12, 663);
+      this.DELETE_UNIT_BUTTON.Location = new System.Drawing.Point(12, 740);
       this.DELETE_UNIT_BUTTON.Name = "DELETE_UNIT_BUTTON";
       this.DELETE_UNIT_BUTTON.Size = new System.Drawing.Size(83, 33);
       this.DELETE_UNIT_BUTTON.TabIndex = 2;
@@ -179,7 +179,7 @@
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Control;
-      this.ClientSize = new System.Drawing.Size(1671, 710);
+      this.ClientSize = new System.Drawing.Size(1671, 781);
       this.Controls.Add(this.LOAD_BUTTON);
       this.Controls.Add(this.DUPLICATE);
       this.Controls.Add(this.UPDATE);

@@ -203,7 +203,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     private static ObjectData UpdateHeaderData(ObjectData headerData, UnitInformation unitInfo)
     {
       var serviceLoadCalculationMText = headerData.MTexts.FirstOrDefault(mText => mText.Contents.Contains("SERVICE LOAD CALCULATION"));
-      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - UNIT {unitInfo.Name}");
+      serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("SERVICE LOAD CALCULATION", $"SERVICE LOAD CALCULATION - {unitInfo.Name}");
       serviceLoadCalculationMText.Contents = serviceLoadCalculationMText.Contents.Replace("\\Farial|c0", "\\fArial Rounded MT Bold|b1|i0|c0|p34");
       return headerData;
     }

@@ -366,6 +366,14 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private static void HandleUnitDataSaving(string unitDirectory, List<Unit.UnitInformation> allUnitInformation)
     {
+      foreach (var oldDir in Directory.GetDirectories(unitDirectory, "Unit *"))
+      {
+        if (Directory.Exists(oldDir))
+        {
+          Directory.Delete(oldDir, true);
+        }
+      }
+
       var duplicateIds = allUnitInformation
           .GroupBy(u => u.ID)
           .Where(g => g.Count() > 1)
@@ -385,24 +393,23 @@ namespace GMEPElectricalResidential.LoadCalculations
 
         string saveDirectory = Path.Combine(unitDirectory, unitInformation.FilteredFormattedName());
         Directory.CreateDirectory(saveDirectory);
+
         string json = JsonConvert.SerializeObject(unitInformation, Formatting.Indented);
         string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
         string savePath = Path.Combine(saveDirectory, $"{timestamp}.json");
         File.WriteAllText(savePath, json);
       }
 
-      RemoveOldDirectories(unitDirectory, duplicateIds);
+      RemoveOldUnitDirectories(unitDirectory, duplicateIds);
     }
 
-    private static void RemoveOldDirectories(string unitDirectory, HashSet<int> duplicateIds)
+    private static void RemoveOldUnitDirectories(string unitDirectory, HashSet<int> duplicateIds)
     {
-      var regex = new Regex(@"Unit .+ - ID(\d+)$");
-
+      var regex = new Regex(@"^.+ - ID(\d+)$");
       foreach (var subdirectory in Directory.GetDirectories(unitDirectory))
       {
         string dirName = Path.GetFileName(subdirectory);
         var match = regex.Match(dirName);
-
         if (match.Success && int.TryParse(match.Groups[1].Value, out int id) && duplicateIds.Contains(id))
         {
           try

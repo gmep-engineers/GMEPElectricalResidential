@@ -84,6 +84,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         }
       }
       _isLoaded = true;
+      UpdateStatusOf40PcDemand();
       UpdateDataAndLoads();
     }
 
@@ -92,7 +93,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       if (unitInformation == null) return;
 
       // Set TextBox and ComboBox values with the saved data
-      UNIT_NAME.Text = unitInformation.Name;
+      NAME.Text = unitInformation.Name;
       VOLTAGE.Text = unitInformation.Voltage;
 
       // Set Radio Buttons
@@ -176,7 +177,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       if (this.Visible)
       {
-        UNIT_NAME.Select();
+        NAME.Select();
       }
     }
 
@@ -295,7 +296,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private void UpdateGeneralData()
     {
-      _unitInformation.Name = UNIT_NAME.Text;
+      _unitInformation.Name = NAME.Text;
       _unitInformation.Voltage = VOLTAGE.Text;
       _unitInformation.Demand40Percent = DEMAND_40PC.Checked;
     }
@@ -1341,25 +1342,26 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private void DEMAND_40PC_CheckedChanged(object sender, EventArgs e)
     {
+      UpdateStatusOf40PcDemand();
+    }
+
+    private void UpdateStatusOf40PcDemand()
+    {
       if (DEMAND_40PC.Checked)
       {
-        GENERAL_LIGHTING_TITLE.Visible = false;
         GENERAL_LIGHTING_GROUP_BOX.Visible = false;
-        GENERAL_LIGHTING_TOTAL.Visible = false;
-        GENERAL_LIGHTING_TOTAL_VA_LABEL.Visible = false;
         COOKING_APPLIANCE.Visible = false;
         LIGHTING_OTHER.Checked = true;
-
+        GENERAL_LIGHTING_TOTAL_VA_LABEL.Location = new Point(266, GENERAL_LIGHTING_TOTAL_VA_LABEL.Location.Y);
+        GENERAL_LIGHTING_TOTAL.Location = new Point(265, GENERAL_LIGHTING_TOTAL.Location.Y);
         SetAllGeneralLoadsAsNonCookingAppliances();
       }
       else
       {
-        GENERAL_LIGHTING_TITLE.Visible = true;
         GENERAL_LIGHTING_GROUP_BOX.Visible = true;
-        GENERAL_LIGHTING_TOTAL.Visible = true;
-        GENERAL_LIGHTING_TOTAL_VA_LABEL.Visible = true;
         COOKING_APPLIANCE.Visible = true;
-
+        GENERAL_LIGHTING_TOTAL_VA_LABEL.Location = new Point(666, GENERAL_LIGHTING_TOTAL_VA_LABEL.Location.Y);
+        GENERAL_LIGHTING_TOTAL.Location = new Point(665, GENERAL_LIGHTING_TOTAL.Location.Y);
         UpdateDataAndLoads();
       }
     }
@@ -1431,18 +1433,18 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     public string FormattedName()
     {
-      return $"Unit {Name} - ID{ID}";
+      return $"{Name} - ID{ID}";
     }
 
     public string FilteredFormattedName()
     {
       if (string.IsNullOrEmpty(Name))
       {
-        return $"Unit - ID{ID}";
+        return $" - ID{ID}";
       }
 
       string filteredName = new string(Name.Where(c => char.IsLetterOrDigit(c)).ToArray());
-      return $"Unit {filteredName} - ID{ID}";
+      return $"{filteredName} - ID{ID}";
     }
   }
 
