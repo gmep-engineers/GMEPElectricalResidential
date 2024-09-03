@@ -1192,22 +1192,49 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       }
       int condenserVA = GetCondenserVATotalFromUnits(units);
       OUTDOOR_CONDENSER_VA.Text = condenserVA.ToString();
-
-      // Format and output units to AutoCAD command line
-      string formattedUnits = FormatUnits(units);
-      OutputToCommandLine(formattedUnits);
+      string formattedUnits = FormatUnits(units, "HP");
+      OutputToCommandLine("Condenser Units", formattedUnits);
     }
 
-    private string FormatUnits(List<int> units)
+    private void ESTIMATE_FAN_COIL_Click(object sender, EventArgs e)
     {
-      return string.Join(", ", units.Select(u => $"HP-{u}"));
+      List<int> units;
+      if (int.TryParse(AREA.Text, out int area))
+      {
+        int kBTU = (int)Math.Ceiling((area / 500.0) * 12);
+        if (kBTU < 18)
+        {
+          kBTU = 18;
+        }
+        else if (kBTU % 6 != 0)
+        {
+          kBTU = ((int)(kBTU / 6) + 1) * 6;
+        }
+        units = BreakUpkBTU(kBTU);
+      }
+      else
+      {
+        units = new List<int> { 0 };
+      }
+      int fanCoilVA = GetFanCoilVATotalFromUnits(units);
+      INDOOR_FAN_COIL_VA.Text = fanCoilVA.ToString();
+      string formattedUnits = FormatUnits(units, "FC");
+      OutputToCommandLine("Fan Coil Units", formattedUnits);
     }
 
-    private void OutputToCommandLine(string message)
+    private string FormatUnits(List<int> units, string prefix)
+    {
+      var groupedUnits = units.GroupBy(u => u)
+                              .Select(g => $"[{g.Count()}]{prefix}-{g.Key}")
+                              .ToList();
+      return string.Join(", ", groupedUnits);
+    }
+
+    private void OutputToCommandLine(string unitType, string message)
     {
       Document doc = Application.DocumentManager.MdiActiveDocument;
       Editor ed = doc.Editor;
-      ed.WriteMessage("\nCondenser Units: " + message);
+      ed.WriteMessage($"\n{unitType}: {message}");
     }
 
     private int GetCondenserVATotalFromUnits(List<int> units)
@@ -1276,45 +1303,6 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
       FindCombination(kBTU, startingCombination, 0);
       return bestCombination;
-    }
-
-    private void ESTIMATE_FAN_COIL_Click(object sender, EventArgs e)
-    {
-      List<int> units;
-      if (int.TryParse(AREA.Text, out int area))
-      {
-        int kBTU = (int)Math.Ceiling((area / 500.0) * 12);
-        if (kBTU < 18)
-        {
-          kBTU = 18;
-        }
-        else if (kBTU % 6 != 0)
-        {
-          kBTU = ((int)(kBTU / 6) + 1) * 6;
-        }
-        units = BreakUpkBTU(kBTU);
-      }
-      else
-      {
-        units = new List<int> { 0 };
-      }
-      int fanCoilVA = GetFanCoilVATotalFromUnits(units);
-      INDOOR_FAN_COIL_VA.Text = fanCoilVA.ToString();
-
-      string formattedUnits = FormatFanCoilUnits(units);
-      OutputToCommandLineFC(formattedUnits);
-    }
-
-    private string FormatFanCoilUnits(List<int> units)
-    {
-      return string.Join(", ", units.Select(u => $"FC-{u}"));
-    }
-
-    private void OutputToCommandLineFC(string message)
-    {
-      Document doc = Application.DocumentManager.MdiActiveDocument;
-      Editor ed = doc.Editor;
-      ed.WriteMessage("\nFan Coil Units: " + message);
     }
 
     private void COOKING_APPLIANCE_Click(object sender, EventArgs e)
