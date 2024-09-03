@@ -353,15 +353,78 @@ namespace GMEPElectricalResidential.LoadCalculations
       string unitDirectory = Path.Combine(baseSaveDirectory, "Unit");
       Directory.CreateDirectory(unitDirectory);
 
+      CleanupMismatchedDirectories(unitDirectory);
+
       // Create the Building directory if it doesn't exist
       string buildingDirectory = Path.Combine(baseSaveDirectory, "Building");
       Directory.CreateDirectory(buildingDirectory);
+
+      CleanupMismatchedDirectories(buildingDirectory);
 
       List<Unit.UnitInformation> allUnitInformation = AllUnitInformation();
       HandleUnitDataSaving(unitDirectory, allUnitInformation);
 
       List<Building.BuildingInformation> allBuildingInformation = AllBuildingInformation();
       HandleBuildingDataSaving(buildingDirectory, allBuildingInformation);
+    }
+
+    public void CleanupMismatchedDirectories(string basePath, object informationObject = null)
+    {
+      foreach (var directory in Directory.GetDirectories(basePath))
+      {
+        var dirName = new DirectoryInfo(directory).Name;
+        var match = Regex.Match(dirName, @"ID(\d+)$");
+        if (!match.Success)
+        {
+          Console.WriteLine($"Directory {dirName} doesn't match the expected format. Skipping.");
+          continue;
+        }
+        var dirId = int.Parse(match.Groups[1].Value);
+
+        // Get all JSON files in the directory
+        var jsonFiles = Directory.GetFiles(directory, "*.json");
+        if (jsonFiles.Length == 0)
+        {
+          Console.WriteLine($"JSON file not found in directory {dirName}. Skipping.");
+          continue;
+        }
+
+        // Find the most recently created JSON file
+        var mostRecentJsonFile = jsonFiles
+            .Select(f => new FileInfo(f))
+            .OrderByDescending(f => f.CreationTime)
+            .First();
+
+        var jsonPath = mostRecentJsonFile.FullName;
+        Console.WriteLine($"Using most recent JSON file: {mostRecentJsonFile.Name}");
+
+        var jsonContent = File.ReadAllText(jsonPath);
+
+        dynamic info;
+        if (informationObject is Building.BuildingInformation)
+        {
+          info = JsonConvert.DeserializeObject<Building.BuildingInformation>(jsonContent);
+        }
+        else if (informationObject is Unit.UnitInformation)
+        {
+          info = JsonConvert.DeserializeObject<Unit.UnitInformation>(jsonContent);
+        }
+        else
+        {
+          // If no specific type is provided, assume UnitInformation as before
+          info = JsonConvert.DeserializeObject<Unit.UnitInformation>(jsonContent);
+        }
+
+        if (info.ID != dirId)
+        {
+          Console.WriteLine($"Mismatch found in {dirName}. Directory ID: {dirId}, JSON ID: {info.ID}. Deleting directory.");
+          Directory.Delete(directory, true);
+        }
+        else
+        {
+          Console.WriteLine($"Directory {dirName} is valid. Keeping it.");
+        }
+      }
     }
 
     private static void HandleUnitDataSaving(string unitDirectory, List<Unit.UnitInformation> allUnitInformation)
