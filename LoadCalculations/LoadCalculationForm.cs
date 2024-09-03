@@ -437,6 +437,13 @@ namespace GMEPElectricalResidential.LoadCalculations
         }
       }
 
+      if (!allUnitInformation.Any())
+      {
+        // Handle the case where allBuildingInformation is empty
+        Console.WriteLine("No unit information to process.");
+        return;
+      }
+
       var duplicateIds = allUnitInformation
           .GroupBy(u => u.ID)
           .Where(g => g.Count() > 1)
@@ -496,6 +503,13 @@ namespace GMEPElectricalResidential.LoadCalculations
         {
           Directory.Delete(oldDir, true);
         }
+      }
+
+      if (!allBuildingInformation.Any())
+      {
+        // Handle the case where allBuildingInformation is empty
+        Console.WriteLine("No building information to process.");
+        return;
       }
 
       var duplicateIds = allBuildingInformation
