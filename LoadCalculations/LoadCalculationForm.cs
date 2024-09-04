@@ -940,40 +940,49 @@ namespace GMEPElectricalResidential.LoadCalculations
       string savePath = Path.Combine(targetDir, $"{timestamp}.json");
       File.WriteAllText(savePath, newJson);
     }
+
+    private void GENERATE_PANELS_Click(object sender, EventArgs e)
+    {
+      // get the unit information
+      var unitInformation = AllUnitInformation();
+
+      // show the PanelGenerator form
+      var panelGeneratorForm = new PanelGenerator();
+      panelGeneratorForm.Show();
+    }
   }
 
-  public class IdComparer
+  internal class PanelGeneratorData
   {
-    public static void CompareAndUpdateIds(List<Unit.UnitInformation> units, List<Building.BuildingInformation> buildings)
+    private UnitInformation _data;
+    private const double GeneralLightingPercent = 0.70;
+    private const double ExteriorLightingPercent = 0.10;
+    private const double LivingRecPercent = 0.15;
+    private const double ExteriorRecPercent = 0.10;
+    private const int COAndSmokeWatt = 100;
+    private const int GasRecWatt = 50;
+    private const int LightingBreakerMaximumWatt = 1000;
+    private bool hasExteriorLighting = false;
+    private bool hasExteriorReceptacle = false;
+    private bool hasGasReceptacle = false;
+
+    public PanelGeneratorData(UnitInformation data)
     {
-      var usedUnitIds = new HashSet<int>();
-      var usedBuildingIds = new HashSet<int>();
-
-      // Update Unit IDs
-      foreach (var unit in units)
-      {
-        while (usedUnitIds.Contains(unit.ID))
-        {
-          unit.ID++;
-        }
-        usedUnitIds.Add(unit.ID);
-      }
-
-      // Update Building IDs
-      foreach (var building in buildings)
-      {
-        while (usedBuildingIds.Contains(building.ID))
-        {
-          building.ID++;
-        }
-        usedBuildingIds.Add(building.ID);
-      }
+      _data = data;
     }
+  }
 
-    public static void UpdateMaxIds(ref int maxUnitId, ref int maxBuildingId, List<Unit.UnitInformation> units, List<Building.BuildingInformation> buildings)
+  internal class PanelBreaker
+  {
+    public string Description { get; set; }
+    public int Watts { get; set; }
+    public int Poles { get; set; }
+
+    public PanelBreaker(string description, int watts, int poles)
     {
-      maxUnitId = units.Any() ? units.Max(u => u.ID) : maxUnitId;
-      maxBuildingId = buildings.Any() ? buildings.Max(b => b.ID) : maxBuildingId;
+      Description = description;
+      Watts = watts;
+      Poles = poles;
     }
   }
 }

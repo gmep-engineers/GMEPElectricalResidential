@@ -93,6 +93,18 @@
     <Compile Include="LoadCalculations\Building\LoadCalculationForm.Designer.cs">
       <DependentUpon>LoadCalculationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoadCalculations\ItemSelectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LoadCalculations\ItemSelectionControl.Designer.cs">
+      <DependentUpon>ItemSelectionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LoadCalculations\PanelGenerator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoadCalculations\PanelGenerator.Designer.cs">
+      <DependentUpon>PanelGenerator.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoadCalculations\Unit\CombinedUnitInformation.cs" />
     <Compile Include="LoadCalculations\Unit\LoadCalculation.cs" />
     <Compile Include="LoadCalculations\LoadCalculationForm.cs">
@@ -168,6 +180,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LoadCalculations\LoadCalculationForm.resx">
       <DependentUpon>LoadCalculationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoadCalculations\PanelGenerator.resx">
+      <DependentUpon>PanelGenerator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoadCalculations\Unit\LoadCalculationForm.resx">
       <DependentUpon>LoadCalculationForm.cs</DependentUpon>
