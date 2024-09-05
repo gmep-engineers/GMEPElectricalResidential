@@ -947,8 +947,8 @@ namespace GMEPElectricalResidential.LoadCalculations
       var unitInformation = AllUnitInformation();
 
       // show the PanelGenerator form
-      var panelGeneratorForm = new PanelGenerator();
-      panelGeneratorForm.Show();
+      var panelGeneratorUnitSelectionForm = new PanelGeneratorUnitSelection(unitInformation);
+      panelGeneratorUnitSelectionForm.Show();
     }
   }
 

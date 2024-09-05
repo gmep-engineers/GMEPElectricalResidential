@@ -1,6 +1,8 @@
-﻿using System;
+﻿using GMEPElectricalResidential.LoadCalculations.Unit;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace GMEPElectricalResidential.LoadCalculations
@@ -8,20 +10,12 @@ namespace GMEPElectricalResidential.LoadCalculations
   public partial class PanelGenerator : Form
   {
     private FlowLayoutPanel flowLayoutPanel;
+    private List<UnitInformation> selectedUnits;
 
-    private List<string> items = new List<string>
-    {
-        "Exterior Lighting",
-        "Exterior Receptacle",
-        "Gas Receptacle",
-        "Car Wash",
-        "EV Charger",
-        "Sauna"
-    };
-
-    public PanelGenerator()
+    public PanelGenerator(List<UnitInformation> units)
     {
       InitializeComponent();
+      selectedUnits = units;
       SetupCustomLoadsPanel();
       SetupFlowLayoutPanel();
       PopulateFlowLayoutPanel();
@@ -51,15 +45,19 @@ namespace GMEPElectricalResidential.LoadCalculations
 
     private void PopulateFlowLayoutPanel()
     {
-      foreach (string item in items)
+      foreach (var unit in selectedUnits)
       {
-        var itemControl = new ItemSelectionControl
+        foreach (var customLoad in unit.CustomLoads)
         {
-          ItemText = item,
-          Width = PANEL_CUSTOM_LOADS.ClientSize.Width - SystemInformation.VerticalScrollBarWidth - 5,
-          Margin = new Padding(0, 0, 0, 5)  // Add some vertical spacing between items
-        };
-        flowLayoutPanel.Controls.Add(itemControl);
+          var itemText = $"{unit.Name} - {customLoad.Name}";
+          var itemControl = new ItemSelectionControl
+          {
+            ItemText = itemText,
+            Width = PANEL_CUSTOM_LOADS.ClientSize.Width - SystemInformation.VerticalScrollBarWidth - 5,
+            Margin = new Padding(0, 0, 0, 5)  // Add some vertical spacing between items
+          };
+          flowLayoutPanel.Controls.Add(itemControl);
+        }
       }
     }
 
