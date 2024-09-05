@@ -19,6 +19,37 @@ namespace GMEPElectricalResidential.LoadCalculations
       SetupCustomLoadsPanel();
       SetupFlowLayoutPanel();
       PopulateFlowLayoutPanel();
+      PopulatePanelBreakers();
+    }
+
+    private void PopulatePanelBreakers()
+    {
+      PANEL_BREAKERS.AutoScroll = true;
+      PANEL_BREAKERS.HorizontalScroll.Enabled = false;
+      PANEL_BREAKERS.HorizontalScroll.Visible = false;
+      PANEL_BREAKERS.HorizontalScroll.Maximum = 0;
+      PANEL_BREAKERS.AutoScrollMinSize = new Size(0, 0);
+
+      var flowLayoutPanel = new FlowLayoutPanel
+      {
+        Dock = DockStyle.Top,
+        FlowDirection = FlowDirection.TopDown,
+        WrapContents = false,
+        AutoSize = true,
+        AutoSizeMode = AutoSizeMode.GrowAndShrink
+      };
+      PANEL_BREAKERS.Controls.Add(flowLayoutPanel);
+
+      foreach (var unit in selectedUnits)
+      {
+        var label = new Label
+        {
+          Text = $"{unit.Name} - 0/0",
+          AutoSize = true,
+          Margin = new Padding(0, 0, 0, 5)
+        };
+        flowLayoutPanel.Controls.Add(label);
+      }
     }
 
     private void SetupCustomLoadsPanel()
@@ -65,6 +96,18 @@ namespace GMEPElectricalResidential.LoadCalculations
     {
       base.OnResize(e);
       ResizeItemControls();
+      ResizePanelBreakerLabels();
+    }
+
+    private void ResizePanelBreakerLabels()
+    {
+      if (PANEL_BREAKERS.Controls.Count > 0 && PANEL_BREAKERS.Controls[0] is FlowLayoutPanel flowPanel)
+      {
+        foreach (Control control in flowPanel.Controls)
+        {
+          control.Width = PANEL_BREAKERS.ClientSize.Width - SystemInformation.VerticalScrollBarWidth - 5;
+        }
+      }
     }
 
     private void ResizeItemControls()

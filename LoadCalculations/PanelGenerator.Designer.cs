@@ -31,25 +31,16 @@
       this.PANEL_CUSTOM_LOADS = new System.Windows.Forms.Panel();
       this.label1 = new System.Windows.Forms.Label();
       this.label2 = new System.Windows.Forms.Label();
-      this.label3 = new System.Windows.Forms.Label();
-      this.label4 = new System.Windows.Forms.Label();
-      this.BREAKERS_REQUIRED = new System.Windows.Forms.Label();
-      this.label6 = new System.Windows.Forms.Label();
-      this.BREAKERS = new System.Windows.Forms.ComboBox();
-      this.label5 = new System.Windows.Forms.Label();
-      this.label7 = new System.Windows.Forms.Label();
-      this.NAME = new System.Windows.Forms.TextBox();
       this.label8 = new System.Windows.Forms.Label();
-      this.textBox1 = new System.Windows.Forms.TextBox();
-      this.label9 = new System.Windows.Forms.Label();
-      this.label10 = new System.Windows.Forms.Label();
-      this.comboBox1 = new System.Windows.Forms.ComboBox();
+      this.SUB_BREAKERS = new System.Windows.Forms.ComboBox();
       this.button1 = new System.Windows.Forms.Button();
       this.button2 = new System.Windows.Forms.Button();
       this.SUBPANELS = new System.Windows.Forms.ListBox();
       this.GENERATE_PANEL = new System.Windows.Forms.Button();
-      this.label11 = new System.Windows.Forms.Label();
-      this.BREAKERS_AVAILABLE = new System.Windows.Forms.Label();
+      this.MP_BREAKERS = new System.Windows.Forms.ComboBox();
+      this.label3 = new System.Windows.Forms.Label();
+      this.label4 = new System.Windows.Forms.Label();
+      this.PANEL_BREAKERS = new System.Windows.Forms.Panel();
       this.SuspendLayout();
       // 
       // EXTERIOR_LIGHTING
@@ -90,7 +81,7 @@
       this.PANEL_CUSTOM_LOADS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
       this.PANEL_CUSTOM_LOADS.Location = new System.Drawing.Point(30, 201);
       this.PANEL_CUSTOM_LOADS.Name = "PANEL_CUSTOM_LOADS";
-      this.PANEL_CUSTOM_LOADS.Size = new System.Drawing.Size(291, 137);
+      this.PANEL_CUSTOM_LOADS.Size = new System.Drawing.Size(291, 123);
       this.PANEL_CUSTOM_LOADS.TabIndex = 3;
       // 
       // label1
@@ -111,154 +102,24 @@
       this.label2.Location = new System.Drawing.Point(36, 169);
       this.label2.Margin = new System.Windows.Forms.Padding(12, 18, 12, 12);
       this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(98, 17);
+      this.label2.Size = new System.Drawing.Size(211, 17);
       this.label2.TabIndex = 5;
-      this.label2.Text = "Custom Loads";
-      // 
-      // label3
-      // 
-      this.label3.AutoSize = true;
-      this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.label3.Location = new System.Drawing.Point(174, 169);
-      this.label3.Margin = new System.Windows.Forms.Padding(12);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(113, 17);
-      this.label3.TabIndex = 6;
-      this.label3.Text = "Number of Poles";
-      // 
-      // label4
-      // 
-      this.label4.AutoSize = true;
-      this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.label4.Location = new System.Drawing.Point(36, 359);
-      this.label4.Margin = new System.Windows.Forms.Padding(12, 18, 12, 12);
-      this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(201, 17);
-      this.label4.TabIndex = 7;
-      this.label4.Text = "Number of Breakers Required:";
-      // 
-      // BREAKERS_REQUIRED
-      // 
-      this.BREAKERS_REQUIRED.AutoSize = true;
-      this.BREAKERS_REQUIRED.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.BREAKERS_REQUIRED.Location = new System.Drawing.Point(239, 359);
-      this.BREAKERS_REQUIRED.Margin = new System.Windows.Forms.Padding(12, 18, 12, 12);
-      this.BREAKERS_REQUIRED.Name = "BREAKERS_REQUIRED";
-      this.BREAKERS_REQUIRED.Size = new System.Drawing.Size(16, 17);
-      this.BREAKERS_REQUIRED.TabIndex = 8;
-      this.BREAKERS_REQUIRED.Text = "0";
-      // 
-      // label6
-      // 
-      this.label6.AutoSize = true;
-      this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.label6.Location = new System.Drawing.Point(36, 430);
-      this.label6.Margin = new System.Windows.Forms.Padding(12, 18, 12, 6);
-      this.label6.Name = "label6";
-      this.label6.Size = new System.Drawing.Size(78, 17);
-      this.label6.TabIndex = 10;
-      this.label6.Text = "Main Panel";
-      // 
-      // BREAKERS
-      // 
-      this.BREAKERS.AutoCompleteCustomSource.AddRange(new string[] {
-            "6",
-            "12",
-            "18",
-            "24",
-            "32",
-            "42",
-            "84"});
-      this.BREAKERS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.BREAKERS.FormattingEnabled = true;
-      this.BREAKERS.Items.AddRange(new object[] {
-            "6",
-            "12",
-            "20",
-            "24",
-            "30",
-            "32",
-            "42",
-            "84"});
-      this.BREAKERS.Location = new System.Drawing.Point(164, 488);
-      this.BREAKERS.Name = "BREAKERS";
-      this.BREAKERS.Size = new System.Drawing.Size(157, 24);
-      this.BREAKERS.TabIndex = 11;
-      // 
-      // label5
-      // 
-      this.label5.AutoSize = true;
-      this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.label5.Location = new System.Drawing.Point(172, 465);
-      this.label5.Margin = new System.Windows.Forms.Padding(12, 18, 12, 3);
-      this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(65, 17);
-      this.label5.TabIndex = 12;
-      this.label5.Text = "Breakers";
-      // 
-      // label7
-      // 
-      this.label7.AutoSize = true;
-      this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.label7.Location = new System.Drawing.Point(36, 465);
-      this.label7.Margin = new System.Windows.Forms.Padding(12, 12, 12, 3);
-      this.label7.Name = "label7";
-      this.label7.Size = new System.Drawing.Size(45, 17);
-      this.label7.TabIndex = 13;
-      this.label7.Text = "Name";
-      // 
-      // NAME
-      // 
-      this.NAME.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.NAME.Location = new System.Drawing.Point(30, 488);
-      this.NAME.Name = "NAME";
-      this.NAME.Size = new System.Drawing.Size(128, 23);
-      this.NAME.TabIndex = 14;
+      this.label2.Text = "Unit Type - Custom Load | Poles";
       // 
       // label8
       // 
       this.label8.AutoSize = true;
       this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.label8.Location = new System.Drawing.Point(36, 529);
+      this.label8.Location = new System.Drawing.Point(36, 570);
       this.label8.Margin = new System.Windows.Forms.Padding(12, 18, 12, 6);
       this.label8.Name = "label8";
-      this.label8.Size = new System.Drawing.Size(75, 17);
+      this.label8.Size = new System.Drawing.Size(129, 17);
       this.label8.TabIndex = 15;
-      this.label8.Text = "Subpanels";
+      this.label8.Text = "Subpanel Breakers";
       // 
-      // textBox1
+      // SUB_BREAKERS
       // 
-      this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.textBox1.Location = new System.Drawing.Point(33, 587);
-      this.textBox1.Name = "textBox1";
-      this.textBox1.Size = new System.Drawing.Size(125, 23);
-      this.textBox1.TabIndex = 19;
-      // 
-      // label9
-      // 
-      this.label9.AutoSize = true;
-      this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.label9.Location = new System.Drawing.Point(39, 564);
-      this.label9.Margin = new System.Windows.Forms.Padding(12, 12, 12, 3);
-      this.label9.Name = "label9";
-      this.label9.Size = new System.Drawing.Size(45, 17);
-      this.label9.TabIndex = 18;
-      this.label9.Text = "Name";
-      // 
-      // label10
-      // 
-      this.label10.AutoSize = true;
-      this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.label10.Location = new System.Drawing.Point(175, 564);
-      this.label10.Margin = new System.Windows.Forms.Padding(12, 18, 12, 3);
-      this.label10.Name = "label10";
-      this.label10.Size = new System.Drawing.Size(65, 17);
-      this.label10.TabIndex = 17;
-      this.label10.Text = "Breakers";
-      // 
-      // comboBox1
-      // 
-      this.comboBox1.AutoCompleteCustomSource.AddRange(new string[] {
+      this.SUB_BREAKERS.AutoCompleteCustomSource.AddRange(new string[] {
             "6",
             "12",
             "18",
@@ -266,9 +127,9 @@
             "32",
             "42",
             "84"});
-      this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.comboBox1.FormattingEnabled = true;
-      this.comboBox1.Items.AddRange(new object[] {
+      this.SUB_BREAKERS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+      this.SUB_BREAKERS.FormattingEnabled = true;
+      this.SUB_BREAKERS.Items.AddRange(new object[] {
             "6",
             "12",
             "20",
@@ -277,15 +138,15 @@
             "32",
             "42",
             "84"});
-      this.comboBox1.Location = new System.Drawing.Point(164, 587);
-      this.comboBox1.Name = "comboBox1";
-      this.comboBox1.Size = new System.Drawing.Size(157, 24);
-      this.comboBox1.TabIndex = 16;
+      this.SUB_BREAKERS.Location = new System.Drawing.Point(33, 593);
+      this.SUB_BREAKERS.Name = "SUB_BREAKERS";
+      this.SUB_BREAKERS.Size = new System.Drawing.Size(288, 24);
+      this.SUB_BREAKERS.TabIndex = 16;
       // 
       // button1
       // 
       this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.button1.Location = new System.Drawing.Point(33, 617);
+      this.button1.Location = new System.Drawing.Point(33, 623);
       this.button1.Name = "button1";
       this.button1.Size = new System.Drawing.Size(125, 33);
       this.button1.TabIndex = 20;
@@ -295,7 +156,7 @@
       // button2
       // 
       this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.button2.Location = new System.Drawing.Point(164, 617);
+      this.button2.Location = new System.Drawing.Point(164, 623);
       this.button2.Name = "button2";
       this.button2.Size = new System.Drawing.Size(157, 33);
       this.button2.TabIndex = 21;
@@ -307,7 +168,7 @@
       this.SUBPANELS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
       this.SUBPANELS.FormattingEnabled = true;
       this.SUBPANELS.ItemHeight = 16;
-      this.SUBPANELS.Location = new System.Drawing.Point(33, 656);
+      this.SUBPANELS.Location = new System.Drawing.Point(33, 662);
       this.SUBPANELS.Name = "SUBPANELS";
       this.SUBPANELS.Size = new System.Drawing.Size(288, 68);
       this.SUBPANELS.TabIndex = 22;
@@ -315,59 +176,84 @@
       // GENERATE_PANEL
       // 
       this.GENERATE_PANEL.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.GENERATE_PANEL.Location = new System.Drawing.Point(33, 739);
+      this.GENERATE_PANEL.Location = new System.Drawing.Point(33, 736);
       this.GENERATE_PANEL.Name = "GENERATE_PANEL";
       this.GENERATE_PANEL.Size = new System.Drawing.Size(288, 33);
       this.GENERATE_PANEL.TabIndex = 23;
       this.GENERATE_PANEL.Text = "Generate Panels";
       this.GENERATE_PANEL.UseVisualStyleBackColor = true;
       // 
-      // label11
+      // MP_BREAKERS
       // 
-      this.label11.AutoSize = true;
-      this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.label11.Location = new System.Drawing.Point(36, 383);
-      this.label11.Margin = new System.Windows.Forms.Padding(12, 18, 12, 12);
-      this.label11.Name = "label11";
-      this.label11.Size = new System.Drawing.Size(200, 17);
-      this.label11.TabIndex = 24;
-      this.label11.Text = "Number of Breakers Available:";
+      this.MP_BREAKERS.AutoCompleteCustomSource.AddRange(new string[] {
+            "6",
+            "12",
+            "18",
+            "24",
+            "32",
+            "42",
+            "84"});
+      this.MP_BREAKERS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+      this.MP_BREAKERS.FormattingEnabled = true;
+      this.MP_BREAKERS.Items.AddRange(new object[] {
+            "6",
+            "12",
+            "20",
+            "24",
+            "30",
+            "32",
+            "42",
+            "84"});
+      this.MP_BREAKERS.Location = new System.Drawing.Point(33, 525);
+      this.MP_BREAKERS.Name = "MP_BREAKERS";
+      this.MP_BREAKERS.Size = new System.Drawing.Size(288, 24);
+      this.MP_BREAKERS.TabIndex = 25;
       // 
-      // BREAKERS_AVAILABLE
+      // label3
       // 
-      this.BREAKERS_AVAILABLE.AutoSize = true;
-      this.BREAKERS_AVAILABLE.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-      this.BREAKERS_AVAILABLE.Location = new System.Drawing.Point(239, 383);
-      this.BREAKERS_AVAILABLE.Margin = new System.Windows.Forms.Padding(12, 18, 12, 12);
-      this.BREAKERS_AVAILABLE.Name = "BREAKERS_AVAILABLE";
-      this.BREAKERS_AVAILABLE.Size = new System.Drawing.Size(16, 17);
-      this.BREAKERS_AVAILABLE.TabIndex = 25;
-      this.BREAKERS_AVAILABLE.Text = "0";
+      this.label3.AutoSize = true;
+      this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+      this.label3.Location = new System.Drawing.Point(36, 502);
+      this.label3.Margin = new System.Windows.Forms.Padding(12, 18, 12, 6);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(139, 17);
+      this.label3.TabIndex = 24;
+      this.label3.Text = "Main Panel Breakers";
+      // 
+      // label4
+      // 
+      this.label4.AutoSize = true;
+      this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+      this.label4.Location = new System.Drawing.Point(36, 345);
+      this.label4.Margin = new System.Windows.Forms.Padding(12, 18, 12, 12);
+      this.label4.Name = "label4";
+      this.label4.Size = new System.Drawing.Size(262, 17);
+      this.label4.TabIndex = 27;
+      this.label4.Text = "Unit Type - Breakers Required/Available";
+      // 
+      // PANEL_BREAKERS
+      // 
+      this.PANEL_BREAKERS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+      this.PANEL_BREAKERS.Location = new System.Drawing.Point(30, 377);
+      this.PANEL_BREAKERS.Name = "PANEL_BREAKERS";
+      this.PANEL_BREAKERS.Size = new System.Drawing.Size(291, 104);
+      this.PANEL_BREAKERS.TabIndex = 26;
       // 
       // PanelGenerator
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(353, 793);
-      this.Controls.Add(this.BREAKERS_AVAILABLE);
-      this.Controls.Add(this.label11);
+      this.Controls.Add(this.label4);
+      this.Controls.Add(this.PANEL_BREAKERS);
+      this.Controls.Add(this.MP_BREAKERS);
+      this.Controls.Add(this.label3);
       this.Controls.Add(this.GENERATE_PANEL);
       this.Controls.Add(this.SUBPANELS);
       this.Controls.Add(this.button2);
       this.Controls.Add(this.button1);
-      this.Controls.Add(this.textBox1);
-      this.Controls.Add(this.label9);
-      this.Controls.Add(this.label10);
-      this.Controls.Add(this.comboBox1);
+      this.Controls.Add(this.SUB_BREAKERS);
       this.Controls.Add(this.label8);
-      this.Controls.Add(this.NAME);
-      this.Controls.Add(this.label7);
-      this.Controls.Add(this.label5);
-      this.Controls.Add(this.BREAKERS);
-      this.Controls.Add(this.label6);
-      this.Controls.Add(this.BREAKERS_REQUIRED);
-      this.Controls.Add(this.label4);
-      this.Controls.Add(this.label3);
       this.Controls.Add(this.label2);
       this.Controls.Add(this.label1);
       this.Controls.Add(this.PANEL_CUSTOM_LOADS);
@@ -388,24 +274,15 @@
     private System.Windows.Forms.Panel PANEL_CUSTOM_LOADS;
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.Label label2;
-    private System.Windows.Forms.Label label3;
-    private System.Windows.Forms.Label label4;
-    private System.Windows.Forms.Label BREAKERS_REQUIRED;
-    private System.Windows.Forms.Label label6;
-    private System.Windows.Forms.ComboBox BREAKERS;
-    private System.Windows.Forms.Label label5;
-    private System.Windows.Forms.Label label7;
-    private System.Windows.Forms.TextBox NAME;
     private System.Windows.Forms.Label label8;
-    private System.Windows.Forms.TextBox textBox1;
-    private System.Windows.Forms.Label label9;
-    private System.Windows.Forms.Label label10;
-    private System.Windows.Forms.ComboBox comboBox1;
+    private System.Windows.Forms.ComboBox SUB_BREAKERS;
     private System.Windows.Forms.Button button1;
     private System.Windows.Forms.Button button2;
     private System.Windows.Forms.ListBox SUBPANELS;
     private System.Windows.Forms.Button GENERATE_PANEL;
-    private System.Windows.Forms.Label label11;
-    private System.Windows.Forms.Label BREAKERS_AVAILABLE;
+    private System.Windows.Forms.ComboBox MP_BREAKERS;
+    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.Label label4;
+    private System.Windows.Forms.Panel PANEL_BREAKERS;
   }
 }
