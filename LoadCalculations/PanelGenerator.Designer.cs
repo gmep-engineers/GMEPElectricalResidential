@@ -78,6 +78,7 @@
       // 
       // PANEL_CUSTOM_LOADS
       // 
+      this.PANEL_CUSTOM_LOADS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.PANEL_CUSTOM_LOADS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
       this.PANEL_CUSTOM_LOADS.Location = new System.Drawing.Point(30, 201);
       this.PANEL_CUSTOM_LOADS.Name = "PANEL_CUSTOM_LOADS";
@@ -233,6 +234,7 @@
       // 
       // PANEL_BREAKERS
       // 
+      this.PANEL_BREAKERS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.PANEL_BREAKERS.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
       this.PANEL_BREAKERS.Location = new System.Drawing.Point(30, 377);
       this.PANEL_BREAKERS.Name = "PANEL_BREAKERS";

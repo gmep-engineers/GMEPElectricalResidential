@@ -184,6 +184,9 @@
     <EmbeddedResource Include="LoadCalculations\Building\LoadCalculationForm.resx">
       <DependentUpon>LoadCalculationForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LoadCalculations\ItemSelectionControl.resx">
+      <DependentUpon>ItemSelectionControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LoadCalculations\LoadCalculationForm.resx">
       <DependentUpon>LoadCalculationForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -957,7 +957,7 @@ namespace GMEPElectricalResidential.LoadCalculations
     private UnitInformation _data;
     private const double GeneralLightingPercent = 0.70;
     private const double ExteriorLightingPercent = 0.10;
-    private const double LivingRecPercent = 0.15;
+    private const double LivingRecPercent = 0.30;
     private const double ExteriorRecPercent = 0.10;
     private const int COAndSmokeWatt = 100;
     private const int GasRecWatt = 50;
@@ -966,9 +966,71 @@ namespace GMEPElectricalResidential.LoadCalculations
     private bool hasExteriorReceptacle = false;
     private bool hasGasReceptacle = false;
 
-    public PanelGeneratorData(UnitInformation data)
+    public List<PanelBreaker> PanelBreakers { get; private set; }
+
+    public PanelGeneratorData(UnitInformation data, bool hasExteriorLighting, bool hasExteriorReceptacle, bool hasGasReceptacle)
     {
       _data = data;
+      this.hasExteriorLighting = hasExteriorLighting;
+      this.hasExteriorReceptacle = hasExteriorReceptacle;
+      this.hasGasReceptacle = hasGasReceptacle;
+      PanelBreakers = new List<PanelBreaker>();
+    }
+
+    private List<PanelBreaker> DistributeBreakers(string name, int totalWatts, int maxBreakers = 10)
+    {
+      List<PanelBreaker> breakers = new List<PanelBreaker>();
+      int numBreakers = Math.Min(maxBreakers, Math.Max(1, (int)Math.Ceiling(totalWatts / 1000.0)));
+      int wattsPerBreaker = (int)Math.Ceiling((double)totalWatts / numBreakers);
+
+      for (int i = 0; i < numBreakers; i++)
+      {
+        int breakerWatts = (i == numBreakers - 1) ? totalWatts : wattsPerBreaker;
+        breakers.Add(new PanelBreaker($"{name} {i + 1}", breakerWatts, 1));
+        totalWatts -= breakerWatts;
+      }
+
+      return breakers;
+    }
+
+    public void GenerateLightingBreakers()
+    {
+      int totalLightingWatts = _data.GeneralLoads.Lighting.Total;
+
+      PanelBreakers.Add(new PanelBreaker("CO & Smoke", COAndSmokeWatt, 1));
+
+      if (hasGasReceptacle)
+      {
+        totalLightingWatts -= GasRecWatt;
+        PanelBreakers.Add(new PanelBreaker("Gas Receptacle", GasRecWatt, 1));
+      }
+
+      int remainingWatts = totalLightingWatts - COAndSmokeWatt;
+
+      double generalLightingPercent = GeneralLightingPercent;
+      if (hasExteriorLighting)
+        generalLightingPercent -= ExteriorLightingPercent;
+      if (hasExteriorReceptacle)
+        generalLightingPercent -= ExteriorRecPercent;
+
+      int livingRecWatts = (int)(remainingWatts * LivingRecPercent);
+      int generalLightingWatts = (int)(remainingWatts * generalLightingPercent);
+
+      PanelBreakers.AddRange(DistributeBreakers("Living Receptacle", livingRecWatts));
+
+      if (hasExteriorLighting)
+      {
+        int exteriorLightingWatts = (int)(remainingWatts * ExteriorLightingPercent);
+        PanelBreakers.AddRange(DistributeBreakers("Exterior Lighting", exteriorLightingWatts));
+      }
+
+      if (hasExteriorReceptacle)
+      {
+        int exteriorRecWatts = (int)(remainingWatts * ExteriorRecPercent);
+        PanelBreakers.AddRange(DistributeBreakers("Exterior Receptacle", exteriorRecWatts));
+      }
+
+      PanelBreakers.AddRange(DistributeBreakers("General Lighting", generalLightingWatts));
     }
   }
 
