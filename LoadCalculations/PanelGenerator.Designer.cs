@@ -185,6 +185,7 @@
       this.GENERATE_PANEL.TabIndex = 23;
       this.GENERATE_PANEL.Text = "Generate Panels";
       this.GENERATE_PANEL.UseVisualStyleBackColor = true;
+      this.GENERATE_PANEL.Click += new System.EventHandler(this.GENERATE_PANEL_Click);
       // 
       // MP_BREAKERS
       // 
