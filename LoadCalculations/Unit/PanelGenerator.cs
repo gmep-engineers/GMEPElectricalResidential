@@ -25,7 +25,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
             Loads = new List<int>();
         }
     }
-    public partial class PanelGenerator 
+    public class PanelGenerator
     {
         private FlowLayoutPanel flowLayoutPanel;
         private List<UnitInformation> selectedUnits;
@@ -37,7 +37,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
             selectedUnits = units;
         }
 
-       
+
         public void StoreDataInJsonFile(List<Dictionary<string, object>> saveData)
         {
             string acDocPath = Path.GetDirectoryName(this.acDoc.Name);
@@ -181,7 +181,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
             }
             return "20";
         }
-        private void GENERATE_PANEL_Click(object sender, EventArgs e)
+        public void GENERATE_PANEL_Click(object sender, EventArgs e)
         {
             // bug: setting 42 breaker panel created panel with 36 breakers for ADU
 
@@ -189,18 +189,19 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
             {
                 int currentPanel = -1;
                 //int numSubpanels = SUBPANELS.Items.Count;
-                int numBreakers = 0;
+
+                int numBreakers = 32;
                 //Int32.TryParse(MP_BREAKERS.Text, out numBreakers);
-                Panel mainPanel = new Panel(false, 24);
-                List<Panel> subpanels = new List<Panel>();
-               /* for (int i = 0; i < numSubpanels; i++)
-                {
-                    Panel subpanel = new Panel();
-                    subpanels.Add(subpanel);
-                }*/
+                Panel mainPanel = new Panel(false, 32);
+                //List<Panel> subpanels = new List<Panel>();
+                /* for (int i = 0; i < numSubpanels; i++)
+                 {
+                     Panel subpanel = new Panel();
+                     subpanels.Add(subpanel);
+                 }*/
 
                 int breakerIndex = 0;
-                mainPanel.NumBreakers = 24;
+                mainPanel.NumBreakers = 32;
                 List<UnitLoad> loads = new List<UnitLoad>();
 
 
@@ -217,7 +218,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
                 {
                     if (currentPanel == -1)
                     {
-                        if (breakerIndex >= mainPanel.NumBreakers - (subpanels.Count * 2) - (load.Total > 1800 ? 1 : 0))
+                        if (breakerIndex >= mainPanel.NumBreakers  - (load.Total > 1800 ? 1 : 0))
                         {
                             currentPanel++;
                             breakerIndex = 0;
@@ -240,13 +241,12 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
                     else
                     {
                         // add to subpanel at index currentPanel
-                        if (breakerIndex >= subpanels[currentPanel].NumBreakers - (load.Total > 1800 ? 1 : 0))
+                        if (breakerIndex >= -(load.Total > 1800 ? 1 : 0))
                         {
                             currentPanel++;
                             breakerIndex = 0;
                         }
-                        subpanels[currentPanel].Descriptions.Add(load.Name);
-                        subpanels[currentPanel].Loads.Add(load.Total);
+
                     }
                 }
                 // iterate through panels and separate by right and left
@@ -641,19 +641,19 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
                 panel.Add("breaker_right", breaker_right);
                 panel.Add("notes", notes);
 
-                foreach (Panel subpanel in subpanels)
-                {
-                    Dictionary<string, object> sp = new Dictionary<string, object>();
-                }
-                panelStorage.Add(panel);
-                if (this.acDoc != null)
-                {
-                    using (DocumentLock docLock = this.acDoc.LockDocument())
+                //foreach (Panel subpanel in subpanels)
+                //{
+                    //Dictionary<string, object> sp = new Dictionary<string, object>();
+                    //}
+                    panelStorage.Add(panel);
+                    if (this.acDoc != null)
                     {
-                        StoreDataInJsonFile(panelStorage);
+                        using (DocumentLock docLock = this.acDoc.LockDocument())
+                        {
+                            StoreDataInJsonFile(panelStorage);
+                        }
                     }
                 }
             }
         }
     }
-}

@@ -119,7 +119,7 @@
             this.label8.Text = "Subpanel Breakers";
             // 
             // SUB_BREAKERS
-            // 
+            //
             this.SUB_BREAKERS.AutoCompleteCustomSource.AddRange(new string[] {
             "6",
             "12",
