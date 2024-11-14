@@ -125,6 +125,7 @@
     <Compile Include="LoadCalculations\Unit\LoadCalculationForm.Designer.cs">
       <DependentUpon>LoadCalculationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoadCalculations\Unit\PanelGenerator.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
