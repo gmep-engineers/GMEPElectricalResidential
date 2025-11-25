@@ -32,7 +32,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       }
 
       var acCurDb = Application.DocumentManager.MdiActiveDocument.Database;
-
+           
       using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
       {
         Point3d point = new Point3d(0, 0, 0);

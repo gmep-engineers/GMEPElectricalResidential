@@ -31,6 +31,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
     private bool _unitNullFlag = false;
     private int _dragIndex = -1;
     private int _tabID;
+    private PanelGenerator panelGenerator;
 
     public LoadCalculationForm(LOAD_CALCULATION_FORM parent, int tabId, UnitInformation unitInformation = null)
     {
@@ -54,6 +55,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
         _unitNullFlag = true;
         _unitInformation = new UnitInformation(tabId);
       }
+       panelGenerator = new PanelGenerator(_parentForm.AllUnitInformation());
 
       this.Load += new EventHandler(UnitLoadCalculation_Load);
       GENERAL_CUSTOM_LOAD_BOX.DrawMode = DrawMode.OwnerDrawFixed;
@@ -1092,7 +1094,9 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
 
     private void ADD_ENTRY_Click(object sender, EventArgs e)
     {
-      AddEntry(GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_TOTAL, GENERAL_CUSTOM_LOAD_BOX);
+        AddEntry(GENERAL_CUSTOM_NAME, GENERAL_CUSTOM_MULTIPLIER, GENERAL_CUSTOM_TOTAL, GENERAL_CUSTOM_LOAD_BOX);
+        panelGenerator = new PanelGenerator(_parentForm.AllUnitInformation());
+        panelGenerator.GENERATE_PANEL_Click(sender, e);
     }
 
     private void ADD_ENTRY_CUSTOM_Click(object sender, EventArgs e)
