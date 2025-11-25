@@ -1179,7 +1179,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       List<int> units;
       if (int.TryParse(AREA.Text, out int area))
       {
-        int kBTU = (int)Math.Ceiling((area / 500.0) * 12);
+        int kBTU = (int)Math.Ceiling((area / 400.0) * 12);
         if (kBTU < 18)
         {
           kBTU = 18;
@@ -1205,7 +1205,7 @@ namespace GMEPElectricalResidential.LoadCalculations.Unit
       List<int> units;
       if (int.TryParse(AREA.Text, out int area))
       {
-        int kBTU = (int)Math.Ceiling((area / 500.0) * 12);
+        int kBTU = (int)Math.Ceiling((area / 400.0) * 12);
         if (kBTU < 18)
         {
           kBTU = 18;
