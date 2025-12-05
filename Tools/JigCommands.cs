@@ -198,13 +198,15 @@ namespace GMEPElectricalResidential
     public Point3d InsertionPoint { get; private set; }
     private double _blockScale;
     private double _blockRotation;
+    private double _maxDistance;
     public double rotation;
 
     public LineBlockJig(
       Line baseLine,
       ObjectId blockDefId,
-      double blockScale = 1.0,
-      double blockRotation = 0.0
+      double blockScale = 1,
+      double blockRotation = 0,
+      double maxDistance = 0
     )
     {
       _baseLine = baseLine;
@@ -213,6 +215,7 @@ namespace GMEPElectricalResidential
       InsertionPoint = baseLine.StartPoint;
       _blockScale = blockScale;
       _blockRotation = blockRotation;
+      _maxDistance = maxDistance;
     }
 
     protected override bool WorldDraw(WorldDraw draw)
@@ -220,9 +223,83 @@ namespace GMEPElectricalResidential
       // Preview the block at the projected point
 
       rotation = _blockRotation;
+      bool rotationApplied = false;
       if (_mousePoint.X > InsertionPoint.X)
       {
         rotation = rotation + 3.14159265359;
+        rotationApplied = true;
+      }
+      else if (_mousePoint.Y < InsertionPoint.Y)
+      {
+        rotation = rotation + 3.14159265359;
+        rotationApplied = true;
+      }
+      bool increasingDirection = false;
+      if (_baseLine.StartPoint.X < _baseLine.EndPoint.X)
+      {
+        increasingDirection = true;
+      }
+      if (_baseLine.StartPoint.Y < _baseLine.EndPoint.Y)
+      {
+        increasingDirection = true;
+      }
+
+      bool angleFlip = true;
+      if (
+        _baseLine.StartPoint.X != _baseLine.EndPoint.X
+        && _baseLine.StartPoint.Y != _baseLine.EndPoint.Y
+      )
+      {
+        if (
+          _baseLine.EndPoint.X > _baseLine.StartPoint.X
+          && _baseLine.EndPoint.Y > _baseLine.StartPoint.Y
+        )
+        {
+          angleFlip = false;
+        }
+        if (
+          _baseLine.EndPoint.X < _baseLine.StartPoint.X
+          && _baseLine.EndPoint.Y < _baseLine.StartPoint.Y
+        )
+        {
+          angleFlip = false;
+        }
+      }
+      else
+      {
+        angleFlip = false;
+      }
+
+      if (_maxDistance > 0 && _mousePoint.DistanceTo(_baseLine.StartPoint) > _maxDistance)
+      {
+        double x =
+          _baseLine.StartPoint.X
+          + _maxDistance
+            * Math.Cos(rotation)
+            * (rotationApplied ? 1 : -1)
+            * (increasingDirection ? -1 : 1)
+            * (angleFlip ? -1 : 1);
+        double y =
+          _baseLine.StartPoint.Y
+          + _maxDistance
+            * Math.Sin(rotation)
+            * (rotationApplied ? 1 : -1)
+            * (increasingDirection ? -1 : 1)
+            * (angleFlip ? -1 : 1);
+        InsertionPoint = new Point3d(x, y, 0);
+      }
+
+      if (angleFlip)
+      {
+        rotation = _blockRotation;
+        if (_mousePoint.X < InsertionPoint.X)
+        {
+          rotation = rotation + 3.14159265359;
+        }
+        else if (_mousePoint.Y < InsertionPoint.Y)
+        {
+          rotation = rotation + 3.14159265359;
+        }
       }
       BlockReference previewBlock = new BlockReference(InsertionPoint, _blockDefId)
       {

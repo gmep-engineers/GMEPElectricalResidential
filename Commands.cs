@@ -45,6 +45,38 @@ namespace GMEPElectricalResidential
       _loadCalculationForm.BringToFront();
     }
 
+    public void ProcessWallReceptacles(
+      List<ObjectId> wallLines,
+      List<string> labels,
+      double minDistance,
+      double maxDistance
+    )
+    {
+      double remainingLength = 0;
+      foreach (var l in wallLines)
+      {
+        bool wallDone = false;
+        double coveredLength = 0;
+        while (!wallDone)
+        {
+          bool cont;
+          (coveredLength, remainingLength, cont) = AutoCADHelper.PlaceBlockOnLine(
+            coveredLength,
+            remainingLength,
+            l,
+            "GMEP REC",
+            minDistance,
+            maxDistance,
+            labels
+          );
+          if (!cont)
+          {
+            wallDone = true;
+          }
+        }
+      }
+    }
+
     [CommandMethod("Receptacle")]
     public void Receptacle()
     {
@@ -95,97 +127,11 @@ namespace GMEPElectricalResidential
       }
       string selectedOption = keywordResult.StringResult;
 
+      (List<ObjectId> wallLines, List<IntPoint> wallPoints) =
+        AutoCADHelper.DefineMultiSidedPerimeter("E-WALL", "wall");
       if (selectedOption == "KitchenCountertop")
       {
-        // HERE follow same line creation method as phr
-        // create a poly line on a layer titled SINK
-        (List<ObjectId> sinkLines, List<IntPoint> sinkPoints) =
-          AutoCADHelper.DefineFourSidedPerimeter("E-SINK", "sink");
-        (List<ObjectId> rangeLines, List<IntPoint> rangePoints) =
-          AutoCADHelper.DefineFourSidedPerimeter("E-RANGE", "range");
-        (List<ObjectId> wallLines, List<IntPoint> wallPoints) =
-          AutoCADHelper.DefineMultiSidedPerimeter("E-WALL", "wall");
-
-        foreach (var l in wallLines)
-        {
-          bool wallDone = false;
-          int coveredLength = 0;
-          while (!wallDone)
-          {
-            using (Transaction tr = db.TransactionManager.StartTransaction())
-            {
-              Line line = (Line)tr.GetObject(l, OpenMode.ForWrite);
-              if (line.Length < 24)
-              {
-                wallDone = true;
-                break;
-              }
-              if (line.Length < coveredLength)
-              {
-                wallDone = true;
-                break;
-              }
-              Point3d startPoint;
-              Point3d endPoint;
-              if (line.StartPoint.X >= line.EndPoint.X)
-              {
-                startPoint = line.EndPoint;
-                endPoint = line.StartPoint;
-              }
-              else
-              {
-                startPoint = line.StartPoint;
-                endPoint = line.EndPoint;
-              }
-              if (line.StartPoint.Y >= line.EndPoint.Y)
-              {
-                startPoint = line.EndPoint;
-                endPoint = line.StartPoint;
-              }
-              else
-              {
-                startPoint = line.StartPoint;
-                endPoint = line.EndPoint;
-              }
-              Vector3d dir = (endPoint - startPoint).GetNormal();
-              double angle = dir.AngleOnPlane(new Plane(Point3d.Origin, Vector3d.ZAxis));
-
-              BlockTable bt = (BlockTable)
-                tr.GetObject(line.Database.BlockTableId, OpenMode.ForRead);
-              string blockName = "GMEP REC";
-              if (!bt.Has(blockName))
-              {
-                ed.WriteMessage($"\nBlock '{blockName}' not found in drawing.");
-                return;
-              }
-              ObjectId blockDefId = bt[blockName];
-              BlockTableRecord btr = (BlockTableRecord)
-                tr.GetObject(line.OwnerId, OpenMode.ForWrite);
-              LineBlockJig lineBlockJig = new LineBlockJig(line, blockDefId, 1, angle);
-              PromptResult jigResult = ed.Drag(lineBlockJig);
-              if (jigResult.Status != PromptStatus.OK)
-              {
-                break;
-              }
-              Point3d blockPos = lineBlockJig.InsertionPoint;
-              string layer = "E-SYM1";
-              BlockReference blockRef = new BlockReference(blockPos, blockDefId)
-              {
-                Rotation = lineBlockJig.rotation,
-                Layer = layer,
-              };
-              btr.AppendEntity(blockRef);
-              tr.AddNewlyCreatedDBObject(blockRef, true);
-              tr.Commit();
-
-              coveredLength += 144;
-            }
-          }
-        }
-
-        // create a poly line on a layer titled RANGE
-        // create a poly line on a layer titled WALL
-        // follow same line procedure as the arrows
+        ProcessWallReceptacles(wallLines, new List<string>() { "+42\"", "GFI" }, 24, 48);
       }
       else if (selectedOption == "KitchenIsland") { }
       else if (selectedOption == "Bathroom") { }
@@ -199,7 +145,7 @@ namespace GMEPElectricalResidential
       else if (selectedOption == "Foyer") { }
       else
       {
-        ed.WriteMessage("\nPoop.");
+        ProcessWallReceptacles(wallLines, new List<string>() { }, 24, 144);
       }
     }
   }

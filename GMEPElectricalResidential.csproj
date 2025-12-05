@@ -180,6 +180,8 @@
     <Compile Include="SingleLineDiagram\UserControls\PullSectionAboveForm.Designer.cs">
       <DependentUpon>PullSectionAboveForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\AutoCADHelper.cs" />
+    <Compile Include="Tools\JigCommands.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="LoadCalculations\Building\LoadCalculationForm.resx">
