@@ -350,4 +350,265 @@ namespace GMEPElectricalResidential
       return SamplerStatus.OK;
     }
   }
+
+  public class PolyLineJig : DrawJig
+  {
+    private Polyline polyline;
+    public Point3d CurrentPoint;
+    private List<Point3d> vertices;
+
+    public PolyLineJig(Point3d startPoint)
+    {
+      polyline = new Polyline();
+      vertices = new List<Point3d> { startPoint };
+      polyline.AddVertexAt(0, new Point2d(startPoint.X, startPoint.Y), 0, 0, 0);
+      CurrentPoint = startPoint;
+    }
+
+    protected override bool WorldDraw(WorldDraw draw)
+    {
+      if (polyline != null)
+      {
+        draw.Geometry.Draw(polyline);
+      }
+      return true;
+    }
+
+    protected override SamplerStatus Sampler(JigPrompts prompts)
+    {
+      JigPromptPointOptions options = new JigPromptPointOptions("\nSelect next point or [Close]:");
+      options.UserInputControls =
+        UserInputControls.Accept3dCoordinates | UserInputControls.NullResponseAccepted;
+      options.Keywords.Add("Close");
+      PromptPointResult result = prompts.AcquirePoint(options);
+
+      if (result.Status == PromptStatus.Keyword && result.StringResult == "Close")
+      {
+        if (vertices.Count > 2)
+        {
+          polyline.Closed = true;
+          return SamplerStatus.Cancel;
+        }
+        else
+        {
+          Application.DocumentManager.MdiActiveDocument.Editor.WriteMessage(
+            "\nA polyline must have at least 3 vertices to be closed."
+          );
+          return SamplerStatus.NoChange;
+        }
+      }
+      if (result.Status == PromptStatus.Cancel || result.Status == PromptStatus.Error)
+      {
+        return SamplerStatus.Cancel;
+      }
+      options.BasePoint = CurrentPoint;
+      options.UseBasePoint = true;
+      options.Cursor = CursorType.RubberBand;
+
+      if (result.Status != PromptStatus.OK)
+        return SamplerStatus.Cancel;
+
+      if (CurrentPoint.DistanceTo(result.Value) < Tolerance.Global.EqualPoint)
+        return SamplerStatus.NoChange;
+
+      CurrentPoint = result.Value;
+
+      return SamplerStatus.OK;
+    }
+
+    public void AddVertex(Point3d point)
+    {
+      vertices.Add(point);
+      polyline.AddVertexAt(vertices.Count - 1, new Point2d(point.X, point.Y), 0, 0, 0);
+    }
+
+    public Polyline GetPolyline()
+    {
+      return polyline;
+    }
+  }
+
+  public class ConvenienceRecJig : DrawJig
+  {
+    public Point3d _point;
+
+    private ObjectId _blockId = ObjectId.Null;
+
+    private string _name = string.Empty;
+    private double _scale = 1;
+
+    public ConvenienceRecJig(string _name = "block", double _scale = 1)
+    {
+      this._name = _name;
+      this._scale = _scale;
+    }
+
+    public (PromptResult, ObjectId, int) DragMe(
+      ObjectId i_blockId,
+      List<ObjectId> objectIdList,
+      int objectListIdx,
+      out Point3d o_pnt
+    )
+    {
+      _blockId = i_blockId;
+
+      Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+
+      PromptResult jigRes = ed.Drag(this);
+
+      if (jigRes.Status == PromptStatus.Cancel)
+      {
+        o_pnt = _point;
+        return (jigRes, i_blockId, 0);
+      }
+
+      if (jigRes.Status == PromptStatus.None)
+      {
+        if (objectIdList.Count > 0)
+        {
+          objectListIdx++;
+          if (objectListIdx == objectIdList.Count())
+          {
+            return DragMe(objectIdList[0], objectIdList, 0, out o_pnt);
+          }
+          else
+          {
+            return DragMe(objectIdList[objectListIdx], objectIdList, objectListIdx, out o_pnt);
+          }
+        }
+      }
+
+      o_pnt = _point;
+
+      return (jigRes, i_blockId, objectListIdx);
+    }
+
+    protected override SamplerStatus Sampler(JigPrompts prompts)
+    {
+      JigPromptPointOptions jigOpts = new JigPromptPointOptions();
+
+      jigOpts.UserInputControls = (
+        UserInputControls.Accept3dCoordinates | UserInputControls.NullResponseAccepted
+      );
+
+      jigOpts.Message = $"Select a point for {_name}:";
+
+      PromptPointResult jigRes = prompts.AcquirePoint(jigOpts);
+
+      Point3d pt = jigRes.Value;
+
+      if (pt == _point)
+        return SamplerStatus.NoChange;
+
+      _point = pt;
+
+      if (jigRes.Status == PromptStatus.OK)
+        return SamplerStatus.OK;
+
+      return SamplerStatus.Cancel;
+    }
+
+    protected override bool WorldDraw(Autodesk.AutoCAD.GraphicsInterface.WorldDraw draw)
+    {
+      BlockReference inMemoryBlockInsert = new BlockReference(_point, _blockId);
+      inMemoryBlockInsert.ScaleFactors = new Scale3d(_scale, _scale, 1);
+
+      draw.Geometry.Draw(inMemoryBlockInsert);
+
+      inMemoryBlockInsert.Dispose();
+
+      return true;
+    }
+  }
+
+  public class RotateJig : EntityJig
+  {
+    private Point3d _insertionPoint;
+    private Point3d _rotationPoint;
+    private Vector3d _direction;
+    private bool _inserted;
+
+    public RotateJig(BlockReference blockRef)
+      : base(blockRef)
+    {
+      _insertionPoint = Point3d.Origin;
+      _rotationPoint = Point3d.Origin;
+      _inserted = false;
+    }
+
+    protected override SamplerStatus Sampler(JigPrompts prompts)
+    {
+      string prompt;
+      if (!_inserted)
+      {
+        prompt = "\nSpecify insertion point: ";
+      }
+      else
+      {
+        prompt = "\nSpecify rotation: ";
+      }
+      JigPromptPointOptions pointOptions = new JigPromptPointOptions(prompt);
+      PromptPointResult pointResult = prompts.AcquirePoint(pointOptions);
+      if (pointResult.Status == PromptStatus.OK)
+      {
+        if (!_inserted)
+        {
+          if (pointResult.Status == PromptStatus.OK)
+          {
+            if (_insertionPoint == pointResult.Value)
+            {
+              return SamplerStatus.NoChange;
+            }
+            _insertionPoint = pointResult.Value;
+            _inserted = true;
+            return SamplerStatus.OK;
+          }
+        }
+        else
+        {
+          if (pointResult.Status == PromptStatus.OK)
+          {
+            if (_rotationPoint == pointResult.Value)
+            {
+              return SamplerStatus.NoChange;
+            }
+            _direction = _insertionPoint - pointResult.Value;
+            _rotationPoint = pointResult.Value;
+            return SamplerStatus.OK;
+          }
+        }
+      }
+      return SamplerStatus.Cancel;
+    }
+
+    protected override bool Update()
+    {
+      ((BlockReference)Entity).Position = _insertionPoint;
+      double rotation = 0;
+      if (
+        (_insertionPoint - _rotationPoint).Length > 12
+        && (_insertionPoint - _rotationPoint).Length < 72
+      )
+      {
+        rotation = Math.Atan2(_direction.Y, _direction.X) - Math.PI / 2;
+        for (int i = -12; i < 12; i += 2)
+        {
+          if (rotation >= 0.3926991 * (i - 1) && rotation < 0.3926991 * (i + 1))
+          {
+            rotation = ((0.3926991 * i) + 0.3926991 * (i + 2)) / 2 - 0.3926991;
+            break;
+          }
+        }
+      }
+      if ((_insertionPoint - _rotationPoint).Length >= 96)
+      {
+        rotation = Math.Atan2(_direction.Y, _direction.X) - Math.PI / 2;
+      }
+
+      ((BlockReference)Entity).Rotation = rotation;
+      return true;
+    }
+
+    public Point3d InsertionPoint => _insertionPoint;
+  }
 }

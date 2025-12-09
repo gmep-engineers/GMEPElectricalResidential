@@ -243,6 +243,7 @@ namespace GMEPElectricalResidential
       string blockName,
       double minDistance,
       double maxDistance,
+      double initialDistance,
       List<string> labels
     )
     {
@@ -267,7 +268,7 @@ namespace GMEPElectricalResidential
 
         if (coveredLength == 0 && remainingLength == 0)
         {
-          maxDistance = minDistance;
+          maxDistance = initialDistance;
         }
         else if (coveredLength == 0 && remainingLength > 0)
         {
