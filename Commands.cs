@@ -67,7 +67,7 @@ namespace GMEPElectricalResidential
             coveredLength,
             remainingLength,
             l,
-            "GMEP REC",
+            "GMEP DUPLEX",
             minDistance,
             maxDistance,
             initialDistance,
@@ -81,31 +81,202 @@ namespace GMEPElectricalResidential
       }
     }
 
+    public int PlaceReceptacleBlock(int objectIdIdx, List<string> labels, string blockName = "")
+    {
+      var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
+      if (doc == null)
+        return -1;
+
+      var db = doc.Database;
+      var ed = doc.Editor;
+      ObjectId blockId;
+      try
+      {
+        Point3d point;
+        double rotation = 0;
+        using (Transaction tr = db.TransactionManager.StartTransaction())
+        {
+          List<ObjectId> objectIdList;
+          ConvenienceRecJig blockJig = new ConvenienceRecJig();
+          if (String.IsNullOrEmpty(blockName))
+          {
+            BlockTable bt = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
+            BlockTableRecord duplex = (BlockTableRecord)
+              tr.GetObject(bt["GMEP DUPLEX"], OpenMode.ForRead);
+            BlockTableRecord duplexData = (BlockTableRecord)
+              tr.GetObject(bt["GMEP DUPLEXDATA"], OpenMode.ForRead);
+            BlockTableRecord floorDuplex = (BlockTableRecord)
+              tr.GetObject(bt["GMEP FLOOR DUPLEX"], OpenMode.ForRead);
+            BlockTableRecord floorDuplexData = (BlockTableRecord)
+              tr.GetObject(bt["GMEP FLOOR DUPLEXDATA"], OpenMode.ForRead);
+            BlockTableRecord quad = (BlockTableRecord)
+              tr.GetObject(bt["GMEP QUAD"], OpenMode.ForRead);
+            BlockTableRecord quadData = (BlockTableRecord)
+              tr.GetObject(bt["GMEP QUADDATA"], OpenMode.ForRead);
+            BlockTableRecord floorQuad = (BlockTableRecord)
+              tr.GetObject(bt["GMEP FLOOR QUAD"], OpenMode.ForRead);
+            BlockTableRecord floorQuadData = (BlockTableRecord)
+              tr.GetObject(bt["GMEP FLOOR QUADDATA"], OpenMode.ForRead);
+            BlockTableRecord nema = (BlockTableRecord)
+              tr.GetObject(bt["GMEP NEMA"], OpenMode.ForRead);
+
+            objectIdList = new List<ObjectId>()
+            {
+              duplex.ObjectId,
+              duplexData.ObjectId,
+              floorDuplex.ObjectId,
+              floorDuplexData.ObjectId,
+              quad.ObjectId,
+              quadData.ObjectId,
+              floorQuad.ObjectId,
+              floorQuadData.ObjectId,
+              nema.ObjectId,
+            };
+          }
+          else
+          {
+            BlockTable bt = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
+            BlockTableRecord duplex = (BlockTableRecord)
+              tr.GetObject(bt[blockName], OpenMode.ForRead);
+            objectIdList = new List<ObjectId>() { duplex.ObjectId };
+          }
+
+          if (objectIdIdx >= objectIdList.Count)
+          {
+            objectIdIdx = 0;
+          }
+
+          (PromptResult, ObjectId, int) res = blockJig.DragMe(
+            objectIdList[objectIdIdx],
+            objectIdList,
+            objectIdIdx,
+            out point
+          );
+          if (res.Item1.Status == PromptStatus.OK)
+          {
+            objectIdIdx = res.Item3;
+
+            BlockTableRecord curSpace = (BlockTableRecord)
+              tr.GetObject(db.CurrentSpaceId, OpenMode.ForWrite);
+
+            BlockReference br = new BlockReference(point, res.Item2);
+            RotateJig rotateJig = new RotateJig(br);
+            PromptResult rotatePromptResult = ed.Drag(rotateJig);
+
+            if (rotatePromptResult.Status != PromptStatus.OK)
+            {
+              return -1;
+            }
+            rotation = br.Rotation;
+
+            Point3d blockRefPosition = br.Position;
+            Console.WriteLine(rotation);
+
+            TextHorizontalMode horizontalMode = TextHorizontalMode.TextLeft;
+            AttachmentPoint attachmentPoint = AttachmentPoint.BaseLeft;
+
+            if (labels.Count > 0 && AutoCADHelper.Scale < 0)
+            {
+              AutoCADHelper.SetScale();
+            }
+
+            if (rotation > 1.5 && rotation < 1.6)
+            {
+              blockRefPosition = new Point3d(blockRefPosition.X + 1, blockRefPosition.Y, 0);
+            }
+
+            if (rotation > 4.7 && rotation < 4.8)
+            {
+              horizontalMode = TextHorizontalMode.TextRight;
+              attachmentPoint = AttachmentPoint.BaseRight;
+              blockRefPosition = new Point3d(blockRefPosition.X - 1, blockRefPosition.Y, 0);
+            }
+
+            if (rotation > 3.14 && rotation < 3.15)
+            {
+              horizontalMode = TextHorizontalMode.TextRight;
+              attachmentPoint = AttachmentPoint.BaseRight;
+              blockRefPosition = new Point3d(
+                blockRefPosition.X - 1.125 / AutoCADHelper.Scale,
+                blockRefPosition.Y - 1.125 / AutoCADHelper.Scale,
+                0
+              );
+            }
+
+            if (rotation == 0)
+            {
+              blockRefPosition = new Point3d(
+                blockRefPosition.X + 1.125 / AutoCADHelper.Scale,
+                blockRefPosition.Y + 1.375 / AutoCADHelper.Scale,
+                0
+              );
+            }
+
+            curSpace.AppendEntity(br);
+
+            tr.AddNewlyCreatedDBObject(br, true);
+            blockId = br.Id;
+            double yTransform = 1.375;
+            for (int i = 0; i < labels.Count; i++)
+            {
+              AutoCADHelper.CreateAndPositionText(
+                tr,
+                labels[i],
+                "RPM",
+                1.125 / AutoCADHelper.Scale,
+                0.85,
+                2,
+                "E-TXT1",
+                new Point3d(
+                  blockRefPosition.X,
+                  blockRefPosition.Y - (yTransform * i) / AutoCADHelper.Scale,
+                  0
+                ),
+                horizontalMode,
+                TextVerticalMode.TextBase,
+                attachmentPoint
+              );
+            }
+          }
+          else
+          {
+            return -1;
+          }
+          tr.Commit();
+        }
+      }
+      catch (System.Exception ex)
+      {
+        Console.WriteLine(ex.ToString());
+      }
+      return objectIdIdx;
+    }
+
     [CommandMethod("Receptacle")]
     public void Receptacle()
     {
       List<string> roomTypes = new List<string>()
       {
-        "KitchenCountertop",
-        "KitchenIsland",
-        "FamilyRoom",
-        "DiningRoom",
-        "LivingRoom",
-        "Parlor",
-        "Library",
-        "Den",
-        "Sunroom",
-        "Bedroom",
-        "RecreationRoom",
-        "Bathroom",
-        "OutdoorGrade-LevelEntrance/Exit",
-        "OutdoorOne-andTwo-FamilyDwelling",
-        "Balcony",
-        "Laundry",
-        "Basement",
-        "Garage",
-        "Hallway",
-        "Foyer",
+        "A-KitchenCountertop",
+        "B-KitchenIsland",
+        "C-FamilyRoom",
+        "D-DiningRoom",
+        "E-LivingRoom",
+        "F-Parlor",
+        "G-Library",
+        "H-Den",
+        "I-Sunroom",
+        "J-Bedroom",
+        "K-RecreationRoom",
+        "L-Bathroom",
+        "M-OutdoorGrade-LevelEntrance/Exit",
+        "N-OutdoorOne-andTwo-FamilyDwelling",
+        "O-Balcony",
+        "P-Laundry",
+        "Q-Basement",
+        "R-Garage",
+        "S-Hallway",
+        "T-Foyer",
       };
       var doc = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument;
       if (doc == null)
@@ -131,13 +302,14 @@ namespace GMEPElectricalResidential
       }
       string selectedOption = keywordResult.StringResult;
 
-      if (selectedOption == "KitchenCountertop")
+      Console.WriteLine(selectedOption);
+      if (selectedOption == "A-KitchenCountertop")
       {
         (List<ObjectId> wallLines, List<IntPoint> wallPoints) =
           AutoCADHelper.DefineMultiSidedPerimeter("E-WALL", "wall");
         ProcessWallReceptacles(wallLines, new List<string>() { "+42\"", "GFI" }, 24, 48, 24);
       }
-      else if (selectedOption == "KitchenIsland")
+      else if (selectedOption == "B-KitchenIsland")
       {
         // Create a closed polyline - follow DefineLightingLocation command
         PromptPointOptions ppo = new PromptPointOptions("\nSpecify start point: ");
@@ -202,147 +374,56 @@ namespace GMEPElectricalResidential
           ed.WriteMessage(
             "\nPlace " + (i + 1).ToString() + "/" + numRecs + " for '" + "Kitchen Island" + "'"
           );
-          ObjectId blockId;
-          try
-          {
-            Point3d point;
-            double rotation = 0;
-            using (Transaction tr = db.TransactionManager.StartTransaction())
-            {
-              BlockTable bt = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
-              BlockTableRecord duplex = (BlockTableRecord)
-                tr.GetObject(bt["GMEP DUPLEX"], OpenMode.ForRead);
-              BlockTableRecord duplexData = (BlockTableRecord)
-                tr.GetObject(bt["GMEP DUPLEXDATA"], OpenMode.ForRead);
-              BlockTableRecord floorDuplex = (BlockTableRecord)
-                tr.GetObject(bt["GMEP FLOOR DUPLEX"], OpenMode.ForRead);
-              BlockTableRecord floorDuplexData = (BlockTableRecord)
-                tr.GetObject(bt["GMEP FLOOR DUPLEXDATA"], OpenMode.ForRead);
-              BlockTableRecord quad = (BlockTableRecord)
-                tr.GetObject(bt["GMEP QUAD"], OpenMode.ForRead);
-              BlockTableRecord quadData = (BlockTableRecord)
-                tr.GetObject(bt["GMEP QUADDATA"], OpenMode.ForRead);
-              BlockTableRecord floorQuad = (BlockTableRecord)
-                tr.GetObject(bt["GMEP FLOOR QUAD"], OpenMode.ForRead);
-              BlockTableRecord floorQuadData = (BlockTableRecord)
-                tr.GetObject(bt["GMEP FLOOR QUADDATA"], OpenMode.ForRead);
-
-              ConvenienceRecJig blockJig = new ConvenienceRecJig();
-
-              List<ObjectId> objectIdList;
-
-              if (numRecs - i > 2)
-              {
-                objectIdList = new List<ObjectId>()
-                {
-                  duplex.ObjectId,
-                  duplexData.ObjectId,
-                  floorDuplex.ObjectId,
-                  floorDuplexData.ObjectId,
-                  quad.ObjectId,
-                  quadData.ObjectId,
-                  floorQuad.ObjectId,
-                  floorQuadData.ObjectId,
-                };
-              }
-              else
-              {
-                objectIdList = new List<ObjectId>()
-                {
-                  duplex.ObjectId,
-                  duplexData.ObjectId,
-                  floorDuplex.ObjectId,
-                  floorDuplexData.ObjectId,
-                };
-              }
-
-              if (objectIdIdx >= objectIdList.Count)
-              {
-                objectIdIdx = 0;
-              }
-
-              (PromptResult, ObjectId, int) res = blockJig.DragMe(
-                objectIdList[objectIdIdx],
-                objectIdList,
-                objectIdIdx,
-                out point
-              );
-              if (res.Item1.Status == PromptStatus.OK)
-              {
-                objectIdIdx = res.Item3;
-
-                BlockTableRecord curSpace = (BlockTableRecord)
-                  tr.GetObject(db.CurrentSpaceId, OpenMode.ForWrite);
-
-                BlockReference br = new BlockReference(point, res.Item2);
-                RotateJig rotateJig = new RotateJig(br);
-                PromptResult rotatePromptResult = ed.Drag(rotateJig);
-
-                if (rotatePromptResult.Status != PromptStatus.OK)
-                {
-                  return;
-                }
-                rotation = br.Rotation;
-
-                curSpace.AppendEntity(br);
-
-                tr.AddNewlyCreatedDBObject(br, true);
-                blockId = br.Id;
-                double circuitOffsetX = 0;
-                double circuitOffsetY = 0;
-                switch (rotation)
-                {
-                  case var _ when rotation > 5.49:
-                    circuitOffsetY = 8.5;
-                    circuitOffsetX = 4.5;
-                    break;
-                  case var _ when rotation > 4.71:
-                    circuitOffsetY = 4.5;
-                    break;
-                  case var _ when rotation > 2.35:
-                    circuitOffsetY = 1.5;
-                    circuitOffsetX = -4.5;
-                    break;
-                  case var _ when rotation > 1.57:
-                    circuitOffsetY = -4.5;
-                    break;
-                  default:
-                    circuitOffsetY = -5;
-                    break;
-                }
-              }
-              else
-              {
-                return;
-              }
-              tr.Commit();
-            }
-          }
-          catch (System.Exception ex)
-          {
-            Console.WriteLine(ex.ToString());
-          }
+          List<string> label = new List<string>() { "+30\"", "GFI" };
+          objectIdIdx = PlaceReceptacleBlock(objectIdIdx, label);
         }
 
         // Standard block jig rotation jig to place appropriate # of recs
       }
-      else if (selectedOption == "Bathroom")
+      else if (selectedOption == "L-Bathroom")
       {
-        // Standard block jig with height and gfi
+        PlaceReceptacleBlock(0, new List<string>() { "+42\"", "GFI" }, "GMEP DUPLEX");
       }
-      else if (selectedOption == "OutdoorGrade-LevelEntrance/Exit") { }
-      else if (selectedOption == "OutdoorOne-andTwo-FamilyDwelling") { }
-      else if (selectedOption == "Balcony") { }
-      else if (selectedOption == "Laundry") { }
-      else if (selectedOption == "Basement") { }
-      else if (selectedOption == "Garage") { }
-      else if (selectedOption == "Hallway")
+      else if (selectedOption == "M-OutdoorGrade-LevelEntrance")
+      {
+        PlaceReceptacleBlock(0, new List<string>() { "GFI", "WP" }, "GMEP DUPLEX");
+      }
+      else if (selectedOption == "N-OutdoorOne-andTwo-FamilyDwelling")
+      {
+        PlaceReceptacleBlock(0, new List<string>() { "GFI", "WP" }, "GMEP DUPLEX");
+      }
+      else if (selectedOption == "O-Balcony")
+      {
+        PlaceReceptacleBlock(0, new List<string>() { "GFI", "WP" }, "GMEP DUPLEX");
+      }
+      else if (selectedOption == "P-Laundry")
+      {
+        PlaceReceptacleBlock(0, new List<string>(), "GMEP NEMA");
+      }
+      else if (selectedOption == "Q-Basement")
+      {
+        //(List<ObjectId> wallLines, List<IntPoint> wallPoints) =
+        //  AutoCADHelper.DefineMultiSidedPerimeter("E-WALL", "wall");
+        //ProcessWallReceptacles(wallLines, new List<string>() { }, 24, 240, 240);
+      }
+      else if (selectedOption == "R-Garage")
+      {
+        //(List<ObjectId> wallLines, List<IntPoint> wallPoints) =
+        //  AutoCADHelper.DefineMultiSidedPerimeter("E-WALL", "wall");
+        //ProcessWallReceptacles(wallLines, new List<string>() { }, 24, 240, 240);
+      }
+      else if (selectedOption == "S-Hallway")
       {
         (List<ObjectId> wallLines, List<IntPoint> wallPoints) =
           AutoCADHelper.DefineMultiSidedPerimeter("E-WALL", "wall");
         ProcessWallReceptacles(wallLines, new List<string>() { }, 24, 240, 240);
       }
-      else if (selectedOption == "Foyer") { }
+      else if (selectedOption == "T-Foyer")
+      {
+        (List<ObjectId> wallLines, List<IntPoint> wallPoints) =
+          AutoCADHelper.DefineMultiSidedPerimeter("E-WALL", "wall");
+        ProcessWallReceptacles(wallLines, new List<string>() { }, 36, 240, 240);
+      }
       else
       {
         (List<ObjectId> wallLines, List<IntPoint> wallPoints) =
