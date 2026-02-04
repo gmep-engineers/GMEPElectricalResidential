@@ -160,6 +160,7 @@ namespace GMEPElectricalResidential
               tr.GetObject(db.CurrentSpaceId, OpenMode.ForWrite);
 
             BlockReference br = new BlockReference(point, res.Item2);
+            br.Layer = "E-SYM1";
             RotateJig rotateJig = new RotateJig(br);
             PromptResult rotatePromptResult = ed.Drag(rotateJig);
 
@@ -170,7 +171,6 @@ namespace GMEPElectricalResidential
             rotation = br.Rotation;
 
             Point3d blockRefPosition = br.Position;
-            Console.WriteLine(rotation);
 
             TextHorizontalMode horizontalMode = TextHorizontalMode.TextLeft;
             AttachmentPoint attachmentPoint = AttachmentPoint.BaseLeft;
@@ -302,7 +302,6 @@ namespace GMEPElectricalResidential
       }
       string selectedOption = keywordResult.StringResult;
 
-      Console.WriteLine(selectedOption);
       if (selectedOption == "A-KitchenCountertop")
       {
         (List<ObjectId> wallLines, List<IntPoint> wallPoints) =
@@ -349,6 +348,7 @@ namespace GMEPElectricalResidential
             }
             else
             {
+              polyline.Layer = "DEFPOINTS";
               btr.AppendEntity(polyline);
               tr.AddNewlyCreatedDBObject(polyline, true);
               tr.Commit();
@@ -416,19 +416,19 @@ namespace GMEPElectricalResidential
       {
         (List<ObjectId> wallLines, List<IntPoint> wallPoints) =
           AutoCADHelper.DefineMultiSidedPerimeter("E-WALL", "wall");
-        ProcessWallReceptacles(wallLines, new List<string>() { }, 24, 240, 240);
+        ProcessWallReceptacles(wallLines, new List<string>(), 24, 240, 240);
       }
       else if (selectedOption == "T-Foyer")
       {
         (List<ObjectId> wallLines, List<IntPoint> wallPoints) =
           AutoCADHelper.DefineMultiSidedPerimeter("E-WALL", "wall");
-        ProcessWallReceptacles(wallLines, new List<string>() { }, 36, 240, 240);
+        ProcessWallReceptacles(wallLines, new List<string>(), 36, 240, 240);
       }
       else
       {
         (List<ObjectId> wallLines, List<IntPoint> wallPoints) =
           AutoCADHelper.DefineMultiSidedPerimeter("E-WALL", "wall");
-        ProcessWallReceptacles(wallLines, new List<string>() { }, 24, 144, 72);
+        ProcessWallReceptacles(wallLines, new List<string>(), 24, 144, 72);
       }
     }
   }

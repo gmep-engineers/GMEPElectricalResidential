@@ -327,7 +327,7 @@ namespace GMEPElectricalResidential
       }
       using (Transaction tr = db.TransactionManager.StartTransaction())
       {
-        if (AutoCADHelper.Scale < 0)
+        if (AutoCADHelper.Scale < 0 && labels.Count > 0)
         {
           AutoCADHelper.SetScale();
         }
